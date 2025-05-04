@@ -1,8 +1,14 @@
 {
   "name": "conjoin-sdk",
-  "packageManager": "yarn@4.9.1",
+  "version": "0.0.1",
+  "repository": "https://github.com/delalify/conjoin-sdk",
+  "author": "Delalify SE Team",
+  "license": "MIT",
+  "private": false,
+  "workspaces": ["packages/*"],
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "turbo": "^2.5.2"
-  }
+  },
+  "packageManager": "yarn@4.9.1"
 }
