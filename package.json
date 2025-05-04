@@ -1,4 +1,7 @@
 {
   "name": "conjoin-sdk",
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.9.1",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
+  }
 }
