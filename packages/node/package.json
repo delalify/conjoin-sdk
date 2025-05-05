@@ -1,0 +1,43 @@
+{
+  "name": "@conjoin/sdk-node",
+  "description": "Conjoin SDK for Node.js",
+  "version": "0.0.0",
+  "repository": "https://github.com/delalify/conjoin-sdk",
+  "author": "Delalify SE Team",
+  "license": "MIT",
+  "private": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "watch": "yarn build && chokidar \"./**/*.{ts,swcrc,json}\" -i \"./dist/**/*.{ts,json}\" -c \"yarn build\"",
+    "lint": "biome lint && tsc --noEmit --skipLibCheck",
+    "lint:fix": "biome lint --fix",
+    "format": "biome format --write",
+    "pre-commit": "lint-staged",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "yarn lint && swc -d dist --workers 2 --sync --copy-files --delete-dir-on-start --strip-leading-paths --include-dotfiles src && tsc --declaration --emitDeclarationOnly"
+  },
+  "lint-staged": {
+    "./*/**/*.{js,ts}": ["yarn format", "yarn lint:fix"],
+    "*.{json,md}": ["yarn format"]
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@swc/cli": "^0.6.0",
+    "@swc/core": "^1.10.18",
+    "@types/node": "^22.14.0",
+    "chokidar-cli": "^3.0.0",
+    "lint-staged": "^13.2.2",
+    "typescript": "^5.6.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "main": "./dist/index.js",
+    "require": "./dist/index.js",
+    "import": "./dist/index.js"
+  }
+}
