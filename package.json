@@ -4,8 +4,9 @@
   "repository": "https://github.com/delalify/conjoin-sdk",
   "author": "Delalify SE Team",
   "license": "MIT",
-  "private": false,
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "turbo": "^2.5.2"

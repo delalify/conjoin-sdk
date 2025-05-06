@@ -5,7 +5,6 @@
   "repository": "https://github.com/delalify/conjoin-sdk",
   "author": "Delalify SE Team",
   "license": "MIT",
-  "private": false,
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "type": "module",
@@ -35,9 +34,20 @@
     "access": "public"
   },
   "exports": {
-    "types": "./dist/index.d.ts",
-    "main": "./dist/index.js",
-    "require": "./dist/index.js",
-    "import": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./types/*": {
+      "types": "./dist/types/*.d.ts",
+      "require": "./dist/types/*.js",
+      "import": "./dist/types/*.js",
+      "default": "./dist/types/*.js"
+    }
+  },
+  "dependencies": {
+    "undici": "^7.8.0"
   }
 }

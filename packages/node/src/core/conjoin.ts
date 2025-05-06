@@ -1,6 +1,5 @@
-import type { ConjoinOptions } from './core/base-conjoin'
-import { BaseConjoin } from './core/base-conjoin'
-import { BillingResource } from './billing'
+import { BillingResource } from '../billing'
+import { BaseConjoin, type ConjoinOptions } from './base-conjoin'
 
 export class Conjoin extends BaseConjoin {
   readonly billing: BillingResource
