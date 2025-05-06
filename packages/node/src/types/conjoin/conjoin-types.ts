@@ -2,7 +2,7 @@ export type ConjoinRequestOptions = {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   headers?: HeadersInit
   body?: Record<string, unknown>
-  query?: Record<string, string | number | boolean>
+  query?: Record<string, unknown>
   returnFullResponse?: boolean
 }
 
@@ -38,4 +38,12 @@ export type ConjoinResponseType<TData = unknown> = {
       | undefined
     total_count?: number
   }
+}
+
+export type ConjoinCloudOptions = {
+  projectId: string
+}
+
+export interface ConjoinBillingOptions extends ConjoinCloudOptions {
+  entityId: string
 }
