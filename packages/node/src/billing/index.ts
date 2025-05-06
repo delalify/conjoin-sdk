@@ -3,9 +3,9 @@ import { CustomerResource } from './customer'
 import { PaymentIntentResource } from './payment-intent'
 
 export class BillingResource {
+  readonly #client: BaseConjoin
   readonly paymentIntent: PaymentIntentResource
   readonly customer: CustomerResource
-  readonly #client: BaseConjoin
 
   constructor(client: BaseConjoin) {
     this.#client = client
