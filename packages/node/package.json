@@ -5,7 +5,6 @@
   "repository": "https://github.com/delalify/conjoin-sdk",
   "author": "Delalify SE Team",
   "license": "MIT",
-  "private": false,
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "type": "module",
@@ -19,8 +18,13 @@
     "build": "yarn lint && swc -d dist --workers 2 --sync --copy-files --delete-dir-on-start --strip-leading-paths --include-dotfiles src && tsc --declaration --emitDeclarationOnly"
   },
   "lint-staged": {
-    "./*/**/*.{js,ts}": ["yarn format", "yarn lint:fix"],
-    "*.{json,md}": ["yarn format"]
+    "./*/**/*.{js,ts}": [
+      "yarn format",
+      "yarn lint:fix"
+    ],
+    "*.{json,md}": [
+      "yarn format"
+    ]
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -39,5 +43,8 @@
     "main": "./dist/index.js",
     "require": "./dist/index.js",
     "import": "./dist/index.js"
+  },
+  "dependencies": {
+    "undici": "^7.8.0"
   }
 }
