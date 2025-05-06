@@ -18,13 +18,8 @@
     "build": "yarn lint && swc -d dist --workers 2 --sync --copy-files --delete-dir-on-start --strip-leading-paths --include-dotfiles src && tsc --declaration --emitDeclarationOnly"
   },
   "lint-staged": {
-    "./*/**/*.{js,ts}": [
-      "yarn format",
-      "yarn lint:fix"
-    ],
-    "*.{json,md}": [
-      "yarn format"
-    ]
+    "./*/**/*.{js,ts}": ["yarn format", "yarn lint:fix"],
+    "*.{json,md}": ["yarn format"]
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -39,10 +34,18 @@
     "access": "public"
   },
   "exports": {
-    "types": "./dist/index.d.ts",
-    "main": "./dist/index.js",
-    "require": "./dist/index.js",
-    "import": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./types/*": {
+      "types": "./dist/types/*.d.ts",
+      "require": "./dist/types/*.js",
+      "import": "./dist/types/*.js",
+      "default": "./dist/types/*.js"
+    }
   },
   "dependencies": {
     "undici": "^7.8.0"
