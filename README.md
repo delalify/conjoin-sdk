@@ -1,6 +1,6 @@
-# @conjoin/sdk
+# Conjoin SDK
 
-The official TypeScript SDK for [Conjoin](https://conjoin.cloud). One package, nine products, tree-shakeable from top to bottom.
+The official SDKs for [Conjoin](https://conjoin.delalify.com). One package per language, eight products, tree-shakeable from top to bottom.
 
 [![npm version](https://img.shields.io/npm/v/@conjoin/sdk)](https://www.npmjs.com/package/@conjoin/sdk)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
@@ -51,9 +51,10 @@ Each product has its own sub-path import. You only bundle what you use.
 | **Messaging** | `@conjoin/sdk/messaging` | Email, SMS, contacts, conversations, templates, OTP |
 | **Relay** | `@conjoin/sdk/relay` | WebSocket broadcast, queues, events, scheduler, memory store, search |
 | **AI** | `@conjoin/sdk/ai` | Chat completions, model registry, providers, usage tracking |
-| **Cloud** | `@conjoin/sdk/cloud` | API keys, roles, webhooks, audit logs, projects |
 | **Database** | `@conjoin/sdk/database` | Managed database client |
 | **Runtime** | `@conjoin/sdk/runtime` | Container runtime management |
+
+Platform management (API keys, roles, webhooks, audit logs, projects) is available via `@conjoin/sdk/cloud`.
 
 ## Usage
 
