@@ -1,5 +1,6 @@
 import { conjoinFetch, conjoinFetchList, conjoinFetchRaw } from './fetch'
 import type { ConjoinClient, ConjoinConfig, RequestOptions, ResolvedConfig } from './types'
+import { DEFAULT_API_VERSION } from './version'
 
 const DEFAULT_BASE_URL = 'https://api.conjoin.cloud'
 const DEFAULT_TIMEOUT = 30_000
@@ -10,6 +11,7 @@ function resolveConfig(config: ConjoinConfig): ResolvedConfig {
   return Object.freeze({
     apiKey: config.apiKey,
     baseUrl: config.baseUrl ?? DEFAULT_BASE_URL,
+    apiVersion: config.apiVersion ?? DEFAULT_API_VERSION,
     timeout: config.timeout ?? DEFAULT_TIMEOUT,
     retry: Object.freeze({
       maxRetries: config.retry?.maxRetries ?? DEFAULT_MAX_RETRIES,

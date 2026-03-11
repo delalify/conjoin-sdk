@@ -12,6 +12,7 @@ import type { ResolvedConfig } from '../types'
 const config: ResolvedConfig = Object.freeze({
   apiKey: 'ck_test_123',
   baseUrl: 'https://api.conjoin.cloud',
+  apiVersion: '2026-03-31',
   timeout: 30_000,
   retry: Object.freeze({ maxRetries: 0, backoffMs: 100 }),
 })
@@ -49,6 +50,16 @@ describe('conjoinFetch', () => {
     expect(url).toBe('https://api.conjoin.cloud/v1/billing/customers')
     expect(init?.method).toBe('GET')
     expect((init?.headers as Record<string, string>).Authorization).toBe('Bearer ck_test_123')
+  })
+
+  it('sends X-Conjoin-API-Version header', async () => {
+    const fetchMock = vi.mocked(fetch)
+    fetchMock.mockResolvedValueOnce(mockResponse({ data: { id: '1' } }))
+
+    await conjoinFetch(config, 'billing/customers')
+
+    const [, init] = fetchMock.mock.calls[0]
+    expect((init?.headers as Record<string, string>)['X-Conjoin-API-Version']).toBe('2026-03-31')
   })
 
   it('unwraps response envelope and returns data', async () => {

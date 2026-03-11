@@ -18,3 +18,4 @@ export type {
   RequestOptions,
   ResolvedConfig,
 } from './types'
+export { DEFAULT_API_VERSION, SDK_VERSION } from './version'

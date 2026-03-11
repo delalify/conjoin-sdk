@@ -1,6 +1,7 @@
 export type ConjoinConfig = {
   apiKey: string
   baseUrl?: string
+  apiVersion?: string
   timeout?: number
   retry?: {
     maxRetries?: number
@@ -11,6 +12,7 @@ export type ConjoinConfig = {
 export type ResolvedConfig = {
   readonly apiKey: string
   readonly baseUrl: string
+  readonly apiVersion: string
   readonly timeout: number
   readonly retry: {
     readonly maxRetries: number
