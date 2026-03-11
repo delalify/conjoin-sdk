@@ -1,0 +1,15 @@
+{
+  "name": "conjoin-sdk",
+  "private": true,
+  "packageManager": "pnpm@10.6.3",
+  "scripts": {
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test",
+    "lint": "nx run-many -t lint",
+    "format": "nx run-many -t format",
+    "generate": "nx run-many -t generate"
+  },
+  "devDependencies": {
+    "nx": "20.6.2"
+  }
+}

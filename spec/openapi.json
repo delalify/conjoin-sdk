@@ -1,0 +1,30 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Conjoin API",
+    "version": "1.0.0",
+    "description": "Conjoin developer platform API"
+  },
+  "servers": [
+    {
+      "url": "https://api.conjoin.cloud/v1",
+      "description": "Production"
+    }
+  ],
+  "paths": {},
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API Key"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
