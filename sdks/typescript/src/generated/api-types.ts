@@ -225,6 +225,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/ai/inference/chat/completions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create an AI chat completion */
+        post: operations["createAiChatCompletion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/inference/multi-model": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a multi-model AI inference */
+        post: operations["createAiMultiModelInference"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/inference/best-of-n": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a best-of-N AI inference */
+        post: operations["createAiBestOfNInference"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/inference/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List AI inference requests */
+        get: operations["listAiInferenceRequests"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/inference/requests/{request_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read an AI inference request */
+        get: operations["readAiInferenceRequest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/ai/model/models": {
         parameters: {
             query?: never;
@@ -253,6 +338,23 @@ export interface paths {
         get: operations["readAiModel"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/policy/policy/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Check content against AI policy rules */
+        post: operations["checkAiPolicy"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9132,6 +9234,479 @@ export interface operations {
             };
         };
     };
+    createAiChatCompletion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    model: string;
+                    messages: {
+                        role: string;
+                        content: string;
+                    }[];
+                    temperature?: number;
+                    max_tokens?: number;
+                    top_p?: number;
+                    stream?: boolean;
+                    stop?: string[];
+                    tools?: {
+                        name: string;
+                        description: string;
+                        parameters: {
+                            [key: string]: unknown;
+                        };
+                    }[];
+                    response_format?: {
+                        [key: string]: unknown;
+                    };
+                    metadata?: {
+                        [key: string]: unknown;
+                    };
+                    context?: {
+                        containers: string[];
+                        modes?: ("vector" | "fulltext" | "agentic")[];
+                        agentic?: {
+                            enabled: boolean;
+                            max_steps?: number;
+                        };
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            request_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            model: string;
+                            request_type: string;
+                            status: string;
+                            token_usage: {
+                                input_tokens: number;
+                                output_tokens: number;
+                                total_tokens: number;
+                            };
+                            cost_usd: number;
+                            latency_ms: number;
+                            streaming_enabled: boolean;
+                            policy_applied: boolean;
+                            is_byok: boolean;
+                            context_used: boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    createAiMultiModelInference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    models: string[];
+                    messages: {
+                        role: string;
+                        content: string;
+                    }[];
+                    temperature?: number;
+                    max_tokens?: number;
+                    synthesize?: boolean;
+                    judge_model?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            request_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            model: string;
+                            request_type: string;
+                            status: string;
+                            token_usage: {
+                                input_tokens: number;
+                                output_tokens: number;
+                                total_tokens: number;
+                            };
+                            cost_usd: number;
+                            latency_ms: number;
+                            streaming_enabled: boolean;
+                            policy_applied: boolean;
+                            is_byok: boolean;
+                            context_used: boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    createAiBestOfNInference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    model: string;
+                    messages: {
+                        role: string;
+                        content: string;
+                    }[];
+                    n: number;
+                    temperature?: number;
+                    max_tokens?: number;
+                    /** @enum {string} */
+                    selection_criteria?: "length" | "coherence" | "custom";
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            request_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            model: string;
+                            request_type: string;
+                            status: string;
+                            token_usage: {
+                                input_tokens: number;
+                                output_tokens: number;
+                                total_tokens: number;
+                            };
+                            cost_usd: number;
+                            latency_ms: number;
+                            streaming_enabled: boolean;
+                            policy_applied: boolean;
+                            is_byok: boolean;
+                            context_used: boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listAiInferenceRequests: {
+        parameters: {
+            query?: {
+                cursor?: {
+                    prev?: string;
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: number;
+                query?: {
+                    model?: string;
+                    /** @enum {string} */
+                    status?: "pending" | "streaming" | "completed" | "failed" | "cancelled";
+                    /** @enum {string} */
+                    request_type?: "single" | "multi_model" | "best_of_n" | "synthesis";
+                    date_created?: {
+                        /** Format: date-time */
+                        equals?: string;
+                        /** Format: date-time */
+                        not_equals?: string;
+                        /** Format: date-time */
+                        greater_than?: string;
+                        /** Format: date-time */
+                        less_than?: string;
+                        /** Format: date-time */
+                        greater_than_or_equals?: string;
+                        /** Format: date-time */
+                        less_than_or_equals?: string;
+                    };
+                };
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            request_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            model: string;
+                            request_type: string;
+                            status: string;
+                            token_usage: {
+                                input_tokens: number;
+                                output_tokens: number;
+                                total_tokens: number;
+                            };
+                            cost_usd: number;
+                            latency_ms: number;
+                            streaming_enabled: boolean;
+                            policy_applied: boolean;
+                            is_byok: boolean;
+                            context_used: boolean;
+                            date_created: string;
+                            date_updated: string;
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    readAiInferenceRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            request_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            model: string;
+                            request_type: string;
+                            status: string;
+                            token_usage: {
+                                input_tokens: number;
+                                output_tokens: number;
+                                total_tokens: number;
+                            };
+                            cost_usd: number;
+                            latency_ms: number;
+                            streaming_enabled: boolean;
+                            policy_applied: boolean;
+                            is_byok: boolean;
+                            context_used: boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
     listAiModels: {
         parameters: {
             query?: {
@@ -9265,6 +9840,90 @@ export interface operations {
                             deprecation_date?: string | null;
                             date_created: string;
                             date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    checkAiPolicy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    content: string;
+                    /** @enum {string} */
+                    direction: "request" | "response" | "both";
+                    context?: {
+                        model?: string;
+                        request_id?: string;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            allowed: boolean;
+                            action_taken: string;
+                            matched_rules: {
+                                rule_id: string;
+                                rule_type: string;
+                                action: string;
+                                detections: {
+                                    type: string;
+                                    value: string;
+                                    position: {
+                                        start: number;
+                                        end: number;
+                                    };
+                                    confidence: number;
+                                }[];
+                            }[];
+                            transformed_content?: string | null;
                         };
                     };
                 };

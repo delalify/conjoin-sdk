@@ -17,7 +17,7 @@ export function createAiChat(client: ConjoinClient) {
       params: Omit<ChatCompletionParams, 'stream'>,
       options?: ChatStreamOptions,
     ): Promise<ChatCompletionResponse> {
-      return client.fetch<ChatCompletionResponse>('ai/chat/completions', {
+      return client.fetch<ChatCompletionResponse>('ai/inference/chat/completions', {
         method: 'POST',
         body: { ...params, stream: false },
         signal: options?.signal,
@@ -63,7 +63,7 @@ async function* createStreamIterator(
   params: Omit<ChatCompletionParams, 'stream'>,
   signal: AbortSignal,
 ): AsyncGenerator<ChatCompletionChunk> {
-  const response = await client.fetchRaw('ai/chat/completions', {
+  const response = await client.fetchRaw('ai/inference/chat/completions', {
     method: 'POST',
     body: { ...params, stream: true },
     signal,

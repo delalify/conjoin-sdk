@@ -9,6 +9,7 @@
           "pnpm tsx codegen/generate.ts",
           "pnpm biome check --write src/generated/modules/"
         ],
+        "parallel": false,
         "cwd": "{projectRoot}"
       }
     },

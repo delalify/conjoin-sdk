@@ -1,6 +1,8 @@
 import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
+type CheckBody = operations['checkAiPolicy']['requestBody']['content']['application/json']
+type CheckData = NonNullable<operations['checkAiPolicy']['responses']['200']['content']['application/json']['data']>
 type CreateRuleBody = operations['createAiPolicyRule']['requestBody']['content']['application/json']
 type CreateRuleData = NonNullable<
   operations['createAiPolicyRule']['responses']['201']['content']['application/json']['data']
@@ -26,6 +28,8 @@ type ListLogsQuery = NonNullable<operations['listAiPolicyLogs']['parameters']['q
 
 export function createAiPolicies(client: ConjoinClient) {
   return {
+    check: (data: CheckBody) => client.fetch<CheckData>('ai/policy/policy/check', { method: 'POST', body: data }),
+
     createRule: (data: CreateRuleBody) =>
       client.fetch<CreateRuleData>('ai/policy/policy/rules/create', { method: 'POST', body: data }),
 
