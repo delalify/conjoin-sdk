@@ -5,6 +5,7 @@ export {
   ConjoinError,
   ConjoinNetworkError,
   ConjoinRateLimitError,
+  ConjoinStorageError,
   ConjoinTimeoutError,
   ConjoinValidationError,
 } from './errors'

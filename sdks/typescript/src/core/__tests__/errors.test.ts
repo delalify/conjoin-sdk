@@ -4,6 +4,7 @@ import {
   ConjoinError,
   ConjoinNetworkError,
   ConjoinRateLimitError,
+  ConjoinStorageError,
   ConjoinTimeoutError,
   ConjoinValidationError,
 } from '../errors'
@@ -100,5 +101,30 @@ describe('ConjoinTimeoutError', () => {
   it('is instanceof ConjoinError', () => {
     const err = new ConjoinTimeoutError('too slow')
     expect(err).toBeInstanceOf(ConjoinError)
+  })
+})
+
+describe('ConjoinStorageError', () => {
+  it('stores storageUrl and uploadMode', () => {
+    const err = new ConjoinStorageError('upload failed', 403, 'https://storage.example.com/upload', 'resumable')
+    expect(err.status).toBe(403)
+    expect(err.code).toBe('storage_error')
+    expect(err.storageUrl).toBe('https://storage.example.com/upload')
+    expect(err.uploadMode).toBe('resumable')
+    expect(err.name).toBe('ConjoinStorageError')
+  })
+
+  it('works without uploadMode', () => {
+    const err = new ConjoinStorageError('download failed', 404, 'https://storage.example.com/file.txt')
+    expect(err.status).toBe(404)
+    expect(err.storageUrl).toBe('https://storage.example.com/file.txt')
+    expect(err.uploadMode).toBeUndefined()
+  })
+
+  it('is instanceof ConjoinError and Error', () => {
+    const err = new ConjoinStorageError('fail', 500, 'https://storage.example.com')
+    expect(err).toBeInstanceOf(ConjoinError)
+    expect(err).toBeInstanceOf(ConjoinStorageError)
+    expect(err).toBeInstanceOf(Error)
   })
 })

@@ -57,3 +57,15 @@ export class ConjoinTimeoutError extends ConjoinError {
     this.name = 'ConjoinTimeoutError'
   }
 }
+
+export class ConjoinStorageError extends ConjoinError {
+  readonly storageUrl: string
+  readonly uploadMode?: 'resumable' | 'single'
+
+  constructor(message: string, status: number, storageUrl: string, uploadMode?: 'resumable' | 'single') {
+    super(message, status, 'storage_error')
+    this.name = 'ConjoinStorageError'
+    this.storageUrl = storageUrl
+    this.uploadMode = uploadMode
+  }
+}

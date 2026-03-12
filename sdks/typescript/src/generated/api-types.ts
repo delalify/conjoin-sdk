@@ -4,6 +4,108 @@
  */
 
 export interface paths {
+    "/v1/ai/byok/byok/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a BYOK API key configuration */
+        post: operations["createAiByokConfig"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/byok/byok": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List BYOK API key configurations */
+        get: operations["listAiByokConfigs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/byok/byok/{byok_config_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read a BYOK API key configuration */
+        get: operations["readAiByokConfig"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/byok/byok/{byok_config_id}/update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update a BYOK API key configuration */
+        patch: operations["updateAiByokConfig"];
+        trace?: never;
+    };
+    "/v1/ai/byok/byok/{byok_config_id}/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a BYOK API key configuration */
+        delete: operations["deleteAiByokConfig"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/byok/byok/{byok_config_id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Test a BYOK API key connection */
+        post: operations["testAiByokConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/ai/context/context/indexes/create": {
         parameters: {
             query?: never;
@@ -254,91 +356,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/ai/provider/providers/create": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create an AI provider configuration */
-        post: operations["createAiProviderConfig"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/ai/provider/providers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List AI provider configurations */
-        get: operations["listAiProviderConfigs"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/ai/provider/providers/{config_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Read an AI provider configuration */
-        get: operations["readAiProviderConfig"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/ai/provider/providers/{config_id}/update": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update an AI provider configuration */
-        patch: operations["updateAiProviderConfig"];
-        trace?: never;
-    };
-    "/v1/ai/provider/providers/{config_id}/delete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete an AI provider configuration */
-        delete: operations["deleteAiProviderConfig"];
         options?: never;
         head?: never;
         patch?: never;
@@ -7935,6 +7952,505 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    createAiByokConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    provider: "anthropic" | "openai" | "google" | "openai_compatible" | "self_hosted";
+                    provider_name: string;
+                    api_key: string;
+                    endpoint_url?: string | null;
+                    allowed_models?: string[];
+                    description?: string | null;
+                    reference_id?: string | null;
+                    /**
+                     * @description Custom key-value metadata (max 50 keys)
+                     * @default {}
+                     */
+                    metadata?: {
+                        [key: string]: string | number | boolean;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            byok_config_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id: string | null;
+                            provider: string;
+                            provider_name: string;
+                            has_api_key: boolean;
+                            endpoint_url: string | null;
+                            allowed_models: string[];
+                            is_enabled: boolean;
+                            status: string;
+                            description?: string | null;
+                            metadata: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listAiByokConfigs: {
+        parameters: {
+            query?: {
+                cursor?: {
+                    prev?: string;
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: number;
+                query?: {
+                    /** @enum {string} */
+                    provider?: "anthropic" | "openai" | "google" | "openai_compatible" | "self_hosted";
+                    /** @enum {string} */
+                    status?: "active" | "disabled" | "archived";
+                    is_enabled?: boolean;
+                    date_created?: {
+                        /** Format: date-time */
+                        equals?: string;
+                        /** Format: date-time */
+                        not_equals?: string;
+                        /** Format: date-time */
+                        greater_than?: string;
+                        /** Format: date-time */
+                        less_than?: string;
+                        /** Format: date-time */
+                        greater_than_or_equals?: string;
+                        /** Format: date-time */
+                        less_than_or_equals?: string;
+                    };
+                };
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            byok_config_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id: string | null;
+                            provider: string;
+                            provider_name: string;
+                            has_api_key: boolean;
+                            endpoint_url: string | null;
+                            allowed_models: string[];
+                            is_enabled: boolean;
+                            status: string;
+                            description?: string | null;
+                            metadata: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    readAiByokConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                byok_config_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            byok_config_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id: string | null;
+                            provider: string;
+                            provider_name: string;
+                            has_api_key: boolean;
+                            endpoint_url: string | null;
+                            allowed_models: string[];
+                            is_enabled: boolean;
+                            status: string;
+                            description?: string | null;
+                            metadata: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateAiByokConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                byok_config_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    provider_name?: string;
+                    api_key?: string;
+                    endpoint_url?: string | null;
+                    allowed_models?: string[];
+                    is_enabled?: boolean;
+                    /** @enum {string} */
+                    status?: "active" | "disabled" | "archived";
+                    description?: string | null;
+                    /** @description Custom key-value metadata (max 50 keys) */
+                    metadata?: {
+                        [key: string]: string | number | boolean;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            byok_config_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id: string | null;
+                            provider: string;
+                            provider_name: string;
+                            has_api_key: boolean;
+                            endpoint_url: string | null;
+                            allowed_models: string[];
+                            is_enabled: boolean;
+                            status: string;
+                            description?: string | null;
+                            metadata: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    deleteAiByokConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                byok_config_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                        data?: {
+                            byok_config_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id: string | null;
+                            provider: string;
+                            provider_name: string;
+                            has_api_key: boolean;
+                            endpoint_url: string | null;
+                            allowed_models: string[];
+                            is_enabled: boolean;
+                            status: string;
+                            description?: string | null;
+                            metadata: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    testAiByokConnection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                byok_config_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
     createAiContextIndex: {
         parameters: {
             query?: never;
@@ -9357,460 +9873,6 @@ export interface operations {
                             date_created: string;
                         }[];
                         cursor?: components["schemas"]["PaginationCursor"];
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationError"];
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    createAiProviderConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @enum {string} */
-                    provider: "vertex_ai" | "azure_ai_foundry" | "openai_compatible" | "self_hosted";
-                    provider_name: string;
-                    credentials: {
-                        api_key?: string;
-                        /** Format: uri */
-                        endpoint_url?: string;
-                    };
-                    allowed_models?: string[];
-                    priority?: number;
-                    rate_limit_rpm?: number | null;
-                    description?: string | null;
-                    reference_id?: string | null;
-                    /**
-                     * @description Custom key-value metadata (max 50 keys)
-                     * @default {}
-                     */
-                    metadata?: {
-                        [key: string]: string | number | boolean;
-                    };
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                        data?: {
-                            config_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id: string | null;
-                            provider: string;
-                            provider_name: string;
-                            is_enabled: boolean;
-                            allowed_models: string[];
-                            priority: number;
-                            rate_limit_rpm?: number | null;
-                            status: string;
-                            description?: string | null;
-                            metadata: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationError"];
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    listAiProviderConfigs: {
-        parameters: {
-            query?: {
-                cursor?: {
-                    prev?: string;
-                    next?: string;
-                };
-                sort?: {
-                    [key: string]: "asc" | "desc";
-                };
-                limit?: number;
-                query?: {
-                    /** @enum {string} */
-                    provider?: "vertex_ai" | "azure_ai_foundry" | "openai_compatible" | "self_hosted";
-                    /** @enum {string} */
-                    status?: "active" | "disabled" | "archived";
-                    is_enabled?: boolean;
-                    date_created?: {
-                        /** Format: date-time */
-                        equals?: string;
-                        /** Format: date-time */
-                        not_equals?: string;
-                        /** Format: date-time */
-                        greater_than?: string;
-                        /** Format: date-time */
-                        less_than?: string;
-                        /** Format: date-time */
-                        greater_than_or_equals?: string;
-                        /** Format: date-time */
-                        less_than_or_equals?: string;
-                    };
-                };
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                        data?: {
-                            config_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id: string | null;
-                            provider: string;
-                            provider_name: string;
-                            is_enabled: boolean;
-                            allowed_models: string[];
-                            priority: number;
-                            rate_limit_rpm?: number | null;
-                            status: string;
-                            description?: string | null;
-                            metadata: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        }[];
-                        cursor?: components["schemas"]["PaginationCursor"];
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationError"];
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    readAiProviderConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                config_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                        data?: {
-                            config_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id: string | null;
-                            provider: string;
-                            provider_name: string;
-                            is_enabled: boolean;
-                            allowed_models: string[];
-                            priority: number;
-                            rate_limit_rpm?: number | null;
-                            status: string;
-                            description?: string | null;
-                            metadata: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationError"];
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    updateAiProviderConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                config_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    provider_name?: string;
-                    credentials?: {
-                        api_key?: string;
-                        /** Format: uri */
-                        endpoint_url?: string;
-                    };
-                    allowed_models?: string[];
-                    priority?: number;
-                    rate_limit_rpm?: number | null;
-                    is_enabled?: boolean;
-                    /** @enum {string} */
-                    status?: "active" | "disabled" | "archived";
-                    description?: string | null;
-                    /** @description Custom key-value metadata (max 50 keys) */
-                    metadata?: {
-                        [key: string]: string | number | boolean;
-                    };
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                        data?: {
-                            config_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id: string | null;
-                            provider: string;
-                            provider_name: string;
-                            is_enabled: boolean;
-                            allowed_models: string[];
-                            priority: number;
-                            rate_limit_rpm?: number | null;
-                            status: string;
-                            description?: string | null;
-                            metadata: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationError"];
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    deleteAiProviderConfig: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                config_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiResponseMeta"];
-                        data?: {
-                            config_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id: string | null;
-                            provider: string;
-                            provider_name: string;
-                            is_enabled: boolean;
-                            allowed_models: string[];
-                            priority: number;
-                            rate_limit_rpm?: number | null;
-                            status: string;
-                            description?: string | null;
-                            metadata: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
                     };
                 };
             };
@@ -36942,7 +37004,7 @@ export interface operations {
                     description?: string;
                     /** Format: uri */
                     url: string;
-                    events: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-provider-config-created" | "ai-provider-config-updated" | "ai-provider-config-deleted" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-email_enrolled" | "auth-mfa-email_activated" | "auth-mfa-email_verified" | "auth-mfa-email_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-incoming_sent" | "messaging-sms-outgoing_accepted" | "messaging-sms-outgoing_delayed" | "messaging-sms-outgoing_sent" | "messaging-sms-outgoing_failed" | "messaging-sms-outgoing_delivered" | "messaging-sms-outgoing_complained" | "messaging-sms-outgoing_rejected" | "messaging-sms-outgoing_updated" | "messaging-sms-outgoing_replied" | "messaging-sms-outgoing_expired" | "messaging-email-unknown" | "messaging-email-incoming_sent" | "messaging-email-outgoing_accepted" | "messaging-email-outgoing_delayed" | "messaging-email-outgoing_sent" | "messaging-email-outgoing_failed" | "messaging-email-outgoing_delivered" | "messaging-email-outgoing_complained" | "messaging-email-outgoing_rejected" | "messaging-email-outgoing_updated" | "messaging-email-outgoing_replied" | "messaging-email-outgoing_opened" | "messaging-email-outgoing_clicked" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-otp-sent" | "messaging-otp-failed" | "messaging-otp-delivered" | "messaging-otp-updated" | "messaging-sender-domain_created" | "messaging-sender-domain_updated" | "messaging-sender-domain_deleted" | "messaging-sender-domain_verified" | "messaging-sender-phone_number_purchased" | "messaging-sender-phone_number_released" | "messaging-sender-alpha_numeric_id_reserved" | "messaging-sender-alpha_numeric_id_released" | "messaging-sender-alpha_numeric_id_approved" | "messaging-sender-alpha_numeric_id_rejected" | "messaging-sender-blocked" | "messaging-participant-created" | "messaging-participant-conversation_attached" | "messaging-participant-conversation_detached" | "messaging-participant-deleted" | "messaging-participant-sms_unsubscribed" | "messaging-participant-email_unsubscribed" | "messaging-phone-number-provision-not-requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
+                    events: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-byok-config-created" | "ai-byok-config-updated" | "ai-byok-config-deleted" | "ai-byok-config-tested" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-email_enrolled" | "auth-mfa-email_activated" | "auth-mfa-email_verified" | "auth-mfa-email_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-incoming_sent" | "messaging-sms-outgoing_accepted" | "messaging-sms-outgoing_delayed" | "messaging-sms-outgoing_sent" | "messaging-sms-outgoing_failed" | "messaging-sms-outgoing_delivered" | "messaging-sms-outgoing_complained" | "messaging-sms-outgoing_rejected" | "messaging-sms-outgoing_updated" | "messaging-sms-outgoing_replied" | "messaging-sms-outgoing_expired" | "messaging-email-unknown" | "messaging-email-incoming_sent" | "messaging-email-outgoing_accepted" | "messaging-email-outgoing_delayed" | "messaging-email-outgoing_sent" | "messaging-email-outgoing_failed" | "messaging-email-outgoing_delivered" | "messaging-email-outgoing_complained" | "messaging-email-outgoing_rejected" | "messaging-email-outgoing_updated" | "messaging-email-outgoing_replied" | "messaging-email-outgoing_opened" | "messaging-email-outgoing_clicked" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-otp-sent" | "messaging-otp-failed" | "messaging-otp-delivered" | "messaging-otp-updated" | "messaging-sender-domain_created" | "messaging-sender-domain_updated" | "messaging-sender-domain_deleted" | "messaging-sender-domain_verified" | "messaging-sender-phone_number_purchased" | "messaging-sender-phone_number_released" | "messaging-sender-alpha_numeric_id_reserved" | "messaging-sender-alpha_numeric_id_released" | "messaging-sender-alpha_numeric_id_approved" | "messaging-sender-alpha_numeric_id_rejected" | "messaging-sender-blocked" | "messaging-participant-created" | "messaging-participant-conversation_attached" | "messaging-participant-conversation_detached" | "messaging-participant-deleted" | "messaging-participant-sms_unsubscribed" | "messaging-participant-email_unsubscribed" | "messaging-phone-number-provision-not-requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
                     is_active?: boolean;
                 };
             };
@@ -37162,7 +37224,7 @@ export interface operations {
                     description?: string;
                     /** Format: uri */
                     url?: string;
-                    events?: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-provider-config-created" | "ai-provider-config-updated" | "ai-provider-config-deleted" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-email_enrolled" | "auth-mfa-email_activated" | "auth-mfa-email_verified" | "auth-mfa-email_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-incoming_sent" | "messaging-sms-outgoing_accepted" | "messaging-sms-outgoing_delayed" | "messaging-sms-outgoing_sent" | "messaging-sms-outgoing_failed" | "messaging-sms-outgoing_delivered" | "messaging-sms-outgoing_complained" | "messaging-sms-outgoing_rejected" | "messaging-sms-outgoing_updated" | "messaging-sms-outgoing_replied" | "messaging-sms-outgoing_expired" | "messaging-email-unknown" | "messaging-email-incoming_sent" | "messaging-email-outgoing_accepted" | "messaging-email-outgoing_delayed" | "messaging-email-outgoing_sent" | "messaging-email-outgoing_failed" | "messaging-email-outgoing_delivered" | "messaging-email-outgoing_complained" | "messaging-email-outgoing_rejected" | "messaging-email-outgoing_updated" | "messaging-email-outgoing_replied" | "messaging-email-outgoing_opened" | "messaging-email-outgoing_clicked" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-otp-sent" | "messaging-otp-failed" | "messaging-otp-delivered" | "messaging-otp-updated" | "messaging-sender-domain_created" | "messaging-sender-domain_updated" | "messaging-sender-domain_deleted" | "messaging-sender-domain_verified" | "messaging-sender-phone_number_purchased" | "messaging-sender-phone_number_released" | "messaging-sender-alpha_numeric_id_reserved" | "messaging-sender-alpha_numeric_id_released" | "messaging-sender-alpha_numeric_id_approved" | "messaging-sender-alpha_numeric_id_rejected" | "messaging-sender-blocked" | "messaging-participant-created" | "messaging-participant-conversation_attached" | "messaging-participant-conversation_detached" | "messaging-participant-deleted" | "messaging-participant-sms_unsubscribed" | "messaging-participant-email_unsubscribed" | "messaging-phone-number-provision-not-requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
+                    events?: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-byok-config-created" | "ai-byok-config-updated" | "ai-byok-config-deleted" | "ai-byok-config-tested" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-email_enrolled" | "auth-mfa-email_activated" | "auth-mfa-email_verified" | "auth-mfa-email_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-incoming_sent" | "messaging-sms-outgoing_accepted" | "messaging-sms-outgoing_delayed" | "messaging-sms-outgoing_sent" | "messaging-sms-outgoing_failed" | "messaging-sms-outgoing_delivered" | "messaging-sms-outgoing_complained" | "messaging-sms-outgoing_rejected" | "messaging-sms-outgoing_updated" | "messaging-sms-outgoing_replied" | "messaging-sms-outgoing_expired" | "messaging-email-unknown" | "messaging-email-incoming_sent" | "messaging-email-outgoing_accepted" | "messaging-email-outgoing_delayed" | "messaging-email-outgoing_sent" | "messaging-email-outgoing_failed" | "messaging-email-outgoing_delivered" | "messaging-email-outgoing_complained" | "messaging-email-outgoing_rejected" | "messaging-email-outgoing_updated" | "messaging-email-outgoing_replied" | "messaging-email-outgoing_opened" | "messaging-email-outgoing_clicked" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-otp-sent" | "messaging-otp-failed" | "messaging-otp-delivered" | "messaging-otp-updated" | "messaging-sender-domain_created" | "messaging-sender-domain_updated" | "messaging-sender-domain_deleted" | "messaging-sender-domain_verified" | "messaging-sender-phone_number_purchased" | "messaging-sender-phone_number_released" | "messaging-sender-alpha_numeric_id_reserved" | "messaging-sender-alpha_numeric_id_released" | "messaging-sender-alpha_numeric_id_approved" | "messaging-sender-alpha_numeric_id_rejected" | "messaging-sender-blocked" | "messaging-participant-created" | "messaging-participant-conversation_attached" | "messaging-participant-conversation_detached" | "messaging-participant-deleted" | "messaging-participant-sms_unsubscribed" | "messaging-participant-email_unsubscribed" | "messaging-phone-number-provision-not-requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
                     is_active?: boolean;
                 };
             };
@@ -53165,8 +53227,16 @@ export interface operations {
                     "application/json": {
                         response?: components["schemas"]["ApiResponseMeta"];
                         data?: {
-                            url: string;
-                            expires_at: string;
+                            upload_url: string;
+                            required_fields: {
+                                /** @enum {string} */
+                                method: "POST" | "PUT";
+                                headers: {
+                                    [key: string]: string;
+                                };
+                            };
+                            /** @enum {string} */
+                            upload_mode: "resumable" | "single";
                         };
                     };
                 };
@@ -53230,7 +53300,9 @@ export interface operations {
                         response?: components["schemas"]["ApiResponseMeta"];
                         data?: {
                             url: string;
-                            expires_at: string;
+                            headers?: {
+                                [key: string]: string;
+                            };
                         };
                     };
                 };
