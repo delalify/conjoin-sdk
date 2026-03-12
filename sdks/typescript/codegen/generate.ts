@@ -27,6 +27,8 @@ type OperationInfo = {
   path: string
   pathParams: PathParam[]
   hasRequestBody: boolean
+  requestContentType: string
+  responseContentType: string
   successCode: string
   hasDataProperty: boolean
   isListResponse: boolean
@@ -47,9 +49,16 @@ function loadSpec(): Record<string, unknown> {
   return JSON.parse(raw)
 }
 
+function getFirstContentType(contentMap: Record<string, unknown> | undefined): string {
+  if (!contentMap) return 'application/json'
+  const keys = Object.keys(contentMap)
+  return keys[0] ?? 'application/json'
+}
+
 function getResponseSchemaProperties(
   operation: Record<string, unknown>,
   successCode: string,
+  responseContentType: string,
 ): Record<string, unknown> | undefined {
   const responses = operation.responses as Record<string, Record<string, unknown>> | undefined
   if (!responses) return undefined
@@ -60,11 +69,11 @@ function getResponseSchemaProperties(
   const content = successResponse.content as Record<string, Record<string, unknown>> | undefined
   if (!content) return undefined
 
-  const jsonContent = content['application/json'] as Record<string, unknown> | undefined
-  if (!jsonContent) return undefined
+  const mediaContent = content[responseContentType] as Record<string, unknown> | undefined
+  if (!mediaContent) return undefined
 
-  const schema = jsonContent.schema as Record<string, unknown> | undefined
-  if (!schema) return jsonContent
+  const schema = mediaContent.schema as Record<string, unknown> | undefined
+  if (!schema) return mediaContent
 
   const properties = schema.properties as Record<string, unknown> | undefined
   return properties || schema
@@ -108,9 +117,18 @@ function collectOperations(spec: Record<string, unknown>): ResourceGroup[] {
       const hasQuery = parameters.some(p => p.in === 'query')
       const hasBody = 'requestBody' in operation
 
+      const requestBody = operation.requestBody as Record<string, unknown> | undefined
+      const requestContent = requestBody?.content as Record<string, unknown> | undefined
+      const requestContentType = getFirstContentType(requestContent)
+
       const successCode =
         Object.keys(operation.responses as Record<string, unknown>).find(c => c.startsWith('2')) || '200'
-      const properties = getResponseSchemaProperties(operation, successCode)
+
+      const successResponse = (operation.responses as Record<string, Record<string, unknown>>)?.[successCode]
+      const responseContent = successResponse?.content as Record<string, unknown> | undefined
+      const responseContentType = getFirstContentType(responseContent)
+
+      const properties = getResponseSchemaProperties(operation, successCode, responseContentType)
 
       let hasData = false
       let isList = false
@@ -130,6 +148,8 @@ function collectOperations(spec: Record<string, unknown>): ResourceGroup[] {
           path,
           pathParams,
           hasRequestBody: hasBody,
+          requestContentType,
+          responseContentType,
           successCode,
           hasDataProperty: hasData,
           isListResponse: isList,
@@ -147,22 +167,24 @@ function generateTypeAlias(op: OperationInfo, methodName: string): string {
   const lines: string[] = []
   const opId = op.operationId
   const pascal = methodName.charAt(0).toUpperCase() + methodName.slice(1)
+  const reqCt = op.requestContentType
+  const resCt = op.responseContentType
 
   if (op.hasRequestBody) {
-    lines.push(`type ${pascal}Body = operations['${opId}']['requestBody']['content']['application/json']`)
+    lines.push(`type ${pascal}Body = operations['${opId}']['requestBody']['content']['${reqCt}']`)
   }
 
   if (op.hasDataProperty && op.isListResponse) {
     lines.push(
-      `type ${pascal}Data = NonNullable<operations['${opId}']['responses']['${op.successCode}']['content']['application/json']['data']>[number]`,
+      `type ${pascal}Data = NonNullable<operations['${opId}']['responses']['${op.successCode}']['content']['${resCt}']['data']>[number]`,
     )
   } else if (op.hasDataProperty) {
     lines.push(
-      `type ${pascal}Data = NonNullable<operations['${opId}']['responses']['${op.successCode}']['content']['application/json']['data']>`,
+      `type ${pascal}Data = NonNullable<operations['${opId}']['responses']['${op.successCode}']['content']['${resCt}']['data']>`,
     )
   } else {
     lines.push(
-      `type ${pascal}Response = operations['${opId}']['responses']['${op.successCode}']['content']['application/json']`,
+      `type ${pascal}Response = operations['${opId}']['responses']['${op.successCode}']['content']['${resCt}']`,
     )
   }
 

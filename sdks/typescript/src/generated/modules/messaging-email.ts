@@ -1,7 +1,7 @@
 import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
-type SendBody = operations['sendEmail']['requestBody']['content']['application/json']
+type SendBody = operations['sendEmail']['requestBody']['content']['multipart/form-data']
 type SendData = NonNullable<operations['sendEmail']['responses']['200']['content']['application/json']['data']>
 type ReadMessagesBody = operations['readEmailMessages']['requestBody']['content']['application/json']
 type ReadMessagesData = NonNullable<

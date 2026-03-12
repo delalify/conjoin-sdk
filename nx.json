@@ -27,13 +27,13 @@
       "cache": true
     },
     "lint": {
-      "cache": true
+      "cache": false
     },
     "test": {
       "cache": true
     },
     "format": {
-      "cache": true
+      "cache": false
     }
   }
 }
