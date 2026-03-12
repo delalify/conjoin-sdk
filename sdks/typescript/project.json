@@ -5,7 +5,9 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts"
+          "pnpm openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts",
+          "pnpm tsx codegen/generate.ts",
+          "pnpm biome check --write src/generated/modules/"
         ],
         "cwd": "{projectRoot}"
       }
