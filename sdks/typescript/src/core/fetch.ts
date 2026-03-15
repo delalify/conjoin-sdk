@@ -20,8 +20,9 @@ function buildUrl(config: ResolvedConfig, path: string, query?: Record<string, u
 }
 
 function buildHeaders(config: ResolvedConfig, extra?: Record<string, string>): Record<string, string> {
+  const authKey = config.apiKey ?? config.publishableKey
   const headers: Record<string, string> = {
-    Authorization: `Bearer ${config.apiKey}`,
+    ...(authKey ? { Authorization: `Bearer ${authKey}` } : {}),
     'Content-Type': 'application/json',
     'X-Conjoin-SDK-Version': SDK_VERSION,
     'X-Conjoin-API-Version': config.apiVersion,

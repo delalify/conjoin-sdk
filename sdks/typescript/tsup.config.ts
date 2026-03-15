@@ -1,3 +1,4 @@
+import { cpSync, mkdirSync } from 'node:fs'
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
@@ -14,6 +15,7 @@ export default defineConfig({
     'cloud/index': 'src/cloud/index.ts',
     'react/index': 'src/react/index.ts',
     'server/index': 'src/server/index.ts',
+    'expo/index': 'src/expo/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -21,7 +23,12 @@ export default defineConfig({
   treeshake: true,
   clean: true,
   outDir: 'dist',
+  external: ['react', 'react-dom', 'expo-secure-store', 'node:crypto'],
   define: {
     __CONJOIN_SDK_VERSION__: JSON.stringify(process.env.npm_package_version ?? '0.0.1'),
+  },
+  onSuccess: async () => {
+    mkdirSync('dist/react', { recursive: true })
+    cpSync('src/react/styles/conjoin.css', 'dist/react/styles.css')
   },
 })
