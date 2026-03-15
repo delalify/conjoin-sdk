@@ -40,6 +40,12 @@
         "command": "pnpm vitest run",
         "cwd": "{projectRoot}"
       }
+    },
+    "nx-release-publish": {
+      "executor": "@nx/js:release-publish",
+      "options": {
+        "packageRoot": "{projectRoot}"
+      }
     }
   }
 }

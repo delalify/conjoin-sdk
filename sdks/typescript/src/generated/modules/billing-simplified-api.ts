@@ -2,17 +2,11 @@ import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
 type SimplifiedCheckoutBody = operations['simplifiedCheckout']['requestBody']['content']['application/json']
-type SimplifiedCheckoutData = NonNullable<
-  operations['simplifiedCheckout']['responses']['201']['content']['application/json']['data']
->
+type SimplifiedCheckoutData = NonNullable<operations['simplifiedCheckout']['responses']['201']['content']['application/json']['data']>
 type SimplifiedCheckBody = operations['simplifiedCheck']['requestBody']['content']['application/json']
-type SimplifiedCheckData = NonNullable<
-  operations['simplifiedCheck']['responses']['200']['content']['application/json']['data']
->
+type SimplifiedCheckData = NonNullable<operations['simplifiedCheck']['responses']['200']['content']['application/json']['data']>
 type SimplifiedTrackBody = operations['simplifiedTrack']['requestBody']['content']['application/json']
-type SimplifiedTrackData = NonNullable<
-  operations['simplifiedTrack']['responses']['200']['content']['application/json']['data']
->
+type SimplifiedTrackData = NonNullable<operations['simplifiedTrack']['responses']['200']['content']['application/json']['data']>
 
 export function createBillingSimplifiedAPIs(client: ConjoinClient) {
   return {

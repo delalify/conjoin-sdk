@@ -2,16 +2,10 @@ import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
 type CreateBody = operations['createPaymentMethod']['requestBody']['content']['application/json']
-type CreateData = NonNullable<
-  operations['createPaymentMethod']['responses']['201']['content']['application/json']['data']
->
-type ListData = NonNullable<
-  operations['listPaymentMethods']['responses']['200']['content']['application/json']['data']
->[number]
+type CreateData = NonNullable<operations['createPaymentMethod']['responses']['201']['content']['application/json']['data']>
+type ListData = NonNullable<operations['listPaymentMethods']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listPaymentMethods']['parameters']['query']>
-type DeleteData = NonNullable<
-  operations['deletePaymentMethod']['responses']['200']['content']['application/json']['data']
->
+type DeleteData = NonNullable<operations['deletePaymentMethod']['responses']['200']['content']['application/json']['data']>
 
 export function createBillingPaymentMethods(client: ConjoinClient) {
   return {

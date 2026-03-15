@@ -11,21 +11,12 @@ type ValidateData = NonNullable<operations['validateStepUp']['responses']['200']
 export function createAuthStepUps(client: ConjoinClient) {
   return {
     request: (appId: string, accountId: string, data: RequestBody) =>
-      client.fetch<RequestData>(`auth/step-up/${appId}/account/${accountId}/step-up/request`, {
-        method: 'POST',
-        body: data,
-      }),
+      client.fetch<RequestData>(`auth/step-up/${appId}/account/${accountId}/step-up/request`, { method: 'POST', body: data }),
 
     verify: (appId: string, accountId: string, data: VerifyBody) =>
-      client.fetch<VerifyData>(`auth/step-up/${appId}/account/${accountId}/step-up/verify`, {
-        method: 'POST',
-        body: data,
-      }),
+      client.fetch<VerifyData>(`auth/step-up/${appId}/account/${accountId}/step-up/verify`, { method: 'POST', body: data }),
 
     validate: (appId: string, accountId: string, data: ValidateBody) =>
-      client.fetch<ValidateData>(`auth/step-up/${appId}/account/${accountId}/step-up/validate`, {
-        method: 'POST',
-        body: data,
-      }),
+      client.fetch<ValidateData>(`auth/step-up/${appId}/account/${accountId}/step-up/validate`, { method: 'POST', body: data }),
   }
 }

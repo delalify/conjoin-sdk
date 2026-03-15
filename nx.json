@@ -10,6 +10,25 @@
       "!{projectRoot}/vitest.config.ts"
     ]
   },
+  "release": {
+    "projects": ["sdk-typescript"],
+    "projectsRelationship": "fixed",
+    "releaseTagPattern": "v{version}",
+    "version": {
+      "conventionalCommits": false
+    },
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
+      },
+      "projectChangelogs": false
+    },
+    "git": {
+      "commit": true,
+      "tag": true,
+      "commitMessage": "chore(release): v{version}"
+    }
+  },
   "targetDefaults": {
     "generate": {
       "dependsOn": ["spec:validate"],

@@ -3,22 +3,16 @@ import type { operations } from '../api-types'
 
 type CreateBody = operations['createInvoice']['requestBody']['content']['application/json']
 type CreateData = NonNullable<operations['createInvoice']['responses']['201']['content']['application/json']['data']>
-type ListData = NonNullable<
-  operations['listInvoices']['responses']['200']['content']['application/json']['data']
->[number]
+type ListData = NonNullable<operations['listInvoices']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listInvoices']['parameters']['query']>
 type UpdateBody = operations['updateInvoice']['requestBody']['content']['application/json']
 type UpdateData = NonNullable<operations['updateInvoice']['responses']['200']['content']['application/json']['data']>
-type FinalizeData = NonNullable<
-  operations['finalizeInvoice']['responses']['200']['content']['application/json']['data']
->
+type FinalizeData = NonNullable<operations['finalizeInvoice']['responses']['200']['content']['application/json']['data']>
 type PayBody = operations['payInvoice']['requestBody']['content']['application/json']
 type PayData = NonNullable<operations['payInvoice']['responses']['200']['content']['application/json']['data']>
 type VoidData = NonNullable<operations['voidInvoice']['responses']['200']['content']['application/json']['data']>
 type MarkPaidBody = operations['markInvoicePaid']['requestBody']['content']['application/json']
-type MarkPaidData = NonNullable<
-  operations['markInvoicePaid']['responses']['200']['content']['application/json']['data']
->
+type MarkPaidData = NonNullable<operations['markInvoicePaid']['responses']['200']['content']['application/json']['data']>
 type SendData = NonNullable<operations['sendInvoice']['responses']['200']['content']['application/json']['data']>
 type ReadPdfResponse = operations['readInvoicePdf']['responses']['200']['content']['application/json']
 

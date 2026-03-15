@@ -1,33 +1,19 @@
 import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
-type ReadEventsData = NonNullable<
-  operations['readGuardEvents']['responses']['200']['content']['application/json']['data']
->[number]
+type ReadEventsData = NonNullable<operations['readGuardEvents']['responses']['200']['content']['application/json']['data']>[number]
 type ReadEventsQuery = NonNullable<operations['readGuardEvents']['parameters']['query']>
 type UpdateSettingsBody = operations['updateGuardSettings']['requestBody']['content']['application/json']
-type UpdateSettingsData = NonNullable<
-  operations['updateGuardSettings']['responses']['200']['content']['application/json']['data']
->
+type UpdateSettingsData = NonNullable<operations['updateGuardSettings']['responses']['200']['content']['application/json']['data']>
 type AddTrustedIpBody = operations['addGuardTrustedIp']['requestBody']['content']['application/json']
-type AddTrustedIpData = NonNullable<
-  operations['addGuardTrustedIp']['responses']['200']['content']['application/json']['data']
->
+type AddTrustedIpData = NonNullable<operations['addGuardTrustedIp']['responses']['200']['content']['application/json']['data']>
 type RemoveTrustedIpBody = operations['removeGuardTrustedIp']['requestBody']['content']['application/json']
-type RemoveTrustedIpData = NonNullable<
-  operations['removeGuardTrustedIp']['responses']['200']['content']['application/json']['data']
->
-type ListAnonymousIpsData = NonNullable<
-  operations['listGuardAnonymousIps']['responses']['200']['content']['application/json']['data']
->
+type RemoveTrustedIpData = NonNullable<operations['removeGuardTrustedIp']['responses']['200']['content']['application/json']['data']>
+type ListAnonymousIpsData = NonNullable<operations['listGuardAnonymousIps']['responses']['200']['content']['application/json']['data']>
 type AddAnonymousIpsBody = operations['addGuardAnonymousIps']['requestBody']['content']['application/json']
-type AddAnonymousIpsData = NonNullable<
-  operations['addGuardAnonymousIps']['responses']['200']['content']['application/json']['data']
->
+type AddAnonymousIpsData = NonNullable<operations['addGuardAnonymousIps']['responses']['200']['content']['application/json']['data']>
 type RemoveAnonymousIpsBody = operations['removeGuardAnonymousIps']['requestBody']['content']['application/json']
-type RemoveAnonymousIpsData = NonNullable<
-  operations['removeGuardAnonymousIps']['responses']['200']['content']['application/json']['data']
->
+type RemoveAnonymousIpsData = NonNullable<operations['removeGuardAnonymousIps']['responses']['200']['content']['application/json']['data']>
 
 export function createAuthGuards(client: ConjoinClient) {
   return {
@@ -43,15 +29,13 @@ export function createAuthGuards(client: ConjoinClient) {
     removeTrustedIp: (appId: string, data: RemoveTrustedIpBody) =>
       client.fetch<RemoveTrustedIpData>(`auth/guard/${appId}/guard/trusted-ips/remove`, { method: 'POST', body: data }),
 
-    listAnonymousIps: (appId: string) => client.fetch<ListAnonymousIpsData>(`auth/guard/${appId}/guard/anonymous-ips`),
+    listAnonymousIps: (appId: string) =>
+      client.fetch<ListAnonymousIpsData>(`auth/guard/${appId}/guard/anonymous-ips`),
 
     addAnonymousIps: (appId: string, data: AddAnonymousIpsBody) =>
       client.fetch<AddAnonymousIpsData>(`auth/guard/${appId}/guard/anonymous-ips`, { method: 'POST', body: data }),
 
     removeAnonymousIps: (appId: string, data: RemoveAnonymousIpsBody) =>
-      client.fetch<RemoveAnonymousIpsData>(`auth/guard/${appId}/guard/anonymous-ips/remove`, {
-        method: 'POST',
-        body: data,
-      }),
+      client.fetch<RemoveAnonymousIpsData>(`auth/guard/${appId}/guard/anonymous-ips/remove`, { method: 'POST', body: data }),
   }
 }

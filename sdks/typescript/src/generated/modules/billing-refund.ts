@@ -3,9 +3,7 @@ import type { operations } from '../api-types'
 
 type CreateBody = operations['createRefund']['requestBody']['content']['application/json']
 type CreateData = NonNullable<operations['createRefund']['responses']['201']['content']['application/json']['data']>
-type ListData = NonNullable<
-  operations['listRefunds']['responses']['200']['content']['application/json']['data']
->[number]
+type ListData = NonNullable<operations['listRefunds']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listRefunds']['parameters']['query']>
 
 export function createBillingRefunds(client: ConjoinClient) {

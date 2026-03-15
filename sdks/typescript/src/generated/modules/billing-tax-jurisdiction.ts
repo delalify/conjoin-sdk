@@ -1,13 +1,9 @@
 import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
-type ListData = NonNullable<
-  operations['listTaxJurisdictions']['responses']['200']['content']['application/json']['data']
->[number]
+type ListData = NonNullable<operations['listTaxJurisdictions']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listTaxJurisdictions']['parameters']['query']>
-type QueryTaxRateData = NonNullable<
-  operations['queryTaxRate']['responses']['200']['content']['application/json']['data']
->
+type QueryTaxRateData = NonNullable<operations['queryTaxRate']['responses']['200']['content']['application/json']['data']>
 type QueryTaxRateQuery = NonNullable<operations['queryTaxRate']['parameters']['query']>
 
 export function createBillingTaxJurisdictions(client: ConjoinClient) {

@@ -17,9 +17,7 @@ export function createBillingPrices(client: ConjoinClient) {
       client.fetch<CreateData>(`billing/price/${entityId}`, { method: 'POST', body: data }),
 
     list: (entityId: string, referenceId: string, query?: ListQuery) =>
-      client.fetchList<ListData>(`billing/price/${entityId}/${referenceId}`, {
-        query: query as Record<string, unknown>,
-      }),
+      client.fetchList<ListData>(`billing/price/${entityId}/${referenceId}`, { query: query as Record<string, unknown> }),
 
     update: (entityId: string, referenceId: string, data: UpdateBody) =>
       client.fetch<UpdateData>(`billing/price/${entityId}/${referenceId}`, { method: 'PUT', body: data }),

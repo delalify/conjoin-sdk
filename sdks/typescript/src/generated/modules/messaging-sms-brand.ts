@@ -2,23 +2,13 @@ import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
 type CreateSmsBrandBody = operations['createSmsBrand']['requestBody']['content']['application/json']
-type CreateSmsBrandData = NonNullable<
-  operations['createSmsBrand']['responses']['201']['content']['application/json']['data']
->
-type ReadSmsBrandData = NonNullable<
-  operations['readSmsBrand']['responses']['200']['content']['application/json']['data']
->
+type CreateSmsBrandData = NonNullable<operations['createSmsBrand']['responses']['201']['content']['application/json']['data']>
+type ReadSmsBrandData = NonNullable<operations['readSmsBrand']['responses']['200']['content']['application/json']['data']>
 type UpdateSmsBrandBody = operations['updateSmsBrand']['requestBody']['content']['application/json']
-type UpdateSmsBrandData = NonNullable<
-  operations['updateSmsBrand']['responses']['200']['content']['application/json']['data']
->
-type DeleteSmsBrandData = NonNullable<
-  operations['deleteSmsBrand']['responses']['200']['content']['application/json']['data']
->
+type UpdateSmsBrandData = NonNullable<operations['updateSmsBrand']['responses']['200']['content']['application/json']['data']>
+type DeleteSmsBrandData = NonNullable<operations['deleteSmsBrand']['responses']['200']['content']['application/json']['data']>
 type ListSmsBrandsBody = operations['listSmsBrands']['requestBody']['content']['application/json']
-type ListSmsBrandsData = NonNullable<
-  operations['listSmsBrands']['responses']['200']['content']['application/json']['data']
->[number]
+type ListSmsBrandsData = NonNullable<operations['listSmsBrands']['responses']['200']['content']['application/json']['data']>[number]
 
 export function createMessagingSMSBrands(client: ConjoinClient) {
   return {
