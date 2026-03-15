@@ -1,5 +1,6 @@
 export type ConjoinConfig = {
-  apiKey: string
+  apiKey?: string
+  publishableKey?: string
   baseUrl?: string
   apiVersion?: string
   timeout?: number
@@ -10,7 +11,8 @@ export type ConjoinConfig = {
 }
 
 export type ResolvedConfig = {
-  readonly apiKey: string
+  readonly apiKey?: string
+  readonly publishableKey?: string
   readonly baseUrl: string
   readonly apiVersion: string
   readonly timeout: number

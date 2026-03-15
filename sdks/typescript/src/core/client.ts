@@ -8,8 +8,13 @@ const DEFAULT_MAX_RETRIES = 3
 const DEFAULT_BACKOFF_MS = 500
 
 function resolveConfig(config: ConjoinConfig): ResolvedConfig {
+  if (!config.apiKey && !config.publishableKey) {
+    throw new Error('Either apiKey or publishableKey must be provided')
+  }
+
   return Object.freeze({
     apiKey: config.apiKey,
+    publishableKey: config.publishableKey,
     baseUrl: config.baseUrl ?? DEFAULT_BASE_URL,
     apiVersion: config.apiVersion ?? DEFAULT_API_VERSION,
     timeout: config.timeout ?? DEFAULT_TIMEOUT,

@@ -2,7 +2,9 @@
   "name": "@conjoin/sdk",
   "version": "0.0.1",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/react/styles.css"
+  ],
   "license": "MIT",
   "exports": {
     ".": {
@@ -64,26 +66,38 @@
       "types": "./dist/server/index.d.ts",
       "import": "./dist/server/index.js",
       "require": "./dist/server/index.cjs"
-    }
+    },
+    "./expo": {
+      "types": "./dist/expo/index.d.ts",
+      "import": "./dist/expo/index.js",
+      "require": "./dist/expo/index.cjs"
+    },
+    "./react/styles.css": "./dist/react/styles.css"
   },
   "files": [
     "dist"
   ],
   "peerDependencies": {
-    "@tanstack/react-query": ">=5.0.0",
-    "react": ">=18.0.0"
+    "expo-secure-store": ">=13.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "peerDependenciesMeta": {
     "react": {
       "optional": true
     },
-    "@tanstack/react-query": {
+    "react-dom": {
+      "optional": true
+    },
+    "expo-secure-store": {
       "optional": true
     }
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
     "@types/node": "25.4.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "openapi-typescript": "7.13.0",
     "tsup": "8.5.1",
     "tsx": "4.21.0",
@@ -96,5 +110,17 @@
     "format": "biome check --write src/",
     "test": "vitest run",
     "generate": "openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts"
+  },
+  "dependencies": {
+    "@radix-ui/react-avatar": "1.1.11",
+    "@radix-ui/react-dialog": "1.1.15",
+    "@radix-ui/react-dropdown-menu": "2.1.16",
+    "@radix-ui/react-label": "2.1.8",
+    "@radix-ui/react-popover": "1.1.15",
+    "@radix-ui/react-separator": "1.1.8",
+    "@radix-ui/react-tabs": "1.1.13",
+    "@radix-ui/react-visually-hidden": "1.2.4",
+    "@tanstack/query-core": "5.90.20",
+    "jose": "6.2.1"
   }
 }
