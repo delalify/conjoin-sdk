@@ -2,22 +2,43 @@ import type { AuthTransport, ConjoinAuthState } from '../provider/types'
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
-  const match = document.cookie.match(new RegExp(`(?:^|; )${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}=([^;]*)`))
-  return match ? decodeURIComponent(match[1]) : null
+  const prefix = `${name}=`
+  const cookies = document.cookie.split('; ')
+  for (const cookie of cookies) {
+    if (cookie.startsWith(prefix)) {
+      return decodeURIComponent(cookie.substring(prefix.length))
+    }
+  }
+  return null
 }
 
-function parseAuthCookie(): {
+type AuthCookiePayload = {
   accountId: string
   sessionId: string
   orgId: string | null
   orgRole: string | null
-} | null {
+}
+
+function parseAuthCookie(): AuthCookiePayload | null {
   const raw = getCookie('__conjoin_auth_cl')
   if (!raw) return null
   try {
-    return JSON.parse(raw) as { accountId: string; sessionId: string; orgId: string | null; orgRole: string | null }
+    const parsed = JSON.parse(raw)
+    if (typeof parsed !== 'object' || parsed === null) return null
+    if (typeof parsed.accountId !== 'string' || typeof parsed.sessionId !== 'string') return null
+    return parsed as AuthCookiePayload
   } catch {
     return null
+  }
+}
+
+function deleteCookie(name: string) {
+  if (typeof window !== 'undefined' && 'cookieStore' in window) {
+    const store = window.cookieStore as { delete: (name: string) => Promise<void> }
+    store.delete(name).catch(() => {})
+  } else if (typeof document !== 'undefined') {
+    // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API fallback for older browsers
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
   }
 }
 
@@ -40,20 +61,12 @@ export function createWebTransport(): AuthTransport {
       }
     },
 
-    storeTokens(_accessToken: string, _refreshToken: string) {
-      // Tokens are stored as HttpOnly cookies by the auth server.
-      // The access token in the client state is used for API calls only.
+    storeTokens() {
+      // Tokens are HttpOnly cookies managed by the auth server
     },
 
     clearTokens() {
-      if (typeof window !== 'undefined' && 'cookieStore' in window) {
-        ;(window as unknown as { cookieStore: { delete: (name: string) => Promise<void> } }).cookieStore.delete(
-          '__conjoin_auth_cl',
-        )
-      } else if (typeof document !== 'undefined') {
-        // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API not available, fallback required
-        document.cookie = '__conjoin_auth_cl=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
-      }
+      deleteCookie('__conjoin_auth_cl')
     },
 
     attachAuth(headers: Record<string, string>): Record<string, string> {

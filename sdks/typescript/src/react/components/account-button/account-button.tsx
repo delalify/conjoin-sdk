@@ -36,10 +36,8 @@ export function AccountButton({ onManageAccount, onSignOut }: AccountButtonProps
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
-          data-conjoin-avatar=""
-          data-size="md"
           aria-label="Account menu"
-          style={{ cursor: 'pointer', border: 'none' }}
+          style={{ cursor: 'pointer', border: 'none', background: 'none', padding: 0 }}
         >
           <Avatar.Root data-conjoin-avatar="" data-size="md">
             {account?.avatar_url && <Avatar.Image src={account.avatar_url} alt={displayName} />}

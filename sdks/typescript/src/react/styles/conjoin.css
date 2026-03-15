@@ -394,4 +394,25 @@
       transform: rotate(360deg);
     }
   }
+
+  @media (max-width: 640px) {
+    [data-conjoin-pricing-grid] {
+      grid-template-columns: 1fr;
+    }
+
+    [data-conjoin-dialog-content] {
+      width: 95vw;
+      padding: calc(var(--conjoin-spacing-unit) * 4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-conjoin-provider] [data-conjoin-spinner],
+    [data-conjoin-provider] [data-conjoin-dialog-overlay],
+    [data-conjoin-provider] [data-conjoin-dialog-content],
+    [data-conjoin-provider] [data-conjoin-menu-content] {
+      animation: none;
+      transition: none;
+    }
+  }
 }

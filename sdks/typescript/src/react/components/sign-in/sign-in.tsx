@@ -1,26 +1,33 @@
 import * as Label from '@radix-ui/react-label'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
-import { type FormEvent, useCallback, useState } from 'react'
+import { type FormEvent, useCallback, useRef, useState } from 'react'
+import { useAuthFetch } from '../../hooks/internal/use-auth-fetch'
 import { useConjoinClient } from '../../hooks/internal/use-conjoin-client'
 
 type SignInStep = 'identifier' | 'password' | 'mfa'
 
 type SignInProps = {
   afterSignInUrl?: string
+  forgotPasswordUrl?: string
+  signUpUrl?: string
   onSignIn?: () => void
 }
 
-export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
+export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn }: SignInProps) {
   const { sdkConfig } = useConjoinClient()
+  const { authFetch, authDomain, isConfigured } = useAuthFetch()
   const [step, setStep] = useState<SignInStep>('identifier')
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [mfaCode, setMfaCode] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [flowId, setFlowId] = useState<string | null>(null)
 
-  const authDomain = sdkConfig?.auth.domain
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const mfaRef = useRef<HTMLInputElement>(null)
+  const identifierRef = useRef<HTMLInputElement>(null)
+
   const signInMethods = sdkConfig?.auth.sign_in_methods ?? []
   const oauthMethods = signInMethods.filter(m => m !== 'email_password' && m !== 'email_otp')
   const hasEmailPassword = signInMethods.includes('email_password')
@@ -28,50 +35,47 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
   const handleIdentifierSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
-      if (!authDomain || !identifier.trim()) return
+      if (isSubmitting || !identifier.trim()) return
 
-      setIsLoading(true)
+      setIsSubmitting(true)
       setError(null)
 
       try {
-        const response = await fetch(`https://${authDomain}/v1/auth/signin/start`, {
+        const response = await authFetch('/v1/auth/signin/start', {
           method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ identifier: identifier.trim() }),
         })
 
         if (!response.ok) {
           const body = (await response.json().catch(() => ({}))) as { message?: string }
-          setError(body.message ?? 'Sign in failed')
+          setError(body.message ?? 'Unable to sign in. Please check your email and try again.')
           return
         }
 
-        const body = (await response.json()) as { data: { flow_id: string; requires_mfa: boolean } }
+        const body = (await response.json()) as { data: { flow_id: string } }
         setFlowId(body.data.flow_id)
         setStep('password')
+        requestAnimationFrame(() => passwordRef.current?.focus())
       } catch {
-        setError('An unexpected error occurred')
+        setError('A network error occurred. Please check your connection and try again.')
       } finally {
-        setIsLoading(false)
+        setIsSubmitting(false)
       }
     },
-    [authDomain, identifier],
+    [authFetch, identifier, isSubmitting],
   )
 
   const handlePasswordSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
-      if (!authDomain || !flowId || !password) return
+      if (isSubmitting || !flowId || !password) return
 
-      setIsLoading(true)
+      setIsSubmitting(true)
       setError(null)
 
       try {
-        const response = await fetch(`https://${authDomain}/v1/auth/signin/complete`, {
+        const response = await authFetch('/v1/auth/signin/complete', {
           method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ flow_id: flowId, password }),
         })
 
@@ -79,9 +83,10 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
           const body = (await response.json().catch(() => ({}))) as { message?: string; requires_mfa?: boolean }
           if (body.requires_mfa) {
             setStep('mfa')
+            requestAnimationFrame(() => mfaRef.current?.focus())
             return
           }
-          setError(body.message ?? 'Invalid credentials')
+          setError(body.message ?? 'Invalid credentials. Please try again.')
           return
         }
 
@@ -90,33 +95,31 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
         }
         onSignIn?.()
       } catch {
-        setError('An unexpected error occurred')
+        setError('A network error occurred. Please check your connection and try again.')
       } finally {
-        setIsLoading(false)
+        setIsSubmitting(false)
       }
     },
-    [authDomain, flowId, password, afterSignInUrl, onSignIn],
+    [authFetch, flowId, password, afterSignInUrl, onSignIn, isSubmitting],
   )
 
   const handleMfaSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
-      if (!authDomain || !flowId || !mfaCode) return
+      if (isSubmitting || !flowId || !mfaCode) return
 
-      setIsLoading(true)
+      setIsSubmitting(true)
       setError(null)
 
       try {
-        const response = await fetch(`https://${authDomain}/v1/auth/signin/complete`, {
+        const response = await authFetch('/v1/auth/signin/complete', {
           method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ flow_id: flowId, mfa_code: mfaCode }),
         })
 
         if (!response.ok) {
           const body = (await response.json().catch(() => ({}))) as { message?: string }
-          setError(body.message ?? 'Invalid code')
+          setError(body.message ?? 'Invalid verification code. Please try again.')
           return
         }
 
@@ -125,21 +128,39 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
         }
         onSignIn?.()
       } catch {
-        setError('An unexpected error occurred')
+        setError('A network error occurred. Please check your connection and try again.')
       } finally {
-        setIsLoading(false)
+        setIsSubmitting(false)
       }
     },
-    [authDomain, flowId, mfaCode, afterSignInUrl, onSignIn],
+    [authFetch, flowId, mfaCode, afterSignInUrl, onSignIn, isSubmitting],
   )
 
   const handleOAuthClick = useCallback(
     (provider: string) => {
       if (!authDomain) return
-      window.location.href = `https://${authDomain}/v1/auth/oauth/${provider}/start`
+      window.location.href = `https://${authDomain}/v1/auth/oauth/${encodeURIComponent(provider)}/start`
     },
     [authDomain],
   )
+
+  const handleBack = useCallback(() => {
+    setStep('identifier')
+    setError(null)
+    setPassword('')
+    setMfaCode('')
+    requestAnimationFrame(() => identifierRef.current?.focus())
+  }, [])
+
+  if (!isConfigured) {
+    return (
+      <div data-conjoin-card="">
+        <p data-conjoin-heading="" style={{ textAlign: 'center' }}>
+          Sign in is not available
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div data-conjoin-card="">
@@ -159,13 +180,20 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
 
       {oauthMethods.length > 0 && hasEmailPassword && <div data-conjoin-divider-text="">or</div>}
 
+      {error && (
+        <p data-conjoin-field-error="" role="alert">
+          {error}
+        </p>
+      )}
+
       {step === 'identifier' && hasEmailPassword && (
-        <form onSubmit={handleIdentifierSubmit}>
+        <form onSubmit={handleIdentifierSubmit} noValidate>
           <div style={{ marginBottom: '1rem' }}>
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-identifier">
               Email address
             </Label.Root>
             <input
+              ref={identifierRef}
               id="conjoin-sign-in-identifier"
               data-conjoin-input=""
               type="email"
@@ -174,25 +202,26 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
               onChange={e => setIdentifier(e.target.value)}
               placeholder="you@example.com"
               required
+              aria-invalid={!!error}
+              maxLength={320}
             />
           </div>
-
-          {error && <p data-conjoin-field-error="">{error}</p>}
 
           <button
             type="submit"
             data-conjoin-button=""
             data-variant="primary"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
             style={{ width: '100%', marginTop: '0.5rem' }}
           >
-            {isLoading ? <span data-conjoin-spinner="" data-size="sm" /> : 'Continue'}
+            {isSubmitting ? <span data-conjoin-spinner="" data-size="sm" /> : 'Continue'}
           </button>
         </form>
       )}
 
       {step === 'password' && (
-        <form onSubmit={handlePasswordSubmit}>
+        <form onSubmit={handlePasswordSubmit} noValidate>
           <VisuallyHidden.Root>
             <label htmlFor="conjoin-sign-in-email-hidden">Email</label>
             <input id="conjoin-sign-in-email-hidden" type="email" value={identifier} readOnly autoComplete="email" />
@@ -203,6 +232,7 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
               Password
             </Label.Root>
             <input
+              ref={passwordRef}
               id="conjoin-sign-in-password"
               data-conjoin-input=""
               type="password"
@@ -211,29 +241,41 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
               onChange={e => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
+              aria-invalid={!!error}
             />
           </div>
 
-          {error && <p data-conjoin-field-error="">{error}</p>}
+          {forgotPasswordUrl && (
+            <div style={{ textAlign: 'right', marginBottom: '0.75rem' }}>
+              <a
+                href={forgotPasswordUrl}
+                style={{
+                  fontSize: '0.8125rem',
+                  color: 'var(--conjoin-primary)',
+                  textDecoration: 'none',
+                }}
+              >
+                Forgot password?
+              </a>
+            </div>
+          )}
 
           <button
             type="submit"
             data-conjoin-button=""
             data-variant="primary"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
             style={{ width: '100%', marginTop: '0.5rem' }}
           >
-            {isLoading ? <span data-conjoin-spinner="" data-size="sm" /> : 'Sign in'}
+            {isSubmitting ? <span data-conjoin-spinner="" data-size="sm" /> : 'Sign in'}
           </button>
 
           <button
             type="button"
             data-conjoin-button=""
             data-variant="outline"
-            onClick={() => {
-              setStep('identifier')
-              setError(null)
-            }}
+            onClick={handleBack}
             style={{ width: '100%', marginTop: '0.5rem' }}
           >
             Back
@@ -242,12 +284,13 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
       )}
 
       {step === 'mfa' && (
-        <form onSubmit={handleMfaSubmit}>
+        <form onSubmit={handleMfaSubmit} noValidate>
           <div style={{ marginBottom: '1rem' }}>
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-mfa">
               Verification code
             </Label.Root>
             <input
+              ref={mfaRef}
               id="conjoin-sign-in-mfa"
               data-conjoin-input=""
               type="text"
@@ -257,21 +300,38 @@ export function SignIn({ afterSignInUrl, onSignIn }: SignInProps) {
               onChange={e => setMfaCode(e.target.value)}
               placeholder="Enter 6-digit code"
               required
+              maxLength={8}
+              aria-invalid={!!error}
             />
           </div>
-
-          {error && <p data-conjoin-field-error="">{error}</p>}
 
           <button
             type="submit"
             data-conjoin-button=""
             data-variant="primary"
-            disabled={isLoading}
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
             style={{ width: '100%', marginTop: '0.5rem' }}
           >
-            {isLoading ? <span data-conjoin-spinner="" data-size="sm" /> : 'Verify'}
+            {isSubmitting ? <span data-conjoin-spinner="" data-size="sm" /> : 'Verify'}
           </button>
         </form>
+      )}
+
+      {signUpUrl && (
+        <p
+          style={{
+            textAlign: 'center',
+            fontSize: '0.8125rem',
+            color: 'var(--conjoin-subtle-text)',
+            marginTop: '1.5rem',
+          }}
+        >
+          Don't have an account?{' '}
+          <a href={signUpUrl} style={{ color: 'var(--conjoin-primary)', textDecoration: 'none' }}>
+            Sign up
+          </a>
+        </p>
       )}
     </div>
   )

@@ -3,42 +3,44 @@ import * as Label from '@radix-ui/react-label'
 import * as Separator from '@radix-ui/react-separator'
 import * as Tabs from '@radix-ui/react-tabs'
 import { type FormEvent, useCallback, useState } from 'react'
-import { useConjoinClient } from '../../hooks/internal/use-conjoin-client'
+import { useAuthFetch } from '../../hooks/internal/use-auth-fetch'
 import { type ConjoinAccount, useAccount } from '../../hooks/use-account'
 import { useSession } from '../../hooks/use-session'
 
 function ProfileTab({ account }: { account: ConjoinAccount }) {
-  const { sdkConfig } = useConjoinClient()
-  const authDomain = sdkConfig?.auth.domain
+  const { authFetch } = useAuthFetch()
   const [firstName, setFirstName] = useState(account.first_name ?? '')
   const [lastName, setLastName] = useState(account.last_name ?? '')
   const [isSaving, setIsSaving] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   const handleSave = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
-      if (!authDomain) return
+      if (isSaving) return
 
       setIsSaving(true)
-      setMessage(null)
+      setFeedback(null)
 
       try {
-        const response = await fetch(`https://${authDomain}/v1/auth/self`, {
+        const response = await authFetch('/v1/auth/self', {
           method: 'PATCH',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ first_name: firstName, last_name: lastName }),
+          body: JSON.stringify({ first_name: firstName.trim(), last_name: lastName.trim() }),
         })
 
-        setMessage(response.ok ? 'Profile updated' : 'Update failed')
+        if (response.ok) {
+          setFeedback({ type: 'success', message: 'Profile updated' })
+        } else {
+          const body = (await response.json().catch(() => ({}))) as { message?: string }
+          setFeedback({ type: 'error', message: body.message ?? 'Failed to update profile' })
+        }
       } catch {
-        setMessage('Update failed')
+        setFeedback({ type: 'error', message: 'A network error occurred' })
       } finally {
         setIsSaving(false)
       }
     },
-    [authDomain, firstName, lastName],
+    [authFetch, firstName, lastName, isSaving],
   )
 
   return (
@@ -50,7 +52,7 @@ function ProfileTab({ account }: { account: ConjoinAccount }) {
         </Avatar.Root>
         <div>
           <p style={{ fontWeight: 500 }}>
-            {[account.first_name, account.last_name].filter(Boolean).join(' ') || 'Your profile'}
+            {[account.first_name, account.last_name].filter(Boolean).join(' ') || account.email}
           </p>
           <p style={{ fontSize: '0.8125rem', color: 'var(--conjoin-subtle-text)' }}>{account.email}</p>
         </div>
@@ -68,6 +70,7 @@ function ProfileTab({ account }: { account: ConjoinAccount }) {
             data-conjoin-input=""
             value={firstName}
             onChange={e => setFirstName(e.target.value)}
+            maxLength={100}
           />
         </div>
         <div>
@@ -79,15 +82,25 @@ function ProfileTab({ account }: { account: ConjoinAccount }) {
             data-conjoin-input=""
             value={lastName}
             onChange={e => setLastName(e.target.value)}
+            maxLength={100}
           />
         </div>
       </div>
 
-      {message && (
-        <p style={{ fontSize: '0.8125rem', color: 'var(--conjoin-success)', marginBottom: '0.5rem' }}>{message}</p>
+      {feedback && (
+        <p
+          role={feedback.type === 'error' ? 'alert' : 'status'}
+          style={{
+            fontSize: '0.8125rem',
+            marginBottom: '0.5rem',
+            color: feedback.type === 'success' ? 'var(--conjoin-success)' : 'var(--conjoin-danger)',
+          }}
+        >
+          {feedback.message}
+        </p>
       )}
 
-      <button type="submit" data-conjoin-button="" data-variant="primary" disabled={isSaving}>
+      <button type="submit" data-conjoin-button="" data-variant="primary" disabled={isSaving} aria-busy={isSaving}>
         {isSaving ? <span data-conjoin-spinner="" data-size="sm" /> : 'Save'}
       </button>
     </form>
@@ -95,44 +108,41 @@ function ProfileTab({ account }: { account: ConjoinAccount }) {
 }
 
 function SecurityTab() {
-  const { sdkConfig } = useConjoinClient()
-  const authDomain = sdkConfig?.auth.domain
+  const { authFetch } = useAuthFetch()
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [isSaving, setIsSaving] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   const handleChangePassword = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
-      if (!authDomain) return
+      if (isSaving) return
 
       setIsSaving(true)
-      setMessage(null)
+      setFeedback(null)
 
       try {
-        const response = await fetch(`https://${authDomain}/v1/auth/self/password`, {
+        const response = await authFetch('/v1/auth/self/password', {
           method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
         })
 
         if (response.ok) {
-          setMessage('Password updated')
+          setFeedback({ type: 'success', message: 'Password updated' })
           setCurrentPassword('')
           setNewPassword('')
         } else {
           const body = (await response.json().catch(() => ({}))) as { message?: string }
-          setMessage(body.message ?? 'Password change failed')
+          setFeedback({ type: 'error', message: body.message ?? 'Failed to update password' })
         }
       } catch {
-        setMessage('Password change failed')
+        setFeedback({ type: 'error', message: 'A network error occurred' })
       } finally {
         setIsSaving(false)
       }
     },
-    [authDomain, currentPassword, newPassword],
+    [authFetch, currentPassword, newPassword, isSaving],
   )
 
   return (
@@ -171,11 +181,20 @@ function SecurityTab() {
         />
       </div>
 
-      {message && (
-        <p style={{ fontSize: '0.8125rem', marginBottom: '0.5rem', color: 'var(--conjoin-subtle-text)' }}>{message}</p>
+      {feedback && (
+        <p
+          role={feedback.type === 'error' ? 'alert' : 'status'}
+          style={{
+            fontSize: '0.8125rem',
+            marginBottom: '0.5rem',
+            color: feedback.type === 'success' ? 'var(--conjoin-success)' : 'var(--conjoin-danger)',
+          }}
+        >
+          {feedback.message}
+        </p>
       )}
 
-      <button type="submit" data-conjoin-button="" data-variant="primary" disabled={isSaving}>
+      <button type="submit" data-conjoin-button="" data-variant="primary" disabled={isSaving} aria-busy={isSaving}>
         {isSaving ? <span data-conjoin-spinner="" data-size="sm" /> : 'Update password'}
       </button>
     </form>
@@ -191,7 +210,7 @@ function SessionsTab() {
         Active sessions
       </h3>
 
-      {session && (
+      {session ? (
         <div
           style={{
             display: 'flex',
@@ -206,11 +225,13 @@ function SessionsTab() {
             <p style={{ fontWeight: 500, fontSize: '0.875rem' }}>Current session</p>
             <p style={{ fontSize: '0.75rem', color: 'var(--conjoin-subtle-text)' }}>
               {session.client_info?.device_type ?? 'Unknown device'}
-              {session.client_info?.city ? ` - ${session.client_info.city}` : ''}
+              {session.client_info?.city ? ` \u00B7 ${session.client_info.city}` : ''}
             </p>
           </div>
-          <span style={{ fontSize: '0.75rem', color: 'var(--conjoin-success)' }}>Active</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--conjoin-success)', fontWeight: 500 }}>Active</span>
         </div>
+      ) : (
+        <p style={{ fontSize: '0.8125rem', color: 'var(--conjoin-subtle-text)' }}>Loading session data...</p>
       )}
     </div>
   )
@@ -232,7 +253,7 @@ export function AccountProfile() {
   return (
     <div data-conjoin-card="" style={{ maxWidth: '640px' }}>
       <Tabs.Root defaultValue="profile">
-        <Tabs.List data-conjoin-tabs-list="">
+        <Tabs.List data-conjoin-tabs-list="" aria-label="Account settings sections">
           <Tabs.Trigger data-conjoin-tabs-trigger="" value="profile">
             Profile
           </Tabs.Trigger>

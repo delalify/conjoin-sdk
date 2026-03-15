@@ -16,6 +16,7 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
 
   const handleActivate = useCallback(
     async (bundleReferenceId: string) => {
+      if (activatingId) return
       setActivatingId(bundleReferenceId)
       try {
         await checkout.activate({
@@ -25,12 +26,12 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
         })
         onCheckoutComplete?.()
       } catch {
-        // Error state surfaced via checkout.error
+        // Error surfaced via checkout.error
       } finally {
         setActivatingId(null)
       }
     },
-    [entityId, checkout, onCheckoutComplete],
+    [entityId, checkout, onCheckoutComplete, activatingId],
   )
 
   if (isLoading) {
@@ -43,7 +44,7 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
 
   if (error) {
     return (
-      <div data-conjoin-card="" style={{ textAlign: 'center' }}>
+      <div data-conjoin-card="" style={{ textAlign: 'center' }} role="alert">
         <p style={{ color: 'var(--conjoin-danger)' }}>Failed to load pricing</p>
       </div>
     )
@@ -60,7 +61,7 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
   const columns = Math.min(bundles.length, 3)
 
   return (
-    <div data-conjoin-pricing-grid="" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+    <div data-conjoin-pricing-grid="" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
       {bundles.map(bundle => {
         const bundleRecord = bundle as Record<string, unknown>
         const id = bundleRecord.id as string
@@ -70,6 +71,7 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
         const price = bundleRecord.price as { amount: number; currency: string; interval: string } | undefined
         const isHighlighted = id === highlightedBundleId
         const isActivating = activatingId === id
+        const isDisabled = !!activatingId || checkout.isLoading
 
         return (
           <div key={id} data-conjoin-pricing-card="" data-highlighted={isHighlighted ? 'true' : undefined}>
@@ -109,7 +111,9 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
                       gap: '0.5rem',
                     }}
                   >
-                    <span style={{ color: 'var(--conjoin-success)' }}>&#10003;</span>
+                    <span style={{ color: 'var(--conjoin-success)' }} aria-hidden="true">
+                      &#10003;
+                    </span>
                     {feature}
                   </li>
                 ))}
@@ -121,7 +125,8 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
               data-conjoin-button=""
               data-variant={isHighlighted ? 'primary' : 'outline'}
               style={{ width: '100%', marginTop: 'auto' }}
-              disabled={isActivating || checkout.isLoading}
+              disabled={isDisabled}
+              aria-busy={isActivating}
               onClick={() => handleActivate(id)}
             >
               {isActivating ? <span data-conjoin-spinner="" data-size="sm" /> : 'Get started'}
@@ -131,7 +136,7 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
       })}
 
       {checkout.error && (
-        <div style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
+        <div style={{ gridColumn: '1 / -1', textAlign: 'center' }} role="alert">
           <p data-conjoin-field-error="">Checkout failed. Please try again.</p>
         </div>
       )}

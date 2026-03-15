@@ -6,6 +6,12 @@ import { useConjoinQuery } from './internal/use-conjoin-query'
 type EntitlementOverridesApi = ReturnType<typeof createBillingEntitlementOverrides>
 type EntitlementOverrideItem = Awaited<ReturnType<EntitlementOverridesApi['list']>>['data'][number]
 
+type EntitlementCheckResult = {
+  allowed: boolean
+  balance?: number
+  limit?: number
+}
+
 export function useEntitlements(entityId: string) {
   const { client } = useConjoinClient()
 
@@ -24,14 +30,19 @@ export function useEntitlements(entityId: string) {
   const entitlements = result.data ?? []
 
   const check = useCallback(
-    (featureId: string): { allowed: boolean; balance?: number; limit?: number } => {
-      const entry = entitlements.find(e => (e as Record<string, unknown>).feature_id === featureId)
+    (featureId: string): EntitlementCheckResult => {
+      const record = entitlements as unknown as Array<{
+        feature_id?: string
+        is_active?: boolean
+        balance?: number
+        limit?: number
+      }>
+      const entry = record.find(e => e.feature_id === featureId)
       if (!entry) return { allowed: false }
-      const record = entry as Record<string, unknown>
       return {
-        allowed: record.is_active === true,
-        balance: typeof record.balance === 'number' ? record.balance : undefined,
-        limit: typeof record.limit === 'number' ? record.limit : undefined,
+        allowed: entry.is_active === true,
+        balance: entry.balance,
+        limit: entry.limit,
       }
     },
     [entitlements],
