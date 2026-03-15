@@ -1,1 +1,5 @@
-export {}
+export * from '../generated/modules/storage-index'
+export type { DownloadOptions, DownloadResult } from './download'
+export { createStorageDownloader } from './download'
+export type { UploadInput, UploadOptions, UploadProgress } from './upload'
+export { createStorageUploader } from './upload'

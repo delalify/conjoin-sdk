@@ -24,6 +24,7 @@ function buildHeaders(config: ResolvedConfig, extra?: Record<string, string>): R
     Authorization: `Bearer ${config.apiKey}`,
     'Content-Type': 'application/json',
     'X-Conjoin-SDK-Version': SDK_VERSION,
+    'X-Conjoin-API-Version': config.apiVersion,
     ...extra,
   }
   return headers
