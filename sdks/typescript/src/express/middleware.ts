@@ -24,7 +24,8 @@ export function conjoinMiddleware(options: ConjoinExpressOptions): RequestHandle
 
     if (!token) {
       req.auth = null
-      return next()
+      next()
+      return
     }
 
     try {

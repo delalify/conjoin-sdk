@@ -48,6 +48,17 @@ describe('verifyWebhook', () => {
     expect(verifyWebhook(TEST_PAYLOAD, '', TEST_SECRET)).toBe(false)
   })
 
+  it('rejects signature with non-hex characters', () => {
+    const nonHexSig = `zz${'a'.repeat(62)}`
+    expect(verifyWebhook(TEST_PAYLOAD, nonHexSig, TEST_SECRET)).toBe(false)
+  })
+
+  it('rejects signature with uppercase valid hex but correct length', () => {
+    const signature = computeSignature(TEST_PAYLOAD, TEST_SECRET)
+    const uppercased = signature.toUpperCase()
+    expect(verifyWebhook(TEST_PAYLOAD, uppercased, TEST_SECRET)).toBe(true)
+  })
+
   it('produces consistent results for the same inputs', () => {
     const signature = computeSignature(TEST_PAYLOAD, TEST_SECRET)
     const result1 = verifyWebhook(TEST_PAYLOAD, signature, TEST_SECRET)

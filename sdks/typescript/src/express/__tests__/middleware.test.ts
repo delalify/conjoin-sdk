@@ -142,6 +142,45 @@ describe('conjoinMiddleware', () => {
     expect(next).toHaveBeenCalledOnce()
   })
 
+  it('passes audience and issuer to verifyToken', async () => {
+    mockVerifyToken.mockResolvedValueOnce(mockVerifiedToken)
+    const middleware = conjoinMiddleware({
+      jwksUrl: JWKS_URL,
+      audience: 'my-app',
+      issuer: 'https://auth.conjoin.cloud',
+    })
+
+    const req = createMockReq({
+      headers: { authorization: 'Bearer valid-token' },
+    })
+    const res = createMockRes()
+    const next = vi.fn()
+
+    await middleware(req, res, next)
+
+    expect(mockVerifyToken).toHaveBeenCalledWith('valid-token', {
+      jwksUrl: JWKS_URL,
+      audience: 'my-app',
+      issuer: 'https://auth.conjoin.cloud',
+    })
+  })
+
+  it('ignores non-Bearer authorization headers', async () => {
+    const middleware = conjoinMiddleware({ jwksUrl: JWKS_URL })
+
+    const req = createMockReq({
+      headers: { authorization: 'Basic dXNlcjpwYXNz' },
+    })
+    const res = createMockRes()
+    const next = vi.fn()
+
+    await middleware(req, res, next)
+
+    expect(mockVerifyToken).not.toHaveBeenCalled()
+    expect((req as Record<string, unknown>).auth).toBeNull()
+    expect(next).toHaveBeenCalledOnce()
+  })
+
   it('uses custom cookie name when specified', async () => {
     mockVerifyToken.mockResolvedValueOnce(mockVerifiedToken)
     const middleware = conjoinMiddleware({

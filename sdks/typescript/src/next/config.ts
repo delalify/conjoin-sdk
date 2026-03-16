@@ -20,7 +20,14 @@ export function getJwksUrl(config: NextAdapterConfig): string {
     throw new Error('Conjoin Next.js adapter requires a publishableKey, authDomain, or jwksUrl to verify tokens')
   }
 
-  const parts = config.publishableKey.split('_')
-  const domain = parts[parts.length - 1]
+  const keyPattern = /^pk_(test|live)_(.+)$/
+  const match = config.publishableKey.match(keyPattern)
+  if (!match) {
+    throw new Error(
+      `Invalid publishable key format "${config.publishableKey}". Expected "pk_test_<domain>" or "pk_live_<domain>".`,
+    )
+  }
+
+  const domain = match[2]
   return `https://${domain}/.well-known/jwks.json`
 }

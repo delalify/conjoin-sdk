@@ -15,7 +15,19 @@ function parseClientState(req: NextRequest): AuthObject | null {
   if (!cookie) return null
 
   try {
-    const state: ClientState = JSON.parse(cookie)
+    const parsed: unknown = JSON.parse(cookie)
+    if (typeof parsed !== 'object' || parsed === null) return null
+
+    const raw = parsed as Record<string, unknown>
+    if (typeof raw.accountId !== 'string' || typeof raw.sessionId !== 'string') return null
+
+    const state: ClientState = {
+      accountId: raw.accountId,
+      sessionId: raw.sessionId,
+      orgId: typeof raw.orgId === 'string' ? raw.orgId : null,
+      orgRole: typeof raw.orgRole === 'string' ? raw.orgRole : null,
+    }
+
     return {
       accountId: state.accountId,
       sessionId: state.sessionId,

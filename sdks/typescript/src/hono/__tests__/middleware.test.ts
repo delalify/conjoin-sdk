@@ -139,6 +139,46 @@ describe('conjoinMiddleware', () => {
     expect(handlerCalled).toBe(true)
   })
 
+  it('passes audience and issuer to verifyToken', async () => {
+    mockVerifyToken.mockResolvedValueOnce(mockVerifiedToken)
+    const app = createApp()
+    app.use(
+      conjoinMiddleware({
+        jwksUrl: JWKS_URL,
+        audience: 'my-hono-app',
+        issuer: 'https://auth.conjoin.cloud',
+      }),
+    )
+    app.get('/test', c => c.json({ ok: true }))
+
+    await app.request('/test', {
+      headers: { authorization: 'Bearer valid-token' },
+    })
+
+    expect(mockVerifyToken).toHaveBeenCalledWith('valid-token', {
+      jwksUrl: JWKS_URL,
+      audience: 'my-hono-app',
+      issuer: 'https://auth.conjoin.cloud',
+    })
+  })
+
+  it('ignores non-Bearer authorization headers', async () => {
+    const app = createApp()
+    app.use(conjoinMiddleware({ jwksUrl: JWKS_URL }))
+    app.get('/test', c => {
+      const auth = c.get('auth')
+      return c.json({ auth })
+    })
+
+    const res = await app.request('/test', {
+      headers: { authorization: 'Basic dXNlcjpwYXNz' },
+    })
+
+    expect(mockVerifyToken).not.toHaveBeenCalled()
+    const body = await res.json()
+    expect(body.auth).toBeNull()
+  })
+
   it('uses custom cookie name', async () => {
     mockVerifyToken.mockResolvedValueOnce(mockVerifiedToken)
     const app = createApp()
@@ -216,5 +256,22 @@ describe('requireAuth', () => {
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.ok).toBe(true)
+  })
+
+  it('calls custom onUnauthenticated handler', async () => {
+    const app = createApp()
+    app.use(conjoinMiddleware({ jwksUrl: JWKS_URL }))
+    app.use(
+      requireAuth({
+        onUnauthenticated: c => c.json({ message: 'Please sign in' }, 403),
+      }),
+    )
+    app.get('/test', c => c.json({ ok: true }))
+
+    const res = await app.request('/test')
+
+    expect(res.status).toBe(403)
+    const body = await res.json()
+    expect(body.message).toBe('Please sign in')
   })
 })
