@@ -26,6 +26,16 @@
         "cwd": "{projectRoot}"
       }
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm tsc --noEmit",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["generate"],
+      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"],
+      "cache": true
+    },
     "format": {
       "executor": "nx:run-commands",
       "options": {

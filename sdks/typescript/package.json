@@ -2,10 +2,44 @@
   "name": "@conjoin-cloud/sdk",
   "version": "0.0.1",
   "type": "module",
+  "description": "Official TypeScript SDK for Conjoin: auth, billing, storage, messaging, relay, AI, runtime, database, and cloud, in one tree-shakeable package.",
+  "author": "Delalify Engineering (https://delalify.com)",
+  "license": "MIT",
+  "homepage": "https://conjoin.delalify.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delalify/conjoin-sdk.git",
+    "directory": "sdks/typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/delalify/conjoin-sdk/issues"
+  },
+  "keywords": [
+    "sdk",
+    "conjoin",
+    "typescript",
+    "auth",
+    "billing",
+    "storage",
+    "messaging",
+    "relay",
+    "ai",
+    "database",
+    "runtime",
+    "cloud",
+    "developer-platform"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
   "sideEffects": [
     "./dist/react/styles.css"
   ],
-  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/core/index.d.ts",
@@ -130,6 +164,7 @@
     "@types/node": "25.4.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "expo-secure-store": "55.0.13",
     "hono": "4.12.8",
     "next": "16.1.6",
     "openapi-typescript": "7.13.0",

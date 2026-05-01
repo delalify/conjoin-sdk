@@ -12,6 +12,11 @@ on:
         required: false
         type: boolean
         default: false
+      first-release:
+        description: 'First release (no prior tag exists)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -24,15 +29,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_PAT }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 22
           cache: pnpm
@@ -44,33 +50,43 @@ jobs:
       - name: Update npm for trusted publishing
         run: npm install -g npm@latest
 
+      - name: Lint
+        run: pnpm nx run sdk-typescript:lint
+
+      - name: Typecheck
+        run: pnpm nx run sdk-typescript:typecheck
+
       - name: Build
         run: pnpm nx run sdk-typescript:build
 
       - name: Test
         run: pnpm nx run sdk-typescript:test
 
+      - name: Validate version input
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! echo "$VERSION" | grep -qE '^(patch|minor|major|[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)$'; then
+            echo "::error::Invalid version input: '$VERSION'. Must be patch, minor, major, or a valid semver like 1.2.3"
+            exit 1
+          fi
+
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Version
-        run: pnpm nx release version "$RELEASE_VERSION"
+      - name: Release
         env:
-          RELEASE_VERSION: ${{ inputs.version }}
-
-      - name: Changelog
-        run: pnpm nx release changelog "$RELEASE_VERSION"
-        env:
-          RELEASE_VERSION: ${{ inputs.version }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN_FLAG: ${{ inputs.dry-run && '--dry-run' || '' }}
+          FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: pnpm nx release "$VERSION" $DRY_RUN_FLAG $FIRST_RELEASE_FLAG --skip-publish
 
       - name: Publish
         if: ${{ !inputs.dry-run }}
-        run: pnpm nx release publish --verbose
         env:
           NPM_CONFIG_PROVENANCE: true
-
-      - name: Push tags and changelog
-        if: ${{ !inputs.dry-run }}
-        run: git push --follow-tags
+          FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
+        run: pnpm nx release publish $FIRST_RELEASE_FLAG --verbose
