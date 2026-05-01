@@ -1,9 +1,7 @@
 import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
-type ListData = NonNullable<
-  operations['listCharges']['responses']['200']['content']['application/json']['data']
->[number]
+type ListData = NonNullable<operations['listCharges']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listCharges']['parameters']['query']>
 
 export function createBillingCharges(client: ConjoinClient) {

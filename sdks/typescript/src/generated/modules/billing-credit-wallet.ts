@@ -2,21 +2,13 @@ import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
 type CreateBody = operations['createCreditWallet']['requestBody']['content']['application/json']
-type CreateData = NonNullable<
-  operations['createCreditWallet']['responses']['201']['content']['application/json']['data']
->
-type ListData = NonNullable<
-  operations['listCreditWallets']['responses']['200']['content']['application/json']['data']
->[number]
+type CreateData = NonNullable<operations['createCreditWallet']['responses']['201']['content']['application/json']['data']>
+type ListData = NonNullable<operations['listCreditWallets']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listCreditWallets']['parameters']['query']>
 type UpdateBody = operations['updateCreditWallet']['requestBody']['content']['application/json']
-type UpdateData = NonNullable<
-  operations['updateCreditWallet']['responses']['200']['content']['application/json']['data']
->
+type UpdateData = NonNullable<operations['updateCreditWallet']['responses']['200']['content']['application/json']['data']>
 type GrantCreditsBody = operations['grantCredits']['requestBody']['content']['application/json']
-type GrantCreditsData = NonNullable<
-  operations['grantCredits']['responses']['201']['content']['application/json']['data']
->
+type GrantCreditsData = NonNullable<operations['grantCredits']['responses']['201']['content']['application/json']['data']>
 
 export function createBillingCreditWallets(client: ConjoinClient) {
   return {

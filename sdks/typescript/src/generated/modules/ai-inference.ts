@@ -2,24 +2,14 @@ import type { ConjoinClient } from '../../core/types'
 import type { operations } from '../api-types'
 
 type CreateChatCompletionBody = operations['createAiChatCompletion']['requestBody']['content']['application/json']
-type CreateChatCompletionData = NonNullable<
-  operations['createAiChatCompletion']['responses']['200']['content']['application/json']['data']
->
+type CreateChatCompletionData = NonNullable<operations['createAiChatCompletion']['responses']['200']['content']['application/json']['data']>
 type CreateAiMultiModelBody = operations['createAiMultiModelInference']['requestBody']['content']['application/json']
-type CreateAiMultiModelData = NonNullable<
-  operations['createAiMultiModelInference']['responses']['200']['content']['application/json']['data']
->
+type CreateAiMultiModelData = NonNullable<operations['createAiMultiModelInference']['responses']['200']['content']['application/json']['data']>
 type CreateAiBestOfNBody = operations['createAiBestOfNInference']['requestBody']['content']['application/json']
-type CreateAiBestOfNData = NonNullable<
-  operations['createAiBestOfNInference']['responses']['200']['content']['application/json']['data']
->
-type ListRequestsData = NonNullable<
-  operations['listAiInferenceRequests']['responses']['200']['content']['application/json']['data']
->[number]
+type CreateAiBestOfNData = NonNullable<operations['createAiBestOfNInference']['responses']['200']['content']['application/json']['data']>
+type ListRequestsData = NonNullable<operations['listAiInferenceRequests']['responses']['200']['content']['application/json']['data']>[number]
 type ListRequestsQuery = NonNullable<operations['listAiInferenceRequests']['parameters']['query']>
-type ReadRequestData = NonNullable<
-  operations['readAiInferenceRequest']['responses']['200']['content']['application/json']['data']
->
+type ReadRequestData = NonNullable<operations['readAiInferenceRequest']['responses']['200']['content']['application/json']['data']>
 
 export function createAiInferences(client: ConjoinClient) {
   return {
@@ -35,6 +25,7 @@ export function createAiInferences(client: ConjoinClient) {
     listRequests: (query?: ListRequestsQuery) =>
       client.fetchList<ListRequestsData>('ai/inference/requests', { query: query as Record<string, unknown> }),
 
-    readRequest: (requestId: string) => client.fetch<ReadRequestData>(`ai/inference/requests/${requestId}`),
+    readRequest: (requestId: string) =>
+      client.fetch<ReadRequestData>(`ai/inference/requests/${requestId}`),
   }
 }

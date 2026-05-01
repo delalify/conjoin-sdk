@@ -3,14 +3,10 @@ import type { operations } from '../api-types'
 
 type CreateBody = operations['createCreditNote']['requestBody']['content']['application/json']
 type CreateData = NonNullable<operations['createCreditNote']['responses']['201']['content']['application/json']['data']>
-type ListData = NonNullable<
-  operations['listCreditNotes']['responses']['200']['content']['application/json']['data']
->[number]
+type ListData = NonNullable<operations['listCreditNotes']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listCreditNotes']['parameters']['query']>
 type VoidData = NonNullable<operations['voidCreditNote']['responses']['200']['content']['application/json']['data']>
-type ReadBalanceData = NonNullable<
-  operations['readCreditNoteBalance']['responses']['200']['content']['application/json']['data']
->
+type ReadBalanceData = NonNullable<operations['readCreditNoteBalance']['responses']['200']['content']['application/json']['data']>
 
 export function createBillingCreditNotes(client: ConjoinClient) {
   return {
@@ -23,6 +19,7 @@ export function createBillingCreditNotes(client: ConjoinClient) {
     void: (creditNoteId: string) =>
       client.fetch<VoidData>(`billing/credit-note/void/${creditNoteId}`, { method: 'PATCH' }),
 
-    readBalance: (customerId: string) => client.fetch<ReadBalanceData>(`billing/credit-note/balance/${customerId}`),
+    readBalance: (customerId: string) =>
+      client.fetch<ReadBalanceData>(`billing/credit-note/balance/${customerId}`),
   }
 }

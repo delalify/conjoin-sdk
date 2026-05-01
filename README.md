@@ -2,21 +2,21 @@
 
 The official SDKs for [Conjoin](https://conjoin.delalify.com). One package per language, eight products, tree-shakeable from top to bottom.
 
-[![npm version](https://img.shields.io/npm/v/@conjoin/sdk)](https://www.npmjs.com/package/@conjoin/sdk)
+[![npm version](https://img.shields.io/npm/v/@conjoin-cloud/sdk)](https://www.npmjs.com/package/@conjoin-cloud/sdk)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ## Install
 
 ```bash
-npm install @conjoin/sdk
+npm install @conjoin-cloud/sdk
 ```
 
 ```bash
-pnpm add @conjoin/sdk
+pnpm add @conjoin-cloud/sdk
 ```
 
 ```bash
-yarn add @conjoin/sdk
+yarn add @conjoin-cloud/sdk
 ```
 
 ## Quick Start
@@ -24,8 +24,8 @@ yarn add @conjoin/sdk
 Create a client with your API key, then import the products you need. Everything else gets stripped from your bundle.
 
 ```ts
-import { createConjoinClient } from '@conjoin/sdk'
-import { createBillingCustomers } from '@conjoin/sdk/billing'
+import { createConjoinClient } from '@conjoin-cloud/sdk'
+import { createBillingCustomers } from '@conjoin-cloud/sdk/billing'
 
 const conjoin = createConjoinClient({
   apiKey: 'ck_live_...',
@@ -45,23 +45,23 @@ Each product has its own sub-path import. You only bundle what you use.
 
 | Product | Import | What it does |
 | ------- | ------ | ------------ |
-| **Auth** | `@conjoin/sdk/auth` | Accounts, sessions, OAuth flows, organizations, passkeys, MFA |
-| **Billing** | `@conjoin/sdk/billing` | Customers, subscriptions, invoices, products, prices, payment methods |
-| **Storage** | `@conjoin/sdk/storage` | File containers, object uploads/downloads, signed URLs, image optimization |
-| **Messaging** | `@conjoin/sdk/messaging` | Email, SMS, contacts, conversations, templates, OTP |
-| **Relay** | `@conjoin/sdk/relay` | WebSocket broadcast, queues, events, scheduler, memory store, search |
-| **AI** | `@conjoin/sdk/ai` | Chat completions, model registry, providers, usage tracking |
-| **Database** | `@conjoin/sdk/database` | Managed database client |
-| **Runtime** | `@conjoin/sdk/runtime` | Container runtime management |
+| **Auth** | `@conjoin-cloud/sdk/auth` | Accounts, sessions, OAuth flows, organizations, passkeys, MFA |
+| **Billing** | `@conjoin-cloud/sdk/billing` | Customers, subscriptions, invoices, products, prices, payment methods |
+| **Storage** | `@conjoin-cloud/sdk/storage` | File containers, object uploads/downloads, signed URLs, image optimization |
+| **Messaging** | `@conjoin-cloud/sdk/messaging` | Email, SMS, contacts, conversations, templates, OTP |
+| **Relay** | `@conjoin-cloud/sdk/relay` | WebSocket broadcast, queues, events, scheduler, memory store, search |
+| **AI** | `@conjoin-cloud/sdk/ai` | Chat completions, model registry, providers, usage tracking |
+| **Database** | `@conjoin-cloud/sdk/database` | Managed database client |
+| **Runtime** | `@conjoin-cloud/sdk/runtime` | Container runtime management |
 
-Platform management (API keys, roles, webhooks, audit logs, projects) is available via `@conjoin/sdk/cloud`.
+Platform management (API keys, roles, webhooks, audit logs, projects) is available via `@conjoin-cloud/sdk/cloud`.
 
 ## Usage
 
 ### Auth
 
 ```ts
-import { createAuthAccounts, createAuthSessions } from '@conjoin/sdk/auth'
+import { createAuthAccounts, createAuthSessions } from '@conjoin-cloud/sdk/auth'
 
 const accounts = createAuthAccounts(conjoin)
 const sessions = createAuthSessions(conjoin)
@@ -83,7 +83,7 @@ const session = await sessions.create({
 import {
   createBillingCustomers,
   createBillingSubscriptions,
-} from '@conjoin/sdk/billing'
+} from '@conjoin-cloud/sdk/billing'
 
 const customers = createBillingCustomers(conjoin)
 const subscriptions = createBillingSubscriptions(conjoin)
@@ -102,7 +102,7 @@ const subscription = await subscriptions.create('entity_123', {
 ### Storage
 
 ```ts
-import { createStorageObjects } from '@conjoin/sdk/storage'
+import { createStorageObjects } from '@conjoin-cloud/sdk/storage'
 
 const objects = createStorageObjects(conjoin)
 
@@ -122,7 +122,7 @@ const signedUrl = await objects.getSignedUrl('my-bucket', uploaded.id, {
 Messaging requires a profile ID, which gets sent as a header on every request.
 
 ```ts
-import { createMessaging } from '@conjoin/sdk/messaging'
+import { createMessaging } from '@conjoin-cloud/sdk/messaging'
 
 const messaging = createMessaging(conjoin, {
   profileId: 'mp_123',
@@ -143,7 +143,7 @@ await messaging.email.send({
 ### AI (Streaming)
 
 ```ts
-import { createAIChat } from '@conjoin/sdk/ai'
+import { createAIChat } from '@conjoin-cloud/sdk/ai'
 
 const chat = createAIChat(conjoin)
 
@@ -160,7 +160,7 @@ for await (const chunk of stream) {
 ### Relay (Real-Time)
 
 ```ts
-import { createBroadcastConnection } from '@conjoin/sdk/relay'
+import { createBroadcastConnection } from '@conjoin-cloud/sdk/relay'
 
 const broadcast = createBroadcastConnection(conjoin, {
   channels: ['chat:room-42'],
@@ -181,7 +181,7 @@ broadcast.publish('chat:room-42', {
 All list endpoints use cursor-based pagination.
 
 ```ts
-import { createBillingCustomers } from '@conjoin/sdk/billing'
+import { createBillingCustomers } from '@conjoin-cloud/sdk/billing'
 
 const customers = createBillingCustomers(conjoin)
 
@@ -206,7 +206,7 @@ npm install react @tanstack/react-query
 ### Provider Setup
 
 ```tsx
-import { ConjoinProvider } from '@conjoin/sdk/react'
+import { ConjoinProvider } from '@conjoin-cloud/sdk/react'
 import { QueryClient } from '@tanstack/react-query'
 
 const queryClient = new QueryClient()
@@ -226,7 +226,7 @@ function App() {
 ### Hooks
 
 ```tsx
-import { useBillingCustomers } from '@conjoin/sdk/react'
+import { useBillingCustomers } from '@conjoin-cloud/sdk/react'
 
 function CustomerList({ entityId }: { entityId: string }) {
   const { customers, isLoading, create } = useBillingCustomers(entityId)
@@ -250,13 +250,13 @@ Each hook only imports its own product module, so `useBillingCustomers` won't pu
 Server-only utilities for webhook verification and middleware. These should only run in Node.js, not in the browser.
 
 ```ts
-import { verifyWebhookSignature } from '@conjoin/sdk/server'
+import { verifyWebhookSignature } from '@conjoin-cloud/sdk/server'
 ```
 
 ### Webhook Verification
 
 ```ts
-import { verifyWebhookSignature } from '@conjoin/sdk/server'
+import { verifyWebhookSignature } from '@conjoin-cloud/sdk/server'
 
 const isValid = await verifyWebhookSignature({
   payload: request.body,
@@ -268,7 +268,7 @@ const isValid = await verifyWebhookSignature({
 ### Framework Middleware
 
 ```ts
-import { createConjoinMiddleware } from '@conjoin/sdk/server'
+import { createConjoinMiddleware } from '@conjoin-cloud/sdk/server'
 
 const middleware = createConjoinMiddleware({
   webhookSecret: 'whsec_...',
@@ -314,7 +314,7 @@ import {
   ConjoinValidationError,
   ConjoinNetworkError,
   ConjoinTimeoutError,
-} from '@conjoin/sdk'
+} from '@conjoin-cloud/sdk'
 
 try {
   await customers.create('entity_123', data)
@@ -359,14 +359,14 @@ The SDK retries automatically on 429 and 5xx responses (up to `maxRetries` with 
 
 - **Node.js** 20 or later
 - **TypeScript** 5.x (for type-only consumers, the SDK ships compiled JS + `.d.ts` files)
-- **React** 18+ (only if using `@conjoin/sdk/react`)
-- **TanStack Query** 5+ (only if using `@conjoin/sdk/react`)
+- **React** 18+ (only if using `@conjoin-cloud/sdk/react`)
+- **TanStack Query** 5+ (only if using `@conjoin-cloud/sdk/react`)
 
 ## Bundle Size
 
 The SDK is designed for tree-shaking at every level:
 
-- Each product is its own entry point. Importing `@conjoin/sdk/billing` pulls in zero code from auth, storage, or any other product.
+- Each product is its own entry point. Importing `@conjoin-cloud/sdk/billing` pulls in zero code from auth, storage, or any other product.
 - Factory functions (not classes) allow bundlers to eliminate unused methods.
 - `"sideEffects": false` tells bundlers every module is safe to drop if unused.
 - Both ESM and CJS outputs are provided.

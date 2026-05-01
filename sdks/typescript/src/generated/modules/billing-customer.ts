@@ -3,9 +3,7 @@ import type { operations } from '../api-types'
 
 type CreateBody = operations['createCustomer']['requestBody']['content']['application/json']
 type CreateData = NonNullable<operations['createCustomer']['responses']['201']['content']['application/json']['data']>
-type ListData = NonNullable<
-  operations['listCustomers']['responses']['200']['content']['application/json']['data']
->[number]
+type ListData = NonNullable<operations['listCustomers']['responses']['200']['content']['application/json']['data']>[number]
 type ListQuery = NonNullable<operations['listCustomers']['parameters']['query']>
 type UpdateBody = operations['updateCustomer']['requestBody']['content']['application/json']
 type UpdateData = NonNullable<operations['updateCustomer']['responses']['200']['content']['application/json']['data']>

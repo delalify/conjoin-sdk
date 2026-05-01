@@ -1,11 +1,45 @@
 {
-  "name": "@conjoin/sdk",
+  "name": "@conjoin-cloud/sdk",
   "version": "0.0.1",
   "type": "module",
+  "description": "Official TypeScript SDK for Conjoin: auth, billing, storage, messaging, relay, AI, runtime, database, and cloud, in one tree-shakeable package.",
+  "author": "Delalify Engineering (https://delalify.com)",
+  "license": "MIT",
+  "homepage": "https://conjoin.delalify.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delalify/conjoin-sdk.git",
+    "directory": "sdks/typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/delalify/conjoin-sdk/issues"
+  },
+  "keywords": [
+    "sdk",
+    "conjoin",
+    "typescript",
+    "auth",
+    "billing",
+    "storage",
+    "messaging",
+    "relay",
+    "ai",
+    "database",
+    "runtime",
+    "cloud",
+    "developer-platform"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
   "sideEffects": [
     "./dist/react/styles.css"
   ],
-  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/core/index.d.ts",
@@ -67,6 +101,21 @@
       "import": "./dist/server/index.js",
       "require": "./dist/server/index.cjs"
     },
+    "./next": {
+      "types": "./dist/next/index.d.ts",
+      "import": "./dist/next/index.js",
+      "require": "./dist/next/index.cjs"
+    },
+    "./express": {
+      "types": "./dist/express/index.d.ts",
+      "import": "./dist/express/index.js",
+      "require": "./dist/express/index.cjs"
+    },
+    "./hono": {
+      "types": "./dist/hono/index.d.ts",
+      "import": "./dist/hono/index.js",
+      "require": "./dist/hono/index.cjs"
+    },
     "./expo": {
       "types": "./dist/expo/index.d.ts",
       "import": "./dist/expo/index.js",
@@ -78,7 +127,11 @@
     "dist"
   ],
   "peerDependencies": {
+    "@types/express": ">=4.0.0",
     "expo-secure-store": ">=13.0.0",
+    "express": ">=4.0.0",
+    "hono": ">=4.0.0",
+    "next": ">=14.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
@@ -91,13 +144,29 @@
     },
     "expo-secure-store": {
       "optional": true
+    },
+    "express": {
+      "optional": true
+    },
+    "@types/express": {
+      "optional": true
+    },
+    "hono": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
     }
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
+    "@types/express": "5.0.6",
     "@types/node": "25.4.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "expo-secure-store": "55.0.13",
+    "hono": "4.12.8",
+    "next": "16.1.6",
     "openapi-typescript": "7.13.0",
     "tsup": "8.5.1",
     "tsx": "4.21.0",

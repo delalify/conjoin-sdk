@@ -6,8 +6,7 @@
       "options": {
         "commands": [
           "pnpm openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts",
-          "pnpm tsx codegen/generate.ts",
-          "pnpm biome check --write src/generated/modules/"
+          "pnpm tsx codegen/generate.ts"
         ],
         "parallel": false,
         "cwd": "{projectRoot}"
@@ -27,6 +26,16 @@
         "cwd": "{projectRoot}"
       }
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm tsc --noEmit",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["generate"],
+      "inputs": ["default", "{workspaceRoot}/tsconfig.base.json"],
+      "cache": true
+    },
     "format": {
       "executor": "nx:run-commands",
       "options": {
@@ -39,6 +48,12 @@
       "options": {
         "command": "pnpm vitest run",
         "cwd": "{projectRoot}"
+      }
+    },
+    "nx-release-publish": {
+      "executor": "@nx/js:release-publish",
+      "options": {
+        "packageRoot": "{projectRoot}"
       }
     }
   }

@@ -1,0 +1,92 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version bump (patch, minor, major, or explicit like 1.2.3)'
+        required: true
+        type: string
+      dry-run:
+        description: 'Dry run (no publish)'
+        required: false
+        type: boolean
+        default: false
+      first-release:
+        description: 'First release (no prior tag exists)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_PAT }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Update npm for trusted publishing
+        run: npm install -g npm@latest
+
+      - name: Lint
+        run: pnpm nx run sdk-typescript:lint
+
+      - name: Typecheck
+        run: pnpm nx run sdk-typescript:typecheck
+
+      - name: Build
+        run: pnpm nx run sdk-typescript:build
+
+      - name: Test
+        run: pnpm nx run sdk-typescript:test
+
+      - name: Validate version input
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! echo "$VERSION" | grep -qE '^(patch|minor|major|[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)$'; then
+            echo "::error::Invalid version input: '$VERSION'. Must be patch, minor, major, or a valid semver like 1.2.3"
+            exit 1
+          fi
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Release
+        env:
+          VERSION: ${{ inputs.version }}
+          DRY_RUN_FLAG: ${{ inputs.dry-run && '--dry-run' || '' }}
+          FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: pnpm nx release "$VERSION" $DRY_RUN_FLAG $FIRST_RELEASE_FLAG --skip-publish
+
+      - name: Publish
+        if: ${{ !inputs.dry-run }}
+        env:
+          NPM_CONFIG_PROVENANCE: true
+          FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
+        run: pnpm nx release publish $FIRST_RELEASE_FLAG --verbose

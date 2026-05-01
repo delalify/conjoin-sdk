@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -336,9 +336,10 @@ function main() {
 
   console.log(`Found ${groups.length} resource groups`)
 
-  if (!existsSync(OUTPUT_DIR)) {
-    mkdirSync(OUTPUT_DIR, { recursive: true })
+  if (existsSync(OUTPUT_DIR)) {
+    rmSync(OUTPUT_DIR, { recursive: true, force: true })
   }
+  mkdirSync(OUTPUT_DIR, { recursive: true })
 
   const services = new Set<string>()
 
