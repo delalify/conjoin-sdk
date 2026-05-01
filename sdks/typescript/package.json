@@ -166,7 +166,7 @@
     "@types/react-dom": "19.2.3",
     "expo-secure-store": "55.0.13",
     "hono": "4.12.8",
-    "next": "16.1.6",
+    "next": "16.2.3",
     "openapi-typescript": "7.13.0",
     "tsup": "8.5.1",
     "tsx": "4.21.0",
