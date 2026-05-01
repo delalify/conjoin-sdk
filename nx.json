@@ -1,7 +1,10 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "sharedGlobals": [],
     "production": [
       "default",
@@ -11,9 +14,10 @@
     ]
   },
   "release": {
-    "projects": ["sdk-typescript"],
+    "projects": [
+      "sdk-typescript"
+    ],
     "projectsRelationship": "independent",
-    "releaseTagPattern": "{projectName}@v{version}",
     "version": {
       "conventionalCommits": false,
       "updateDependents": "never"
@@ -30,22 +34,36 @@
       "tag": true,
       "push": true,
       "commitMessage": "chore(release): {projectName}@v{version}"
+    },
+    "releaseTag": {
+      "pattern": "{projectName}@v{version}"
     }
   },
   "targetDefaults": {
     "generate": {
-      "dependsOn": ["spec:validate"],
+      "dependsOn": [
+        "spec:validate"
+      ],
       "inputs": [
         "{workspaceRoot}/spec/openapi.json",
         "{projectRoot}/codegen/**/*"
       ],
-      "outputs": ["{projectRoot}/src/generated/**/*"],
+      "outputs": [
+        "{projectRoot}/src/generated/**/*"
+      ],
       "cache": true
     },
     "build": {
-      "dependsOn": ["^build", "generate"],
-      "inputs": ["production"],
-      "outputs": ["{projectRoot}/dist"],
+      "dependsOn": [
+        "^build",
+        "generate"
+      ],
+      "inputs": [
+        "production"
+      ],
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
       "cache": true
     },
     "lint": {
