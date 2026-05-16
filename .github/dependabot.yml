@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 4
+    groups:
+      production:
+        dependency-type: "production"
+      dev-dependencies:
+        dependency-type: "development"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps(dev)"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 4
+    commit-message:
+      prefix: "ci"
