@@ -213,6 +213,21 @@ describe('conjoinMiddleware', () => {
 
     expect((req as Record<string, unknown>).conjoinRequestId).toBe(VALID_REQUEST_ID)
   })
+
+  it('ignores invalid incoming Conjoin request IDs', async () => {
+    const middleware = conjoinMiddleware({ jwksUrl: JWKS_URL })
+
+    const req = createMockReq({
+      headers: { 'conjoin-request-id': 'not-valid' },
+    })
+    const res = createMockRes()
+    const next = vi.fn()
+
+    await middleware(req, res, next)
+
+    expect((req as Record<string, unknown>).conjoinRequestId).toBeUndefined()
+    expect(next).toHaveBeenCalledOnce()
+  })
 })
 
 describe('getAuth', () => {

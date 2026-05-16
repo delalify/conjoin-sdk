@@ -206,6 +206,20 @@ describe('conjoinMiddleware', () => {
     const body = await res.json()
     expect(body.requestId).toBe(VALID_REQUEST_ID)
   })
+
+  it('ignores invalid incoming Conjoin request IDs', async () => {
+    const app = createApp()
+    app.use(conjoinMiddleware({ jwksUrl: JWKS_URL }))
+    app.get('/test', c => c.json({ requestId: c.get('conjoinRequestId') }))
+
+    const res = await app.request('/test', {
+      headers: { 'conjoin-request-id': 'not-valid' },
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.requestId).toBeUndefined()
+  })
 })
 
 describe('getAuth', () => {
