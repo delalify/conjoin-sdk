@@ -131,7 +131,7 @@
     "expo-secure-store": ">=13.0.0",
     "express": ">=4.0.0",
     "hono": ">=4.12.18",
-    "next": ">=14.0.0",
+    "next": ">=16.2.6",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
@@ -166,7 +166,7 @@
     "@types/react-dom": "19.2.3",
     "expo-secure-store": "55.0.13",
     "hono": "4.12.18",
-    "next": "16.1.6",
+    "next": "16.2.6",
     "openapi-typescript": "7.13.0",
     "tsup": "8.5.1",
     "tsx": "4.21.0",
