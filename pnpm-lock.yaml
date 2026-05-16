@@ -76,8 +76,8 @@ importers:
         specifier: 55.0.13
         version: 55.0.13(expo@55.0.6)
       hono:
-        specifier: 4.12.16
-        version: 4.12.16
+        specifier: 4.12.18
+        version: 4.12.18
       next:
         specifier: 16.1.6
         version: 16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -3181,8 +3181,8 @@ packages:
   hermes-parser@0.35.0:
     resolution: {integrity: sha512-9JLjeHxBx8T4CAsydZR49PNZUaix+WpQJwu9p2010lu+7Kwl6D/7wYFFJxoz+aXkaaClp9Zfg6W6/zVlSJORaA==}
 
-  hono@4.12.16:
-    resolution: {integrity: sha512-jN0ZewiNAWSe5khM3EyCmBb250+b40wWbwNILNfEvq84VREWwOIkuUsFONk/3i3nqkz7Oe1PcpM2mwQEK2L9Kg==}
+  hono@4.12.18:
+    resolution: {integrity: sha512-RWzP96k/yv0PQfyXnWjs6zot20TqfpfsNXhOnev8d1InAxubW93L11/oNUc3tQqn2G0bSdAOBpX+2uDFHV7kdQ==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@7.0.2:
@@ -8254,7 +8254,7 @@ snapshots:
     dependencies:
       hermes-estree: 0.35.0
 
-  hono@4.12.16: {}
+  hono@4.12.18: {}
 
   hosted-git-info@7.0.2:
     dependencies:
