@@ -159,19 +159,19 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.6",
+    "@biomejs/biome": "2.4.15",
     "@types/express": "5.0.6",
-    "@types/node": "25.4.0",
+    "@types/node": "25.7.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "expo-secure-store": "55.0.13",
+    "expo-secure-store": "56.0.3",
     "hono": "4.12.18",
     "next": "16.2.6",
     "openapi-typescript": "7.13.0",
     "tsup": "8.5.1",
     "tsx": "4.21.0",
-    "typescript": "5.9.3",
-    "vitest": "4.0.18"
+    "typescript": "6.0.3",
+    "vitest": "4.1.6"
   },
   "scripts": {
     "build": "tsup",
