@@ -1,1 +1,12 @@
 /skills/conjoin-platform/ @delalify/conjoin-platform-team
+
+# Repository automation and dependency policy.
+/.github/CODEOWNERS @delalify/repository-security
+/.github/dependabot.yml @delalify/repository-security
+/.github/workflows/ @delalify/repository-security
+/.github/scripts/ @delalify/repository-security
+/package.json @delalify/repository-security
+/pnpm-lock.yaml @delalify/repository-security
+/pnpm-workspace.yaml @delalify/repository-security
+/sdks/**/package.json @delalify/repository-security
+/spec/package.json @delalify/repository-security

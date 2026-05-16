@@ -1,3 +1,5 @@
 packages:
   - 'sdks/*'
   - 'spec'
+
+minimumReleaseAge: 5760
