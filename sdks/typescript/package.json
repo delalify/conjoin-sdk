@@ -189,7 +189,7 @@
     "@radix-ui/react-separator": "1.1.8",
     "@radix-ui/react-tabs": "1.1.13",
     "@radix-ui/react-visually-hidden": "1.2.4",
-    "@tanstack/query-core": "5.90.20",
-    "jose": "6.2.1"
+    "@tanstack/query-core": "5.100.10",
+    "jose": "6.2.3"
   }
 }
