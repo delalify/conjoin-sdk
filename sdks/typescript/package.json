@@ -164,6 +164,7 @@
     "@types/node": "25.4.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "@vitest/coverage-v8": "4.1.6",
     "expo-secure-store": "55.0.13",
     "hono": "4.12.18",
     "next": "16.2.6",
@@ -171,13 +172,19 @@
     "tsup": "8.5.1",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "vitest": "4.0.18"
+    "vitest": "4.1.6"
   },
   "scripts": {
     "build": "tsup",
-    "lint": "biome check src/",
-    "format": "biome check --write src/",
+    "lint": "biome check src/ tests/",
+    "format": "biome check --write src/ tests/",
+    "typecheck": "tsc --noEmit && tsc --project tests/tsconfig.json",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:integration:coverage": "vitest run --config vitest.integration.config.ts --coverage",
+    "test:all": "pnpm test && pnpm test:integration",
+    "test:all:coverage": "pnpm test:coverage && pnpm test:integration:coverage",
     "generate": "openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts"
   },
   "dependencies": {

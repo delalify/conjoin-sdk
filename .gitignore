@@ -4,5 +4,7 @@ dist/
 *.tsbuildinfo
 .DS_Store
 coverage/
+sdks/typescript/tests/coverage/
+sdks/typescript/tests/coverage-integration/
 
 .claude/worktrees

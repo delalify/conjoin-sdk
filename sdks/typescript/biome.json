@@ -6,7 +6,14 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!!**/dist", "!.claude", "!src/generated/**"]
+    "includes": [
+      "**",
+      "!!**/dist",
+      "!.claude",
+      "!src/generated",
+      "!tests/coverage",
+      "!tests/coverage-integration"
+    ]
   },
   "formatter": {
     "enabled": true,
