@@ -9,7 +9,7 @@ type ReadByokConfigData = NonNullable<operations['readAiByokConfig']['responses'
 type UpdateByokConfigBody = operations['updateAiByokConfig']['requestBody']['content']['application/json']
 type UpdateByokConfigData = NonNullable<operations['updateAiByokConfig']['responses']['200']['content']['application/json']['data']>
 type DeleteByokConfigData = NonNullable<operations['deleteAiByokConfig']['responses']['200']['content']['application/json']['data']>
-type TestByokConnectionResponse = operations['testAiByokConnection']['responses']['200']['content']['application/json']
+type TestByokConnectionData = NonNullable<operations['testAiByokConnection']['responses']['200']['content']['application/json']['data']>
 
 export function createAiBYOKs(client: ConjoinClient) {
   return {
@@ -29,6 +29,6 @@ export function createAiBYOKs(client: ConjoinClient) {
       client.fetch<DeleteByokConfigData>(`ai/byok/byok/${byokConfigId}/delete`, { method: 'DELETE' }),
 
     testByokConnection: (byokConfigId: string) =>
-      client.fetch<TestByokConnectionResponse>(`ai/byok/byok/${byokConfigId}/test`, { method: 'POST' }),
+      client.fetch<TestByokConnectionData>(`ai/byok/byok/${byokConfigId}/test`, { method: 'POST' }),
   }
 }

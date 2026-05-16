@@ -7,7 +7,14 @@ import {
   ConjoinValidationError,
 } from './errors'
 import { serializeQuery } from './query-serializer'
-import type { ConjoinListResponse, RequestOptions, ResolvedConfig } from './types'
+import { CONJOIN_REQUEST_ID_HEADER, getConjoinRequestIdFromHeaders, isValidConjoinRequestId } from './request-tracing'
+import type {
+  ConjoinFetchListResult,
+  ConjoinFetchResult,
+  ConjoinListResponse,
+  RequestOptions,
+  ResolvedConfig,
+} from './types'
 import { SDK_VERSION } from './version'
 
 function buildUrl(config: ResolvedConfig, path: string, query?: Record<string, unknown>): string {
@@ -19,16 +26,39 @@ function buildUrl(config: ResolvedConfig, path: string, query?: Record<string, u
   return url
 }
 
-function buildHeaders(config: ResolvedConfig, extra?: Record<string, string>): Record<string, string> {
+function withoutConjoinRequestIdHeader(headers?: Record<string, string>): Record<string, string> {
+  if (!headers) {
+    return {}
+  }
+
+  return Object.fromEntries(
+    Object.entries(headers).filter(([name]) => name.toLowerCase() !== CONJOIN_REQUEST_ID_HEADER.toLowerCase()),
+  )
+}
+
+function buildHeaders(
+  config: ResolvedConfig,
+  extra?: Record<string, string>,
+  conjoinRequestId?: string,
+): Record<string, string> {
   const authKey = config.apiKey ?? config.publishableKey
+  const extraHeaders = withoutConjoinRequestIdHeader(extra)
+  const requestId = [conjoinRequestId, getConjoinRequestIdFromHeaders(extra), config.conjoinRequestId].find(
+    isValidConjoinRequestId,
+  )
   const headers: Record<string, string> = {
     ...(authKey ? { Authorization: `Bearer ${authKey}` } : {}),
     'Content-Type': 'application/json',
     'X-Conjoin-SDK-Version': SDK_VERSION,
     'X-Conjoin-API-Version': config.apiVersion,
-    ...extra,
+    ...extraHeaders,
+    ...(requestId ? { [CONJOIN_REQUEST_ID_HEADER]: requestId } : {}),
   }
   return headers
+}
+
+function readResponseRequestId(response: Response): string | undefined {
+  return getConjoinRequestIdFromHeaders(response.headers)
 }
 
 async function handleErrorResponse(response: Response, requestId?: string): Promise<never> {
@@ -67,15 +97,33 @@ async function sleep(ms: number): Promise<void> {
 }
 
 export async function conjoinFetch<T>(config: ResolvedConfig, path: string, options: RequestOptions = {}): Promise<T> {
+  const result = await conjoinFetchWithResponse<T>(config, path, options)
+
+  return result.data
+}
+
+export async function conjoinFetchWithResponse<T>(
+  config: ResolvedConfig,
+  path: string,
+  options: RequestOptions = {},
+): Promise<ConjoinFetchResult<T>> {
   const response = await conjoinFetchRaw(config, path, options)
-  const requestId = response.headers.get('x-request-id') ?? undefined
+  const requestId = readResponseRequestId(response)
 
   if (!response.ok) {
     await handleErrorResponse(response, requestId)
   }
 
   const json = (await response.json()) as { data: T }
-  return json.data
+
+  return {
+    data: json.data,
+    metadata: {
+      requestId,
+      status: response.status,
+      headers: response.headers,
+    },
+  }
 }
 
 export async function conjoinFetchList<T>(
@@ -83,15 +131,33 @@ export async function conjoinFetchList<T>(
   path: string,
   options: RequestOptions = {},
 ): Promise<ConjoinListResponse<T>> {
+  const result = await conjoinFetchListWithResponse<T>(config, path, options)
+
+  return result.data
+}
+
+export async function conjoinFetchListWithResponse<T>(
+  config: ResolvedConfig,
+  path: string,
+  options: RequestOptions = {},
+): Promise<ConjoinFetchListResult<T>> {
   const response = await conjoinFetchRaw(config, path, options)
-  const requestId = response.headers.get('x-request-id') ?? undefined
+  const requestId = readResponseRequestId(response)
 
   if (!response.ok) {
     await handleErrorResponse(response, requestId)
   }
 
   const json = (await response.json()) as ConjoinListResponse<T>
-  return json
+
+  return {
+    data: json,
+    metadata: {
+      requestId,
+      status: response.status,
+      headers: response.headers,
+    },
+  }
 }
 
 export async function conjoinFetchRaw(
@@ -100,7 +166,7 @@ export async function conjoinFetchRaw(
   options: RequestOptions = {},
 ): Promise<Response> {
   const url = buildUrl(config, path, options.query)
-  const headers = buildHeaders(config, options.headers)
+  const headers = buildHeaders(config, options.headers, options.conjoinRequestId)
 
   const maxRetries = config.retry.maxRetries
   const backoffMs = config.retry.backoffMs

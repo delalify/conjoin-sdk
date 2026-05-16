@@ -3,8 +3,8 @@ import type { operations } from '../api-types'
 
 type CreateBody = operations['createMessagingProfile']['requestBody']['content']['application/json']
 type CreateData = NonNullable<operations['createMessagingProfile']['responses']['201']['content']['application/json']['data']>
-type ActivateData = NonNullable<operations['activateMessagingProfile']['responses']['200']['content']['application/json']['data']>
-type DeactivateData = NonNullable<operations['deactivateMessagingProfile']['responses']['200']['content']['application/json']['data']>
+type EnableData = NonNullable<operations['enableMessagingProfile']['responses']['200']['content']['application/json']['data']>
+type DisableData = NonNullable<operations['disableMessagingProfile']['responses']['200']['content']['application/json']['data']>
 type CloseData = NonNullable<operations['closeMessagingProfile']['responses']['200']['content']['application/json']['data']>
 type UpdateBody = operations['updateMessagingProfile']['requestBody']['content']['application/json']
 type UpdateData = NonNullable<operations['updateMessagingProfile']['responses']['200']['content']['application/json']['data']>
@@ -24,11 +24,11 @@ export function createMessagingProfiles(client: ConjoinClient) {
     create: (data: CreateBody) =>
       client.fetch<CreateData>('messaging/profiles/new', { method: 'POST', body: data }),
 
-    activate: (profileId: string) =>
-      client.fetch<ActivateData>(`messaging/profiles/${profileId}/enable`, { method: 'PATCH' }),
+    enable: (profileId: string) =>
+      client.fetch<EnableData>(`messaging/profiles/${profileId}/enable`, { method: 'PATCH' }),
 
-    deactivate: (profileId: string) =>
-      client.fetch<DeactivateData>(`messaging/profiles/${profileId}/disable`, { method: 'PATCH' }),
+    disable: (profileId: string) =>
+      client.fetch<DisableData>(`messaging/profiles/${profileId}/disable`, { method: 'PATCH' }),
 
     close: (profileId: string) =>
       client.fetch<CloseData>(`messaging/profiles/${profileId}/close`, { method: 'PATCH' }),
@@ -52,6 +52,6 @@ export function createMessagingProfiles(client: ConjoinClient) {
       client.fetch<UpdateVerificationsConfigData>(`messaging/profiles/${profileId}/verifications-config`, { method: 'PATCH', body: data }),
 
     list: (data: ListBody) =>
-      client.fetchList<ListData>('messaging/profiles', { method: 'POST', body: data }),
+      client.fetchList<ListData>('messaging/profiles/', { method: 'POST', body: data }),
   }
 }

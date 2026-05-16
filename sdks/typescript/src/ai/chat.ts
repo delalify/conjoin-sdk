@@ -1,4 +1,5 @@
 import { ConjoinError } from '../core/errors'
+import { CONJOIN_REQUEST_ID_HEADER } from '../core/request-tracing'
 import type { ConjoinClient } from '../core/types'
 import { iterSSEMessages } from './sse'
 import type { ChatCompletionChunk, ChatCompletionParams, ChatCompletionResponse } from './types'
@@ -77,7 +78,7 @@ async function* createStreamIterator(
       /* empty */
     }
     const message = typeof body.message === 'string' ? body.message : response.statusText
-    const requestId = response.headers.get('x-request-id') ?? undefined
+    const requestId = response.headers.get(CONJOIN_REQUEST_ID_HEADER) ?? undefined
     throw new ConjoinError(message, response.status, 'api_error', requestId)
   }
 
@@ -94,7 +95,7 @@ async function* createStreamIterator(
           chunk.error.message,
           response.status,
           'stream_error',
-          response.headers.get('x-request-id') ?? undefined,
+          response.headers.get(CONJOIN_REQUEST_ID_HEADER) ?? undefined,
         )
       }
       yield chunk as ChatCompletionChunk
@@ -104,7 +105,7 @@ async function* createStreamIterator(
         `Failed to parse SSE chunk: ${event.data}`,
         response.status,
         'parse_error',
-        response.headers.get('x-request-id') ?? undefined,
+        response.headers.get(CONJOIN_REQUEST_ID_HEADER) ?? undefined,
       )
     }
   }

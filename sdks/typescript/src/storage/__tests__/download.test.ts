@@ -15,8 +15,11 @@ function createMockClient(fetchImpl?: ConjoinClient['fetch']): ConjoinClient {
   return {
     config,
     fetch: fetchImpl ?? vi.fn(),
+    fetchWithResponse: vi.fn(),
     fetchList: vi.fn(),
+    fetchListWithResponse: vi.fn(),
     fetchRaw: vi.fn(),
+    withRequestTrace: vi.fn(),
   }
 }
 

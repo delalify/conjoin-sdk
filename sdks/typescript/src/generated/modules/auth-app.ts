@@ -10,8 +10,6 @@ type UpdateBody = operations['updateAuthApp']['requestBody']['content']['applica
 type UpdateData = NonNullable<operations['updateAuthApp']['responses']['200']['content']['application/json']['data']>
 type UpdateSettingsBody = operations['updateAuthAppSettings']['requestBody']['content']['application/json']
 type UpdateSettingsData = NonNullable<operations['updateAuthAppSettings']['responses']['200']['content']['application/json']['data']>
-type UpdateBrandingBody = operations['updateAuthAppBranding']['requestBody']['content']['application/json']
-type UpdateBrandingData = NonNullable<operations['updateAuthAppBranding']['responses']['200']['content']['application/json']['data']>
 type UpdateCustomAttributesBody = operations['updateAuthAppCustomAttributes']['requestBody']['content']['application/json']
 type UpdateCustomAttributesData = NonNullable<operations['updateAuthAppCustomAttributes']['responses']['200']['content']['application/json']['data']>
 
@@ -31,9 +29,6 @@ export function createAuthApps(client: ConjoinClient) {
 
     updateSettings: (appId: string, data: UpdateSettingsBody) =>
       client.fetch<UpdateSettingsData>(`auth/app/${appId}/settings/update`, { method: 'PATCH', body: data }),
-
-    updateBranding: (appId: string, data: UpdateBrandingBody) =>
-      client.fetch<UpdateBrandingData>(`auth/app/${appId}/branding/update`, { method: 'PATCH', body: data }),
 
     updateCustomAttributes: (appId: string, data: UpdateCustomAttributesBody) =>
       client.fetch<UpdateCustomAttributesData>(`auth/app/${appId}/settings/custom-attributes-schema`, { method: 'PUT', body: data }),

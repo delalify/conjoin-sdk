@@ -13,6 +13,9 @@ type CancelData = NonNullable<operations['cancelScheduler']['responses']['200'][
 type TriggerExecutionData = NonNullable<operations['triggerSchedulerExecution']['responses']['200']['content']['application/json']['data']>
 type ReadExecutionsData = NonNullable<operations['readSchedulerExecutions']['responses']['200']['content']['application/json']['data']>[number]
 type ReadExecutionsQuery = NonNullable<operations['readSchedulerExecutions']['parameters']['query']>
+type ReadDeadLetterEntriesData = NonNullable<operations['readSchedulerDeadLetterEntries']['responses']['200']['content']['application/json']['data']>[number]
+type ReadDeadLetterEntriesQuery = NonNullable<operations['readSchedulerDeadLetterEntries']['parameters']['query']>
+type ReplayDeadLetterEntryData = NonNullable<operations['replaySchedulerDeadLetterEntry']['responses']['200']['content']['application/json']['data']>
 
 export function createRelaySchedulers(client: ConjoinClient) {
   return {
@@ -39,5 +42,11 @@ export function createRelaySchedulers(client: ConjoinClient) {
 
     readExecutions: (scheduleId: string, query?: ReadExecutionsQuery) =>
       client.fetchList<ReadExecutionsData>(`relay/scheduler/${scheduleId}/executions`, { query: query as Record<string, unknown> }),
+
+    readDeadLetterEntries: (scheduleId: string, query?: ReadDeadLetterEntriesQuery) =>
+      client.fetchList<ReadDeadLetterEntriesData>(`relay/scheduler/${scheduleId}/dead-letters`, { query: query as Record<string, unknown> }),
+
+    replayDeadLetterEntry: (scheduleId: string, dlqEntryId: string) =>
+      client.fetch<ReplayDeadLetterEntryData>(`relay/scheduler/${scheduleId}/dead-letters/${dlqEntryId}/replay`, { method: 'POST' }),
   }
 }

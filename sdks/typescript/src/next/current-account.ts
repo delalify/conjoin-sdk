@@ -1,4 +1,6 @@
+import { headers } from 'next/headers'
 import { createConjoinClient } from '../core/client'
+import { getConjoinRequestIdFromHeaders } from '../core/request-tracing'
 import { auth } from './auth'
 import { resolveConfig } from './config'
 import type { NextAdapterConfig } from './types'
@@ -18,8 +20,11 @@ export async function currentAccount(overrides?: Partial<NextAdapterConfig>): Pr
   if (!authObj) return null
 
   const config = resolveConfig(overrides)
+  const headerStore = await headers()
+  const conjoinRequestId = getConjoinRequestIdFromHeaders(headerStore)
   const client = createConjoinClient({
     apiKey: config.secretKey,
+    ...(conjoinRequestId ? { conjoinRequestId } : {}),
   })
 
   const account = await client.fetch<Account>('auth/self', {

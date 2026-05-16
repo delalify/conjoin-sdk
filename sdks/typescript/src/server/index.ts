@@ -1,15 +1,23 @@
 import { createConjoinClient } from '../core/client'
+import { getConjoinRequestIdFromHeaders, type HeaderMapLike } from '../core/request-tracing'
 import type { ConjoinClient } from '../core/types'
 
 export type ServerOptions = {
   apiKey: string
   baseUrl?: string
+  conjoinRequestId?: string
+  request?: {
+    headers?: HeaderMapLike
+  }
 }
 
 export function createConjoinServer(options: ServerOptions): ConjoinClient {
+  const conjoinRequestId = options.conjoinRequestId ?? getConjoinRequestIdFromHeaders(options.request?.headers)
+
   return createConjoinClient({
     apiKey: options.apiKey,
     baseUrl: options.baseUrl,
+    ...(conjoinRequestId ? { conjoinRequestId } : {}),
   })
 }
 

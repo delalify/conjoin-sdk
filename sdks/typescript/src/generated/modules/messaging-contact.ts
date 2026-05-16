@@ -26,6 +26,6 @@ export function createMessagingContacts(client: ConjoinClient) {
       client.fetch<DeleteData>(`messaging/contacts/${contactId}`, { method: 'DELETE' }),
 
     list: (data: ListBody) =>
-      client.fetchList<ListData>('messaging/contacts', { method: 'POST', body: data }),
+      client.fetchList<ListData>('messaging/contacts/', { method: 'POST', body: data }),
   }
 }
