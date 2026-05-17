@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { ValidateFunction } from 'ajv'
 import Ajv2020 from 'ajv/dist/2020'
+import addFormats from 'ajv-formats'
 import { validateRequestAgainstOperation } from './openapi-request-validation'
 import { compileRoutes, resolveOperation } from './openapi-routes'
 import {
@@ -47,6 +48,10 @@ export const createOpenApiContract = (document: OpenApiDocument): OpenApiContrac
     coerceTypes: true,
     strict: false,
   })
+
+  addFormats(schemaAjv)
+  addFormats(parameterAjv)
+
   const parameterValidators = new Map<string, ValidateFunction>()
   const responseValidators = new Map<string, ValidateFunction>()
   const requestBodyValidators = new Map<string, ValidateFunction>()
