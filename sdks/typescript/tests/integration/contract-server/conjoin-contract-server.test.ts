@@ -21,7 +21,12 @@ describe('Conjoin contract server', () => {
       handler: () =>
         conjoinSuccess(
           {
+            cloud_account_id: 'account_123',
+            entity_id: 'entity_123',
             project_id: 'project_123',
+            organization_id: 'organization_123',
+            tags: ['contract'],
+            date_created: '2026-05-16T00:00:00.000Z',
           },
           {
             status: 201,
@@ -43,7 +48,12 @@ describe('Conjoin contract server', () => {
     expect(response.status).toBe(201)
     await expect(response.json()).resolves.toMatchObject({
       data: {
+        cloud_account_id: 'account_123',
+        entity_id: 'entity_123',
         project_id: 'project_123',
+        organization_id: 'organization_123',
+        tags: ['contract'],
+        date_created: '2026-05-16T00:00:00.000Z',
       },
     })
 
@@ -126,6 +136,39 @@ describe('Conjoin contract server', () => {
     expect(response.status).toBe(500)
     await expect(response.json()).resolves.toMatchObject({
       code: 'contract_server_error',
+    })
+  })
+
+  it('rejects fixture response bodies that do not match OpenAPI schemas', async () => {
+    server = await startConjoinContractServer()
+    server.register({
+      method: 'POST',
+      path: CREATE_PROJECT_PATH,
+      handler: () =>
+        conjoinSuccess(
+          {
+            project_id: 'project_123',
+          },
+          {
+            status: 201,
+          },
+        ),
+    })
+
+    const response = await fetch(`${server.baseUrl}/v1/cloud/project/domain_123/new`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Demo project',
+      }),
+    })
+
+    expect(response.status).toBe(500)
+    await expect(response.json()).resolves.toMatchObject({
+      code: 'contract_server_error',
+      message: expect.stringContaining('Response body does not match OpenAPI schema'),
     })
   })
 })

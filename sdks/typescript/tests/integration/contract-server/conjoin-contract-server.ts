@@ -133,6 +133,11 @@ const handleRequest = async ({ request, response, recorder, routes }: HandleRequ
 
     if (routes.openApiContract !== undefined && routeMatch.openApiMatch !== undefined) {
       routes.openApiContract.assertDeclaredResponseStatus(routeMatch.openApiMatch, contractResponse.status)
+      routes.openApiContract.assertValidResponseBody(
+        routeMatch.openApiMatch,
+        contractResponse.status,
+        contractResponse.body,
+      )
     }
 
     writeResponse(response, contractResponse)
