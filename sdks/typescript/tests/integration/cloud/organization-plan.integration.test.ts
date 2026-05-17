@@ -1,133 +1,104 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { expect } from 'vitest'
 import { createCloudOrganizations, createCloudPlans } from '../../../src/cloud'
-import { expectContractRequest, expectJsonBody, expectQuery } from '../contract-server/assertions'
-import type { ConjoinContractServer } from '../contract-server/conjoin-contract-server'
 import { conjoinList, conjoinSuccess } from '../contract-server/response-fixtures'
-import { ORGANIZATION_ID, organizationFixture, planFixture, startCloudContractTest } from './cloud-test-utils'
+import { describeCloudSdkContractCases, ORGANIZATION_ID, organizationFixture, planFixture } from './cloud-test-utils'
 
-describe('Cloud organization SDK contract integration', () => {
-  let server: ConjoinContractServer | undefined
+const createOrganizationBody = {
+  custom_id: 'demo-org',
+  name: 'Demo organization',
+  tags: ['contract'],
+}
+const updateOrganizationBody = {
+  name: 'Renamed organization',
+  tags: ['cloud'],
+}
 
-  afterEach(async () => {
-    await server?.stop()
-    server = undefined
-  })
-
-  it('sends organization requests through the generated SDK methods', async () => {
-    const context = await startCloudContractTest()
-    server = context.server
-    server.register({
-      method: 'POST',
-      path: '/v1/cloud/organization/new',
-      handler: () => conjoinSuccess(organizationFixture({ custom_id: 'demo-org' }), { status: 201 }),
-    })
-    server.register({
-      method: 'PATCH',
-      path: '/v1/cloud/organization/update-info/{domain_id_or_custom_id}',
-      handler: () => conjoinSuccess(organizationFixture({ name: 'Renamed organization' })),
-    })
-    server.register({
-      method: 'GET',
-      path: '/v1/cloud/organization/',
-      handler: () => conjoinList([organizationFixture()]),
-    })
-
-    const organizations = createCloudOrganizations(context.client)
-    const createBody = {
-      custom_id: 'demo-org',
-      name: 'Demo organization',
-      tags: ['contract'],
-    }
-    const updateBody = {
-      name: 'Renamed organization',
-      tags: ['cloud'],
-    }
-
-    await expect(organizations.create(createBody)).resolves.toEqual(organizationFixture({ custom_id: 'demo-org' }))
-    await expect(organizations.update(ORGANIZATION_ID, updateBody)).resolves.toEqual(
-      organizationFixture({ name: 'Renamed organization' }),
-    )
-    await expect(
-      organizations.read({
+describeCloudSdkContractCases('Cloud organization SDK contract integration', [
+  {
+    name: 'creates an organization',
+    method: 'POST',
+    path: '/v1/cloud/organization/new',
+    expectedBody: createOrganizationBody,
+    response: conjoinSuccess(organizationFixture({ custom_id: 'demo-org' }), { status: 201 }),
+    run: context => createCloudOrganizations(context.client).create(createOrganizationBody),
+    assertResult: result => expect(result).toEqual(organizationFixture({ custom_id: 'demo-org' })),
+  },
+  {
+    name: 'updates an organization',
+    method: 'PATCH',
+    path: '/v1/cloud/organization/update-info/{domain_id_or_custom_id}',
+    expectedBody: updateOrganizationBody,
+    expectedPath: `/v1/cloud/organization/update-info/${ORGANIZATION_ID}`,
+    expectedPathParams: {
+      domain_id_or_custom_id: ORGANIZATION_ID,
+    },
+    response: conjoinSuccess(organizationFixture({ name: 'Renamed organization' })),
+    run: context => createCloudOrganizations(context.client).update(ORGANIZATION_ID, updateOrganizationBody),
+    assertResult: result => expect(result).toEqual(organizationFixture({ name: 'Renamed organization' })),
+  },
+  {
+    name: 'lists organizations',
+    method: 'GET',
+    path: '/v1/cloud/organization/',
+    expectedQuery: {
+      'cursor[next]': 'cursor_next_123',
+      limit: '1',
+      'query[name]': 'Demo organization',
+      'sort[date_created]': 'desc',
+    },
+    response: conjoinList([organizationFixture()]),
+    run: context =>
+      createCloudOrganizations(context.client).read({
         cursor: { next: 'cursor_next_123' },
         limit: 1,
         query: { name: 'Demo organization' },
         sort: { date_created: 'desc' },
       }),
-    ).resolves.toMatchObject({ data: [organizationFixture()] })
+    assertResult: result => expect(result).toMatchObject({ data: [organizationFixture()] }),
+  },
+])
 
-    const requests = server.recorder.all()
-
-    expect(requests.map(request => `${request.method} ${request.path}`)).toEqual([
-      'POST /v1/cloud/organization/new',
-      `PATCH /v1/cloud/organization/update-info/${ORGANIZATION_ID}`,
-      'GET /v1/cloud/organization/',
-    ])
-    expectJsonBody(expectContractRequest(requests[0]), createBody)
-    expectJsonBody(expectContractRequest(requests[1]), updateBody)
-    expectQuery(expectContractRequest(requests[2]), {
-      'cursor[next]': 'cursor_next_123',
-      limit: '1',
-      'query[name]': 'Demo organization',
-      'sort[date_created]': 'desc',
-    })
-  })
-})
-
-describe('Cloud plan SDK contract integration', () => {
-  let server: ConjoinContractServer | undefined
-
-  afterEach(async () => {
-    await server?.stop()
-    server = undefined
-  })
-
-  it('sends plan requests through the generated SDK methods', async () => {
-    const context = await startCloudContractTest()
-    server = context.server
-    server.register({
-      method: 'GET',
-      path: '/v1/cloud/plan/many',
-      handler: () => conjoinList([planFixture()]),
-    })
-    server.register({
-      method: 'GET',
-      path: '/v1/cloud/plan/single/{slug}',
-      handler: () => conjoinSuccess(planFixture()),
-    })
-    server.register({
-      method: 'GET',
-      path: '/v1/cloud/plan/account',
-      handler: () => conjoinSuccess(planFixture({ slug: 'business' })),
-    })
-
-    const plans = createCloudPlans(context.client)
-
-    await expect(
-      plans.list({
-        cursor: { next: 'cursor_next_123' },
-        limit: 1,
-        query: { currency: 'usd', slug: 'starter', status: 'active' },
-        sort: { date_created: 'desc' },
-      }),
-    ).resolves.toMatchObject({ data: [planFixture()] })
-    await expect(plans.read('starter')).resolves.toEqual(planFixture())
-    await expect(plans.readAccount()).resolves.toEqual(planFixture({ slug: 'business' }))
-
-    const requests = server.recorder.all()
-
-    expect(requests.map(request => `${request.method} ${request.path}`)).toEqual([
-      'GET /v1/cloud/plan/many',
-      'GET /v1/cloud/plan/single/starter',
-      'GET /v1/cloud/plan/account',
-    ])
-    expectQuery(expectContractRequest(requests[0]), {
+describeCloudSdkContractCases('Cloud plan SDK contract integration', [
+  {
+    name: 'lists cloud plans',
+    method: 'GET',
+    path: '/v1/cloud/plan/many',
+    expectedQuery: {
       'cursor[next]': 'cursor_next_123',
       limit: '1',
       'query[currency]': 'usd',
       'query[slug]': 'starter',
       'query[status]': 'active',
       'sort[date_created]': 'desc',
-    })
-  })
-})
+    },
+    response: conjoinList([planFixture()]),
+    run: context =>
+      createCloudPlans(context.client).list({
+        cursor: { next: 'cursor_next_123' },
+        limit: 1,
+        query: { currency: 'usd', slug: 'starter', status: 'active' },
+        sort: { date_created: 'desc' },
+      }),
+    assertResult: result => expect(result).toMatchObject({ data: [planFixture()] }),
+  },
+  {
+    name: 'reads a cloud plan',
+    method: 'GET',
+    path: '/v1/cloud/plan/single/{slug}',
+    expectedPath: '/v1/cloud/plan/single/starter',
+    expectedPathParams: {
+      slug: 'starter',
+    },
+    response: conjoinSuccess(planFixture()),
+    run: context => createCloudPlans(context.client).read('starter'),
+    assertResult: result => expect(result).toEqual(planFixture()),
+  },
+  {
+    name: 'reads the account plan',
+    method: 'GET',
+    path: '/v1/cloud/plan/account',
+    response: conjoinSuccess(planFixture({ slug: 'business' })),
+    run: context => createCloudPlans(context.client).readAccount(),
+    assertResult: result => expect(result).toEqual(planFixture({ slug: 'business' })),
+  },
+])

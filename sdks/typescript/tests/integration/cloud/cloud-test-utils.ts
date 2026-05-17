@@ -1,7 +1,9 @@
 import { createConjoinClient } from '../../../src/core/client'
 import type { ConjoinClient } from '../../../src/core/types'
+import { DEFAULT_API_VERSION, SDK_VERSION } from '../../../src/core/version'
 import type { ConjoinContractServer } from '../contract-server/conjoin-contract-server'
 import { startConjoinContractServer } from '../contract-server/conjoin-contract-server'
+import { describeSdkContractCases, type SdkContractCase } from '../sdk-contract/run-sdk-contract-cases'
 
 export const API_KEY = 'ck_test_cloud_contract'
 export const ACCOUNT_ID = 'account_123'
@@ -20,6 +22,8 @@ export type CloudContractTestContext = {
   server: ConjoinContractServer
 }
 
+export type CloudSdkContractCase<TResult = unknown> = SdkContractCase<CloudContractTestContext, TResult>
+
 export const startCloudContractTest = async (): Promise<CloudContractTestContext> => {
   const server = await startConjoinContractServer()
   const client = createConjoinClient({
@@ -31,6 +35,19 @@ export const startCloudContractTest = async (): Promise<CloudContractTestContext
     client,
     server,
   }
+}
+
+export const describeCloudSdkContractCases = (suiteName: string, cases: CloudSdkContractCase[]): void => {
+  describeSdkContractCases({
+    cases,
+    defaultExpectedHeaders: {
+      authorization: `Bearer ${API_KEY}`,
+      'x-conjoin-api-version': DEFAULT_API_VERSION,
+      'x-conjoin-sdk-version': SDK_VERSION,
+    },
+    startContext: startCloudContractTest,
+    suiteName,
+  })
 }
 
 export const cloudAccountFixture = (overrides: Record<string, unknown> = {}) => ({
