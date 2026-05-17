@@ -174,7 +174,7 @@ describe('createStorageDownloader', () => {
 
       try {
         await downloader.download({ container: 'bucket', path: 'secret.pdf' })
-        expect.unreachable('should have thrown')
+        throw new Error('should have thrown')
       } catch (err) {
         expect(err).toBeInstanceOf(ConjoinStorageError)
         const storageErr = err as ConjoinStorageError

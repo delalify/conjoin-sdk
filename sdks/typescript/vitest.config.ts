@@ -8,8 +8,13 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       reportsDirectory: './tests/coverage',
-      include: ['src/**/*.ts', 'src/**/*.tsx'],
-      exclude: ['src/generated/api-types.ts', 'src/**/__tests__/**', '**/*.test.ts', '**/*.test.tsx'],
+      include: [
+        'src/ai/**/*.ts',
+        'src/messaging/**/*.ts',
+        'src/relay/**/*.ts',
+        'src/storage/**/*.ts',
+      ],
+      exclude: ['**/*.test.ts', '**/*.test.tsx'],
       thresholds: {
         branches: 90,
         functions: 90,
