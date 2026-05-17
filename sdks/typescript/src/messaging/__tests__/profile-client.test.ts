@@ -1,5 +1,6 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import type { ConjoinClient, ResolvedConfig } from '../../core/types'
+import { createMessagingProfiledClient } from '../profile-client'
 
 const config: ResolvedConfig = Object.freeze({
   apiKey: 'ck_test_123',
@@ -19,54 +20,38 @@ const createMockClient = (): ConjoinClient => ({
   withRequestTrace: vi.fn(async (callback, options) => callback(createMockClient(), options?.requestId ?? 'req_123')),
 })
 
-type ProfileClientProbe = {
-  fetchWithResponse: () => Promise<unknown>
-  fetchListWithResponse: () => Promise<unknown>
-  fetchRaw: () => Promise<unknown>
-  withRequestTrace: () => Promise<unknown>
-}
-
-afterEach(() => {
-  vi.doUnmock('../../generated/modules/messaging-email')
-  vi.resetModules()
-})
-
-describe('createMessaging profiled client wrapper', () => {
-  it('injects the profile header into response, raw, and traced client calls', async () => {
-    vi.doMock('../../generated/modules/messaging-email', () => ({
-      createMessagingEmails: (client: ConjoinClient): ProfileClientProbe => ({
-        fetchListWithResponse: () =>
-          client.fetchListWithResponse('messaging/custom/list-response', {
-            headers: { Existing: 'yes' },
-          }),
-        fetchRaw: () =>
-          client.fetchRaw('messaging/custom/raw', {
-            headers: { Existing: 'yes' },
-          }),
-        fetchWithResponse: () =>
-          client.fetchWithResponse('messaging/custom/response', {
-            headers: { Existing: 'yes' },
-          }),
-        withRequestTrace: () =>
-          client.withRequestTrace(
-            (scopedClient, requestId) =>
-              scopedClient.fetchRaw(`messaging/custom/trace/${requestId}`, {
-                headers: { Existing: 'yes' },
-              }),
-            { requestId: 'req_456' },
-          ),
-      }),
-    }))
-
-    const { createMessaging } = await import('../index')
+describe('createMessagingProfiledClient', () => {
+  it('injects the configured profile header into fetch calls', async () => {
     const client = createMockClient()
-    const messaging = createMessaging(client, { profileId: 'msg_profile_123' })
-    const emails = messaging.emails as unknown as ProfileClientProbe
+    const profiled = createMessagingProfiledClient(client, 'msg_profile_123')
 
-    await emails.fetchWithResponse()
-    await emails.fetchListWithResponse()
-    await emails.fetchRaw()
-    await emails.withRequestTrace()
+    await profiled.fetch('messaging/email/send', {
+      body: { to: 'user@example.com' },
+      headers: { Existing: 'yes' },
+      method: 'POST',
+    })
+    await profiled.fetchList('messaging/email/messages/msg_123')
+
+    expect(client.fetch).toHaveBeenCalledWith('messaging/email/send', {
+      body: { to: 'user@example.com' },
+      headers: {
+        Existing: 'yes',
+        'Messaging-Profile-ID': 'msg_profile_123',
+      },
+      method: 'POST',
+    })
+    expect(client.fetchList).toHaveBeenCalledWith('messaging/email/messages/msg_123', {
+      headers: { 'Messaging-Profile-ID': 'msg_profile_123' },
+    })
+  })
+
+  it('injects the configured profile header into response and raw calls', async () => {
+    const client = createMockClient()
+    const profiled = createMessagingProfiledClient(client, 'msg_profile_123')
+
+    await profiled.fetchWithResponse('messaging/custom/response', { headers: { Existing: 'yes' } })
+    await profiled.fetchListWithResponse('messaging/custom/list-response', { headers: { Existing: 'yes' } })
+    await profiled.fetchRaw('messaging/custom/raw', { headers: { Existing: 'yes' } })
 
     expect(client.fetchWithResponse).toHaveBeenCalledWith('messaging/custom/response', {
       headers: {
@@ -86,6 +71,20 @@ describe('createMessaging profiled client wrapper', () => {
         'Messaging-Profile-ID': 'msg_profile_123',
       },
     })
+  })
+
+  it('keeps the profile header inside request trace scopes', async () => {
+    const client = createMockClient()
+    const profiled = createMessagingProfiledClient(client, 'msg_profile_123')
+
+    await profiled.withRequestTrace(
+      (scopedClient, requestId) =>
+        scopedClient.fetchRaw(`messaging/custom/trace/${requestId}`, {
+          headers: { Existing: 'yes' },
+        }),
+      { requestId: 'req_456' },
+    )
+
     expect(client.withRequestTrace).toHaveBeenCalledWith(expect.any(Function), { requestId: 'req_456' })
   })
 })

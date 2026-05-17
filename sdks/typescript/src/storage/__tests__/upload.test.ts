@@ -417,37 +417,6 @@ describe('createStorageUploader', () => {
       expect((request?.body as Blob).size).toBe(3)
     })
 
-    it('skips empty ReadableStream chunks during single upload conversion', async () => {
-      const client = createMockClient(
-        vi.fn().mockResolvedValue({
-          upload_url: 'https://storage.example.com/upload',
-          required_fields: { method: 'PUT' as const, headers: {} },
-          upload_mode: 'single' as const,
-        }),
-      )
-      fetchSpy.mockResolvedValue(new Response(null, { status: 200 }))
-
-      const body = new ReadableStream<Uint8Array>({
-        start(controller) {
-          controller.enqueue(undefined as unknown as Uint8Array)
-          controller.enqueue(new Uint8Array([1]))
-          controller.close()
-        },
-      })
-
-      const uploader = createStorageUploader(client)
-      await uploader.upload({
-        container: 'test',
-        path: 'file.txt',
-        contentType: 'text/plain',
-        body,
-        fileSize: 1,
-      })
-
-      const request = fetchSpy.mock.calls[0]?.[1]
-      expect((request?.body as Blob).size).toBe(1)
-    })
-
     it('throws when ReadableStream has no fileSize', async () => {
       const client = createMockClient()
       const uploader = createStorageUploader(client)

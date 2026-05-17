@@ -13,6 +13,7 @@ import { createMessagingSMSCampaigns } from '../generated/modules/messaging-sms-
 import { createMessagingSMSSenders } from '../generated/modules/messaging-sms-sender'
 import { createMessagingTemplates } from '../generated/modules/messaging-template'
 import { createMessagingVerifications } from '../generated/modules/messaging-verification'
+import { createMessagingProfiledClient } from './profile-client'
 
 export * from '../generated/modules/messaging-index'
 
@@ -20,37 +21,8 @@ export type MessagingConfig = {
   profileId: string
 }
 
-function withProfileHeader(client: ConjoinClient, profileId: string): ConjoinClient {
-  const injectHeader = (options?: Parameters<ConjoinClient['fetch']>[1]) => ({
-    ...options,
-    headers: {
-      ...options?.headers,
-      'Messaging-Profile-ID': profileId,
-    },
-  })
-
-  return {
-    config: client.config,
-    fetch: <T>(path: string, options?: Parameters<ConjoinClient['fetch']>[1]) =>
-      client.fetch<T>(path, injectHeader(options)),
-    fetchWithResponse: <T>(path: string, options?: Parameters<ConjoinClient['fetchWithResponse']>[1]) =>
-      client.fetchWithResponse<T>(path, injectHeader(options)),
-    fetchList: <T>(path: string, options?: Parameters<ConjoinClient['fetchList']>[1]) =>
-      client.fetchList<T>(path, injectHeader(options)),
-    fetchListWithResponse: <T>(path: string, options?: Parameters<ConjoinClient['fetchListWithResponse']>[1]) =>
-      client.fetchListWithResponse<T>(path, injectHeader(options)),
-    fetchRaw: (path: string, options?: Parameters<ConjoinClient['fetchRaw']>[1]) =>
-      client.fetchRaw(path, injectHeader(options)),
-    withRequestTrace: async (callback, options) =>
-      client.withRequestTrace(
-        (scopedClient, requestId) => callback(withProfileHeader(scopedClient, profileId), requestId),
-        options,
-      ),
-  }
-}
-
 export function createMessaging(client: ConjoinClient, config: MessagingConfig) {
-  const profiled = withProfileHeader(client, config.profileId)
+  const profiled = createMessagingProfiledClient(client, config.profileId)
 
   return {
     emails: createMessagingEmails(profiled),
