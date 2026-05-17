@@ -1,29 +1,16 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { createCloudProjects } from '../../../src/cloud'
-import { createConjoinClient } from '../../../src/core/client'
 import { DEFAULT_API_VERSION, SDK_VERSION } from '../../../src/core/version'
 import { expectContractRequest, expectHeader, expectJsonBody, expectQuery } from '../contract-server/assertions'
 import type { ConjoinContractServer } from '../contract-server/conjoin-contract-server'
-import { startConjoinContractServer } from '../contract-server/conjoin-contract-server'
 import { conjoinList, conjoinSuccess } from '../contract-server/response-fixtures'
+import { API_KEY, PROJECT_ID, projectFixture, REQUEST_ID, startCloudContractTest } from './cloud-test-utils'
 
-const API_KEY = 'ck_test_cloud_project_contract'
 const CREATE_PROJECT_PATH = '/v1/cloud/project/{domain_id}/new'
+const UPDATE_PROJECT_PATH = '/v1/cloud/project/update-info'
 const READ_PROJECT_PATH = '/v1/cloud/project/public/single/{project_id}'
 const LIST_PROJECTS_PATH = '/v1/cloud/project/many/{domain_id}'
 const DOMAIN_ID = 'domain_123'
-const PROJECT_ID = 'project_123'
-const REQUEST_ID = 'cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c1'
-
-const projectFixture = (overrides: Record<string, unknown> = {}) => ({
-  cloud_account_id: 'account_123',
-  entity_id: 'entity_123',
-  project_id: PROJECT_ID,
-  organization_id: 'organization_123',
-  tags: ['contract'],
-  date_created: '2026-05-16T00:00:00.000Z',
-  ...overrides,
-})
 
 describe('Cloud project SDK contract integration', () => {
   let server: ConjoinContractServer | undefined
@@ -34,7 +21,8 @@ describe('Cloud project SDK contract integration', () => {
   })
 
   it('creates a cloud project through the generated SDK method', async () => {
-    server = await startConjoinContractServer()
+    const context = await startCloudContractTest()
+    server = context.server
     server.register({
       method: 'POST',
       path: CREATE_PROJECT_PATH,
@@ -45,12 +33,7 @@ describe('Cloud project SDK contract integration', () => {
         }),
     })
 
-    const projects = createCloudProjects(
-      createConjoinClient({
-        apiKey: API_KEY,
-        baseUrl: server.baseUrl,
-      }),
-    )
+    const projects = createCloudProjects(context.client)
     const createBody = {
       custom_id: 'project_custom_123',
       name: 'Demo project',
@@ -79,20 +62,47 @@ describe('Cloud project SDK contract integration', () => {
     expectJsonBody(request, createBody)
   })
 
+  it('updates a cloud project through the generated SDK method', async () => {
+    const context = await startCloudContractTest()
+    server = context.server
+    server.register({
+      method: 'PATCH',
+      path: UPDATE_PROJECT_PATH,
+      handler: () => conjoinSuccess(projectFixture({ name: 'Renamed project' }), { requestId: REQUEST_ID }),
+    })
+
+    const projects = createCloudProjects(context.client)
+    const updateBody = {
+      name: 'Renamed project',
+      tags: ['contract'],
+    }
+
+    const result = await projects.update(updateBody)
+
+    expect(result).toEqual(projectFixture({ name: 'Renamed project' }))
+
+    const request = expectContractRequest(server.recorder.last())
+
+    expect(request).toMatchObject({
+      method: 'PATCH',
+      path: UPDATE_PROJECT_PATH,
+      pathTemplate: UPDATE_PROJECT_PATH,
+      query: {},
+    })
+    expectJsonBody(request, updateBody)
+    expectHeader(request, 'authorization', `Bearer ${API_KEY}`)
+  })
+
   it('reads a cloud project through the generated SDK method', async () => {
-    server = await startConjoinContractServer()
+    const context = await startCloudContractTest()
+    server = context.server
     server.register({
       method: 'GET',
       path: READ_PROJECT_PATH,
       handler: () => conjoinSuccess(projectFixture(), { requestId: REQUEST_ID }),
     })
 
-    const projects = createCloudProjects(
-      createConjoinClient({
-        apiKey: API_KEY,
-        baseUrl: server.baseUrl,
-      }),
-    )
+    const projects = createCloudProjects(context.client)
 
     const result = await projects.read(PROJECT_ID)
 
@@ -115,7 +125,8 @@ describe('Cloud project SDK contract integration', () => {
   })
 
   it('lists cloud projects through the generated SDK method with query parameters', async () => {
-    server = await startConjoinContractServer()
+    const context = await startCloudContractTest()
+    server = context.server
     server.register({
       method: 'GET',
       path: LIST_PROJECTS_PATH,
@@ -129,12 +140,7 @@ describe('Cloud project SDK contract integration', () => {
         }),
     })
 
-    const projects = createCloudProjects(
-      createConjoinClient({
-        apiKey: API_KEY,
-        baseUrl: server.baseUrl,
-      }),
-    )
+    const projects = createCloudProjects(context.client)
 
     const result = await projects.list(DOMAIN_ID, {
       cursor: {
