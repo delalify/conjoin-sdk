@@ -158,13 +158,18 @@ describe('Cloud zone SDK contract integration', () => {
     server = undefined
   })
 
-  it('sends zone mutation requests through the generated SDK methods', async () => {
+  it('sends zone requests through the generated SDK methods', async () => {
     const context = await startCloudContractTest()
     server = context.server
     server.register({
       method: 'POST',
       path: '/v1/cloud/cloud-zones/new',
       handler: () => conjoinSuccess(zoneFixture(), { status: 201 }),
+    })
+    server.register({
+      method: 'GET',
+      path: '/v1/cloud/cloud-zones/{zone_id}',
+      handler: () => conjoinSuccess(zoneFixture()),
     })
     server.register({
       method: 'PATCH',
@@ -184,6 +189,7 @@ describe('Cloud zone SDK contract integration', () => {
     }
 
     await expect(zones.create(createBody)).resolves.toEqual(zoneFixture())
+    await expect(zones.read(ZONE_ID)).resolves.toEqual(zoneFixture())
     await expect(zones.verifyDns(ZONE_ID)).resolves.toEqual(zoneFixture({ status: 'verified' }))
     await expect(zones.delete(ZONE_ID)).resolves.toEqual(zoneFixture({ date_deleted: '2026-05-16T01:00:00.000Z' }))
 
@@ -191,6 +197,7 @@ describe('Cloud zone SDK contract integration', () => {
 
     expect(requests.map(request => `${request.method} ${request.path}`)).toEqual([
       'POST /v1/cloud/cloud-zones/new',
+      `GET /v1/cloud/cloud-zones/${ZONE_ID}`,
       `PATCH /v1/cloud/cloud-zones/verify-dns/${ZONE_ID}`,
       `DELETE /v1/cloud/cloud-zones/${ZONE_ID}`,
     ])

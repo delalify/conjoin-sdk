@@ -3721,7 +3721,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/billing/entitlement-feature/{{feature_id_or_key}}": {
+    "/v1/billing/entitlement-feature/{feature_id_or_key}": {
         parameters: {
             query?: never;
             header?: never;
@@ -3730,22 +3730,6 @@ export interface paths {
         };
         /** List entitlement features */
         get: operations["listEntitlementFeatures"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/billing/entitlement-feature/{feature_id_or_key}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
         /** Update an entitlement feature */
         put: operations["updateEntitlementFeature"];
         post?: never;
@@ -4202,7 +4186,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/billing/price-bundle/{entity_id}/{{reference_id}}": {
+    "/v1/billing/price-bundle/{entity_id}/{reference_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -4211,22 +4195,6 @@ export interface paths {
         };
         /** List price bundles */
         get: operations["listPriceBundles"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/billing/price-bundle/{entity_id}/{reference_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
         /** Update a price bundle */
         put: operations["updatePriceBundle"];
         post?: never;
@@ -4372,7 +4340,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/billing/price/{entity_id}/{{reference_id}}": {
+    "/v1/billing/price/{entity_id}/{reference_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -4381,22 +4349,6 @@ export interface paths {
         };
         /** List billing prices */
         get: operations["listPrices"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/billing/price/{entity_id}/{reference_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
         /** Update a billing price */
         put: operations["updatePrice"];
         post?: never;
@@ -4458,7 +4410,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/billing/product/{entity_id}/{{reference_id}}": {
+    "/v1/billing/product/{entity_id}/{reference_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -4467,22 +4419,6 @@ export interface paths {
         };
         /** List billing products */
         get: operations["listProducts"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/billing/product/{entity_id}/{reference_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
         /** Update a billing product */
         put: operations["updateProduct"];
         post?: never;
@@ -5655,7 +5591,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/cloud/cloud-zones/{{zone_id}}": {
+    "/v1/cloud/cloud-zones/{zone_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -5666,7 +5602,8 @@ export interface paths {
         get: operations["readCloudZone"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Delete a cloud zone */
+        delete: operations["deleteCloudZone"];
         options?: never;
         head?: never;
         patch?: never;
@@ -5687,23 +5624,6 @@ export interface paths {
         head?: never;
         /** Verify DNS records for a cloud zone */
         patch: operations["verifyCloudZoneDns"];
-        trace?: never;
-    };
-    "/v1/cloud/cloud-zones/{zone_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete a cloud zone */
-        delete: operations["deleteCloudZone"];
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/v1/messaging/contacts/new": {
@@ -5809,7 +5729,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/messaging/conversations/wipe/{{conversation_id}}": {
+    "/v1/messaging/conversations/wipe/{conversation_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -5826,7 +5746,7 @@ export interface paths {
         patch: operations["deleteConversation"];
         trace?: never;
     };
-    "/v1/messaging/conversations/archive/{{conversation_id}}": {
+    "/v1/messaging/conversations/archive/{conversation_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -5852,7 +5772,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
+        /** List conversations */
+        post: operations["listConversations"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5860,24 +5781,7 @@ export interface paths {
         patch: operations["updateConversation"];
         trace?: never;
     };
-    "/v1/messaging/conversations/{{conversation_id}}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** List conversations */
-        post: operations["listConversations"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/messaging/conversations/{conversation_id}/messages/{{parent_message_id}}": {
+    "/v1/messaging/conversations/{conversation_id}/messages/{parent_message_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -5980,7 +5884,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/messaging/email/messages/{{message_id}}": {
+    "/v1/messaging/email/messages/{message_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -6634,7 +6538,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/messaging/sms/messages/{{message_id}}": {
+    "/v1/messaging/sms/messages/{message_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -6824,7 +6728,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/messaging/templates/{{template_id}}": {
+    "/v1/messaging/templates/{template_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -6835,22 +6739,6 @@ export interface paths {
         put?: never;
         /** List message templates */
         post: operations["listMessageTemplates"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/messaging/templates/{template_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
         /** Delete a message template */
         delete: operations["deleteMessageTemplate"];
         options?: never;
@@ -6926,7 +6814,7 @@ export interface paths {
         patch: operations["checkVerification"];
         trace?: never;
     };
-    "/v1/messaging/otps/resend/{{verification_id}}": {
+    "/v1/messaging/otps/resend/{verification_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -8269,7 +8157,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/storage/storage-container/archive/{{container_name_or_id}}": {
+    "/v1/storage/storage-container/archive/{container_name_or_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -8286,7 +8174,7 @@ export interface paths {
         patch: operations["archiveStorageContainer"];
         trace?: never;
     };
-    "/v1/storage/storage-container/restore/{{container_name_or_id}}": {
+    "/v1/storage/storage-container/restore/{container_name_or_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -47408,7 +47296,7 @@ export interface operations {
             };
         };
     };
-    verifyCloudZoneDns: {
+    deleteCloudZone: {
         parameters: {
             query?: never;
             header?: {
@@ -47508,7 +47396,7 @@ export interface operations {
             };
         };
     };
-    deleteCloudZone: {
+    verifyCloudZoneDns: {
         parameters: {
             query?: never;
             header?: {
@@ -48874,107 +48762,6 @@ export interface operations {
             };
         };
     };
-    updateConversation: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-                /** @description Messaging profile identifier */
-                "Messaging-Profile-ID": string;
-            };
-            path: {
-                conversation_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    title?: string;
-                    /** @example string */
-                    description?: string;
-                    accepts_replies?: boolean;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            conversation_id: string;
-                            profile_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id?: string | null;
-                            title: string;
-                            description?: string;
-                            message_channels: {
-                                [key: string]: unknown;
-                            };
-                            senders?: {
-                                [key: string]: unknown;
-                            } | null;
-                            accepts_replies: boolean;
-                            total_recipients: number;
-                            placeholders?: {
-                                [key: string]: unknown;
-                            } | null;
-                            date_archived?: string | null;
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
     listConversations: {
         parameters: {
             query?: never;
@@ -49182,6 +48969,107 @@ export interface operations {
                             date_deleted?: string | null;
                         }[];
                         cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateConversation: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    title?: string;
+                    /** @example string */
+                    description?: string;
+                    accepts_replies?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            conversation_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id?: string | null;
+                            title: string;
+                            description?: string;
+                            message_channels: {
+                                [key: string]: unknown;
+                            };
+                            senders?: {
+                                [key: string]: unknown;
+                            } | null;
+                            accepts_replies: boolean;
+                            total_recipients: number;
+                            placeholders?: {
+                                [key: string]: unknown;
+                            } | null;
+                            date_archived?: string | null;
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
                     };
                 };
             };
