@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/v1/ai/byok/byok/create": {
+    "/v1/ai/byok/create": {
         parameters: {
             query?: never;
             header?: never;
@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/byok/byok": {
+    "/v1/ai/byok/": {
         parameters: {
             query?: never;
             header?: never;
@@ -38,7 +38,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/byok/byok/{byok_config_id}": {
+    "/v1/ai/byok/{byok_config_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -55,7 +55,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/byok/byok/{byok_config_id}/update": {
+    "/v1/ai/byok/{byok_config_id}/update": {
         parameters: {
             query?: never;
             header?: never;
@@ -72,7 +72,7 @@ export interface paths {
         patch: operations["updateAiByokConfig"];
         trace?: never;
     };
-    "/v1/ai/byok/byok/{byok_config_id}/delete": {
+    "/v1/ai/byok/{byok_config_id}/delete": {
         parameters: {
             query?: never;
             header?: never;
@@ -89,7 +89,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/byok/byok/{byok_config_id}/test": {
+    "/v1/ai/byok/{byok_config_id}/test": {
         parameters: {
             query?: never;
             header?: never;
@@ -106,7 +106,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/context/context/indexes/create": {
+    "/v1/ai/context/indexes/create": {
         parameters: {
             query?: never;
             header?: never;
@@ -123,7 +123,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/context/context/indexes": {
+    "/v1/ai/context/indexes": {
         parameters: {
             query?: never;
             header?: never;
@@ -140,7 +140,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/context/context/indexes/{index_id}": {
+    "/v1/ai/context/indexes/{index_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -157,7 +157,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/context/context/indexes/{index_id}/delete": {
+    "/v1/ai/context/indexes/{index_id}/delete": {
         parameters: {
             query?: never;
             header?: never;
@@ -174,7 +174,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/context/context/indexes/{index_id}/sync": {
+    "/v1/ai/context/indexes/{index_id}/sync": {
         parameters: {
             query?: never;
             header?: never;
@@ -191,7 +191,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/context/context/query": {
+    "/v1/ai/context/query": {
         parameters: {
             query?: never;
             header?: never;
@@ -208,7 +208,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/context/context/query-logs": {
+    "/v1/ai/context/query-logs": {
         parameters: {
             query?: never;
             header?: never;
@@ -344,7 +344,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/policy/policy/check": {
+    "/v1/ai/policy/check": {
         parameters: {
             query?: never;
             header?: never;
@@ -361,7 +361,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/policy/policy/rules/create": {
+    "/v1/ai/policy/rules/create": {
         parameters: {
             query?: never;
             header?: never;
@@ -378,7 +378,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/policy/policy/rules": {
+    "/v1/ai/policy/rules": {
         parameters: {
             query?: never;
             header?: never;
@@ -395,7 +395,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/policy/policy/rules/{rule_id}": {
+    "/v1/ai/policy/rules/{rule_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -412,7 +412,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/policy/policy/rules/{rule_id}/update": {
+    "/v1/ai/policy/rules/{rule_id}/update": {
         parameters: {
             query?: never;
             header?: never;
@@ -429,7 +429,7 @@ export interface paths {
         patch: operations["updateAiPolicyRule"];
         trace?: never;
     };
-    "/v1/ai/policy/policy/rules/{rule_id}/delete": {
+    "/v1/ai/policy/rules/{rule_id}/delete": {
         parameters: {
             query?: never;
             header?: never;
@@ -446,7 +446,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/policy/policy/logs": {
+    "/v1/ai/policy/logs": {
         parameters: {
             query?: never;
             header?: never;
@@ -463,7 +463,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/usage/usage/records": {
+    "/v1/ai/usage/records": {
         parameters: {
             query?: never;
             header?: never;
@@ -480,7 +480,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/usage/usage/summary": {
+    "/v1/ai/usage/summary": {
         parameters: {
             query?: never;
             header?: never;
@@ -599,7 +599,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/account/account": {
+    "/v1/auth/account/": {
         parameters: {
             query?: never;
             header?: never;
@@ -616,7 +616,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/account/account/count": {
+    "/v1/auth/account/count": {
         parameters: {
             query?: never;
             header?: never;
@@ -2861,7 +2861,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/session/session/count": {
+    "/v1/auth/session/count": {
         parameters: {
             query?: never;
             header?: never;
@@ -3031,7 +3031,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/session/session/active/count": {
+    "/v1/auth/session/active/count": {
         parameters: {
             query?: never;
             header?: never;
@@ -3048,7 +3048,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/session/session/active/client-count": {
+    "/v1/auth/session/active/client-count": {
         parameters: {
             query?: never;
             header?: never;
@@ -3065,7 +3065,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/session/session/analytics": {
+    "/v1/auth/session/analytics": {
         parameters: {
             query?: never;
             header?: never;

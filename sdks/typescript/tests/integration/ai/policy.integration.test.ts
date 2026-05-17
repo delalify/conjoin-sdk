@@ -36,7 +36,7 @@ describeAiSdkContractCases('AI policy SDK contract integration', [
   {
     name: 'checks AI policy',
     method: 'POST',
-    path: '/v1/ai/policy/policy/check',
+    path: '/v1/ai/policy/check',
     expectedBody: policyCheckBody,
     response: conjoinSuccess(
       {
@@ -93,7 +93,7 @@ describeAiSdkContractCases('AI policy SDK contract integration', [
   {
     name: 'creates an AI policy rule',
     method: 'POST',
-    path: '/v1/ai/policy/policy/rules/create',
+    path: '/v1/ai/policy/rules/create',
     expectedBody: createPolicyRuleBody,
     response: conjoinSuccess(aiPolicyRuleFixture(), {
       requestId: REQUEST_ID,
@@ -105,7 +105,7 @@ describeAiSdkContractCases('AI policy SDK contract integration', [
   {
     name: 'lists AI policy rules',
     method: 'GET',
-    path: '/v1/ai/policy/policy/rules',
+    path: '/v1/ai/policy/rules',
     expectedQuery: aiExpectedListQuery,
     expectedRawBody: '',
     response: conjoinList([aiPolicyRuleFixture()], {
@@ -128,8 +128,8 @@ describeAiSdkContractCases('AI policy SDK contract integration', [
   {
     name: 'reads an AI policy rule',
     method: 'GET',
-    path: '/v1/ai/policy/policy/rules/{rule_id}',
-    expectedPath: `/v1/ai/policy/policy/rules/${RULE_ID}`,
+    path: '/v1/ai/policy/rules/{rule_id}',
+    expectedPath: `/v1/ai/policy/rules/${RULE_ID}`,
     expectedPathParams: {
       rule_id: RULE_ID,
     },
@@ -141,9 +141,9 @@ describeAiSdkContractCases('AI policy SDK contract integration', [
   {
     name: 'updates an AI policy rule',
     method: 'PATCH',
-    path: '/v1/ai/policy/policy/rules/{rule_id}/update',
+    path: '/v1/ai/policy/rules/{rule_id}/update',
     expectedBody: updatePolicyRuleBody,
-    expectedPath: `/v1/ai/policy/policy/rules/${RULE_ID}/update`,
+    expectedPath: `/v1/ai/policy/rules/${RULE_ID}/update`,
     expectedPathParams: {
       rule_id: RULE_ID,
     },
@@ -154,8 +154,8 @@ describeAiSdkContractCases('AI policy SDK contract integration', [
   {
     name: 'deletes an AI policy rule',
     method: 'DELETE',
-    path: '/v1/ai/policy/policy/rules/{rule_id}/delete',
-    expectedPath: `/v1/ai/policy/policy/rules/${RULE_ID}/delete`,
+    path: '/v1/ai/policy/rules/{rule_id}/delete',
+    expectedPath: `/v1/ai/policy/rules/${RULE_ID}/delete`,
     expectedPathParams: {
       rule_id: RULE_ID,
     },
@@ -167,7 +167,7 @@ describeAiSdkContractCases('AI policy SDK contract integration', [
   {
     name: 'lists AI policy logs',
     method: 'GET',
-    path: '/v1/ai/policy/policy/logs',
+    path: '/v1/ai/policy/logs',
     expectedQuery: aiExpectedListQuery,
     expectedRawBody: '',
     response: conjoinList([aiPolicyLogFixture()], {

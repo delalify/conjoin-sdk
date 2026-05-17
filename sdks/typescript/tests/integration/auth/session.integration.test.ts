@@ -108,7 +108,7 @@ describeAuthSdkContractCases('Auth session SDK contract integration', [
   {
     name: 'counts auth sessions',
     method: 'GET',
-    path: '/v1/auth/session/session/count',
+    path: '/v1/auth/session/count',
     expectedQuery: {
       account_id: ACCOUNT_ID,
       client_id: CLIENT_ID,
@@ -288,7 +288,7 @@ describeAuthSdkContractCases('Auth session SDK contract integration', [
   {
     name: 'gets active session count',
     method: 'GET',
-    path: '/v1/auth/session/session/active/count',
+    path: '/v1/auth/session/active/count',
     expectedQuery: {
       account_id: ACCOUNT_ID,
       time_window_hours: '24',
@@ -305,7 +305,7 @@ describeAuthSdkContractCases('Auth session SDK contract integration', [
   {
     name: 'gets active client session count',
     method: 'GET',
-    path: '/v1/auth/session/session/active/client-count',
+    path: '/v1/auth/session/active/client-count',
     expectedQuery: {
       client_id: CLIENT_ID,
       time_window_hours: '12',
@@ -322,7 +322,7 @@ describeAuthSdkContractCases('Auth session SDK contract integration', [
   {
     name: 'gets session analytics',
     method: 'GET',
-    path: '/v1/auth/session/session/analytics',
+    path: '/v1/auth/session/analytics',
     expectedQuery: {
       client_ids: [CLIENT_ID, 'auth_client_456'],
       end_date: '2026-05-17T00:00:00.000Z',

@@ -40,7 +40,7 @@ export function createAuthSessions(client: ConjoinClient) {
       client.fetchList<ListData>(`auth/session/client/${clientId}/sessions`, { query: query as Record<string, unknown> }),
 
     count: (query?: CountQuery) =>
-      client.fetch<CountData>('auth/session/session/count', { query: query as Record<string, unknown> }),
+      client.fetch<CountData>('auth/session/count', { query: query as Record<string, unknown> }),
 
     update: (appId: string, sessionId: string, data: UpdateBody) =>
       client.fetch<UpdateData>(`auth/session/${appId}/session/${sessionId}/update`, { method: 'PATCH', body: data }),
@@ -70,12 +70,12 @@ export function createAuthSessions(client: ConjoinClient) {
       client.fetchList<ListByClientData>('auth/session/sessions/client', { query: query as Record<string, unknown> }),
 
     getActiveCount: (query?: GetActiveCountQuery) =>
-      client.fetch<GetActiveCountData>('auth/session/session/active/count', { query: query as Record<string, unknown> }),
+      client.fetch<GetActiveCountData>('auth/session/active/count', { query: query as Record<string, unknown> }),
 
     getActiveClientCount: (query?: GetActiveClientCountQuery) =>
-      client.fetch<GetActiveClientCountData>('auth/session/session/active/client-count', { query: query as Record<string, unknown> }),
+      client.fetch<GetActiveClientCountData>('auth/session/active/client-count', { query: query as Record<string, unknown> }),
 
     getAnalytics: (query?: GetAnalyticsQuery) =>
-      client.fetch<GetAnalyticsData>('auth/session/session/analytics', { query: query as Record<string, unknown> }),
+      client.fetch<GetAnalyticsData>('auth/session/analytics', { query: query as Record<string, unknown> }),
   }
 }

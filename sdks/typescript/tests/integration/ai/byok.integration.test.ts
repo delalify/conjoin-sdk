@@ -31,7 +31,7 @@ describeAiSdkContractCases('AI BYOK SDK contract integration', [
   {
     name: 'creates an AI BYOK config',
     method: 'POST',
-    path: '/v1/ai/byok/byok/create',
+    path: '/v1/ai/byok/create',
     expectedBody: createByokConfigBody,
     response: conjoinSuccess(aiByokConfigFixture(), {
       requestId: REQUEST_ID,
@@ -43,7 +43,7 @@ describeAiSdkContractCases('AI BYOK SDK contract integration', [
   {
     name: 'lists AI BYOK configs',
     method: 'GET',
-    path: '/v1/ai/byok/byok',
+    path: '/v1/ai/byok/',
     expectedQuery: aiExpectedListQuery,
     expectedRawBody: '',
     response: conjoinList([aiByokConfigFixture()], {
@@ -66,8 +66,8 @@ describeAiSdkContractCases('AI BYOK SDK contract integration', [
   {
     name: 'reads an AI BYOK config',
     method: 'GET',
-    path: '/v1/ai/byok/byok/{byok_config_id}',
-    expectedPath: `/v1/ai/byok/byok/${BYOK_CONFIG_ID}`,
+    path: '/v1/ai/byok/{byok_config_id}',
+    expectedPath: `/v1/ai/byok/${BYOK_CONFIG_ID}`,
     expectedPathParams: {
       byok_config_id: BYOK_CONFIG_ID,
     },
@@ -79,9 +79,9 @@ describeAiSdkContractCases('AI BYOK SDK contract integration', [
   {
     name: 'updates an AI BYOK config',
     method: 'PATCH',
-    path: '/v1/ai/byok/byok/{byok_config_id}/update',
+    path: '/v1/ai/byok/{byok_config_id}/update',
     expectedBody: updateByokConfigBody,
-    expectedPath: `/v1/ai/byok/byok/${BYOK_CONFIG_ID}/update`,
+    expectedPath: `/v1/ai/byok/${BYOK_CONFIG_ID}/update`,
     expectedPathParams: {
       byok_config_id: BYOK_CONFIG_ID,
     },
@@ -92,8 +92,8 @@ describeAiSdkContractCases('AI BYOK SDK contract integration', [
   {
     name: 'deletes an AI BYOK config',
     method: 'DELETE',
-    path: '/v1/ai/byok/byok/{byok_config_id}/delete',
-    expectedPath: `/v1/ai/byok/byok/${BYOK_CONFIG_ID}/delete`,
+    path: '/v1/ai/byok/{byok_config_id}/delete',
+    expectedPath: `/v1/ai/byok/${BYOK_CONFIG_ID}/delete`,
     expectedPathParams: {
       byok_config_id: BYOK_CONFIG_ID,
     },
@@ -105,8 +105,8 @@ describeAiSdkContractCases('AI BYOK SDK contract integration', [
   {
     name: 'tests an AI BYOK connection',
     method: 'POST',
-    path: '/v1/ai/byok/byok/{byok_config_id}/test',
-    expectedPath: `/v1/ai/byok/byok/${BYOK_CONFIG_ID}/test`,
+    path: '/v1/ai/byok/{byok_config_id}/test',
+    expectedPath: `/v1/ai/byok/${BYOK_CONFIG_ID}/test`,
     expectedPathParams: {
       byok_config_id: BYOK_CONFIG_ID,
     },

@@ -59,10 +59,10 @@ export function createAuthAccounts(client: ConjoinClient) {
       client.fetch<ReadData>(`auth/account/${appId}/account/${accountId}`),
 
     list: (query?: ListQuery) =>
-      client.fetchList<ListData>('auth/account/account', { query: query as Record<string, unknown> }),
+      client.fetchList<ListData>('auth/account/', { query: query as Record<string, unknown> }),
 
     count: (query?: CountQuery) =>
-      client.fetch<CountData>('auth/account/account/count', { query: query as Record<string, unknown> }),
+      client.fetch<CountData>('auth/account/count', { query: query as Record<string, unknown> }),
 
     update: (appId: string, accountId: string, data: UpdateBody) =>
       client.fetch<UpdateData>(`auth/account/${appId}/account/${accountId}/update`, { method: 'PATCH', body: data }),

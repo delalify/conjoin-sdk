@@ -63,7 +63,7 @@ describeAuthSdkContractCases('Auth account SDK contract integration', [
   {
     name: 'lists auth accounts',
     method: 'GET',
-    path: '/v1/auth/account/account',
+    path: '/v1/auth/account/',
     expectedQuery: {
       'cursor[next]': 'cursor_next_123',
       limit: '2',
@@ -90,7 +90,7 @@ describeAuthSdkContractCases('Auth account SDK contract integration', [
   {
     name: 'counts auth accounts',
     method: 'GET',
-    path: '/v1/auth/account/account/count',
+    path: '/v1/auth/account/count',
     expectedQuery: { account_id: ACCOUNT_ID, app_id: APP_ID, status: 'active' },
     expectedRawBody: '',
     response: conjoinSuccess({ count: 1 }, { requestId: REQUEST_ID }),

@@ -16,24 +16,24 @@ type ListQueryLogsQuery = NonNullable<operations['listAiContextQueryLogs']['para
 export function createAiContexts(client: ConjoinClient) {
   return {
     createIndex: (data: CreateIndexBody) =>
-      client.fetch<CreateIndexData>('ai/context/context/indexes/create', { method: 'POST', body: data }),
+      client.fetch<CreateIndexData>('ai/context/indexes/create', { method: 'POST', body: data }),
 
     listIndexes: (query?: ListIndexesQuery) =>
-      client.fetchList<ListIndexesData>('ai/context/context/indexes', { query: query as Record<string, unknown> }),
+      client.fetchList<ListIndexesData>('ai/context/indexes', { query: query as Record<string, unknown> }),
 
     readIndex: (indexId: string) =>
-      client.fetch<ReadIndexData>(`ai/context/context/indexes/${indexId}`),
+      client.fetch<ReadIndexData>(`ai/context/indexes/${indexId}`),
 
     deleteIndex: (indexId: string) =>
-      client.fetch<DeleteIndexData>(`ai/context/context/indexes/${indexId}/delete`, { method: 'DELETE' }),
+      client.fetch<DeleteIndexData>(`ai/context/indexes/${indexId}/delete`, { method: 'DELETE' }),
 
     syncIndex: (indexId: string) =>
-      client.fetch<SyncIndexData>(`ai/context/context/indexes/${indexId}/sync`, { method: 'POST' }),
+      client.fetch<SyncIndexData>(`ai/context/indexes/${indexId}/sync`, { method: 'POST' }),
 
     query: (data: QueryBody) =>
-      client.fetch<QueryData>('ai/context/context/query', { method: 'POST', body: data }),
+      client.fetch<QueryData>('ai/context/query', { method: 'POST', body: data }),
 
     listQueryLogs: (query?: ListQueryLogsQuery) =>
-      client.fetchList<ListQueryLogsData>('ai/context/context/query-logs', { query: query as Record<string, unknown> }),
+      client.fetchList<ListQueryLogsData>('ai/context/query-logs', { query: query as Record<string, unknown> }),
   }
 }

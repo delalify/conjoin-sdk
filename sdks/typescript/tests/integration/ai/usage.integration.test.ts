@@ -18,7 +18,7 @@ describeAiSdkContractCases('AI usage SDK contract integration', [
   {
     name: 'lists AI usage records',
     method: 'GET',
-    path: '/v1/ai/usage/usage/records',
+    path: '/v1/ai/usage/records',
     expectedQuery: aiExpectedListQuery,
     expectedRawBody: '',
     response: conjoinList([aiUsageRecordFixture()], {
@@ -41,7 +41,7 @@ describeAiSdkContractCases('AI usage SDK contract integration', [
   {
     name: 'reads AI usage summary',
     method: 'GET',
-    path: '/v1/ai/usage/usage/summary',
+    path: '/v1/ai/usage/summary',
     expectedQuery: {
       billing_period: '2026-05',
     },

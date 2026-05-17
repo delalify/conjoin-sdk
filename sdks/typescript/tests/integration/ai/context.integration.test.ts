@@ -32,7 +32,7 @@ describeAiSdkContractCases('AI context SDK contract integration', [
   {
     name: 'creates an AI context index',
     method: 'POST',
-    path: '/v1/ai/context/context/indexes/create',
+    path: '/v1/ai/context/indexes/create',
     expectedBody: createContextIndexBody,
     response: conjoinSuccess(aiContextIndexFixture(), {
       requestId: REQUEST_ID,
@@ -44,7 +44,7 @@ describeAiSdkContractCases('AI context SDK contract integration', [
   {
     name: 'lists AI context indexes',
     method: 'GET',
-    path: '/v1/ai/context/context/indexes',
+    path: '/v1/ai/context/indexes',
     expectedQuery: aiExpectedListQuery,
     expectedRawBody: '',
     response: conjoinList([aiContextIndexFixture()], {
@@ -67,8 +67,8 @@ describeAiSdkContractCases('AI context SDK contract integration', [
   {
     name: 'reads an AI context index',
     method: 'GET',
-    path: '/v1/ai/context/context/indexes/{index_id}',
-    expectedPath: `/v1/ai/context/context/indexes/${INDEX_ID}`,
+    path: '/v1/ai/context/indexes/{index_id}',
+    expectedPath: `/v1/ai/context/indexes/${INDEX_ID}`,
     expectedPathParams: {
       index_id: INDEX_ID,
     },
@@ -80,8 +80,8 @@ describeAiSdkContractCases('AI context SDK contract integration', [
   {
     name: 'deletes an AI context index',
     method: 'DELETE',
-    path: '/v1/ai/context/context/indexes/{index_id}/delete',
-    expectedPath: `/v1/ai/context/context/indexes/${INDEX_ID}/delete`,
+    path: '/v1/ai/context/indexes/{index_id}/delete',
+    expectedPath: `/v1/ai/context/indexes/${INDEX_ID}/delete`,
     expectedPathParams: {
       index_id: INDEX_ID,
     },
@@ -93,8 +93,8 @@ describeAiSdkContractCases('AI context SDK contract integration', [
   {
     name: 'syncs an AI context index',
     method: 'POST',
-    path: '/v1/ai/context/context/indexes/{index_id}/sync',
-    expectedPath: `/v1/ai/context/context/indexes/${INDEX_ID}/sync`,
+    path: '/v1/ai/context/indexes/{index_id}/sync',
+    expectedPath: `/v1/ai/context/indexes/${INDEX_ID}/sync`,
     expectedPathParams: {
       index_id: INDEX_ID,
     },
@@ -106,7 +106,7 @@ describeAiSdkContractCases('AI context SDK contract integration', [
   {
     name: 'queries AI context',
     method: 'POST',
-    path: '/v1/ai/context/context/query',
+    path: '/v1/ai/context/query',
     expectedBody: contextQueryBody,
     response: conjoinSuccess(aiContextQueryResultFixture(), { requestId: REQUEST_ID }),
     run: context => createAiContexts(context.client).query(contextQueryBody),
@@ -115,7 +115,7 @@ describeAiSdkContractCases('AI context SDK contract integration', [
   {
     name: 'lists AI context query logs',
     method: 'GET',
-    path: '/v1/ai/context/context/query-logs',
+    path: '/v1/ai/context/query-logs',
     expectedQuery: aiExpectedListQuery,
     expectedRawBody: '',
     response: conjoinList([aiContextQueryLogFixture()], {
