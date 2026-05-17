@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import type { ConjoinContractServer } from './conjoin-contract-server'
 import { startConjoinContractServer } from './conjoin-contract-server'
-import { conjoinSuccess } from './response-fixtures'
+import { conjoinList, conjoinSuccess } from './response-fixtures'
 
 const CREATE_PROJECT_PATH = '/v1/cloud/project/{domain_id}/new'
+const ACCOUNT_SESSIONS_PATH = '/v1/auth/session/sessions/account'
+const MESSAGING_PHONE_NUMBERS_PATH = '/v1/messaging/phone-numbers/'
 
 describe('Conjoin contract server', () => {
   let server: ConjoinContractServer | undefined
@@ -105,6 +107,166 @@ describe('Conjoin contract server', () => {
     await expect(response.json()).resolves.toMatchObject({
       code: 'contract_route_not_stubbed',
     })
+  })
+
+  it('rejects missing required request bodies before handlers run', async () => {
+    let wasHandlerCalled = false
+    server = await startConjoinContractServer()
+    server.register({
+      method: 'POST',
+      path: CREATE_PROJECT_PATH,
+      handler: () => {
+        wasHandlerCalled = true
+
+        return conjoinSuccess({}, { status: 201 })
+      },
+    })
+
+    const response = await fetch(`${server.baseUrl}/v1/cloud/project/domain_123/new`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+
+    expect(response.status).toBe(400)
+    await expect(response.json()).resolves.toMatchObject({
+      code: 'contract_request_invalid',
+      errors: [
+        {
+          path: 'body',
+          message: 'is required',
+        },
+      ],
+    })
+    expect(wasHandlerCalled).toBe(false)
+  })
+
+  it('rejects request bodies that do not match OpenAPI schemas before handlers run', async () => {
+    let wasHandlerCalled = false
+    server = await startConjoinContractServer()
+    server.register({
+      method: 'POST',
+      path: CREATE_PROJECT_PATH,
+      handler: () => {
+        wasHandlerCalled = true
+
+        return conjoinSuccess({}, { status: 201 })
+      },
+    })
+
+    const response = await fetch(`${server.baseUrl}/v1/cloud/project/domain_123/new`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'No',
+      }),
+    })
+
+    expect(response.status).toBe(400)
+    await expect(response.json()).resolves.toMatchObject({
+      code: 'contract_request_invalid',
+      errors: [
+        {
+          path: 'body/name',
+          message: 'must NOT have fewer than 3 characters',
+        },
+      ],
+    })
+    expect(wasHandlerCalled).toBe(false)
+  })
+
+  it('rejects declared header parameters that do not match OpenAPI schemas before handlers run', async () => {
+    let wasHandlerCalled = false
+    server = await startConjoinContractServer()
+    server.register({
+      method: 'POST',
+      path: CREATE_PROJECT_PATH,
+      handler: () => {
+        wasHandlerCalled = true
+
+        return conjoinSuccess({}, { status: 201 })
+      },
+    })
+
+    const response = await fetch(`${server.baseUrl}/v1/cloud/project/domain_123/new`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'conjoin-request-id': 'not-valid',
+      },
+      body: JSON.stringify({
+        name: 'Demo project',
+      }),
+    })
+
+    expect(response.status).toBe(400)
+    await expect(response.json()).resolves.toMatchObject({
+      code: 'contract_request_invalid',
+      errors: expect.arrayContaining([
+        expect.objectContaining({
+          path: 'header.Conjoin-Request-Id',
+        }),
+      ]),
+    })
+    expect(wasHandlerCalled).toBe(false)
+  })
+
+  it('rejects missing required query parameters before handlers run', async () => {
+    let wasHandlerCalled = false
+    server = await startConjoinContractServer()
+    server.register({
+      method: 'GET',
+      path: ACCOUNT_SESSIONS_PATH,
+      handler: () => {
+        wasHandlerCalled = true
+
+        return conjoinList([])
+      },
+    })
+
+    const response = await fetch(`${server.baseUrl}${ACCOUNT_SESSIONS_PATH}`)
+
+    expect(response.status).toBe(400)
+    await expect(response.json()).resolves.toMatchObject({
+      code: 'contract_request_invalid',
+      errors: [
+        {
+          path: 'query.account_id',
+          message: 'is required',
+        },
+      ],
+    })
+    expect(wasHandlerCalled).toBe(false)
+  })
+
+  it('validates bracketed object query parameters before handlers run', async () => {
+    let wasHandlerCalled = false
+    server = await startConjoinContractServer()
+    server.register({
+      method: 'GET',
+      path: MESSAGING_PHONE_NUMBERS_PATH,
+      handler: () => {
+        wasHandlerCalled = true
+
+        return conjoinList([])
+      },
+    })
+
+    const response = await fetch(`${server.baseUrl}${MESSAGING_PHONE_NUMBERS_PATH}?sort%5Bdate_created%5D=sideways`)
+
+    expect(response.status).toBe(400)
+    await expect(response.json()).resolves.toMatchObject({
+      code: 'contract_request_invalid',
+      errors: expect.arrayContaining([
+        expect.objectContaining({
+          path: 'query.sort/date_created',
+        }),
+      ]),
+    })
+    expect(wasHandlerCalled).toBe(false)
   })
 
   it('rejects fixture statuses not declared by OpenAPI', async () => {

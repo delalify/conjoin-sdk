@@ -129,6 +129,23 @@ const handleRequest = async ({ request, response, recorder, routes }: HandleRequ
       body: bodyResult.body,
       rawBody: rawBodyResult.rawBody,
     })
+
+    if (routes.openApiContract !== undefined && routeMatch.openApiMatch !== undefined) {
+      const requestValidation = routes.openApiContract.validateRequest(routeMatch.openApiMatch, recordedRequest)
+
+      if (!requestValidation.success) {
+        writeResponse(
+          response,
+          conjoinError(`Request does not match OpenAPI schema for ${method} ${path}`, {
+            status: 400,
+            code: 'contract_request_invalid',
+            errors: requestValidation.errors,
+          }),
+        )
+        return
+      }
+    }
+
     const contractResponse = await routeMatch.handler(recordedRequest)
 
     if (routes.openApiContract !== undefined && routeMatch.openApiMatch !== undefined) {
