@@ -61,7 +61,7 @@ export const aiExpectedListQuery = {
 }
 
 export const aiByokConfigFixture = (overrides: Record<string, unknown> = {}) => ({
-  allowed_models: ['gpt-5.5'],
+  allowed_models: ['gpt-5.5`'],
   byok_config_id: BYOK_CONFIG_ID,
   conjoin_account_id: CONJOIN_ACCOUNT_ID,
   conjoin_project_id: CONJOIN_PROJECT_ID,
