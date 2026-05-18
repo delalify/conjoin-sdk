@@ -1,6 +1,6 @@
 {
   "name": "@conjoin-cloud/sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "Official TypeScript SDK for Conjoin: auth, billing, storage, messaging, relay, AI, runtime, database, and cloud, in one tree-shakeable package.",
   "author": "Delalify Engineering (https://delalify.com)",
