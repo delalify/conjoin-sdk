@@ -26,28 +26,49 @@ function buildUrl(config: ResolvedConfig, path: string, query?: Record<string, u
   return url
 }
 
-function withoutConjoinRequestIdHeader(headers?: Record<string, string>): Record<string, string> {
+function withoutManagedHeaders(headers?: Record<string, string>): Record<string, string> {
   if (!headers) {
     return {}
   }
 
   return Object.fromEntries(
-    Object.entries(headers).filter(([name]) => name.toLowerCase() !== CONJOIN_REQUEST_ID_HEADER.toLowerCase()),
+    Object.entries(headers).filter(([name]) => {
+      const normalizedName = name.toLowerCase()
+      return normalizedName !== 'authorization' && normalizedName !== CONJOIN_REQUEST_ID_HEADER.toLowerCase()
+    }),
   )
+}
+
+function resolveAuthorizationHeader(config: ResolvedConfig, auth: RequestOptions['auth']): string | undefined {
+  if (auth?.type === 'none') {
+    return undefined
+  }
+
+  if (auth?.type === 'bearer') {
+    if (auth.token.trim().length === 0) {
+      throw new ConjoinAuthenticationError('Bearer token must not be empty')
+    }
+
+    return `Bearer ${auth.token}`
+  }
+
+  const authKey = config.apiKey ?? config.publishableKey
+  return authKey ? `Bearer ${authKey}` : undefined
 }
 
 function buildHeaders(
   config: ResolvedConfig,
   extra?: Record<string, string>,
   conjoinRequestId?: string,
+  auth?: RequestOptions['auth'],
 ): Record<string, string> {
-  const authKey = config.apiKey ?? config.publishableKey
-  const extraHeaders = withoutConjoinRequestIdHeader(extra)
+  const authorization = resolveAuthorizationHeader(config, auth)
+  const extraHeaders = withoutManagedHeaders(extra)
   const requestId = [conjoinRequestId, getConjoinRequestIdFromHeaders(extra), config.conjoinRequestId].find(
     isValidConjoinRequestId,
   )
   const headers: Record<string, string> = {
-    ...(authKey ? { Authorization: `Bearer ${authKey}` } : {}),
+    ...(authorization ? { Authorization: authorization } : {}),
     'Content-Type': 'application/json',
     'X-Conjoin-SDK-Version': SDK_VERSION,
     'X-Conjoin-API-Version': config.apiVersion,
@@ -166,7 +187,7 @@ export async function conjoinFetchRaw(
   options: RequestOptions = {},
 ): Promise<Response> {
   const url = buildUrl(config, path, options.query)
-  const headers = buildHeaders(config, options.headers, options.conjoinRequestId)
+  const headers = buildHeaders(config, options.headers, options.conjoinRequestId, options.auth)
 
   const maxRetries = config.retry.maxRetries
   const backoffMs = config.retry.backoffMs

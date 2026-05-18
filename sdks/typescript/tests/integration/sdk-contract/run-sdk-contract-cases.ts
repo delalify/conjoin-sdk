@@ -18,7 +18,7 @@ export type SdkContractCase<TContext extends SdkContractTestContext, TResult = u
   assertResult: (result: TResult) => void | Promise<void>
   assertRequest?: (request: RecordedContractRequest) => void | Promise<void>
   expectedBody?: unknown
-  expectedHeaders?: Record<string, string>
+  expectedHeaders?: Record<string, string | undefined>
   expectedPath?: string
   expectedPathParams?: Record<string, string>
   expectedQuery?: Record<string, string | string[]>
@@ -100,8 +100,13 @@ const expectRequestToMatchCase = <TContext extends SdkContractTestContext>(
   }
 }
 
-const expectHeaders = (request: RecordedContractRequest, headers: Record<string, string>): void => {
+const expectHeaders = (request: RecordedContractRequest, headers: Record<string, string | undefined>): void => {
   for (const [name, value] of Object.entries(headers)) {
+    if (value === undefined) {
+      expect(request.headers[name.toLowerCase()]).toBeUndefined()
+      continue
+    }
+
     expectHeader(request, name, value)
   }
 }

@@ -61,6 +61,42 @@ describe('conjoinFetch', () => {
     expect((init?.headers as Record<string, string>).Authorization).toBe('Bearer ck_test_123')
   })
 
+  it('uses an explicit bearer token instead of configured auth keys', async () => {
+    const fetchMock = vi.mocked(fetch)
+    fetchMock.mockResolvedValueOnce(mockResponse({ data: { id: '1' } }))
+
+    await conjoinFetch(config, 'auth/scim/v2/project_123/app_123/Users', {
+      auth: { type: 'bearer', token: 'scim_token_123' },
+    })
+
+    const [, init] = fetchMock.mock.calls[0]
+    expect((init?.headers as Record<string, string>).Authorization).toBe('Bearer scim_token_123')
+  })
+
+  it('omits authorization when auth is disabled for a request', async () => {
+    const fetchMock = vi.mocked(fetch)
+    fetchMock.mockResolvedValueOnce(mockResponse({ data: { id: '1' } }))
+
+    await conjoinFetch(config, 'auth/scim/v2/ServiceProviderConfig', {
+      auth: { type: 'none' },
+    })
+
+    const [, init] = fetchMock.mock.calls[0]
+    expect((init?.headers as Record<string, string>).Authorization).toBeUndefined()
+  })
+
+  it('rejects an empty explicit bearer token before sending', async () => {
+    const fetchMock = vi.mocked(fetch)
+
+    await expect(
+      conjoinFetch(config, 'auth/scim/v2/project_123/app_123/Users', {
+        auth: { type: 'bearer', token: ' ' },
+      }),
+    ).rejects.toThrow(ConjoinAuthenticationError)
+
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   it('sends X-Conjoin-API-Version header', async () => {
     const fetchMock = vi.mocked(fetch)
     fetchMock.mockResolvedValueOnce(mockResponse({ data: { id: '1' } }))

@@ -49,6 +49,7 @@ export type RequestOptions = {
   body?: unknown
   query?: Record<string, unknown>
   headers?: Record<string, string>
+  auth?: { type: 'default' } | { type: 'none' } | { type: 'bearer'; token: string }
   conjoinRequestId?: string
   signal?: AbortSignal
 }
