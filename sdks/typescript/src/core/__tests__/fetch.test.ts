@@ -73,12 +73,41 @@ describe('conjoinFetch', () => {
     expect((init?.headers as Record<string, string>).Authorization).toBe('Bearer scim_token_123')
   })
 
+  it('ignores caller-provided authorization headers', async () => {
+    const fetchMock = vi.mocked(fetch)
+    fetchMock.mockResolvedValueOnce(mockResponse({ data: { id: '1' } }))
+
+    await conjoinFetch(config, 'billing/customers', {
+      headers: {
+        Authorization: 'Bearer attacker_supplied_token',
+      },
+    })
+
+    const [, init] = fetchMock.mock.calls[0]
+    expect((init?.headers as Record<string, string>).Authorization).toBe('Bearer ck_test_123')
+  })
+
   it('omits authorization when auth is disabled for a request', async () => {
     const fetchMock = vi.mocked(fetch)
     fetchMock.mockResolvedValueOnce(mockResponse({ data: { id: '1' } }))
 
     await conjoinFetch(config, 'auth/scim/v2/ServiceProviderConfig', {
       auth: { type: 'none' },
+    })
+
+    const [, init] = fetchMock.mock.calls[0]
+    expect((init?.headers as Record<string, string>).Authorization).toBeUndefined()
+  })
+
+  it('does not allow custom authorization headers when auth is disabled', async () => {
+    const fetchMock = vi.mocked(fetch)
+    fetchMock.mockResolvedValueOnce(mockResponse({ data: { id: '1' } }))
+
+    await conjoinFetch(config, 'auth/scim/v2/ServiceProviderConfig', {
+      auth: { type: 'none' },
+      headers: {
+        Authorization: 'Bearer attacker_supplied_token',
+      },
     })
 
     const [, init] = fetchMock.mock.calls[0]
