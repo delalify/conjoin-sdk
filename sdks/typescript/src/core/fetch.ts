@@ -39,6 +39,10 @@ function withoutManagedHeaders(headers?: Record<string, string>): Record<string,
   )
 }
 
+function withoutContentTypeHeader(headers: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(Object.entries(headers).filter(([name]) => name.toLowerCase() !== 'content-type'))
+}
+
 function resolveAuthorizationHeader(config: ResolvedConfig, auth: RequestOptions['auth']): string | undefined {
   if (auth?.type === 'none') {
     return undefined
@@ -61,21 +65,86 @@ function buildHeaders(
   extra?: Record<string, string>,
   conjoinRequestId?: string,
   auth?: RequestOptions['auth'],
+  contentType: RequestOptions['contentType'] = 'application/json',
 ): Record<string, string> {
   const authorization = resolveAuthorizationHeader(config, auth)
-  const extraHeaders = withoutManagedHeaders(extra)
+  const extraHeaders =
+    contentType === 'multipart/form-data'
+      ? withoutContentTypeHeader(withoutManagedHeaders(extra))
+      : withoutManagedHeaders(extra)
   const requestId = [conjoinRequestId, getConjoinRequestIdFromHeaders(extra), config.conjoinRequestId].find(
     isValidConjoinRequestId,
   )
   const headers: Record<string, string> = {
     ...(authorization ? { Authorization: authorization } : {}),
-    'Content-Type': 'application/json',
+    ...(contentType === 'application/json' ? { 'Content-Type': 'application/json' } : {}),
     'X-Conjoin-SDK-Version': SDK_VERSION,
     'X-Conjoin-API-Version': config.apiVersion,
     ...extraHeaders,
     ...(requestId ? { [CONJOIN_REQUEST_ID_HEADER]: requestId } : {}),
   }
   return headers
+}
+
+function isFormDataBody(body: unknown): body is FormData {
+  return typeof FormData !== 'undefined' && body instanceof FormData
+}
+
+function isBlobBody(body: unknown): body is Blob {
+  return typeof Blob !== 'undefined' && body instanceof Blob
+}
+
+function appendFormDataValue(formData: FormData, key: string, value: unknown): void {
+  if (value === undefined || value === null) {
+    return
+  }
+
+  if (isBlobBody(value)) {
+    formData.append(key, value)
+    return
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      appendFormDataValue(formData, key, item)
+    }
+    return
+  }
+
+  if (typeof value === 'object') {
+    formData.append(key, JSON.stringify(value))
+    return
+  }
+
+  formData.append(key, String(value))
+}
+
+function buildFormData(body: unknown): FormData {
+  if (isFormDataBody(body)) {
+    return body
+  }
+
+  if (!body || typeof body !== 'object' || Array.isArray(body) || isBlobBody(body)) {
+    throw new TypeError('multipart/form-data request body must be a FormData instance or object')
+  }
+
+  const formData = new FormData()
+  for (const [key, value] of Object.entries(body)) {
+    appendFormDataValue(formData, key, value)
+  }
+  return formData
+}
+
+function buildRequestBody(body: unknown, contentType: RequestOptions['contentType']): BodyInit | undefined {
+  if (body === undefined) {
+    return undefined
+  }
+
+  if (contentType === 'multipart/form-data') {
+    return buildFormData(body)
+  }
+
+  return JSON.stringify(body)
 }
 
 function readResponseRequestId(response: Response): string | undefined {
@@ -187,7 +256,9 @@ export async function conjoinFetchRaw(
   options: RequestOptions = {},
 ): Promise<Response> {
   const url = buildUrl(config, path, options.query)
-  const headers = buildHeaders(config, options.headers, options.conjoinRequestId, options.auth)
+  const contentType = options.contentType ?? 'application/json'
+  const headers = buildHeaders(config, options.headers, options.conjoinRequestId, options.auth, contentType)
+  const body = buildRequestBody(options.body, contentType)
 
   const maxRetries = config.retry.maxRetries
   const backoffMs = config.retry.backoffMs
@@ -201,7 +272,7 @@ export async function conjoinFetchRaw(
       const response = await fetch(url, {
         method: options.method ?? 'GET',
         headers,
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body,
         signal: signals,
       })
 

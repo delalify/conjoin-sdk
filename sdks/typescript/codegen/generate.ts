@@ -56,6 +56,10 @@ function getFirstContentType(contentMap: Record<string, unknown> | undefined): s
   return keys[0] ?? 'application/json'
 }
 
+function isMultipartRequest(op: OperationInfo): boolean {
+  return op.requestContentType.toLowerCase() === 'multipart/form-data'
+}
+
 function getResponseSchemaProperties(
   operation: Record<string, unknown>,
   successCode: string,
@@ -249,6 +253,9 @@ function generateMethodSignature(op: OperationInfo, methodName: string): string 
   }
   if (op.hasRequestBody) {
     options.push('body: data')
+    if (isMultipartRequest(op)) {
+      options.push("contentType: 'multipart/form-data'")
+    }
   }
   if (op.hasQueryParams && (op.isListResponse || op.httpMethod === 'get')) {
     options.push('query: query as Record<string, unknown>')

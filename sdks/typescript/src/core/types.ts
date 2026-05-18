@@ -47,6 +47,7 @@ export type ConjoinFetchListResult<T> = {
 export type RequestOptions = {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   body?: unknown
+  contentType?: 'application/json' | 'multipart/form-data'
   query?: Record<string, unknown>
   headers?: Record<string, string>
   auth?: { type: 'default' } | { type: 'none' } | { type: 'bearer'; token: string }

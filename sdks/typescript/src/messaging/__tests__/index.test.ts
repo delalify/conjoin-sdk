@@ -31,6 +31,7 @@ describe('createMessaging', () => {
     expect(client.fetch).toHaveBeenCalledWith('messaging/email/send', {
       method: 'POST',
       body: { to: 'user@example.com' },
+      contentType: 'multipart/form-data',
       headers: { 'Messaging-Profile-ID': 'msg_profile_123' },
     })
     expect(client.fetchList).toHaveBeenCalledWith('messaging/email/messages/msg_123', {
