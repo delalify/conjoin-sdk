@@ -22,7 +22,6 @@ export function PricingTable({ entityId, referenceId, highlightedBundleId, onChe
         await checkout.activate({
           entityId,
           referenceId: bundleReferenceId,
-          data: { customer_id: '' },
         })
         onCheckoutComplete?.()
       } catch {

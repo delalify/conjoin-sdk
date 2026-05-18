@@ -15,8 +15,11 @@ function createMockClient(fetchImpl?: ConjoinClient['fetch']): ConjoinClient {
   return {
     config,
     fetch: fetchImpl ?? vi.fn(),
+    fetchWithResponse: vi.fn(),
     fetchList: vi.fn(),
+    fetchListWithResponse: vi.fn(),
     fetchRaw: vi.fn(),
+    withRequestTrace: vi.fn(),
   }
 }
 
@@ -125,7 +128,7 @@ describe('createStorageUploader', () => {
           contentType: 'text/plain',
           body: new Uint8Array([1]),
         })
-        expect.unreachable('should have thrown')
+        throw new Error('should have thrown')
       } catch (err) {
         expect(err).toBeInstanceOf(ConjoinStorageError)
         const storageErr = err as ConjoinStorageError
@@ -266,7 +269,7 @@ describe('createStorageUploader', () => {
           body: new Uint8Array(totalSize),
           chunkSize: CHUNK_SIZE,
         })
-        expect.unreachable('should have thrown')
+        throw new Error('should have thrown')
       } catch (err) {
         expect(err).toBeInstanceOf(ConjoinStorageError)
         const storageErr = err as ConjoinStorageError
@@ -327,6 +330,91 @@ describe('createStorageUploader', () => {
           body: expect.objectContaining({ file_size: 16 }),
         }),
       )
+    })
+
+    it('detects size from Buffer', async () => {
+      const client = createMockClient(
+        vi.fn().mockResolvedValue({
+          upload_url: 'https://storage.example.com/upload',
+          required_fields: { method: 'PUT' as const, headers: {} },
+          upload_mode: 'single' as const,
+        }),
+      )
+      fetchSpy.mockResolvedValue(new Response(null, { status: 200 }))
+
+      const uploader = createStorageUploader(client)
+      await uploader.upload({
+        container: 'test',
+        path: 'file.txt',
+        contentType: 'text/plain',
+        body: Buffer.from('hello'),
+      })
+
+      expect(client.fetch).toHaveBeenCalledWith(
+        'storage/storage-object/upload/signed-url',
+        expect.objectContaining({
+          body: expect.objectContaining({ file_size: 5 }),
+        }),
+      )
+    })
+
+    it('copies SharedArrayBuffer-backed Uint8Array bodies before upload', async () => {
+      const client = createMockClient(
+        vi.fn().mockResolvedValue({
+          upload_url: 'https://storage.example.com/upload',
+          required_fields: { method: 'PUT' as const, headers: {} },
+          upload_mode: 'single' as const,
+        }),
+      )
+      fetchSpy.mockResolvedValue(new Response(null, { status: 200 }))
+
+      const shared = new SharedArrayBuffer(3)
+      const body = new Uint8Array(shared)
+      body.set([1, 2, 3])
+
+      const uploader = createStorageUploader(client)
+      await uploader.upload({
+        container: 'test',
+        path: 'file.txt',
+        contentType: 'text/plain',
+        body,
+      })
+
+      const request = fetchSpy.mock.calls[0]?.[1]
+      expect(request?.body).toBeInstanceOf(Blob)
+      expect((request?.body as Blob).size).toBe(3)
+    })
+
+    it('uploads a ReadableStream as a single Blob when fileSize is provided', async () => {
+      const client = createMockClient(
+        vi.fn().mockResolvedValue({
+          upload_url: 'https://storage.example.com/upload',
+          required_fields: { method: 'PUT' as const, headers: {} },
+          upload_mode: 'single' as const,
+        }),
+      )
+      fetchSpy.mockResolvedValue(new Response(null, { status: 200 }))
+
+      const uploader = createStorageUploader(client)
+      const body = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new Uint8Array([1, 2]))
+          controller.enqueue(new Uint8Array([3]))
+          controller.close()
+        },
+      })
+
+      await uploader.upload({
+        container: 'test',
+        path: 'file.txt',
+        contentType: 'text/plain',
+        body,
+        fileSize: 3,
+      })
+
+      const request = fetchSpy.mock.calls[0]?.[1]
+      expect(request?.body).toBeInstanceOf(Blob)
+      expect((request?.body as Blob).size).toBe(3)
     })
 
     it('throws when ReadableStream has no fileSize', async () => {
@@ -394,6 +482,89 @@ describe('createStorageUploader', () => {
         'https://storage.example.com/upload',
         expect.objectContaining({ signal: controller.signal }),
       )
+    })
+  })
+
+  describe('ReadableStream resumable upload', () => {
+    it('buffers stream chunks into aligned upload chunks and uploads the remainder', async () => {
+      const totalSize = CHUNK_SIZE + 2
+      const client = createMockClient(
+        vi.fn().mockResolvedValue({
+          upload_url: 'https://storage.googleapis.com/resumable/upload',
+          required_fields: {
+            method: 'POST' as const,
+            headers: { 'x-goog-resumable': 'start' },
+          },
+          upload_mode: 'resumable' as const,
+        }),
+      )
+      const sessionUri = 'https://storage.googleapis.com/upload?upload_id=stream'
+
+      fetchSpy
+        .mockResolvedValueOnce(new Response(null, { status: 200, headers: { Location: sessionUri } }))
+        .mockResolvedValueOnce(new Response(null, { status: 308 }))
+        .mockResolvedValueOnce(new Response(null, { status: 200 }))
+
+      const body = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new Uint8Array(CHUNK_SIZE - 1))
+          controller.enqueue(new Uint8Array([1, 2, 3]))
+          controller.close()
+        },
+      })
+
+      const uploader = createStorageUploader(client)
+      await uploader.upload({
+        container: 'bucket',
+        path: 'file.bin',
+        contentType: 'application/octet-stream',
+        body,
+        chunkSize: CHUNK_SIZE,
+        fileSize: totalSize,
+      })
+
+      expect(fetchSpy).toHaveBeenCalledTimes(3)
+      expect(fetchSpy.mock.calls[1]?.[1].headers['Content-Range']).toBe(`bytes 0-${CHUNK_SIZE - 1}/${totalSize}`)
+      expect(fetchSpy.mock.calls[2]?.[1].headers['Content-Range']).toBe(`bytes 0-1/${totalSize}`)
+    })
+
+    it('handles exact stream chunk boundaries and invalid resumable Range headers', async () => {
+      const totalSize = CHUNK_SIZE
+      const client = createMockClient(
+        vi.fn().mockResolvedValue({
+          upload_url: 'https://storage.googleapis.com/resumable/upload',
+          required_fields: {
+            method: 'POST' as const,
+            headers: { 'x-goog-resumable': 'start' },
+          },
+          upload_mode: 'resumable' as const,
+        }),
+      )
+      const sessionUri = 'https://storage.googleapis.com/upload?upload_id=invalid-range'
+
+      fetchSpy
+        .mockResolvedValueOnce(new Response(null, { status: 200, headers: { Location: sessionUri } }))
+        .mockResolvedValueOnce(new Response(null, { status: 308, headers: { Range: 'invalid' } }))
+
+      const body = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new Uint8Array(CHUNK_SIZE))
+          controller.close()
+        },
+      })
+
+      const uploader = createStorageUploader(client)
+      await uploader.upload({
+        container: 'bucket',
+        path: 'file.bin',
+        contentType: 'application/octet-stream',
+        body,
+        chunkSize: CHUNK_SIZE,
+        fileSize: totalSize,
+      })
+
+      expect(fetchSpy).toHaveBeenCalledTimes(2)
+      expect(fetchSpy.mock.calls[1]?.[1].headers['Content-Range']).toBe(`bytes 0-${CHUNK_SIZE - 1}/${totalSize}`)
     })
   })
 })

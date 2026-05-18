@@ -16,7 +16,7 @@ export async function* iterSSEMessages(body: ReadableStream<Uint8Array>): AsyncG
       buffer += decoder.decode(value, { stream: true })
 
       const chunks = buffer.split('\n\n')
-      buffer = chunks.pop() ?? ''
+      buffer = chunks.splice(-1)[0]
 
       for (const chunk of chunks) {
         const event = parseSSEChunk(chunk)

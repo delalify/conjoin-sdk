@@ -9,8 +9,6 @@ type ResendBody = operations['resendVerification']['requestBody']['content']['ap
 type ResendData = NonNullable<operations['resendVerification']['responses']['200']['content']['application/json']['data']>
 type ListMessagesBody = operations['listVerificationMessages']['requestBody']['content']['application/json']
 type ListMessagesData = NonNullable<operations['listVerificationMessages']['responses']['200']['content']['application/json']['data']>[number]
-type ReadBody = operations['readVerification']['requestBody']['content']['application/json']
-type ReadData = NonNullable<operations['readVerification']['responses']['200']['content']['application/json']['data']>[number]
 
 export function createMessagingVerifications(client: ConjoinClient) {
   return {
@@ -25,8 +23,5 @@ export function createMessagingVerifications(client: ConjoinClient) {
 
     listMessages: (data: ListMessagesBody) =>
       client.fetchList<ListMessagesData>('messaging/otps/messages', { method: 'POST', body: data }),
-
-    read: (verificationId: string, data: ReadBody) =>
-      client.fetchList<ReadData>(`messaging/otps/${verificationId}`, { method: 'POST', body: data }),
   }
 }

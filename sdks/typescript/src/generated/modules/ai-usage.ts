@@ -9,9 +9,9 @@ type ReadSummaryQuery = NonNullable<operations['readAiUsageSummary']['parameters
 export function createAiUsages(client: ConjoinClient) {
   return {
     listRecords: (query?: ListRecordsQuery) =>
-      client.fetchList<ListRecordsData>('ai/usage/usage/records', { query: query as Record<string, unknown> }),
+      client.fetchList<ListRecordsData>('ai/usage/records', { query: query as Record<string, unknown> }),
 
     readSummary: (query?: ReadSummaryQuery) =>
-      client.fetch<ReadSummaryData>('ai/usage/usage/summary', { query: query as Record<string, unknown> }),
+      client.fetch<ReadSummaryData>('ai/usage/summary', { query: query as Record<string, unknown> }),
   }
 }

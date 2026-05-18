@@ -1,4 +1,11 @@
-import { conjoinFetch, conjoinFetchList, conjoinFetchRaw } from './fetch'
+import {
+  conjoinFetch,
+  conjoinFetchList,
+  conjoinFetchListWithResponse,
+  conjoinFetchRaw,
+  conjoinFetchWithResponse,
+} from './fetch'
+import { resolveConjoinRequestId } from './request-tracing'
 import type { ConjoinClient, ConjoinConfig, RequestOptions, ResolvedConfig } from './types'
 import { DEFAULT_API_VERSION } from './version'
 
@@ -18,6 +25,7 @@ function resolveConfig(config: ConjoinConfig): ResolvedConfig {
     baseUrl: config.baseUrl ?? DEFAULT_BASE_URL,
     apiVersion: config.apiVersion ?? DEFAULT_API_VERSION,
     timeout: config.timeout ?? DEFAULT_TIMEOUT,
+    conjoinRequestId: config.conjoinRequestId,
     retry: Object.freeze({
       maxRetries: config.retry?.maxRetries ?? DEFAULT_MAX_RETRIES,
       backoffMs: config.retry?.backoffMs ?? DEFAULT_BACKOFF_MS,
@@ -27,11 +35,26 @@ function resolveConfig(config: ConjoinConfig): ResolvedConfig {
 
 export function createConjoinClient(config: ConjoinConfig): ConjoinClient {
   const resolved = resolveConfig(config)
+  const createScopedClient = (requestId: string): ConjoinClient =>
+    createConjoinClient({
+      ...config,
+      conjoinRequestId: requestId,
+    })
 
   return {
     config: resolved,
     fetch: <T>(path: string, options?: RequestOptions) => conjoinFetch<T>(resolved, path, options),
+    fetchWithResponse: <T>(path: string, options?: RequestOptions) =>
+      conjoinFetchWithResponse<T>(resolved, path, options),
     fetchList: <T>(path: string, options?: RequestOptions) => conjoinFetchList<T>(resolved, path, options),
+    fetchListWithResponse: <T>(path: string, options?: RequestOptions) =>
+      conjoinFetchListWithResponse<T>(resolved, path, options),
     fetchRaw: (path: string, options?: RequestOptions) => conjoinFetchRaw(resolved, path, options),
+    withRequestTrace: async (callback, options) => {
+      const requestId = resolveConjoinRequestId(options?.requestId ?? resolved.conjoinRequestId)
+      const scopedClient = createScopedClient(requestId)
+
+      return callback(scopedClient, requestId)
+    },
   }
 }

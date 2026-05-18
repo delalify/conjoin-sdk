@@ -50,7 +50,7 @@ async function inputToBlob(input: UploadInput): Promise<Blob> {
   for (;;) {
     const { done, value } = await reader.read()
     if (done) break
-    if (value) parts.push(toArrayBuffer(value))
+    parts.push(toArrayBuffer(value))
   }
   return new Blob(parts)
 }
@@ -63,23 +63,21 @@ async function* inputToChunks(input: UploadInput, chunkSize: number): AsyncGener
     for (;;) {
       const { done, value } = await reader.read()
 
-      if (value) {
-        const combined = new Uint8Array(buffer.byteLength + value.byteLength)
-        combined.set(buffer, 0)
-        combined.set(value, buffer.byteLength)
-        buffer = combined
-      }
-
-      while (buffer.byteLength >= chunkSize) {
-        yield new Blob([toArrayBuffer(buffer.slice(0, chunkSize))])
-        buffer = buffer.slice(chunkSize)
-      }
-
       if (done) {
         if (buffer.byteLength > 0) {
           yield new Blob([toArrayBuffer(buffer)])
         }
         break
+      }
+
+      const combined = new Uint8Array(buffer.byteLength + value.byteLength)
+      combined.set(buffer, 0)
+      combined.set(value, buffer.byteLength)
+      buffer = combined
+
+      while (buffer.byteLength >= chunkSize) {
+        yield new Blob([toArrayBuffer(buffer.slice(0, chunkSize))])
+        buffer = buffer.slice(chunkSize)
       }
     }
     return

@@ -14,6 +14,7 @@ import type { ConjoinEnv } from '../types'
 const mockVerifyToken = vi.mocked(verifyToken)
 
 const JWKS_URL = 'https://auth.conjoin.cloud/.well-known/jwks.json'
+const VALID_REQUEST_ID = 'cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c1'
 
 const mockVerifiedToken: VerifiedToken = {
   payload: { sub: 'acc_123', sid: 'ses_456' },
@@ -190,6 +191,34 @@ describe('conjoinMiddleware', () => {
     })
 
     expect(mockVerifyToken).toHaveBeenCalledWith('custom-token', expect.anything())
+  })
+
+  it('sets a valid incoming Conjoin request ID on context', async () => {
+    const app = createApp()
+    app.use(conjoinMiddleware({ jwksUrl: JWKS_URL }))
+    app.get('/test', c => c.json({ requestId: c.get('conjoinRequestId') }))
+
+    const res = await app.request('/test', {
+      headers: { 'conjoin-request-id': VALID_REQUEST_ID },
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.requestId).toBe(VALID_REQUEST_ID)
+  })
+
+  it('ignores invalid incoming Conjoin request IDs', async () => {
+    const app = createApp()
+    app.use(conjoinMiddleware({ jwksUrl: JWKS_URL }))
+    app.get('/test', c => c.json({ requestId: c.get('conjoinRequestId') }))
+
+    const res = await app.request('/test', {
+      headers: { 'conjoin-request-id': 'not-valid' },
+    })
+
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.requestId).toBeUndefined()
   })
 })
 

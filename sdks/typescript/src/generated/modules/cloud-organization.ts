@@ -11,12 +11,12 @@ type ReadQuery = NonNullable<operations['readCloudOrganizations']['parameters'][
 export function createCloudOrganizations(client: ConjoinClient) {
   return {
     create: (data: CreateBody) =>
-      client.fetch<CreateData>('cloud/organizationnew', { method: 'POST', body: data }),
+      client.fetch<CreateData>('cloud/organization/new', { method: 'POST', body: data }),
 
     update: (domainIdOrCustomId: string, data: UpdateBody) =>
-      client.fetch<UpdateData>(`cloud/organizationupdate-info/${domainIdOrCustomId}`, { method: 'PATCH', body: data }),
+      client.fetch<UpdateData>(`cloud/organization/update-info/${domainIdOrCustomId}`, { method: 'PATCH', body: data }),
 
     read: (query?: ReadQuery) =>
-      client.fetchList<ReadData>('cloud/organization', { query: query as Record<string, unknown> }),
+      client.fetchList<ReadData>('cloud/organization/', { query: query as Record<string, unknown> }),
   }
 }

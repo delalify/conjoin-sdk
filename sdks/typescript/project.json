@@ -22,14 +22,14 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm biome check src/",
+        "command": "pnpm biome check src/ tests/",
         "cwd": "{projectRoot}"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm tsc --noEmit",
+        "command": "pnpm tsc --noEmit && pnpm tsc --project tests/tsconfig.json",
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["generate"],
@@ -39,7 +39,7 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm biome check --write src/",
+        "command": "pnpm biome check --write src/ tests/",
         "cwd": "{projectRoot}"
       }
     },
@@ -49,6 +49,52 @@
         "command": "pnpm vitest run",
         "cwd": "{projectRoot}"
       }
+    },
+    "test:coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm vitest run --coverage",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/tests/coverage"]
+    },
+    "test:integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm vitest run --config vitest.integration.config.ts",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:integration:coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm vitest run --config vitest.integration.config.ts --coverage",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/tests/coverage-integration"]
+    },
+    "test:all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm vitest run",
+          "pnpm vitest run --config vitest.integration.config.ts"
+        ],
+        "parallel": false,
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test:all:coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm vitest run --coverage",
+          "pnpm vitest run --config vitest.integration.config.ts --coverage"
+        ],
+        "parallel": false,
+        "cwd": "{projectRoot}"
+      },
+      "outputs": ["{projectRoot}/tests/coverage", "{projectRoot}/tests/coverage-integration"]
     },
     "nx-release-publish": {
       "executor": "@nx/js:release-publish",

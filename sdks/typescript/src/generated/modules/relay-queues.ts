@@ -8,13 +8,21 @@ type ReadQueueDefinitionsQuery = NonNullable<operations['readQueueDefinitions'][
 type UpdateQueueDefinitionBody = operations['updateQueueDefinition']['requestBody']['content']['application/json']
 type UpdateQueueDefinitionData = NonNullable<operations['updateQueueDefinition']['responses']['200']['content']['application/json']['data']>
 type DeleteQueueDefinitionData = NonNullable<operations['deleteQueueDefinition']['responses']['200']['content']['application/json']['data']>
+type PauseQueueData = NonNullable<operations['pauseQueue']['responses']['200']['content']['application/json']['data']>
+type ResumeQueueData = NonNullable<operations['resumeQueue']['responses']['200']['content']['application/json']['data']>
 type EnqueueTaskBody = operations['enqueueTask']['requestBody']['content']['application/json']
 type EnqueueTaskData = NonNullable<operations['enqueueTask']['responses']['201']['content']['application/json']['data']>
+type BatchEnqueueTasksBody = operations['batchEnqueueTasks']['requestBody']['content']['application/json']
+type BatchEnqueueTasksData = NonNullable<operations['batchEnqueueTasks']['responses']['201']['content']['application/json']['data']>
 type ReadQueueTasksData = NonNullable<operations['readQueueTasks']['responses']['200']['content']['application/json']['data']>[number]
 type ReadQueueTasksQuery = NonNullable<operations['readQueueTasks']['parameters']['query']>
 type ReadDeadLetterTasksData = NonNullable<operations['readDeadLetterTasks']['responses']['200']['content']['application/json']['data']>[number]
 type ReadDeadLetterTasksQuery = NonNullable<operations['readDeadLetterTasks']['parameters']['query']>
 type ReplayDeadLetterTaskData = NonNullable<operations['replayDeadLetterTask']['responses']['200']['content']['application/json']['data']>
+type BatchGetQueueTasksBody = operations['batchGetQueueTasks']['requestBody']['content']['application/json']
+type BatchGetQueueTasksData = NonNullable<operations['batchGetQueueTasks']['responses']['200']['content']['application/json']['data']>
+type PurgeQueueTasksBody = operations['purgeQueueTasks']['requestBody']['content']['application/json']
+type PurgeQueueTasksData = NonNullable<operations['purgeQueueTasks']['responses']['200']['content']['application/json']['data']>
 
 export function createRelayQueues(client: ConjoinClient) {
   return {
@@ -30,8 +38,17 @@ export function createRelayQueues(client: ConjoinClient) {
     deleteQueueDefinition: (queueId: string) =>
       client.fetch<DeleteQueueDefinitionData>(`relay/queues/${queueId}/delete`, { method: 'DELETE' }),
 
+    pauseQueue: (queueId: string) =>
+      client.fetch<PauseQueueData>(`relay/queues/${queueId}/pause`, { method: 'POST' }),
+
+    resumeQueue: (queueId: string) =>
+      client.fetch<ResumeQueueData>(`relay/queues/${queueId}/resume`, { method: 'POST' }),
+
     enqueueTask: (queueId: string, data: EnqueueTaskBody) =>
       client.fetch<EnqueueTaskData>(`relay/queues/${queueId}/tasks/enqueue`, { method: 'POST', body: data }),
+
+    batchEnqueueTasks: (queueId: string, data: BatchEnqueueTasksBody) =>
+      client.fetch<BatchEnqueueTasksData>(`relay/queues/${queueId}/tasks/enqueue-batch`, { method: 'POST', body: data }),
 
     readQueueTasks: (queueId: string, query?: ReadQueueTasksQuery) =>
       client.fetchList<ReadQueueTasksData>(`relay/queues/${queueId}/tasks`, { query: query as Record<string, unknown> }),
@@ -41,5 +58,11 @@ export function createRelayQueues(client: ConjoinClient) {
 
     replayDeadLetterTask: (queueId: string, dlqEntryId: string) =>
       client.fetch<ReplayDeadLetterTaskData>(`relay/queues/${queueId}/dead-letter/${dlqEntryId}/replay`, { method: 'POST' }),
+
+    batchGetQueueTasks: (queueId: string, data: BatchGetQueueTasksBody) =>
+      client.fetch<BatchGetQueueTasksData>(`relay/queues/${queueId}/tasks/batch`, { method: 'POST', body: data }),
+
+    purgeQueueTasks: (queueId: string, data: PurgeQueueTasksBody) =>
+      client.fetch<PurgeQueueTasksData>(`relay/queues/${queueId}/tasks/purge`, { method: 'POST', body: data }),
   }
 }

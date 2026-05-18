@@ -25,6 +25,6 @@ export function createMessagingSMSCampaigns(client: ConjoinClient) {
       client.fetch<DeleteSmsCampaignData>(`messaging/sms/campaigns/${campaignId}`, { method: 'DELETE' }),
 
     listSmsCampaigns: (data: ListSmsCampaignsBody) =>
-      client.fetchList<ListSmsCampaignsData>('messaging/sms/campaigns', { method: 'POST', body: data }),
+      client.fetchList<ListSmsCampaignsData>('messaging/sms/campaigns/', { method: 'POST', body: data }),
   }
 }

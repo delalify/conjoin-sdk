@@ -22,7 +22,7 @@ export function createMessagingPhoneNumbers(client: ConjoinClient) {
       client.fetchList<ListAvailableData>('messaging/phone-numbers/available', { query: query as Record<string, unknown> }),
 
     list: (query?: ListQuery) =>
-      client.fetchList<ListData>('messaging/phone-numbers', { query: query as Record<string, unknown> }),
+      client.fetchList<ListData>('messaging/phone-numbers/', { query: query as Record<string, unknown> }),
 
     release: (phoneNumber: string) =>
       client.fetch<ReleaseData>(`messaging/phone-numbers/release/${phoneNumber}`, { method: 'POST' }),

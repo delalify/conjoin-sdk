@@ -12,6 +12,7 @@ import { conjoinMiddleware } from '../middleware'
 const mockVerifyToken = vi.mocked(verifyToken)
 
 const JWKS_URL = 'https://auth.conjoin.cloud/.well-known/jwks.json'
+const VALID_REQUEST_ID = 'cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c1'
 
 const mockVerifiedToken: VerifiedToken = {
   payload: { sub: 'acc_123', sid: 'ses_456' },
@@ -197,6 +198,35 @@ describe('conjoinMiddleware', () => {
     await middleware(req, res, next)
 
     expect(mockVerifyToken).toHaveBeenCalledWith('custom-cookie-token', expect.anything())
+  })
+
+  it('attaches a valid incoming Conjoin request ID to the request', async () => {
+    const middleware = conjoinMiddleware({ jwksUrl: JWKS_URL })
+
+    const req = createMockReq({
+      headers: { 'conjoin-request-id': VALID_REQUEST_ID },
+    })
+    const res = createMockRes()
+    const next = vi.fn()
+
+    await middleware(req, res, next)
+
+    expect((req as Record<string, unknown>).conjoinRequestId).toBe(VALID_REQUEST_ID)
+  })
+
+  it('ignores invalid incoming Conjoin request IDs', async () => {
+    const middleware = conjoinMiddleware({ jwksUrl: JWKS_URL })
+
+    const req = createMockReq({
+      headers: { 'conjoin-request-id': 'not-valid' },
+    })
+    const res = createMockRes()
+    const next = vi.fn()
+
+    await middleware(req, res, next)
+
+    expect((req as Record<string, unknown>).conjoinRequestId).toBeUndefined()
+    expect(next).toHaveBeenCalledOnce()
   })
 })
 

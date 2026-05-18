@@ -14,33 +14,32 @@ type EnableBody = operations['enableEmailSender']['requestBody']['content']['app
 type EnableData = NonNullable<operations['enableEmailSender']['responses']['200']['content']['application/json']['data']>
 type DisableBody = operations['disableEmailSender']['requestBody']['content']['application/json']
 type DisableData = NonNullable<operations['disableEmailSender']['responses']['200']['content']['application/json']['data']>
-type TransferBody = operations['transferEmailSender']['requestBody']['content']['application/json']
 type TransferData = NonNullable<operations['transferEmailSender']['responses']['200']['content']['application/json']['data']>
 
 export function createMessagingEmailSenders(client: ConjoinClient) {
   return {
     verify: (senderId: string) =>
-      client.fetch<VerifyData>(`messaging/senders/email/verify/${senderId}`, { method: 'PATCH' }),
+      client.fetch<VerifyData>(`messaging/email/senders/verify/${senderId}`, { method: 'PATCH' }),
 
     listMany: (data: ListManyBody) =>
-      client.fetchList<ListManyData>('messaging/senders/email/retrieve', { method: 'POST', body: data }),
+      client.fetchList<ListManyData>('messaging/email/senders/retrieve', { method: 'POST', body: data }),
 
-    listOne: (sender: string, data: ListOneBody) =>
-      client.fetch<ListOneData>(`messaging/senders/email/${sender}`, { body: data }),
+    listOne: (senderId: string, data: ListOneBody) =>
+      client.fetch<ListOneData>(`messaging/email/senders/${senderId}`, { body: data }),
 
-    delete: (sender: string, data: DeleteBody) =>
-      client.fetch<DeleteData>(`messaging/senders/email/${sender}`, { method: 'DELETE', body: data }),
+    delete: (senderId: string, data: DeleteBody) =>
+      client.fetch<DeleteData>(`messaging/email/senders/${senderId}`, { method: 'DELETE', body: data }),
 
     create: (data: CreateBody) =>
-      client.fetch<CreateData>('messaging/senders/email/new', { method: 'POST', body: data }),
+      client.fetch<CreateData>('messaging/email/senders/new', { method: 'POST', body: data }),
 
-    enable: (sender: string, data: EnableBody) =>
-      client.fetch<EnableData>(`messaging/senders/email/enable/${sender}`, { method: 'PATCH', body: data }),
+    enable: (senderId: string, data: EnableBody) =>
+      client.fetch<EnableData>(`messaging/email/senders/enable/${senderId}`, { method: 'PATCH', body: data }),
 
-    disable: (sender: string, data: DisableBody) =>
-      client.fetch<DisableData>(`messaging/senders/email/disable/${sender}`, { method: 'PATCH', body: data }),
+    disable: (senderId: string, data: DisableBody) =>
+      client.fetch<DisableData>(`messaging/email/senders/disable/${senderId}`, { method: 'PATCH', body: data }),
 
-    transfer: (data: TransferBody) =>
-      client.fetch<TransferData>('messaging/senders/email/transfers', { method: 'PATCH', body: data }),
+    transfer: (senderId: string, projectId: string) =>
+      client.fetch<TransferData>(`messaging/email/senders/transfers/${senderId}/${projectId}`, { method: 'PATCH' }),
   }
 }

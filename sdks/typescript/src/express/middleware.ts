@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express'
+import { getConjoinRequestIdFromHeaders } from '../core/request-tracing'
 import { verifyToken } from '../server/tokens'
 import './types'
 import type { ConjoinExpressOptions } from './types'
@@ -14,6 +15,8 @@ export function conjoinMiddleware(options: ConjoinExpressOptions): RequestHandle
       value: true,
       enumerable: false,
     })
+
+    req.conjoinRequestId = getConjoinRequestIdFromHeaders(req.headers)
 
     const authHeader = req.headers.authorization
     const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null

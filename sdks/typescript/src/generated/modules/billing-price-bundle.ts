@@ -9,12 +9,14 @@ type UpdateBody = operations['updatePriceBundle']['requestBody']['content']['app
 type UpdateData = NonNullable<operations['updatePriceBundle']['responses']['200']['content']['application/json']['data']>
 type ArchiveData = NonNullable<operations['archivePriceBundle']['responses']['200']['content']['application/json']['data']>
 type RestoreData = NonNullable<operations['restorePriceBundle']['responses']['200']['content']['application/json']['data']>
+type PublishData = NonNullable<operations['publishPriceBundle']['responses']['200']['content']['application/json']['data']>
 type ActivateBody = operations['activatePriceBundle']['requestBody']['content']['application/json']
 type ActivateData = NonNullable<operations['activatePriceBundle']['responses']['201']['content']['application/json']['data']>
 type ReadActivationsData = NonNullable<operations['readPriceBundleActivations']['responses']['200']['content']['application/json']['data']>[number]
 type ReadActivationsQuery = NonNullable<operations['readPriceBundleActivations']['parameters']['query']>
 type DeactivateBody = operations['deactivatePriceBundle']['requestBody']['content']['application/json']
 type DeactivateData = NonNullable<operations['deactivatePriceBundle']['responses']['200']['content']['application/json']['data']>
+type ReadAvailableBundleTransitionsData = NonNullable<operations['readAvailableBundleTransitions']['responses']['200']['content']['application/json']['data']>
 
 export function createBillingPriceBundles(client: ConjoinClient) {
   return {
@@ -33,13 +35,19 @@ export function createBillingPriceBundles(client: ConjoinClient) {
     restore: (entityId: string, referenceId: string) =>
       client.fetch<RestoreData>(`billing/price-bundle/${entityId}/${referenceId}/restore`, { method: 'PATCH' }),
 
-    activate: (entityId: string, referenceId: string, data: ActivateBody) =>
-      client.fetch<ActivateData>(`billing/price-bundle/${entityId}/activate/${referenceId}`, { method: 'POST', body: data }),
+    publish: (entityId: string, referenceId: string) =>
+      client.fetch<PublishData>(`billing/price-bundle/${entityId}/${referenceId}/publish`, { method: 'POST' }),
+
+    activate: (entityId: string, data: ActivateBody) =>
+      client.fetch<ActivateData>(`billing/price-bundle/${entityId}/activate`, { method: 'POST', body: data }),
 
     readActivations: (entityId: string, customerId: string, query?: ReadActivationsQuery) =>
       client.fetchList<ReadActivationsData>(`billing/price-bundle/${entityId}/activations/${customerId}`, { query: query as Record<string, unknown> }),
 
     deactivate: (entityId: string, activationId: string, data: DeactivateBody) =>
       client.fetch<DeactivateData>(`billing/price-bundle/${entityId}/deactivate/${activationId}`, { method: 'POST', body: data }),
+
+    readAvailableBundleTransitions: (entityId: string, customerId: string) =>
+      client.fetch<ReadAvailableBundleTransitionsData>(`billing/price-bundle/${entityId}/transitions/${customerId}`),
   }
 }

@@ -17,24 +17,24 @@ type ListLogsQuery = NonNullable<operations['listAiPolicyLogs']['parameters']['q
 export function createAiPolicies(client: ConjoinClient) {
   return {
     check: (data: CheckBody) =>
-      client.fetch<CheckData>('ai/policy/policy/check', { method: 'POST', body: data }),
+      client.fetch<CheckData>('ai/policy/check', { method: 'POST', body: data }),
 
     createRule: (data: CreateRuleBody) =>
-      client.fetch<CreateRuleData>('ai/policy/policy/rules/create', { method: 'POST', body: data }),
+      client.fetch<CreateRuleData>('ai/policy/rules/create', { method: 'POST', body: data }),
 
     listRules: (query?: ListRulesQuery) =>
-      client.fetchList<ListRulesData>('ai/policy/policy/rules', { query: query as Record<string, unknown> }),
+      client.fetchList<ListRulesData>('ai/policy/rules', { query: query as Record<string, unknown> }),
 
     readRule: (ruleId: string) =>
-      client.fetch<ReadRuleData>(`ai/policy/policy/rules/${ruleId}`),
+      client.fetch<ReadRuleData>(`ai/policy/rules/${ruleId}`),
 
     updateRule: (ruleId: string, data: UpdateRuleBody) =>
-      client.fetch<UpdateRuleData>(`ai/policy/policy/rules/${ruleId}/update`, { method: 'PATCH', body: data }),
+      client.fetch<UpdateRuleData>(`ai/policy/rules/${ruleId}/update`, { method: 'PATCH', body: data }),
 
     deleteRule: (ruleId: string) =>
-      client.fetch<DeleteRuleData>(`ai/policy/policy/rules/${ruleId}/delete`, { method: 'DELETE' }),
+      client.fetch<DeleteRuleData>(`ai/policy/rules/${ruleId}/delete`, { method: 'DELETE' }),
 
     listLogs: (query?: ListLogsQuery) =>
-      client.fetchList<ListLogsData>('ai/policy/policy/logs', { query: query as Record<string, unknown> }),
+      client.fetchList<ListLogsData>('ai/policy/logs', { query: query as Record<string, unknown> }),
   }
 }

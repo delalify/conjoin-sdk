@@ -25,6 +25,6 @@ export function createMessagingSMSBrands(client: ConjoinClient) {
       client.fetch<DeleteSmsBrandData>(`messaging/sms/brands/${brandId}`, { method: 'DELETE' }),
 
     listSmsBrands: (data: ListSmsBrandsBody) =>
-      client.fetchList<ListSmsBrandsData>('messaging/sms/brands', { method: 'POST', body: data }),
+      client.fetchList<ListSmsBrandsData>('messaging/sms/brands/', { method: 'POST', body: data }),
   }
 }

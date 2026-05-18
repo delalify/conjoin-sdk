@@ -9,26 +9,26 @@ type ReadByokConfigData = NonNullable<operations['readAiByokConfig']['responses'
 type UpdateByokConfigBody = operations['updateAiByokConfig']['requestBody']['content']['application/json']
 type UpdateByokConfigData = NonNullable<operations['updateAiByokConfig']['responses']['200']['content']['application/json']['data']>
 type DeleteByokConfigData = NonNullable<operations['deleteAiByokConfig']['responses']['200']['content']['application/json']['data']>
-type TestByokConnectionResponse = operations['testAiByokConnection']['responses']['200']['content']['application/json']
+type TestByokConnectionData = NonNullable<operations['testAiByokConnection']['responses']['200']['content']['application/json']['data']>
 
 export function createAiBYOKs(client: ConjoinClient) {
   return {
     createByokConfig: (data: CreateByokConfigBody) =>
-      client.fetch<CreateByokConfigData>('ai/byok/byok/create', { method: 'POST', body: data }),
+      client.fetch<CreateByokConfigData>('ai/byok/create', { method: 'POST', body: data }),
 
     listByokConfigs: (query?: ListByokConfigsQuery) =>
-      client.fetchList<ListByokConfigsData>('ai/byok/byok', { query: query as Record<string, unknown> }),
+      client.fetchList<ListByokConfigsData>('ai/byok/', { query: query as Record<string, unknown> }),
 
     readByokConfig: (byokConfigId: string) =>
-      client.fetch<ReadByokConfigData>(`ai/byok/byok/${byokConfigId}`),
+      client.fetch<ReadByokConfigData>(`ai/byok/${byokConfigId}`),
 
     updateByokConfig: (byokConfigId: string, data: UpdateByokConfigBody) =>
-      client.fetch<UpdateByokConfigData>(`ai/byok/byok/${byokConfigId}/update`, { method: 'PATCH', body: data }),
+      client.fetch<UpdateByokConfigData>(`ai/byok/${byokConfigId}/update`, { method: 'PATCH', body: data }),
 
     deleteByokConfig: (byokConfigId: string) =>
-      client.fetch<DeleteByokConfigData>(`ai/byok/byok/${byokConfigId}/delete`, { method: 'DELETE' }),
+      client.fetch<DeleteByokConfigData>(`ai/byok/${byokConfigId}/delete`, { method: 'DELETE' }),
 
     testByokConnection: (byokConfigId: string) =>
-      client.fetch<TestByokConnectionResponse>(`ai/byok/byok/${byokConfigId}/test`, { method: 'POST' }),
+      client.fetch<TestByokConnectionData>(`ai/byok/${byokConfigId}/test`, { method: 'POST' }),
   }
 }
