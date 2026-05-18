@@ -128,9 +128,9 @@
   ],
   "peerDependencies": {
     "@types/express": ">=4.0.0",
-    "expo-secure-store": ">=13.0.0",
+    "expo-secure-store": ">=13.0.2",
     "express": ">=4.0.0",
-    "hono": ">=4.12.18",
+    "hono": ">=4.12.19",
     "next": ">=16.2.6",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
@@ -199,6 +199,6 @@
     "@radix-ui/react-tabs": "1.1.13",
     "@radix-ui/react-visually-hidden": "1.2.4",
     "@tanstack/query-core": "5.90.20",
-    "jose": "6.2.1"
+    "jose": "6.2.3"
   }
 }
