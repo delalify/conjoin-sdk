@@ -11,7 +11,7 @@
     "generate": "nx run-many -t generate"
   },
   "devDependencies": {
-    "@nx/js": "22.7.1",
-    "nx": "22.7.1"
+    "@nx/js": "22.7.2",
+    "nx": "22.7.2"
   }
 }
