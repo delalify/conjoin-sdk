@@ -47,9 +47,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Upgrade npm to latest
-        run: npm install -g npm@latest
-
       - name: Lint
         run: pnpm nx run sdk-typescript:lint
 
