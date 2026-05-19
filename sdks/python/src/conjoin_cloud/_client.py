@@ -15,11 +15,12 @@ from conjoin_cloud._transport import (
     raise_for_error_response,
     send_request,
 )
+from conjoin_cloud.generated import SyncGeneratedResourcesMixin
 
 T = TypeVar("T")
 
 
-class Conjoin:
+class Conjoin(SyncGeneratedResourcesMixin):
     config: ResolvedConfig
 
     def __init__(
@@ -53,6 +54,7 @@ class Conjoin:
         self._client = http_client if http_client is not None else httpx.Client()
         self._owns_client = http_client is None
         self.with_response = _ConjoinWithResponse(self)
+        self._init_generated_resources()
 
     @overload
     def request(

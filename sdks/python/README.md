@@ -2,7 +2,7 @@
 
 Official Python SDK package for Conjoin.
 
-This package is in active implementation. It currently exposes the hand-written sync and async SDK core: client configuration, auth resolution, request options, retries, typed errors, response metadata wrappers, `httpx` lifecycle management, and base Pydantic models. Generated REST resource namespaces will be added in later implementation phases.
+This package is in active implementation. It currently exposes the hand-written sync and async SDK core plus generated REST resources from the Conjoin OpenAPI spec.
 
 ## Install
 
@@ -23,6 +23,14 @@ customer = client.request("GET", "billing/customers/cust_123")
 ```
 
 ```python
+page = client.auth.accounts.list()
+profile_page = client.messaging.profiles.list(data={"sort": {"date_created": "desc"}})
+message = client.messaging.with_profile("msg_profile_123").emails.send(
+    data={"subject": "Hello", "text": "Body"}
+)
+```
+
+```python
 from conjoin_cloud import AsyncConjoin
 
 
@@ -32,7 +40,7 @@ async def main() -> None:
         print(customer)
 ```
 
-Generated resource methods, pagination iterators, storage helpers, AI streaming helpers, and messaging profile helpers are not exposed yet.
+Pagination iterators, storage helpers, AI streaming helpers, and higher-level messaging helpers are not exposed yet.
 
 ## Development
 
@@ -52,6 +60,7 @@ From the repository root:
 
 ```bash
 pnpm nx run sdk-python:test
+pnpm nx run sdk-python:generate
 pnpm nx run sdk-python:lint
 pnpm nx run sdk-python:typecheck
 pnpm nx run sdk-python:build

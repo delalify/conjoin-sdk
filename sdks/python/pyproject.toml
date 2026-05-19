@@ -80,3 +80,6 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["B", "E", "F", "I", "RUF", "SIM", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/conjoin_cloud/generated/**/*.py" = ["I001"]

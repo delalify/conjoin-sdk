@@ -27,6 +27,7 @@ from conjoin_cloud import (
     Page,
     RequestOptions,
 )
+from conjoin_cloud._multipart import MultipartBody
 from conjoin_cloud._transport import CONJOIN_REQUEST_ID_HEADER
 
 VALID_REQUEST_ID = "cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c1"
@@ -255,6 +256,34 @@ def test_auth_none_omits_authorization() -> None:
 
     assert seen_headers is not None
     assert "Authorization" not in seen_headers
+
+
+def test_multipart_body_uses_httpx_multipart_without_managed_content_type() -> None:
+    seen_request: httpx.Request | None = None
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal seen_request
+        seen_request = request
+        return json_response(request)
+
+    client = make_client(handler)
+
+    try:
+        client.request(
+            "POST",
+            "messaging/email/send",
+            body=MultipartBody({"subject": "Hello", "to": ["user@example.com"]}),
+            request_options=RequestOptions(headers={"Content-Type": "application/json"}),
+        )
+    finally:
+        client.close()
+
+    assert seen_request is not None
+    content_type = seen_request.headers["Content-Type"]
+    assert content_type.startswith("multipart/form-data; boundary=")
+    assert "application/json" not in content_type
+    assert b'name="subject"' in seen_request.content
+    assert b"Hello" in seen_request.content
 
 
 def test_retries_429_and_respects_retry_after_without_changing_request_id() -> None:

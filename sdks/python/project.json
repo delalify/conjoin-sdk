@@ -6,10 +6,10 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 -c \"print('Python SDK generation has no output in Phase 2; generator implementation starts in Phase 4.')\"",
+        "command": "python3 -m codegen",
         "cwd": "{projectRoot}"
       },
-      "outputs": []
+      "outputs": ["{projectRoot}/src/conjoin_cloud/generated"]
     },
     "build": {
       "executor": "nx:run-commands",
@@ -52,4 +52,3 @@
     }
   }
 }
-

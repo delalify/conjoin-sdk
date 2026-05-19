@@ -28,6 +28,7 @@ from conjoin_cloud._errors import (
     ValidationFieldError,
 )
 from conjoin_cloud._models import ConjoinModel, Page
+from conjoin_cloud._multipart import MultipartBody
 from conjoin_cloud._request_options import (
     RequestOptions,
     coerce_request_options,
@@ -45,7 +46,9 @@ SDK_VERSION_HEADER = "X-Conjoin-SDK-Version"
 API_VERSION_HEADER = "X-Conjoin-API-Version"
 
 RETRYABLE_STATUSES = frozenset({429})
-MANAGED_HEADERS = frozenset({"authorization", CONJOIN_REQUEST_ID_HEADER.lower()})
+MANAGED_HEADERS = frozenset(
+    {"authorization", "content-type", CONJOIN_REQUEST_ID_HEADER.lower()}
+)
 
 
 def build_url(config: ResolvedConfig, path: str, query: Mapping[str, Any] | None) -> str:
@@ -69,13 +72,19 @@ def build_url(config: ResolvedConfig, path: str, query: Mapping[str, Any] | None
     return f"{base}{separator}{urlencode(pairs)}"
 
 
-def build_headers(config: ResolvedConfig, options: RequestOptions) -> dict[str, str]:
+def build_headers(
+    config: ResolvedConfig,
+    options: RequestOptions,
+    *,
+    content_type: str | None = "application/json",
+) -> dict[str, str]:
     auth = resolve_auth_override(options.auth)
     headers: dict[str, str] = {
-        "Content-Type": "application/json",
         SDK_VERSION_HEADER: __version__,
         API_VERSION_HEADER: config.api_version,
     }
+    if content_type is not None:
+        headers["Content-Type"] = content_type
 
     authorization = _resolve_authorization(config, auth.type, auth.token)
     if authorization is not None:
@@ -258,7 +267,12 @@ def send_request(
     timeout = _resolve_timeout(config, options)
     max_retries = _resolve_max_retries(config, options)
     url = build_url(config, path, query)
-    headers = build_headers(config, options)
+    headers = build_headers(
+        config,
+        options,
+        content_type=None if isinstance(body, MultipartBody) else "application/json",
+    )
+    request_kwargs = _build_request_body_kwargs(body)
     last_error: ConjoinError | None = None
 
     for attempt in range(max_retries + 1):
@@ -266,9 +280,9 @@ def send_request(
             response = client.request(
                 method.upper(),
                 url,
-                json=body,
                 headers=headers,
                 timeout=timeout,
+                **request_kwargs,
             )
         except httpx.HTTPError as exc:
             last_error = map_transport_error(exc, timeout=timeout)
@@ -303,7 +317,12 @@ async def send_async_request(
     timeout = _resolve_timeout(config, options)
     max_retries = _resolve_max_retries(config, options)
     url = build_url(config, path, query)
-    headers = build_headers(config, options)
+    headers = build_headers(
+        config,
+        options,
+        content_type=None if isinstance(body, MultipartBody) else "application/json",
+    )
+    request_kwargs = _build_request_body_kwargs(body)
     last_error: ConjoinError | None = None
 
     for attempt in range(max_retries + 1):
@@ -311,9 +330,9 @@ async def send_async_request(
             response = await client.request(
                 method.upper(),
                 url,
-                json=body,
                 headers=headers,
                 timeout=timeout,
+                **request_kwargs,
             )
         except httpx.HTTPError as exc:
             last_error = map_transport_error(exc, timeout=timeout)
@@ -369,6 +388,13 @@ def _parse_cast(data: Any, *, cast_to: Any, strict: bool, response: httpx.Respon
             request_id=get_response_request_id(response),
             body=preview_body(response.text),
         ) from exc
+
+
+def _build_request_body_kwargs(body: Any) -> dict[str, Any]:
+    if isinstance(body, MultipartBody):
+        return {"files": body.to_httpx_files()}
+
+    return {"json": body}
 
 
 def _cast_expects_envelope(cast_to: Any) -> bool:
