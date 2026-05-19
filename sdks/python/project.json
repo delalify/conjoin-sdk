@@ -1,0 +1,55 @@
+{
+  "name": "sdk-python",
+  "sourceRoot": "sdks/python/src",
+  "projectType": "library",
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 -c \"print('Python SDK generation has no output in Phase 2; generator implementation starts in Phase 4.')\"",
+        "cwd": "{projectRoot}"
+      },
+      "outputs": []
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 -m hatchling build",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": [],
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 -m ruff check src tests examples",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 -m pyright",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": ["default"],
+      "cache": true
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 -m ruff format src tests examples",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 -m pytest",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}
+

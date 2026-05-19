@@ -1,0 +1,12 @@
+{
+  "include": [
+    "sdks/python/src",
+    "sdks/python/tests",
+    "sdks/python/examples"
+  ],
+  "extraPaths": [
+    "sdks/python/src"
+  ],
+  "pythonVersion": "3.10",
+  "typeCheckingMode": "standard"
+}

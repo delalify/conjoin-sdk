@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling>=1.28,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "conjoin-cloud"
+version = "0.1.0"
+description = "Official Python SDK for Conjoin."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "Delalify Engineering", email = "conjoin@delalify.com" },
+]
+keywords = [
+  "ai",
+  "api",
+  "auth",
+  "billing",
+  "cloud",
+  "conjoin",
+  "developer-platform",
+  "messaging",
+  "sdk",
+  "storage",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+dependencies = [
+  "httpx>=0.28,<1",
+  "pydantic>=2.12,<3",
+]
+
+[project.urls]
+Homepage = "https://conjoin.delalify.com"
+Repository = "https://github.com/delalify/conjoin-sdk"
+Issues = "https://github.com/delalify/conjoin-sdk/issues"
+
+[project.optional-dependencies]
+dev = [
+  "hatchling>=1.28,<2",
+  "pyright>=1.1,<2",
+  "pytest>=9,<10",
+  "ruff>=0.14,<1",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/README.md",
+  "/src",
+  "/tests",
+  "/pyproject.toml",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/conjoin_cloud"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.pyright]
+include = ["src", "tests", "examples"]
+pythonVersion = "3.10"
+typeCheckingMode = "standard"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "RUF", "SIM", "UP"]

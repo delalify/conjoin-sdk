@@ -7,7 +7,7 @@ Official SDKs for [Conjoin](https://conjoin.delalify.com) — auth, billing, sto
 | Language | Package | Source | Status |
 |---|---|---|---|
 | TypeScript / JavaScript | [`@conjoin-cloud/sdk`](https://www.npmjs.com/package/@conjoin-cloud/sdk) | [`sdks/typescript`](./sdks/typescript) | Available |
-| Python | `conjoin-cloud` | `sdks/python` | Planned |
+| Python | `conjoin-cloud` | [`sdks/python`](./sdks/python) | Scaffolded |
 | Go | `github.com/delalify/conjoin-cloud-go` | `sdks/go` | Planned |
 | PHP | `conjoin-cloud/sdk` | `sdks/php` | Planned |
 
@@ -18,7 +18,8 @@ For language-specific install, configuration, and API documentation, see each pa
 ```
 conjoin-sdk/
 ├── sdks/                  Per-language SDK packages
-│   └── typescript/        @conjoin-cloud/sdk
+│   ├── typescript/        @conjoin-cloud/sdk
+│   └── python/            conjoin-cloud
 ├── spec/                  OpenAPI source-of-truth
 └── .github/workflows/     CI and publish pipelines
 ```

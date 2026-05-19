@@ -15,7 +15,8 @@
   },
   "release": {
     "projects": [
-      "sdk-typescript"
+      "sdk-typescript",
+      "sdk-python"
     ],
     "projectsRelationship": "independent",
     "version": {
