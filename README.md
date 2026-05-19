@@ -1,76 +1,62 @@
 # Conjoin SDKs
 
-Official SDKs for [Conjoin](https://conjoin.delalify.com) — auth, billing, storage, messaging, relay, AI, runtime, database, and cloud platform management. One package per language, tree-shakeable from top to bottom.
+This repository contains the official SDK packages for Conjoin. Each SDK lives in its own package directory, follows the conventions of its language ecosystem, and generates typed API bindings from `spec/openapi.json`.
 
-## Packages
+## SDK Catalog
 
-| Language | Package | Source | Status |
-|---|---|---|---|
-| TypeScript / JavaScript | [`@conjoin-cloud/sdk`](https://www.npmjs.com/package/@conjoin-cloud/sdk) | [`sdks/typescript`](./sdks/typescript) | Available |
-| Python | `conjoin-cloud` | [`sdks/python`](./sdks/python) | Active implementation |
-| Go | `github.com/delalify/conjoin-cloud-go` | `sdks/go` | Planned |
-| PHP | `conjoin-cloud/sdk` | `sdks/php` | Planned |
+| SDK | Package | Source | Guide |
+| --- | --- | --- | --- |
+| TypeScript and JavaScript | [`@conjoin-cloud/sdk`](https://www.npmjs.com/package/@conjoin-cloud/sdk) | [`sdks/typescript`](./sdks/typescript) | [`sdks/typescript/README.md`](./sdks/typescript/README.md) |
+| Python | `conjoin-cloud` | [`sdks/python`](./sdks/python) | [`sdks/python/README.md`](./sdks/python/README.md) |
 
-For language-specific install, configuration, and API documentation, see each package's README.
+Each SDK guide covers installation, authentication, generated resources, errors, examples, and package-local development.
 
-## Repository layout
+## Shared API Source
 
-```
-conjoin-sdk/
-├── sdks/                  Per-language SDK packages
-│   ├── typescript/        @conjoin-cloud/sdk
-│   └── python/            conjoin-cloud
-├── spec/                  OpenAPI source-of-truth
-└── .github/workflows/     CI and publish pipelines
-```
+`spec/openapi.json` is the source schema for generated resources. SDK generators read the schema and produce language-specific clients, models, and request helpers. Hand-written helpers stay inside each SDK package when a language needs runtime-specific behavior.
 
-The OpenAPI spec at `spec/openapi.json` is the source of truth. Each SDK's codegen reads it to produce typed bindings.
+## Repository Layout
+
+- `sdks/` contains one package directory per SDK.
+- `spec/` contains the OpenAPI schema and validation script.
+- `.github/workflows/` contains CI and publish workflows.
+- `package.json` and `nx.json` define the shared task graph.
 
 ## Development
 
-This repo uses Nx as the shared task graph and release coordinator. The root `package.json` is intentionally a thin JavaScript tooling anchor: `pnpm` installs the workspace JavaScript tooling and TypeScript package dependencies, while Nx dispatches each SDK target to that language's own tooling. Python dependencies stay in the Python environment under `sdks/python`.
+Install the root tooling once:
 
 ```bash
 pnpm install
+```
 
-# TypeScript SDK
-pnpm nx run sdk-typescript:generate
-pnpm nx run sdk-typescript:typecheck
-pnpm nx run sdk-typescript:lint
-pnpm nx run sdk-typescript:build
+Run all SDK targets through Nx from the repository root:
+
+```bash
+pnpm nx run-many -t generate
+pnpm nx run-many -t typecheck
+pnpm nx run-many -t lint
+pnpm nx run-many -t build
+pnpm nx run-many -t test
+```
+
+Run one SDK target by project name:
+
+```bash
 pnpm nx run sdk-typescript:test
-
-# Python SDK
-cd sdks/python
-python3 -m venv .venv
-. .venv/bin/activate
-python3 -m pip install -e ".[dev]"
-cd ../..
-pnpm nx run sdk-python:generate
-pnpm nx run sdk-python:typecheck
-pnpm nx run sdk-python:lint
-pnpm nx run sdk-python:build
 pnpm nx run sdk-python:test
 ```
 
-Or from each package directory:
+Some SDKs need package-local setup before root tasks can run. Read the SDK guide before working inside a package.
 
-```bash
-cd sdks/typescript
-pnpm test
+## Releases
 
-cd ../python
-python3 -m pytest
-```
-
-## Releasing
-
-Releases are driven from GitHub Actions via the [Publish workflow](.github/workflows/publish.yml). Each SDK is versioned independently; tags follow `{projectName}@v{version}` (e.g. `sdk-typescript@v0.1.0`). The workflow runs lint, typecheck, build, and tests before any publish, supports dry runs, and emits signed npm provenance attestations.
+The [Publish workflow](.github/workflows/publish.yml) publishes SDK packages. Nx versions packages independently and uses tags in the `{projectName}@v{version}` format, such as `sdk-typescript@v0.1.0`. The workflow runs generation, linting, type checks, builds, and tests before publishing.
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup and guidelines.
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for setup and contribution guidelines.
 
 ## License
 
-[MIT](./LICENSE)
+This repository uses the [MIT](./LICENSE) license.
