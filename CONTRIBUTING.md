@@ -10,6 +10,7 @@ This project follows the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUC
 
 - **Node.js** 20 or later
 - **pnpm** 10.x (installed via corepack: `corepack enable`)
+- **Python** 3.10 or later
 - **Git**
 
 ## Getting Started
@@ -27,22 +28,35 @@ cd conjoin-sdk
 pnpm install
 ```
 
-3. Generate types from the OpenAPI spec:
+3. Install Python SDK development dependencies if you are working on Python:
+
+```bash
+cd sdks/python
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install -e ".[dev]"
+cd ../..
+```
+
+4. Generate SDK code from the OpenAPI spec:
 
 ```bash
 pnpm nx run sdk-typescript:generate
+pnpm nx run sdk-python:generate
 ```
 
-4. Build the SDK:
+5. Build the SDK you changed:
 
 ```bash
 pnpm nx run sdk-typescript:build
+pnpm nx run sdk-python:build
 ```
 
-5. Run the tests:
+6. Run the tests for the SDK you changed:
 
 ```bash
 pnpm nx run sdk-typescript:test
+pnpm nx run sdk-python:test
 ```
 
 ## Project Structure
@@ -63,14 +77,24 @@ conjoin-sdk/
         react/              # Hand-written: React hooks and components
         server/             # Hand-written: server utilities
       codegen/              # Code generation scripts
+    python/
+      src/conjoin_cloud/
+        _client.py          # Hand-written sync client
+        _async_client.py    # Hand-written async client
+        _transport.py       # Hand-written httpx transport
+        generated/          # Auto-generated REST resources and models
+      codegen/              # Python code generation pipeline
+      scripts/run_python.py # Nx target runner that selects the Python environment
 ```
 
 ### Generated vs. Hand-written Code
 
 The SDK uses a two-layer approach:
 
-- **`src/generated/`** contains auto-generated code from the OpenAPI spec. These files are gitignored and rebuilt from the spec. Never edit files in this directory by hand.
-- **`src/core/`**, **`src/react/`**, **`src/server/`**, and product module index files are hand-written. These files import from `generated/` and add custom logic where needed.
+- **TypeScript `sdks/typescript/src/generated/`** contains auto-generated code from the OpenAPI spec. Never edit files in this directory by hand.
+- **Python `sdks/python/src/conjoin_cloud/generated/`** contains auto-generated code from the OpenAPI spec. Never edit files in this directory by hand.
+- Generated files are committed and drift-checked in tests so reviewers can see API surface changes.
+- Hand-written SDK code owns client configuration, transports, errors, helpers, and product-level extensions that should not be generated.
 
 ## Development Workflow
 
@@ -78,16 +102,24 @@ The SDK uses a two-layer approach:
 
 | Command | Description |
 | ------- | ----------- |
-| `pnpm nx run sdk-typescript:generate` | Generate types and modules from OpenAPI spec |
+| `pnpm nx run sdk-typescript:generate` | Generate TypeScript types and modules from OpenAPI spec |
 | `pnpm nx run sdk-typescript:build` | Build the TypeScript SDK |
-| `pnpm nx run sdk-typescript:test` | Run the test suite |
-| `pnpm nx run sdk-typescript:lint` | Check code with Biome |
-| `pnpm nx run sdk-typescript:format` | Auto-fix lint and format issues |
+| `pnpm nx run sdk-typescript:test` | Run the TypeScript test suite |
+| `pnpm nx run sdk-typescript:lint` | Check TypeScript code with Biome |
+| `pnpm nx run sdk-typescript:format` | Auto-fix TypeScript lint and format issues |
+| `pnpm nx run sdk-python:generate` | Generate Python resources and models from OpenAPI spec |
+| `pnpm nx run sdk-python:build` | Build the Python wheel and sdist |
+| `pnpm nx run sdk-python:test` | Run the Python test suite |
+| `pnpm nx run sdk-python:typecheck` | Type-check Python with Pyright |
+| `pnpm nx run sdk-python:lint` | Check Python code with Ruff |
+| `pnpm nx run sdk-python:format` | Format Python code with Ruff |
+
+The root `package.json` exists to provide the Nx command anchor for the workspace. It does not make `pnpm` the Python package manager. Python targets call `sdks/python/scripts/run_python.py`, which prefers `CONJOIN_PYTHON`, then `sdks/python/.venv`, then an active `VIRTUAL_ENV`, then the current interpreter.
 
 ### Running Everything
 
 ```bash
-pnpm nx run-many -t lint test build
+pnpm nx run-many -t lint typecheck test build
 ```
 
 ### Task Dependencies
@@ -109,18 +141,19 @@ You don't need to remember this; Nx handles it automatically when you run `build
 
 ### Code Style
 
-- **Biome** handles formatting and linting. Run `pnpm nx run sdk-typescript:format` before committing.
-- Single quotes, no semicolons (unless required for disambiguation), 120-character line width for JS/TS.
-- Factory functions over classes (required for tree-shaking).
-- Named exports only, no default exports.
-- No top-level side effects in any module.
-- Product modules import only from `core/` and `generated/`, never from each other.
+- **Biome** handles TypeScript formatting and linting.
+- **Ruff** handles Python formatting and linting.
+- TypeScript uses single quotes, no semicolons unless required for disambiguation, and a 120-character line width.
+- TypeScript public entrypoints use factory functions, named exports, and no default exports.
+- No top-level side effects in SDK modules.
+- Generated product modules should depend only on shared SDK internals and generated types, not on each other.
+- Python public APIs should be Pythonic: `snake_case` names, sync and async clients, typed request bodies, Pydantic response models, and explicit resource scopes where required.
 
 ### Writing Tests
 
-- Tests live alongside source code in `__tests__/` directories.
-- Use `vitest` with `vi.mock()` for mocking fetch calls.
-- Test files follow the naming convention `{module}.test.ts`.
+- TypeScript tests live under `sdks/typescript/tests/` and use Vitest.
+- Python tests live under `sdks/python/tests/` and use Pytest.
+- Code generation tests should verify generated output stays current with `spec/openapi.json`.
 
 ### Commit Messages
 

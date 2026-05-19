@@ -7,7 +7,7 @@ Official SDKs for [Conjoin](https://conjoin.delalify.com) — auth, billing, sto
 | Language | Package | Source | Status |
 |---|---|---|---|
 | TypeScript / JavaScript | [`@conjoin-cloud/sdk`](https://www.npmjs.com/package/@conjoin-cloud/sdk) | [`sdks/typescript`](./sdks/typescript) | Available |
-| Python | `conjoin-cloud` | [`sdks/python`](./sdks/python) | Scaffolded |
+| Python | `conjoin-cloud` | [`sdks/python`](./sdks/python) | Active implementation |
 | Go | `github.com/delalify/conjoin-cloud-go` | `sdks/go` | Planned |
 | PHP | `conjoin-cloud/sdk` | `sdks/php` | Planned |
 
@@ -28,15 +28,29 @@ The OpenAPI spec at `spec/openapi.json` is the source of truth. Each SDK's codeg
 
 ## Development
 
-This repo is an Nx-managed pnpm monorepo.
+This repo uses Nx as the shared task graph and release coordinator. The root `package.json` is intentionally a thin JavaScript tooling anchor: `pnpm` installs the workspace JavaScript tooling and TypeScript package dependencies, while Nx dispatches each SDK target to that language's own tooling. Python dependencies stay in the Python environment under `sdks/python`.
 
 ```bash
 pnpm install
-pnpm nx run sdk-typescript:generate    # regenerate codegen from the spec
-pnpm nx run sdk-typescript:typecheck   # tsc --noEmit
-pnpm nx run sdk-typescript:lint        # biome check
-pnpm nx run sdk-typescript:build       # tsup
-pnpm nx run sdk-typescript:test        # vitest
+
+# TypeScript SDK
+pnpm nx run sdk-typescript:generate
+pnpm nx run sdk-typescript:typecheck
+pnpm nx run sdk-typescript:lint
+pnpm nx run sdk-typescript:build
+pnpm nx run sdk-typescript:test
+
+# Python SDK
+cd sdks/python
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install -e ".[dev]"
+cd ../..
+pnpm nx run sdk-python:generate
+pnpm nx run sdk-python:typecheck
+pnpm nx run sdk-python:lint
+pnpm nx run sdk-python:build
+pnpm nx run sdk-python:test
 ```
 
 Or from each package directory:
@@ -44,6 +58,9 @@ Or from each package directory:
 ```bash
 cd sdks/typescript
 pnpm test
+
+cd ../python
+python3 -m pytest
 ```
 
 ## Releasing

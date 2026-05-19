@@ -51,7 +51,7 @@ python3 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install -e ".[dev]"
 python3 -m pytest
-python3 -m ruff check src tests examples
+python3 -m ruff check src tests examples scripts codegen
 python3 -m pyright
 python3 -m hatchling build
 ```
@@ -65,3 +65,5 @@ pnpm nx run sdk-python:lint
 pnpm nx run sdk-python:typecheck
 pnpm nx run sdk-python:build
 ```
+
+Root Nx targets use `scripts/run_python.py`, which prefers `CONJOIN_PYTHON`, then this package's `.venv`, then an active `VIRTUAL_ENV`, then the current interpreter.
