@@ -1,7 +1,7 @@
 from importlib.metadata import PackageNotFoundError, version
 
 import conjoin_cloud
-from conjoin_cloud import DEFAULT_API_VERSION, __version__
+from conjoin_cloud import DEFAULT_API_VERSION, AsyncConjoin, Conjoin, __version__
 
 
 def test_version_matches_project_metadata() -> None:
@@ -17,7 +17,8 @@ def test_default_api_version_is_current() -> None:
     assert DEFAULT_API_VERSION == "2026-06-01"
 
 
-def test_phase_two_public_surface_is_metadata_only() -> None:
-    assert conjoin_cloud.__all__ == ("DEFAULT_API_VERSION", "__version__")
-    assert not hasattr(conjoin_cloud, "Conjoin")
-    assert not hasattr(conjoin_cloud, "AsyncConjoin")
+def test_phase_three_public_clients_are_exposed() -> None:
+    assert "Conjoin" in conjoin_cloud.__all__
+    assert "AsyncConjoin" in conjoin_cloud.__all__
+    assert Conjoin.__name__ == "Conjoin"
+    assert AsyncConjoin.__name__ == "AsyncConjoin"

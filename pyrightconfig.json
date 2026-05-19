@@ -7,6 +7,8 @@
   "extraPaths": [
     "sdks/python/src"
   ],
+  "venvPath": "sdks/python",
+  "venv": ".venv",
   "pythonVersion": "3.10",
   "typeCheckingMode": "standard"
 }

@@ -2,7 +2,7 @@
 
 Official Python SDK package for Conjoin.
 
-This package is currently in its scaffold phase. It has package metadata, version handling, type marker support, test/lint/typecheck/build tooling, and the default API version constant. Runtime clients and generated REST resources will be added in later implementation phases.
+This package is in active implementation. It currently exposes the hand-written sync and async SDK core: client configuration, auth resolution, request options, retries, typed errors, response metadata wrappers, `httpx` lifecycle management, and base Pydantic models. Generated REST resource namespaces will be added in later implementation phases.
 
 ## Install
 
@@ -15,19 +15,32 @@ pip install conjoin-cloud
 ## Current Surface
 
 ```python
-from conjoin_cloud import DEFAULT_API_VERSION, __version__
+from conjoin_cloud import Conjoin, DEFAULT_API_VERSION, __version__
 
-print(__version__)
-print(DEFAULT_API_VERSION)
+client = Conjoin(api_key="ck_test_...")
+
+customer = client.request("GET", "billing/customers/cust_123")
 ```
 
-The sync `Conjoin` client, async `AsyncConjoin` client, generated resource methods, pagination helpers, storage helpers, AI streaming helpers, and messaging profile helpers are not exposed by this scaffold yet.
+```python
+from conjoin_cloud import AsyncConjoin
+
+
+async def main() -> None:
+    async with AsyncConjoin(api_key="ck_test_...") as client:
+        customer = await client.request("GET", "billing/customers/cust_123")
+        print(customer)
+```
+
+Generated resource methods, pagination iterators, storage helpers, AI streaming helpers, and messaging profile helpers are not exposed yet.
 
 ## Development
 
 From this package directory:
 
 ```bash
+python3 -m venv .venv
+. .venv/bin/activate
 python3 -m pip install -e ".[dev]"
 python3 -m pytest
 python3 -m ruff check src tests examples
