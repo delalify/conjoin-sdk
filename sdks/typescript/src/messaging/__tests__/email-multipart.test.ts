@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createConjoinClient } from '../../core/client'
 import { CONJOIN_REQUEST_ID_HEADER } from '../../core/request-tracing'
-import { SDK_VERSION } from '../../core/version'
+import { DEFAULT_API_VERSION, SDK_VERSION } from '../../core/version'
 import { createMessaging } from '../index'
 
 const VALID_REQUEST_ID = 'cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c1'
@@ -28,7 +28,7 @@ describe('messaging email requests', () => {
     fetchMock.mockResolvedValueOnce(mockResponse({ data: { message_id: 'msg_123' } }))
     const client = createConjoinClient({
       apiKey: 'ck_test_123',
-      apiVersion: '2026-03-31',
+      apiVersion: DEFAULT_API_VERSION,
       conjoinRequestId: VALID_REQUEST_ID,
       retry: { maxRetries: 0, backoffMs: 100 },
     })
@@ -54,7 +54,7 @@ describe('messaging email requests', () => {
     expect(headers['Content-Type']).toBeUndefined()
     expect(headers.Authorization).toBe('Bearer ck_test_123')
     expect(headers['X-Conjoin-SDK-Version']).toBe(SDK_VERSION)
-    expect(headers['X-Conjoin-API-Version']).toBe('2026-03-31')
+    expect(headers['X-Conjoin-API-Version']).toBe(DEFAULT_API_VERSION)
     expect(headers[CONJOIN_REQUEST_ID_HEADER]).toBe(VALID_REQUEST_ID)
     expect(headers['Messaging-Profile-ID']).toBe('msg_profile_123')
   })
@@ -64,7 +64,7 @@ describe('messaging email requests', () => {
     fetchMock.mockResolvedValueOnce(mockResponse({ success: true, data: [] }))
     const client = createConjoinClient({
       apiKey: 'ck_test_123',
-      apiVersion: '2026-03-31',
+      apiVersion: DEFAULT_API_VERSION,
       retry: { maxRetries: 0, backoffMs: 100 },
     })
     const messaging = createMessaging(client, { profileId: 'msg_profile_123' })
@@ -81,7 +81,7 @@ describe('messaging email requests', () => {
     expect(headers['Content-Type']).toBe('application/json')
     expect(headers.Authorization).toBe('Bearer ck_test_123')
     expect(headers['X-Conjoin-SDK-Version']).toBe(SDK_VERSION)
-    expect(headers['X-Conjoin-API-Version']).toBe('2026-03-31')
+    expect(headers['X-Conjoin-API-Version']).toBe(DEFAULT_API_VERSION)
     expect(headers['Messaging-Profile-ID']).toBe('msg_profile_123')
   })
 })

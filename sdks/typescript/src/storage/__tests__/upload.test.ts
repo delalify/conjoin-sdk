@@ -1,12 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ConjoinStorageError } from '../../core/errors'
 import type { ConjoinClient, ResolvedConfig } from '../../core/types'
+import { DEFAULT_API_VERSION } from '../../core/version'
 import { createStorageUploader } from '../upload'
 
 const config: ResolvedConfig = Object.freeze({
   apiKey: 'ck_test_123',
   baseUrl: 'https://api.conjoin.cloud',
-  apiVersion: '2026-03-31',
+  apiVersion: DEFAULT_API_VERSION,
   timeout: 30_000,
   retry: Object.freeze({ maxRetries: 0, backoffMs: 100 }),
 })

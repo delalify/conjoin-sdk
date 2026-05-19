@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { ConjoinClient, ResolvedConfig } from '../../core/types'
+import { DEFAULT_API_VERSION } from '../../core/version'
 import { createMessagingProfiledClient } from '../profile-client'
 
 const config: ResolvedConfig = Object.freeze({
   apiKey: 'ck_test_123',
-  apiVersion: '2026-03-31',
+  apiVersion: DEFAULT_API_VERSION,
   baseUrl: 'https://api.conjoin.cloud',
   retry: Object.freeze({ backoffMs: 100, maxRetries: 0 }),
   timeout: 30_000,
