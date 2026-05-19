@@ -2,15 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from conjoin_cloud.generated.ai import AsyncAiResource, AiResource
 from conjoin_cloud.generated.auth import AsyncAuthResource, AuthResource
 from conjoin_cloud.generated.billing import AsyncBillingResource, BillingResource
 from conjoin_cloud.generated.cloud import AsyncCloudResource, CloudResource
 from conjoin_cloud.generated.messaging import AsyncMessagingResource, MessagingResource
 from conjoin_cloud.generated.relay import AsyncRelayResource, RelayResource
-from conjoin_cloud.generated.storage import AsyncStorageResource, StorageResource
+
+if TYPE_CHECKING:
+    from conjoin_cloud._ai import AsyncAiResource, AiResource
+    from conjoin_cloud._storage import AsyncStorageResource, StorageResource
 
 
 class SyncGeneratedResourcesMixin:
@@ -23,6 +25,9 @@ class SyncGeneratedResourcesMixin:
     storage: StorageResource
 
     def _init_generated_resources(self: Any) -> None:
+        from conjoin_cloud._ai import AiResource
+        from conjoin_cloud._storage import StorageResource
+
         self.ai = AiResource(self)
         self.auth = AuthResource(self)
         self.billing = BillingResource(self)
@@ -42,6 +47,9 @@ class AsyncGeneratedResourcesMixin:
     storage: AsyncStorageResource
 
     def _init_generated_resources(self: Any) -> None:
+        from conjoin_cloud._ai import AsyncAiResource
+        from conjoin_cloud._storage import AsyncStorageResource
+
         self.ai = AsyncAiResource(self)
         self.auth = AsyncAuthResource(self)
         self.billing = AsyncBillingResource(self)

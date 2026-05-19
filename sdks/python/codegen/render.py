@@ -419,28 +419,61 @@ def _render_service_module(
 def _render_client_mixins(
     services: tuple[tuple[str, tuple[ResourceGroup, ...]], ...],
 ) -> str:
+    handwritten_resource_modules = {
+        "ai": "conjoin_cloud._ai",
+        "storage": "conjoin_cloud._storage",
+    }
     lines = [
         "from __future__ import annotations",
         "",
-        "from typing import Any",
+        "from typing import TYPE_CHECKING, Any",
         "",
     ]
     for service, _groups in services:
         service_pascal = to_pascal(service)
+        if service in handwritten_resource_modules:
+            continue
+        module = f"conjoin_cloud.generated.{to_snake(service)}"
         lines.append(
-            f"from conjoin_cloud.generated.{to_snake(service)} import "
-            f"Async{service_pascal}Resource, {service_pascal}Resource"
+            f"from {module} import Async{service_pascal}Resource, {service_pascal}Resource"
         )
+    if handwritten_resource_modules:
+        lines.extend(["", "if TYPE_CHECKING:"])
+        for service, _groups in services:
+            module = handwritten_resource_modules.get(service)
+            if module is None:
+                continue
+            service_pascal = to_pascal(service)
+            lines.append(
+                f"    from {module} import Async{service_pascal}Resource, "
+                f"{service_pascal}Resource"
+            )
     lines.extend(["", "", "class SyncGeneratedResourcesMixin:"])
     for service, _groups in services:
         lines.append(f"    {to_snake(service)}: {to_pascal(service)}Resource")
     lines.extend(["", "    def _init_generated_resources(self: Any) -> None:"])
+    for service, _groups in services:
+        module = handwritten_resource_modules.get(service)
+        if module is None:
+            continue
+        service_pascal = to_pascal(service)
+        lines.append(f"        from {module} import {service_pascal}Resource")
+    if any(service in handwritten_resource_modules for service, _groups in services):
+        lines.append("")
     for service, _groups in services:
         lines.append(f"        self.{to_snake(service)} = {to_pascal(service)}Resource(self)")
     lines.extend(["", "", "class AsyncGeneratedResourcesMixin:"])
     for service, _groups in services:
         lines.append(f"    {to_snake(service)}: Async{to_pascal(service)}Resource")
     lines.extend(["", "    def _init_generated_resources(self: Any) -> None:"])
+    for service, _groups in services:
+        module = handwritten_resource_modules.get(service)
+        if module is None:
+            continue
+        service_pascal = to_pascal(service)
+        lines.append(f"        from {module} import Async{service_pascal}Resource")
+    if any(service in handwritten_resource_modules for service, _groups in services):
+        lines.append("")
     for service, _groups in services:
         lines.append(
             f"        self.{to_snake(service)} = Async{to_pascal(service)}Resource(self)"

@@ -191,3 +191,31 @@ class ConjoinResponseValidationError(ConjoinError):
             request_id=request_id,
         )
         self.body = body
+
+
+class ConjoinStorageError(ConjoinError):
+    body: str | None
+    storage_url: str
+    upload_mode: str | None
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        status_code: int,
+        storage_url: str,
+        upload_mode: str | None = None,
+        body: str | None = None,
+    ) -> None:
+        super().__init__(
+            message,
+            status_code=status_code,
+            code="storage_error",
+        )
+        self.body = body
+        self.storage_url = storage_url
+        self.upload_mode = upload_mode
+
+    @property
+    def status(self) -> int:
+        return self.status_code
