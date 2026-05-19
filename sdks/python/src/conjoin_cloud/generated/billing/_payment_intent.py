@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -40,7 +41,7 @@ class BillingPaymentIntentsResource:
     ) -> BillingPaymentIntentCreateResponse:
         return self._client.request(
             'POST',
-            f'billing/payment-intent/{entity_id}/create',
+            f'billing/payment-intent/{_encode_path_param(entity_id)}/create',
             query=None,
             body=data,
             cast_to=BillingPaymentIntentCreateResponse,
@@ -56,7 +57,7 @@ class BillingPaymentIntentsResource:
     ) -> Page[BillingPaymentIntentListItem]:
         return self._client.request(
             'GET',
-            f'billing/payment-intent/{entity_id}',
+            f'billing/payment-intent/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingPaymentIntentListItem],
@@ -72,7 +73,7 @@ class BillingPaymentIntentsResource:
     ) -> BillingPaymentIntentVerifyResponse:
         return self._client.request(
             'GET',
-            f'billing/payment-intent/{entity_id}/verify/{reference_id}',
+            f'billing/payment-intent/{_encode_path_param(entity_id)}/verify/{_encode_path_param(reference_id)}',
             query=None,
             body=None,
             cast_to=BillingPaymentIntentVerifyResponse,
@@ -101,7 +102,7 @@ class AsyncBillingPaymentIntentsResource:
     ) -> BillingPaymentIntentCreateResponse:
         return await self._client.request(
             'POST',
-            f'billing/payment-intent/{entity_id}/create',
+            f'billing/payment-intent/{_encode_path_param(entity_id)}/create',
             query=None,
             body=data,
             cast_to=BillingPaymentIntentCreateResponse,
@@ -117,7 +118,7 @@ class AsyncBillingPaymentIntentsResource:
     ) -> Page[BillingPaymentIntentListItem]:
         return await self._client.request(
             'GET',
-            f'billing/payment-intent/{entity_id}',
+            f'billing/payment-intent/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingPaymentIntentListItem],
@@ -133,9 +134,13 @@ class AsyncBillingPaymentIntentsResource:
     ) -> BillingPaymentIntentVerifyResponse:
         return await self._client.request(
             'GET',
-            f'billing/payment-intent/{entity_id}/verify/{reference_id}',
+            f'billing/payment-intent/{_encode_path_param(entity_id)}/verify/{_encode_path_param(reference_id)}',
             query=None,
             body=None,
             cast_to=BillingPaymentIntentVerifyResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

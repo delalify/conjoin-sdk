@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -39,7 +40,7 @@ class BillingReceiptsResource:
     ) -> Page[BillingReceiptListItem]:
         return self._client.request(
             'GET',
-            f'billing/receipt/{entity_id}/receipts',
+            f'billing/receipt/{_encode_path_param(entity_id)}/receipts',
             query=query,
             body=None,
             cast_to=Page[BillingReceiptListItem],
@@ -55,7 +56,7 @@ class BillingReceiptsResource:
     ) -> BillingReceiptReadByChargeIdResponse:
         return self._client.request(
             'GET',
-            f'billing/receipt/{entity_id}/receipt/{charge_id}',
+            f'billing/receipt/{_encode_path_param(entity_id)}/receipt/{_encode_path_param(charge_id)}',
             query=None,
             body=None,
             cast_to=BillingReceiptReadByChargeIdResponse,
@@ -71,7 +72,7 @@ class BillingReceiptsResource:
     ) -> BillingReceiptReadByReceiptIdResponse:
         return self._client.request(
             'GET',
-            f'billing/receipt/{entity_id}/receipts/{receipt_id}',
+            f'billing/receipt/{_encode_path_param(entity_id)}/receipts/{_encode_path_param(receipt_id)}',
             query=None,
             body=None,
             cast_to=BillingReceiptReadByReceiptIdResponse,
@@ -100,7 +101,7 @@ class AsyncBillingReceiptsResource:
     ) -> Page[BillingReceiptListItem]:
         return await self._client.request(
             'GET',
-            f'billing/receipt/{entity_id}/receipts',
+            f'billing/receipt/{_encode_path_param(entity_id)}/receipts',
             query=query,
             body=None,
             cast_to=Page[BillingReceiptListItem],
@@ -116,7 +117,7 @@ class AsyncBillingReceiptsResource:
     ) -> BillingReceiptReadByChargeIdResponse:
         return await self._client.request(
             'GET',
-            f'billing/receipt/{entity_id}/receipt/{charge_id}',
+            f'billing/receipt/{_encode_path_param(entity_id)}/receipt/{_encode_path_param(charge_id)}',
             query=None,
             body=None,
             cast_to=BillingReceiptReadByChargeIdResponse,
@@ -132,9 +133,13 @@ class AsyncBillingReceiptsResource:
     ) -> BillingReceiptReadByReceiptIdResponse:
         return await self._client.request(
             'GET',
-            f'billing/receipt/{entity_id}/receipts/{receipt_id}',
+            f'billing/receipt/{_encode_path_param(entity_id)}/receipts/{_encode_path_param(receipt_id)}',
             query=None,
             body=None,
             cast_to=BillingReceiptReadByReceiptIdResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -73,7 +74,7 @@ class AiBYOKsResource:
     ) -> AiBYOKReadByokConfigResponse:
         return self._client.request(
             'GET',
-            f'ai/byok/{byok_config_id}',
+            f'ai/byok/{_encode_path_param(byok_config_id)}',
             query=None,
             body=None,
             cast_to=AiBYOKReadByokConfigResponse,
@@ -89,7 +90,7 @@ class AiBYOKsResource:
     ) -> AiBYOKUpdateByokConfigResponse:
         return self._client.request(
             'PATCH',
-            f'ai/byok/{byok_config_id}/update',
+            f'ai/byok/{_encode_path_param(byok_config_id)}/update',
             query=None,
             body=data,
             cast_to=AiBYOKUpdateByokConfigResponse,
@@ -104,7 +105,7 @@ class AiBYOKsResource:
     ) -> AiBYOKDeleteByokConfigResponse:
         return self._client.request(
             'DELETE',
-            f'ai/byok/{byok_config_id}/delete',
+            f'ai/byok/{_encode_path_param(byok_config_id)}/delete',
             query=None,
             body=None,
             cast_to=AiBYOKDeleteByokConfigResponse,
@@ -119,7 +120,7 @@ class AiBYOKsResource:
     ) -> AiBYOKTestByokConnectionResponse:
         return self._client.request(
             'POST',
-            f'ai/byok/{byok_config_id}/test',
+            f'ai/byok/{_encode_path_param(byok_config_id)}/test',
             query=None,
             body=None,
             cast_to=AiBYOKTestByokConnectionResponse,
@@ -177,7 +178,7 @@ class AsyncAiBYOKsResource:
     ) -> AiBYOKReadByokConfigResponse:
         return await self._client.request(
             'GET',
-            f'ai/byok/{byok_config_id}',
+            f'ai/byok/{_encode_path_param(byok_config_id)}',
             query=None,
             body=None,
             cast_to=AiBYOKReadByokConfigResponse,
@@ -193,7 +194,7 @@ class AsyncAiBYOKsResource:
     ) -> AiBYOKUpdateByokConfigResponse:
         return await self._client.request(
             'PATCH',
-            f'ai/byok/{byok_config_id}/update',
+            f'ai/byok/{_encode_path_param(byok_config_id)}/update',
             query=None,
             body=data,
             cast_to=AiBYOKUpdateByokConfigResponse,
@@ -208,7 +209,7 @@ class AsyncAiBYOKsResource:
     ) -> AiBYOKDeleteByokConfigResponse:
         return await self._client.request(
             'DELETE',
-            f'ai/byok/{byok_config_id}/delete',
+            f'ai/byok/{_encode_path_param(byok_config_id)}/delete',
             query=None,
             body=None,
             cast_to=AiBYOKDeleteByokConfigResponse,
@@ -223,9 +224,13 @@ class AsyncAiBYOKsResource:
     ) -> AiBYOKTestByokConnectionResponse:
         return await self._client.request(
             'POST',
-            f'ai/byok/{byok_config_id}/test',
+            f'ai/byok/{_encode_path_param(byok_config_id)}/test',
             query=None,
             body=None,
             cast_to=AiBYOKTestByokConnectionResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

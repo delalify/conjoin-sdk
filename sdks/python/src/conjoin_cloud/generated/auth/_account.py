@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -83,7 +84,7 @@ class AuthAccountsResource:
     ) -> AuthAccountCreateResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/create',
+            f'auth/account/{_encode_path_param(app_id)}/account/create',
             query=None,
             body=data,
             cast_to=AuthAccountCreateResponse,
@@ -99,7 +100,7 @@ class AuthAccountsResource:
     ) -> AuthAccountReadResponse:
         return self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}',
             query=None,
             body=None,
             cast_to=AuthAccountReadResponse,
@@ -146,7 +147,7 @@ class AuthAccountsResource:
     ) -> AuthAccountUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'auth/account/{app_id}/account/{account_id}/update',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/update',
             query=None,
             body=data,
             cast_to=AuthAccountUpdateResponse,
@@ -163,7 +164,7 @@ class AuthAccountsResource:
     ) -> AuthAccountUpdateMetadataResponse:
         return self._client.request(
             'PATCH',
-            f'auth/account/{app_id}/account/{account_id}/metadata/update',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/metadata/update',
             query=None,
             body=data,
             cast_to=AuthAccountUpdateMetadataResponse,
@@ -180,7 +181,7 @@ class AuthAccountsResource:
     ) -> AuthAccountUpdateStatusResponse:
         return self._client.request(
             'PATCH',
-            f'auth/account/{app_id}/account/{account_id}/status/update',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/status/update',
             query=None,
             body=data,
             cast_to=AuthAccountUpdateStatusResponse,
@@ -197,7 +198,7 @@ class AuthAccountsResource:
     ) -> AuthAccountAddEmailResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/email/add',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/email/add',
             query=None,
             body=data,
             cast_to=AuthAccountAddEmailResponse,
@@ -214,7 +215,7 @@ class AuthAccountsResource:
     ) -> AuthAccountAddPhoneResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/phone/add',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/phone/add',
             query=None,
             body=data,
             cast_to=AuthAccountAddPhoneResponse,
@@ -231,7 +232,7 @@ class AuthAccountsResource:
     ) -> AuthAccountRemoveEmailResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/email/remove',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/email/remove',
             query=None,
             body=data,
             cast_to=AuthAccountRemoveEmailResponse,
@@ -248,7 +249,7 @@ class AuthAccountsResource:
     ) -> AuthAccountRemovePhoneResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/phone/remove',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/phone/remove',
             query=None,
             body=data,
             cast_to=AuthAccountRemovePhoneResponse,
@@ -265,7 +266,7 @@ class AuthAccountsResource:
     ) -> Page[AuthAccountListOrganizationMembershipsItem]:
         return self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/organizations',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/organizations',
             query=query,
             body=None,
             cast_to=Page[AuthAccountListOrganizationMembershipsItem],
@@ -283,7 +284,7 @@ class AuthAccountsResource:
     ) -> AuthAccountGrantOrgRoleResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/organization/{organization_id}/account/{account_id}/role/grant',
+            f'auth/account/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/role/grant',
             query=None,
             body=data,
             cast_to=AuthAccountGrantOrgRoleResponse,
@@ -301,7 +302,7 @@ class AuthAccountsResource:
     ) -> AuthAccountRevokeOrgRoleResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/organization/{organization_id}/account/{account_id}/role/revoke',
+            f'auth/account/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/role/revoke',
             query=None,
             body=data,
             cast_to=AuthAccountRevokeOrgRoleResponse,
@@ -318,7 +319,7 @@ class AuthAccountsResource:
     ) -> AuthAccountVerifyCredentialResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/credential/verify',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/verify',
             query=None,
             body=data,
             cast_to=AuthAccountVerifyCredentialResponse,
@@ -335,7 +336,7 @@ class AuthAccountsResource:
     ) -> AuthAccountVerifyCredentialMfaTotpResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/credential/mfa/totp/verify',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/verify',
             query=None,
             body=data,
             cast_to=AuthAccountVerifyCredentialMfaTotpResponse,
@@ -352,7 +353,7 @@ class AuthAccountsResource:
     ) -> AuthAccountCountCredentialsResponse:
         return self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/credential/count',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/count',
             query=query,
             body=None,
             cast_to=AuthAccountCountCredentialsResponse,
@@ -369,7 +370,7 @@ class AuthAccountsResource:
     ) -> Page[AuthAccountListCredentialsItem]:
         return self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/credential',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential',
             query=query,
             body=None,
             cast_to=Page[AuthAccountListCredentialsItem],
@@ -386,7 +387,7 @@ class AuthAccountsResource:
     ) -> AuthAccountRemoveCredentialResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/credential/remove',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/remove',
             query=None,
             body=data,
             cast_to=AuthAccountRemoveCredentialResponse,
@@ -403,7 +404,7 @@ class AuthAccountsResource:
     ) -> AuthAccountGrantGlobalRoleResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/global-role/grant',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/global-role/grant',
             query=None,
             body=data,
             cast_to=AuthAccountGrantGlobalRoleResponse,
@@ -420,7 +421,7 @@ class AuthAccountsResource:
     ) -> AuthAccountRevokeGlobalRoleResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/global-role/revoke',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/global-role/revoke',
             query=None,
             body=data,
             cast_to=AuthAccountRevokeGlobalRoleResponse,
@@ -437,7 +438,7 @@ class AuthAccountsResource:
     ) -> AuthAccountDeleteResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/delete',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/delete',
             query=None,
             body=data,
             cast_to=AuthAccountDeleteResponse,
@@ -453,7 +454,7 @@ class AuthAccountsResource:
     ) -> AuthAccountExportResponse:
         return self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/export',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/export',
             query=None,
             body=None,
             cast_to=AuthAccountExportResponse,
@@ -470,7 +471,7 @@ class AuthAccountsResource:
     ) -> AuthAccountSetCustomAttributesResponse:
         return self._client.request(
             'PUT',
-            f'auth/account/{app_id}/account/{account_id}/custom-attributes',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/custom-attributes',
             query=None,
             body=data,
             cast_to=AuthAccountSetCustomAttributesResponse,
@@ -486,7 +487,7 @@ class AuthAccountsResource:
     ) -> AuthAccountMergeResponse:
         return self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/merge',
+            f'auth/account/{_encode_path_param(app_id)}/account/merge',
             query=None,
             body=data,
             cast_to=AuthAccountMergeResponse,
@@ -515,7 +516,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountCreateResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/create',
+            f'auth/account/{_encode_path_param(app_id)}/account/create',
             query=None,
             body=data,
             cast_to=AuthAccountCreateResponse,
@@ -531,7 +532,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}',
             query=None,
             body=None,
             cast_to=AuthAccountReadResponse,
@@ -578,7 +579,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/account/{app_id}/account/{account_id}/update',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/update',
             query=None,
             body=data,
             cast_to=AuthAccountUpdateResponse,
@@ -595,7 +596,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountUpdateMetadataResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/account/{app_id}/account/{account_id}/metadata/update',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/metadata/update',
             query=None,
             body=data,
             cast_to=AuthAccountUpdateMetadataResponse,
@@ -612,7 +613,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountUpdateStatusResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/account/{app_id}/account/{account_id}/status/update',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/status/update',
             query=None,
             body=data,
             cast_to=AuthAccountUpdateStatusResponse,
@@ -629,7 +630,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountAddEmailResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/email/add',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/email/add',
             query=None,
             body=data,
             cast_to=AuthAccountAddEmailResponse,
@@ -646,7 +647,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountAddPhoneResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/phone/add',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/phone/add',
             query=None,
             body=data,
             cast_to=AuthAccountAddPhoneResponse,
@@ -663,7 +664,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountRemoveEmailResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/email/remove',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/email/remove',
             query=None,
             body=data,
             cast_to=AuthAccountRemoveEmailResponse,
@@ -680,7 +681,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountRemovePhoneResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/phone/remove',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/phone/remove',
             query=None,
             body=data,
             cast_to=AuthAccountRemovePhoneResponse,
@@ -697,7 +698,7 @@ class AsyncAuthAccountsResource:
     ) -> Page[AuthAccountListOrganizationMembershipsItem]:
         return await self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/organizations',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/organizations',
             query=query,
             body=None,
             cast_to=Page[AuthAccountListOrganizationMembershipsItem],
@@ -715,7 +716,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountGrantOrgRoleResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/organization/{organization_id}/account/{account_id}/role/grant',
+            f'auth/account/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/role/grant',
             query=None,
             body=data,
             cast_to=AuthAccountGrantOrgRoleResponse,
@@ -733,7 +734,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountRevokeOrgRoleResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/organization/{organization_id}/account/{account_id}/role/revoke',
+            f'auth/account/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/role/revoke',
             query=None,
             body=data,
             cast_to=AuthAccountRevokeOrgRoleResponse,
@@ -750,7 +751,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountVerifyCredentialResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/credential/verify',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/verify',
             query=None,
             body=data,
             cast_to=AuthAccountVerifyCredentialResponse,
@@ -767,7 +768,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountVerifyCredentialMfaTotpResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/credential/mfa/totp/verify',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/verify',
             query=None,
             body=data,
             cast_to=AuthAccountVerifyCredentialMfaTotpResponse,
@@ -784,7 +785,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountCountCredentialsResponse:
         return await self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/credential/count',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/count',
             query=query,
             body=None,
             cast_to=AuthAccountCountCredentialsResponse,
@@ -801,7 +802,7 @@ class AsyncAuthAccountsResource:
     ) -> Page[AuthAccountListCredentialsItem]:
         return await self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/credential',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential',
             query=query,
             body=None,
             cast_to=Page[AuthAccountListCredentialsItem],
@@ -818,7 +819,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountRemoveCredentialResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/credential/remove',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/remove',
             query=None,
             body=data,
             cast_to=AuthAccountRemoveCredentialResponse,
@@ -835,7 +836,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountGrantGlobalRoleResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/global-role/grant',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/global-role/grant',
             query=None,
             body=data,
             cast_to=AuthAccountGrantGlobalRoleResponse,
@@ -852,7 +853,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountRevokeGlobalRoleResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/global-role/revoke',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/global-role/revoke',
             query=None,
             body=data,
             cast_to=AuthAccountRevokeGlobalRoleResponse,
@@ -869,7 +870,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountDeleteResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/{account_id}/delete',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/delete',
             query=None,
             body=data,
             cast_to=AuthAccountDeleteResponse,
@@ -885,7 +886,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountExportResponse:
         return await self._client.request(
             'GET',
-            f'auth/account/{app_id}/account/{account_id}/export',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/export',
             query=None,
             body=None,
             cast_to=AuthAccountExportResponse,
@@ -902,7 +903,7 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountSetCustomAttributesResponse:
         return await self._client.request(
             'PUT',
-            f'auth/account/{app_id}/account/{account_id}/custom-attributes',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/custom-attributes',
             query=None,
             body=data,
             cast_to=AuthAccountSetCustomAttributesResponse,
@@ -918,9 +919,13 @@ class AsyncAuthAccountsResource:
     ) -> AuthAccountMergeResponse:
         return await self._client.request(
             'POST',
-            f'auth/account/{app_id}/account/merge',
+            f'auth/account/{_encode_path_param(app_id)}/account/merge',
             query=None,
             body=data,
             cast_to=AuthAccountMergeResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

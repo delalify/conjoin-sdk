@@ -9403,14 +9403,16 @@ class StorageObjectRestoreVersionResponse(ConjoinModel):
     version_id: str
 
 
-class AiBYOKCreateByokConfigRequest(TypedDict, total=False):
-    allowed_models: Sequence[str]
+class _AiBYOKCreateByokConfigRequestRequired(TypedDict):
     api_key: str
+    provider: str
+    provider_name: str
+
+class AiBYOKCreateByokConfigRequest(_AiBYOKCreateByokConfigRequestRequired, total=False):
+    allowed_models: Sequence[str]
     description: str | None
     endpoint_url: str | None
     metadata: dict[str, Any]
-    provider: str
-    provider_name: str
     reference_id: str | None
 
 
@@ -9432,14 +9434,16 @@ class AiBYOKUpdateByokConfigRequest(TypedDict, total=False):
     status: str
 
 
-class AiContextCreateIndexRequest(TypedDict, total=False):
+class _AiContextCreateIndexRequestRequired(TypedDict):
+    name: str
+    source_config: dict[str, Any]
+    source_type: str
+
+class AiContextCreateIndexRequest(_AiContextCreateIndexRequestRequired, total=False):
     description: str | None
     embedding_model: str
     metadata: dict[str, Any]
-    name: str
     reference_id: str | None
-    source_config: dict[str, Any]
-    source_type: str
 
 
 class AiContextListIndexesQuery(TypedDict, total=False):
@@ -9456,39 +9460,53 @@ class AiContextListQueryLogsQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AiContextQueryRequest(TypedDict, total=False):
-    filters: dict[str, Any]
+class _AiContextQueryRequestRequired(TypedDict):
     index_ids: Sequence[str]
+    query: str
+
+class AiContextQueryRequest(_AiContextQueryRequestRequired, total=False):
+    filters: dict[str, Any]
     limit: int
     modes: Sequence[str]
-    query: str
     user_id: str
 
 
-class AiInferenceCreateAiBestOfNRequest(TypedDict, total=False):
-    max_tokens: float
+class _AiInferenceCreateAiBestOfNRequestRequired(TypedDict):
     messages: Sequence[dict[str, Any]]
     model: str
     n: float
+
+class AiInferenceCreateAiBestOfNRequest(_AiInferenceCreateAiBestOfNRequestRequired, total=False):
+    max_tokens: float
     selection_criteria: str
     temperature: float
 
 
-class AiInferenceCreateAiMultiModelRequest(TypedDict, total=False):
-    judge_model: str
-    max_tokens: float
+class _AiInferenceCreateAiMultiModelRequestRequired(TypedDict):
     messages: Sequence[dict[str, Any]]
     models: Sequence[str]
+
+class AiInferenceCreateAiMultiModelRequest(
+    _AiInferenceCreateAiMultiModelRequestRequired,
+    total=False,
+):
+    judge_model: str
+    max_tokens: float
     synthesize: bool
     temperature: float
 
 
-class AiInferenceCreateChatCompletionRequest(TypedDict, total=False):
+class _AiInferenceCreateChatCompletionRequestRequired(TypedDict):
+    messages: Sequence[dict[str, Any]]
+    model: str
+
+class AiInferenceCreateChatCompletionRequest(
+    _AiInferenceCreateChatCompletionRequestRequired,
+    total=False,
+):
     context: dict[str, Any]
     max_tokens: float
-    messages: Sequence[dict[str, Any]]
     metadata: dict[str, Any]
-    model: str
     response_format: dict[str, Any]
     stop: Sequence[str]
     stream: bool
@@ -9511,22 +9529,26 @@ class AiModelListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AiPolicyCheckRequest(TypedDict, total=False):
+class _AiPolicyCheckRequestRequired(TypedDict):
     content: str
-    context: dict[str, Any]
     direction: str
 
+class AiPolicyCheckRequest(_AiPolicyCheckRequestRequired, total=False):
+    context: dict[str, Any]
 
-class AiPolicyCreateRuleRequest(TypedDict, total=False):
+
+class _AiPolicyCreateRuleRequestRequired(TypedDict):
     action: str
     config: dict[str, Any]
-    description: str | None
     direction: str
-    metadata: dict[str, Any]
     name: str
+    rule_type: str
+
+class AiPolicyCreateRuleRequest(_AiPolicyCreateRuleRequestRequired, total=False):
+    description: str | None
+    metadata: dict[str, Any]
     priority: int
     reference_id: str | None
-    rule_type: str
 
 
 class AiPolicyListLogsQuery(TypedDict, total=False):
@@ -9568,13 +9590,17 @@ class AiUsageReadSummaryQuery(TypedDict, total=False):
     end_date: str
 
 
-class AuthAccountAddEmailRequest(TypedDict, total=False):
+class _AuthAccountAddEmailRequestRequired(TypedDict):
     email: str
+
+class AuthAccountAddEmailRequest(_AuthAccountAddEmailRequestRequired, total=False):
     set_as_primary: bool
 
 
-class AuthAccountAddPhoneRequest(TypedDict, total=False):
+class _AuthAccountAddPhoneRequestRequired(TypedDict):
     phone: str
+
+class AuthAccountAddPhoneRequest(_AuthAccountAddPhoneRequestRequired, total=False):
     set_as_primary: bool
 
 
@@ -9605,11 +9631,11 @@ class AuthAccountDeleteRequest(TypedDict, total=False):
     permanent: bool
 
 
-class AuthAccountGrantGlobalRoleRequest(TypedDict, total=False):
+class AuthAccountGrantGlobalRoleRequest(TypedDict):
     role_key: str
 
 
-class AuthAccountGrantOrgRoleRequest(TypedDict, total=False):
+class AuthAccountGrantOrgRoleRequest(TypedDict):
     role_key: str
 
 
@@ -9633,44 +9659,55 @@ class AuthAccountListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthAccountMergeRequest(TypedDict, total=False):
+class _AuthAccountMergeRequestRequired(TypedDict):
     source_account_id: str
-    strategy: str
     target_account_id: str
 
+class AuthAccountMergeRequest(_AuthAccountMergeRequestRequired, total=False):
+    strategy: str
 
-class AuthAccountRecoveryCompleteRecoveryRequest(TypedDict, total=False):
+
+class _AuthAccountRecoveryCompleteRecoveryRequestRequired(TypedDict):
+    token: str
+
+class AuthAccountRecoveryCompleteRecoveryRequest(
+    _AuthAccountRecoveryCompleteRecoveryRequestRequired,
+    total=False,
+):
     credential_kinds_to_remove: Sequence[str]
+
+
+class AuthAccountRecoveryVerifyRecoveryRequest(TypedDict):
     token: str
 
 
-class AuthAccountRecoveryVerifyRecoveryRequest(TypedDict, total=False):
-    token: str
-
-
-class AuthAccountRemoveCredentialRequest(TypedDict, total=False):
+class AuthAccountRemoveCredentialRequest(TypedDict):
     credential_id: str
 
 
-class AuthAccountRemoveEmailRequest(TypedDict, total=False):
+class _AuthAccountRemoveEmailRequestRequired(TypedDict):
     email: str
+
+class AuthAccountRemoveEmailRequest(_AuthAccountRemoveEmailRequestRequired, total=False):
     primary_email: str
 
 
-class AuthAccountRemovePhoneRequest(TypedDict, total=False):
+class _AuthAccountRemovePhoneRequestRequired(TypedDict):
     phone: str
+
+class AuthAccountRemovePhoneRequest(_AuthAccountRemovePhoneRequestRequired, total=False):
     primary_phone: str
 
 
-class AuthAccountRevokeGlobalRoleRequest(TypedDict, total=False):
+class AuthAccountRevokeGlobalRoleRequest(TypedDict):
     role_key: str
 
 
-class AuthAccountRevokeOrgRoleRequest(TypedDict, total=False):
+class AuthAccountRevokeOrgRoleRequest(TypedDict):
     role_key: str
 
 
-class AuthAccountSetCustomAttributesRequest(TypedDict, total=False):
+class AuthAccountSetCustomAttributesRequest(TypedDict):
     custom_attributes: dict[str, Any | None]
 
 
@@ -9689,21 +9726,23 @@ class AuthAccountUpdateStatusRequest(TypedDict, total=False):
     status: str
 
 
-class AuthAccountVerifyCredentialMfaTotpRequest(TypedDict, total=False):
+class AuthAccountVerifyCredentialMfaTotpRequest(TypedDict):
     code: str
 
 
-class AuthAccountVerifyCredentialRequest(TypedDict, total=False):
+class AuthAccountVerifyCredentialRequest(TypedDict):
     credential_type: str
     credential_value: str
 
 
-class AuthAppCreateRequest(TypedDict, total=False):
+class _AuthAppCreateRequestRequired(TypedDict):
+    name: str
+    slug: str
+
+class AuthAppCreateRequest(_AuthAppCreateRequestRequired, total=False):
     description: str | None
     metadata: dict[str, Any]
-    name: str
     reference_id: str
-    slug: str
     support_email: str | None
 
 
@@ -9714,7 +9753,7 @@ class AuthAppListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthAppUpdateCustomAttributesRequest(TypedDict, total=False):
+class AuthAppUpdateCustomAttributesRequest(TypedDict):
     custom_attributes_schema: Sequence[dict[str, Any]]
 
 
@@ -9732,19 +9771,24 @@ class AuthAppUpdateSettingsRequest(TypedDict, total=False):
     sessions: dict[str, Any]
 
 
-class AuthAuthorizationAuthorizeActionRequest(TypedDict, total=False):
+class _AuthAuthorizationAuthorizeActionRequestRequired(TypedDict):
     account_id: str
     permission_key: str
+
+class AuthAuthorizationAuthorizeActionRequest(
+    _AuthAuthorizationAuthorizeActionRequestRequired,
+    total=False,
+):
     resource_id: str
     resource_type: str
 
 
-class AuthAuthorizationCheckRoleRequest(TypedDict, total=False):
+class AuthAuthorizationCheckRoleRequest(TypedDict):
     account_id: str
     role_key: str
 
 
-class AuthAuthorizationRemoveRolePermissionRequest(TypedDict, total=False):
+class AuthAuthorizationRemoveRolePermissionRequest(TypedDict):
     permission_keys: Sequence[str]
 
 
@@ -9760,31 +9804,31 @@ class AuthClientListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthCredentialActivateEmailMfaRequest(TypedDict, total=False):
+class AuthCredentialActivateEmailMfaRequest(TypedDict):
     code: str
 
 
-class AuthCredentialActivateSmsMfaRequest(TypedDict, total=False):
+class AuthCredentialActivateSmsMfaRequest(TypedDict):
     code: str
 
 
-class AuthCredentialActivateTotpRequest(TypedDict, total=False):
+class AuthCredentialActivateTotpRequest(TypedDict):
     code: str
 
 
-class AuthCredentialConsumeTotpRecoveryCodeRequest(TypedDict, total=False):
+class AuthCredentialConsumeTotpRecoveryCodeRequest(TypedDict):
     code: str
 
 
-class AuthCredentialCreatePasswordRequest(TypedDict, total=False):
+class AuthCredentialCreatePasswordRequest(TypedDict):
     password: str
 
 
-class AuthCredentialEnrollEmailMfaRequest(TypedDict, total=False):
+class AuthCredentialEnrollEmailMfaRequest(TypedDict):
     email: str
 
 
-class AuthCredentialEnrollSmsMfaRequest(TypedDict, total=False):
+class AuthCredentialEnrollSmsMfaRequest(TypedDict):
     phone: str
 
 
@@ -9807,20 +9851,22 @@ class AuthCredentialIssueApiKeyRequest(TypedDict, total=False):
     token_metadata: dict[str, Any] | None
 
 
-class AuthCredentialRevokeApiKeyRequest(TypedDict, total=False):
+class AuthCredentialRevokeApiKeyRequest(TypedDict):
     public_key_id: str
 
 
-class AuthCredentialRotateApiKeyRequest(TypedDict, total=False):
+class _AuthCredentialRotateApiKeyRequestRequired(TypedDict):
+    public_key_id: str
+
+class AuthCredentialRotateApiKeyRequest(_AuthCredentialRotateApiKeyRequestRequired, total=False):
     expire_at: str
     overlap_days: int
     prefix: str
-    public_key_id: str
     scopes: Sequence[str]
     test_mode: bool
 
 
-class AuthCredentialRotatePasswordRequest(TypedDict, total=False):
+class AuthCredentialRotatePasswordRequest(TypedDict):
     new_password: str
 
 
@@ -9829,7 +9875,7 @@ class AuthCredentialRotateTotpRecoveryCodesRequest(TypedDict, total=False):
     recovery_code_length: int
 
 
-class AuthCredentialStartPasskeyRegistrationRequest(TypedDict, total=False):
+class AuthCredentialStartPasskeyRegistrationRequest(TypedDict):
     user_handle: str
 
 
@@ -9841,39 +9887,45 @@ class AuthCredentialUpdateApiKeyRequest(TypedDict, total=False):
     token_metadata: dict[str, Any] | None
 
 
-class AuthCredentialVerifyEmailMfaRequest(TypedDict, total=False):
+class AuthCredentialVerifyEmailMfaRequest(TypedDict):
     code: str
 
 
-class AuthCredentialVerifyPasskeyRegistrationRequest(TypedDict, total=False):
+class AuthCredentialVerifyPasskeyRegistrationRequest(TypedDict):
     attestation_response: Any
 
 
-class AuthCredentialVerifyPasskeyenticationRequest(TypedDict, total=False):
+class AuthCredentialVerifyPasskeyenticationRequest(TypedDict):
     assertion_response: Any
 
 
-class AuthCredentialVerifySmsMfaRequest(TypedDict, total=False):
+class AuthCredentialVerifySmsMfaRequest(TypedDict):
     code: str
 
 
-class AuthFlowCompletePasswordResetRequest(TypedDict, total=False):
+class AuthFlowCompletePasswordResetRequest(TypedDict):
     new_password: str
     reset_token: str
 
 
-class AuthFlowCompleteSigninRequest(TypedDict, total=False):
+class _AuthFlowCompleteSigninRequestRequired(TypedDict):
+    verification_result: dict[str, Any]
+
+class AuthFlowCompleteSigninRequest(_AuthFlowCompleteSigninRequestRequired, total=False):
     mfa: dict[str, Any]
+
+
+class _AuthFlowCompleteSignupRequestRequired(TypedDict):
     verification_result: dict[str, Any]
 
-
-class AuthFlowCompleteSignupRequest(TypedDict, total=False):
+class AuthFlowCompleteSignupRequest(_AuthFlowCompleteSignupRequestRequired, total=False):
     password: str
-    verification_result: dict[str, Any]
 
 
-class AuthFlowStartPasswordResetRequest(TypedDict, total=False):
+class _AuthFlowStartPasswordResetRequestRequired(TypedDict):
     email: str
+
+class AuthFlowStartPasswordResetRequest(_AuthFlowStartPasswordResetRequestRequired, total=False):
     phone: str
 
 
@@ -9893,11 +9945,11 @@ class AuthFlowStartSignupRequest(TypedDict, total=False):
     verification_option: str
 
 
-class AuthGuardAddAnonymousIpsRequest(TypedDict, total=False):
+class AuthGuardAddAnonymousIpsRequest(TypedDict):
     ips: Sequence[str]
 
 
-class AuthGuardAddTrustedIpRequest(TypedDict, total=False):
+class AuthGuardAddTrustedIpRequest(TypedDict):
     ip: str
 
 
@@ -9909,11 +9961,11 @@ class AuthGuardReadEventsQuery(TypedDict, total=False):
     account_id: str
 
 
-class AuthGuardRemoveAnonymousIpsRequest(TypedDict, total=False):
+class AuthGuardRemoveAnonymousIpsRequest(TypedDict):
     ips: Sequence[str]
 
 
-class AuthGuardRemoveTrustedIpRequest(TypedDict, total=False):
+class AuthGuardRemoveTrustedIpRequest(TypedDict):
     ip: str
 
 
@@ -9932,25 +9984,27 @@ class AuthGuardUpdateSettingsRequest(TypedDict, total=False):
     verification_flooding: dict[str, Any]
 
 
-class AuthIdentityDiscoverAccountRequest(TypedDict, total=False):
+class AuthIdentityDiscoverAccountRequest(TypedDict):
     identifiers: dict[str, Any]
 
 
-class AuthIdentityLinkRequest(TypedDict, total=False):
+class AuthIdentityLinkRequest(TypedDict):
     identity: dict[str, Any]
 
 
-class AuthIdentityUnlinkRequest(TypedDict, total=False):
+class AuthIdentityUnlinkRequest(TypedDict):
     identity: dict[str, Any]
 
 
-class AuthOrganizationCreateRequest(TypedDict, total=False):
+class _AuthOrganizationCreateRequestRequired(TypedDict):
+    name: str
+    slug: str
+
+class AuthOrganizationCreateRequest(_AuthOrganizationCreateRequestRequired, total=False):
     description: str | None
     image_url: str | None
     metadata: dict[str, Any]
-    name: str
     reference_id: str
-    slug: str
 
 
 class AuthOrganizationDeleteRequest(TypedDict, total=False):
@@ -9958,7 +10012,7 @@ class AuthOrganizationDeleteRequest(TypedDict, total=False):
     permanent: bool
 
 
-class AuthOrganizationGroupAddGroupMemberRequest(TypedDict, total=False):
+class AuthOrganizationGroupAddGroupMemberRequest(TypedDict):
     account_id: str
 
 
@@ -9967,10 +10021,15 @@ class AuthOrganizationGroupBulkSyncGroupMembersRequest(TypedDict, total=False):
     remove: Sequence[str]
 
 
-class AuthOrganizationGroupCreateGroupRequest(TypedDict, total=False):
+class _AuthOrganizationGroupCreateGroupRequestRequired(TypedDict):
+    name: str
+
+class AuthOrganizationGroupCreateGroupRequest(
+    _AuthOrganizationGroupCreateGroupRequestRequired,
+    total=False,
+):
     description: str
     image_url: str
-    name: str
     reference_id: str
     roles: Sequence[str]
     slug: str
@@ -9989,7 +10048,7 @@ class AuthOrganizationGroupListGroupsQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthOrganizationGroupRemoveGroupMemberRequest(TypedDict, total=False):
+class AuthOrganizationGroupRemoveGroupMemberRequest(TypedDict):
     account_id: str
 
 
@@ -10001,8 +10060,13 @@ class AuthOrganizationGroupUpdateGroupRequest(TypedDict, total=False):
     slug: str
 
 
-class AuthOrganizationInvitationCreateInvitationRequest(TypedDict, total=False):
+class _AuthOrganizationInvitationCreateInvitationRequestRequired(TypedDict):
     email: str
+
+class AuthOrganizationInvitationCreateInvitationRequest(
+    _AuthOrganizationInvitationCreateInvitationRequestRequired,
+    total=False,
+):
     expires_in_seconds: float
     metadata: dict[str, Any]
     name: str | None
@@ -10030,11 +10094,16 @@ class AuthOrganizationListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthOrganizationMembershipCreateMembershipRequest(TypedDict, total=False):
+class _AuthOrganizationMembershipCreateMembershipRequestRequired(TypedDict):
     account_id: str
+    roles: Sequence[str]
+
+class AuthOrganizationMembershipCreateMembershipRequest(
+    _AuthOrganizationMembershipCreateMembershipRequestRequired,
+    total=False,
+):
     joined_at: str
     metadata: dict[str, Any]
-    roles: Sequence[str]
     status: str
 
 
@@ -10052,11 +10121,16 @@ class AuthOrganizationMembershipUpdateMembershipRequest(TypedDict, total=False):
     status: str
 
 
-class AuthOrganizationPermissionCreateOrgPermissionRequest(TypedDict, total=False):
-    description: str | None
+class _AuthOrganizationPermissionCreateOrgPermissionRequestRequired(TypedDict):
     key: str
-    metadata: dict[str, Any]
     name: str
+
+class AuthOrganizationPermissionCreateOrgPermissionRequest(
+    _AuthOrganizationPermissionCreateOrgPermissionRequestRequired,
+    total=False,
+):
+    description: str | None
+    metadata: dict[str, Any]
     reference_id: str
 
 
@@ -10074,11 +10148,16 @@ class AuthOrganizationPermissionUpdateOrgPermissionRequest(TypedDict, total=Fals
     name: str
 
 
-class AuthOrganizationRoleCreateOrgRoleRequest(TypedDict, total=False):
-    description: str | None
+class _AuthOrganizationRoleCreateOrgRoleRequestRequired(TypedDict):
     key: str
-    metadata: dict[str, Any]
     name: str
+
+class AuthOrganizationRoleCreateOrgRoleRequest(
+    _AuthOrganizationRoleCreateOrgRoleRequestRequired,
+    total=False,
+):
+    description: str | None
+    metadata: dict[str, Any]
     parent_role_id: str | None
     reference_id: str
     scope: str
@@ -10091,7 +10170,7 @@ class AuthOrganizationRoleListOrgRolesQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthOrganizationRolePermissionAssignOrgRolePermissionRequest(TypedDict, total=False):
+class AuthOrganizationRolePermissionAssignOrgRolePermissionRequest(TypedDict):
     permission_keys: Sequence[str]
     role_id: str
 
@@ -10126,13 +10205,15 @@ class AuthOrganizationUpdateSettingsRequest(TypedDict, total=False):
     sessions: dict[str, Any]
 
 
-class AuthPolicyCreateRequest(TypedDict, total=False):
+class _AuthPolicyCreateRequestRequired(TypedDict):
     conditions: Sequence[dict[str, Any]]
-    description: str | None
     effect: str
-    is_enabled: bool
     name: str
     permission_keys: Sequence[str]
+
+class AuthPolicyCreateRequest(_AuthPolicyCreateRequestRequired, total=False):
+    description: str | None
+    is_enabled: bool
     priority: float
 
 
@@ -10153,13 +10234,13 @@ class AuthPolicyUpdateRequest(TypedDict, total=False):
     priority: float
 
 
-class AuthResourceGrantCheckResourcePermissionRequest(TypedDict, total=False):
+class AuthResourceGrantCheckResourcePermissionRequest(TypedDict):
     permission_key: str
     resource_id: str
     resource_type: str
 
 
-class AuthResourceGrantGrantResourcePermissionRequest(TypedDict, total=False):
+class AuthResourceGrantGrantResourcePermissionRequest(TypedDict):
     permission_keys: Sequence[str]
     resource_id: str
     resource_type: str
@@ -10172,10 +10253,15 @@ class AuthResourceGrantListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthResourceGrantRevokeResourcePermissionRequest(TypedDict, total=False):
-    permission_keys: Sequence[str]
+class _AuthResourceGrantRevokeResourcePermissionRequestRequired(TypedDict):
     resource_id: str
     resource_type: str
+
+class AuthResourceGrantRevokeResourcePermissionRequest(
+    _AuthResourceGrantRevokeResourcePermissionRequestRequired,
+    total=False,
+):
+    permission_keys: Sequence[str]
 
 
 class AuthRoleAssignmentLogListQuery(TypedDict, total=False):
@@ -10185,8 +10271,10 @@ class AuthRoleAssignmentLogListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthSCIMScimCreateGroupRequest(TypedDict, total=False):
+class _AuthSCIMScimCreateGroupRequestRequired(TypedDict):
     display_name: str
+
+class AuthSCIMScimCreateGroupRequest(_AuthSCIMScimCreateGroupRequestRequired, total=False):
     external_id: str
     members: Sequence[dict[str, Any]]
 
@@ -10201,8 +10289,10 @@ class AuthSCIMScimCreateUserRequest(TypedDict, total=False):
     user_name: str
 
 
-class AuthSCIMScimReplaceGroupRequest(TypedDict, total=False):
+class _AuthSCIMScimReplaceGroupRequestRequired(TypedDict):
     display_name: str
+
+class AuthSCIMScimReplaceGroupRequest(_AuthSCIMScimReplaceGroupRequestRequired, total=False):
     external_id: str
     members: Sequence[dict[str, Any]]
 
@@ -10217,32 +10307,43 @@ class AuthSCIMScimReplaceUserRequest(TypedDict, total=False):
     user_name: str
 
 
-class AuthSLOOidcLogoutRequest(TypedDict, total=False):
+class _AuthSLOOidcLogoutRequestRequired(TypedDict):
     end_session_endpoint: str
+
+class AuthSLOOidcLogoutRequest(_AuthSLOOidcLogoutRequestRequired, total=False):
     id_token_hint: str
     post_logout_redirect_uri: str
 
 
-class AuthSLOSamlIdpLogoutRequest(TypedDict, total=False):
+class AuthSLOSamlIdpLogoutRequest(TypedDict):
     issuer: str
     saml_request: str
 
 
-class AuthSLOSamlSpLogoutRequest(TypedDict, total=False):
+class _AuthSLOSamlSpLogoutRequestRequired(TypedDict):
     issuer: str
     name_id: str
-    session_index: str
     slo_url: str
 
+class AuthSLOSamlSpLogoutRequest(_AuthSLOSamlSpLogoutRequestRequired, total=False):
+    session_index: str
 
-class AuthSessionBulkRevokeAccountRequest(TypedDict, total=False):
-    revoke_reason: str
+
+class _AuthSessionBulkRevokeAccountRequestRequired(TypedDict):
     session_ids: Sequence[str]
 
-
-class AuthSessionBulkRevokeClientRequest(TypedDict, total=False):
+class AuthSessionBulkRevokeAccountRequest(
+    _AuthSessionBulkRevokeAccountRequestRequired,
+    total=False,
+):
     revoke_reason: str
+
+
+class _AuthSessionBulkRevokeClientRequestRequired(TypedDict):
     session_ids: Sequence[str]
+
+class AuthSessionBulkRevokeClientRequest(_AuthSessionBulkRevokeClientRequestRequired, total=False):
+    revoke_reason: str
 
 
 class AuthSessionCountQuery(TypedDict, total=False):
@@ -10273,16 +10374,20 @@ class AuthSessionGetActiveCountQuery(TypedDict, total=False):
     time_window_hours: int
 
 
-class AuthSessionGetAnalyticsQuery(TypedDict, total=False):
+class _AuthSessionGetAnalyticsQueryRequired(TypedDict):
     start_date: str
     end_date: str
+
+class AuthSessionGetAnalyticsQuery(_AuthSessionGetAnalyticsQueryRequired, total=False):
     group_by: str
     include_clients: bool
     client_ids: Sequence[str]
 
 
-class AuthSessionListByAccountQuery(TypedDict, total=False):
+class _AuthSessionListByAccountQueryRequired(TypedDict):
     account_id: str
+
+class AuthSessionListByAccountQuery(_AuthSessionListByAccountQueryRequired, total=False):
     cursor: dict[str, Any]
     sort: dict[str, str]
     limit: Any
@@ -10290,8 +10395,10 @@ class AuthSessionListByAccountQuery(TypedDict, total=False):
     include_expired: bool
 
 
-class AuthSessionListByClientQuery(TypedDict, total=False):
+class _AuthSessionListByClientQueryRequired(TypedDict):
     client_id: str
+
+class AuthSessionListByClientQuery(_AuthSessionListByClientQueryRequired, total=False):
     cursor: dict[str, Any]
     sort: dict[str, str]
     limit: Any
@@ -10330,22 +10437,24 @@ class AuthSessionValidateRequest(TypedDict, total=False):
     update_last_activity: bool
 
 
-class AuthStepUpRequestRequest(TypedDict, total=False):
+class AuthStepUpRequestRequest(TypedDict):
     operation_id: str
     session_id: str
 
 
-class AuthStepUpValidateRequest(TypedDict, total=False):
+class AuthStepUpValidateRequest(TypedDict):
     operation_id: str
     session_id: str
     token: str
 
 
-class AuthStepUpVerifyRequest(TypedDict, total=False):
+class _AuthStepUpVerifyRequestRequired(TypedDict):
     code: str
     method: str
     operation_id: str
     session_id: str
+
+class AuthStepUpVerifyRequest(_AuthStepUpVerifyRequestRequired, total=False):
     ttl_seconds: int
 
 
@@ -10362,19 +10471,21 @@ class BillingChargeListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingCouponCreateRequest(TypedDict, total=False):
-    amount_off: int
-    applies_to: dict[str, Any]
+class _BillingCouponCreateRequestRequired(TypedDict):
     coupon_code: str
-    currency: str
     discount_type: str
     duration: str
+    name: str
+    reason_code: str
+
+class BillingCouponCreateRequest(_BillingCouponCreateRequestRequired, total=False):
+    amount_off: int
+    applies_to: dict[str, Any]
+    currency: str
     duration_in_cycles: int
     expiration_date: str
     max_redemptions: int
-    name: str
     percent_off: float
-    reason_code: str
     reference_id: str
 
 
@@ -10393,13 +10504,15 @@ class BillingCouponUpdateRequest(TypedDict, total=False):
     name: str
 
 
-class BillingCreditNoteCreateRequest(TypedDict, total=False):
+class _BillingCreditNoteCreateRequestRequired(TypedDict):
     amount: int
     currency: str
     customer_id: str
+    reason: str
+
+class BillingCreditNoteCreateRequest(_BillingCreditNoteCreateRequestRequired, total=False):
     description: str
     invoice_id: str
-    reason: str
 
 
 class BillingCreditNoteListQuery(TypedDict, total=False):
@@ -10409,19 +10522,26 @@ class BillingCreditNoteListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingCreditWalletCreateRequest(TypedDict, total=False):
-    auto_topup: dict[str, Any]
+class _BillingCreditWalletCreateRequestRequired(TypedDict):
     credit_value: float
     currency: str
     customer_id: str
+
+class BillingCreditWalletCreateRequest(_BillingCreditWalletCreateRequestRequired, total=False):
+    auto_topup: dict[str, Any]
     label: str
 
 
-class BillingCreditWalletGrantCreditsRequest(TypedDict, total=False):
+class _BillingCreditWalletGrantCreditsRequestRequired(TypedDict):
     amount: int
-    expiration_date: str
     source: str
     wallet_id: str
+
+class BillingCreditWalletGrantCreditsRequest(
+    _BillingCreditWalletGrantCreditsRequestRequired,
+    total=False,
+):
+    expiration_date: str
 
 
 class BillingCreditWalletListQuery(TypedDict, total=False):
@@ -10437,9 +10557,11 @@ class BillingCreditWalletUpdateRequest(TypedDict, total=False):
     is_active: bool
 
 
-class BillingCustomerCreateRequest(TypedDict, total=False):
-    address: dict[str, Any]
+class _BillingCustomerCreateRequestRequired(TypedDict):
     email: str
+
+class BillingCustomerCreateRequest(_BillingCustomerCreateRequestRequired, total=False):
+    address: dict[str, Any]
     invoice_settings: dict[str, Any]
     name: str
     payment_settings: dict[str, Any]
@@ -10466,9 +10588,11 @@ class BillingCustomerUpdateRequest(TypedDict, total=False):
     shipping_address: dict[str, Any]
 
 
-class BillingDiscountCreateRequest(TypedDict, total=False):
+class _BillingDiscountCreateRequestRequired(TypedDict):
     coupon_id: str
     customer_id: str
+
+class BillingDiscountCreateRequest(_BillingDiscountCreateRequestRequired, total=False):
     subscription_id: str
 
 
@@ -10479,13 +10603,18 @@ class BillingDiscountListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingEntitlementFeatureCreateRequest(TypedDict, total=False):
-    credit_config: dict[str, Any]
-    description: str
+class _BillingEntitlementFeatureCreateRequestRequired(TypedDict):
     key: str
-    metering_config: dict[str, Any]
     name: str
     type: str
+
+class BillingEntitlementFeatureCreateRequest(
+    _BillingEntitlementFeatureCreateRequestRequired,
+    total=False,
+):
+    credit_config: dict[str, Any]
+    description: str
+    metering_config: dict[str, Any]
 
 
 class BillingEntitlementFeatureListQuery(TypedDict, total=False):
@@ -10503,15 +10632,20 @@ class BillingEntitlementFeatureUpdateRequest(TypedDict, total=False):
     type: str
 
 
-class BillingEntitlementOverrideCreateRequest(TypedDict, total=False):
+class _BillingEntitlementOverrideCreateRequestRequired(TypedDict):
     customer_id: str
+    feature_id: str
+    value_type: str
+
+class BillingEntitlementOverrideCreateRequest(
+    _BillingEntitlementOverrideCreateRequestRequired,
+    total=False,
+):
     effective_from: str
     effective_to: str | None
-    feature_id: str
     included_units: int
     reason: str
     soft_limit: bool
-    value_type: str
 
 
 class BillingEntitlementOverrideListQuery(TypedDict, total=False):
@@ -10529,35 +10663,39 @@ class BillingEntitlementOverrideUpdateRequest(TypedDict, total=False):
     soft_limit: bool
 
 
-class BillingEntityCheckStripeOnboardingStatusQuery(TypedDict, total=False):
+class BillingEntityCheckStripeOnboardingStatusQuery(TypedDict):
     entity_id: str
 
 
-class BillingEntityCreatePayoutBankAccountRequest(TypedDict, total=False):
+class BillingEntityCreatePayoutBankAccountRequest(TypedDict):
     data: dict[str, Any]
     entity_id: str
 
 
-class BillingEntityCreateRequest(TypedDict, total=False):
+class _BillingEntityCreateRequestRequired(TypedDict):
     account_data: dict[str, Any]
+
+class BillingEntityCreateRequest(_BillingEntityCreateRequestRequired, total=False):
     invoicing: dict[str, Any]
     payments: dict[str, Any]
     subscriptions: dict[str, Any]
     tax_reporting: dict[str, Any]
 
 
-class BillingEntityInitiateStripeOnboardingRequest(TypedDict, total=False):
+class BillingEntityInitiateStripeOnboardingRequest(TypedDict):
     entity_id: str
     refresh_url: str
     return_url: str
 
 
-class BillingEntityOnboardRequest(TypedDict, total=False):
+class _BillingEntityOnboardRequestRequired(TypedDict):
     business_name: str
     business_type: str
     country: str
     email: str
     payment_markets: Sequence[dict[str, Any]]
+
+class BillingEntityOnboardRequest(_BillingEntityOnboardRequestRequired, total=False):
     paystack_public_key: str
     paystack_secret_key: str
     stripe_refresh_url: str
@@ -10569,42 +10707,54 @@ class BillingEntityReadQuery(TypedDict, total=False):
     expand: str
 
 
-class BillingEntitySubmitPaystackCredentialsRequest(TypedDict, total=False):
+class BillingEntitySubmitPaystackCredentialsRequest(TypedDict):
     entity_id: str
     public_key: str
     secret_key: str
 
 
-class BillingEntityUpdateRequest(TypedDict, total=False):
+class BillingEntityUpdateRequest(TypedDict):
     data: dict[str, Any]
     entity_id: str
 
 
-class BillingFeatureAccessCheckEntitlementRequest(TypedDict, total=False):
+class _BillingFeatureAccessCheckEntitlementRequestRequired(TypedDict):
+    feature_id: str
+
+class BillingFeatureAccessCheckEntitlementRequest(
+    _BillingFeatureAccessCheckEntitlementRequestRequired,
+    total=False,
+):
     consume: bool
     customer_id: str
-    feature_id: str
     reference_id: str
     value: int
 
 
-class BillingFeatureAccessTrackFeatureUsageRequest(TypedDict, total=False):
+class _BillingFeatureAccessTrackFeatureUsageRequestRequired(TypedDict):
+    feature_id: str
+    value: int
+
+class BillingFeatureAccessTrackFeatureUsageRequest(
+    _BillingFeatureAccessTrackFeatureUsageRequestRequired,
+    total=False,
+):
     customer_id: str
-    feature_id: str
     reference_id: str
-    value: int
 
 
-class BillingInvoiceCreateRequest(TypedDict, total=False):
+class _BillingInvoiceCreateRequestRequired(TypedDict):
+    customer_id: str
+    invoicing_option: str
+
+class BillingInvoiceCreateRequest(_BillingInvoiceCreateRequestRequired, total=False):
     currency: str
     custom_fields: Sequence[dict[str, Any]]
-    customer_id: str
     description: str
     display_settings: dict[str, Any]
     email_settings: dict[str, Any]
     footer_text: str
     invoice_number: str
-    invoicing_option: str
     line_items: Sequence[dict[str, Any]]
     payment_method_id: str
     payment_settings: dict[str, Any]
@@ -10639,10 +10789,12 @@ class BillingInvoiceUpdateRequest(TypedDict, total=False):
     payment_settings: dict[str, Any]
 
 
-class BillingPaymentIntentCreateRequest(TypedDict, total=False):
-    amount: int
+class _BillingPaymentIntentCreateRequestRequired(TypedDict):
     currency: str
     customer_id: str
+
+class BillingPaymentIntentCreateRequest(_BillingPaymentIntentCreateRequestRequired, total=False):
+    amount: int
     customer_tax_id: str
     description: str
     disable_tax_reporting: bool
@@ -10661,9 +10813,11 @@ class BillingPaymentIntentListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingPaymentMethodCreateRequest(TypedDict, total=False):
+class _BillingPaymentMethodCreateRequestRequired(TypedDict):
     customer_card_email: str
     customer_id: str
+
+class BillingPaymentMethodCreateRequest(_BillingPaymentMethodCreateRequestRequired, total=False):
     is_default: bool
     name: str
     reference_id: str
@@ -10676,9 +10830,11 @@ class BillingPaymentMethodListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingPriceBundleActivateRequest(TypedDict, total=False):
-    application_timing: str
+class _BillingPriceBundleActivateRequestRequired(TypedDict):
     bundles: Sequence[dict[str, Any]]
+
+class BillingPriceBundleActivateRequest(_BillingPriceBundleActivateRequestRequired, total=False):
+    application_timing: str
     customer_id: str
     email: str
     incompatible_addon_behavior: str
@@ -10691,18 +10847,20 @@ class BillingPriceBundleActivateRequest(TypedDict, total=False):
     transition_timing: str
 
 
-class BillingPriceBundleCreateRequest(TypedDict, total=False):
+class _BillingPriceBundleCreateRequestRequired(TypedDict):
+    items: Sequence[dict[str, Any]]
+    name: str
+
+class BillingPriceBundleCreateRequest(_BillingPriceBundleCreateRequestRequired, total=False):
     authoring_mode: str
     auto_activate: bool
     compatible_bundle_ids: Sequence[str] | None
     description: str
     discount_coupon_id: str
     is_default_tier: bool
-    items: Sequence[dict[str, Any]]
     managed_catalog: dict[str, Any]
     metadata: dict[str, Any]
     min_tier_rank: int | None
-    name: str
     reference_id: str
     required_tier_group: str | None
     status: str
@@ -10746,20 +10904,22 @@ class BillingPriceBundleUpdateRequest(TypedDict, total=False):
     tier_rank: int | None
 
 
-class BillingPriceCreateRequest(TypedDict, total=False):
+class _BillingPriceCreateRequestRequired(TypedDict):
     amount: int
     billing_scheme: str
     currency: str
+    product_id: str
+    type: str
+
+class BillingPriceCreateRequest(_BillingPriceCreateRequestRequired, total=False):
     currency_options: dict[str, dict[str, Any]]
     is_active: bool
     metadata: dict[str, Any]
-    product_id: str
     recurring: dict[str, Any]
     reference_id: str
     tax_behavior: str
     tiers: Sequence[dict[str, Any]]
     tiers_mode: str
-    type: str
 
 
 class BillingPriceListQuery(TypedDict, total=False):
@@ -10780,16 +10940,18 @@ class BillingPriceUpdateRequest(TypedDict, total=False):
     type: str
 
 
-class BillingProductCreateRequest(TypedDict, total=False):
+class _BillingProductCreateRequestRequired(TypedDict):
+    name: str
+    unit_label: str
+
+class BillingProductCreateRequest(_BillingProductCreateRequestRequired, total=False):
     description: str
     features: Sequence[dict[str, Any]]
     images: Sequence[str]
     is_active: bool
     metadata: dict[str, Any]
-    name: str
     reference_id: str
     statement_descriptor: str
-    unit_label: str
 
 
 class BillingProductListQuery(TypedDict, total=False):
@@ -10817,10 +10979,12 @@ class BillingReceiptListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingRefundCreateRequest(TypedDict, total=False):
-    amount: int
+class _BillingRefundCreateRequestRequired(TypedDict):
     charge_id: str
     reference_id: str
+
+class BillingRefundCreateRequest(_BillingRefundCreateRequestRequired, total=False):
+    amount: int
 
 
 class BillingRefundListQuery(TypedDict, total=False):
@@ -10840,15 +11004,19 @@ class BillingSettingsUpdateRequest(TypedDict, total=False):
     tax_reporting_enabled: bool
 
 
-class BillingSubscriptionCancelRequest(TypedDict, total=False):
-    reason: str
-    refund_policy: str
+class _BillingSubscriptionCancelRequestRequired(TypedDict):
     termination_behavior: str
 
+class BillingSubscriptionCancelRequest(_BillingSubscriptionCancelRequestRequired, total=False):
+    reason: str
+    refund_policy: str
 
-class BillingSubscriptionCreateRequest(TypedDict, total=False):
-    auto_renew: bool
+
+class _BillingSubscriptionCreateRequestRequired(TypedDict):
     customer_id: str
+
+class BillingSubscriptionCreateRequest(_BillingSubscriptionCreateRequestRequired, total=False):
+    auto_renew: bool
     cycle_start_date: str
     days_until_due: int
     invoicing_option: str
@@ -10880,17 +11048,22 @@ class BillingSubscriptionReadCyclesQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingSubscriptionReadUsageSummaryQuery(TypedDict, total=False):
+class _BillingSubscriptionReadUsageSummaryQueryRequired(TypedDict):
     subscription_id: str
+
+class BillingSubscriptionReadUsageSummaryQuery(
+    _BillingSubscriptionReadUsageSummaryQueryRequired,
+    total=False,
+):
     cycle_id: str
 
 
-class BillingSubscriptionRecordUsageRequest(TypedDict, total=False):
+class BillingSubscriptionRecordUsageRequest(TypedDict):
     plan_id: str
     records: Sequence[dict[str, Any]]
 
 
-class BillingSubscriptionScheduleCreateRequest(TypedDict, total=False):
+class BillingSubscriptionScheduleCreateRequest(TypedDict):
     end_behavior: str
     phases: Sequence[dict[str, Any]]
 
@@ -10902,9 +11075,14 @@ class BillingSubscriptionScheduleListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingSubscriptionUpdatePlansRequest(TypedDict, total=False):
-    application_timing: str
+class _BillingSubscriptionUpdatePlansRequestRequired(TypedDict):
     items: Sequence[dict[str, Any]]
+
+class BillingSubscriptionUpdatePlansRequest(
+    _BillingSubscriptionUpdatePlansRequestRequired,
+    total=False,
+):
+    application_timing: str
     proration_behavior: str
 
 
@@ -10922,16 +11100,23 @@ class BillingTaxJurisdictionListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class BillingTaxJurisdictionQueryTaxRateQuery(TypedDict, total=False):
+class _BillingTaxJurisdictionQueryTaxRateQueryRequired(TypedDict):
     country: str
+
+class BillingTaxJurisdictionQueryTaxRateQuery(
+    _BillingTaxJurisdictionQueryTaxRateQueryRequired,
+    total=False,
+):
     state: str
     date: str
 
 
-class CloudAPIKeyCreateApiKeyRequest(TypedDict, total=False):
+class _CloudAPIKeyCreateApiKeyRequestRequired(TypedDict):
+    name: str
+
+class CloudAPIKeyCreateApiKeyRequest(_CloudAPIKeyCreateApiKeyRequestRequired, total=False):
     description: str
     expire_at: str
-    name: str
     roles: Sequence[str]
     service_ids: Sequence[str]
     test_mode: bool
@@ -10946,27 +11131,33 @@ class CloudAPIKeyReadApiKeysQuery(TypedDict, total=False):
     limit: Any
 
 
-class CloudAPIKeyRegenerateApiKeyRequest(TypedDict, total=False):
-    description: str
-    expire_at: str
+class _CloudAPIKeyRegenerateApiKeyRequestRequired(TypedDict):
     name: str
-    roles: Sequence[str]
-    service_ids: Sequence[str]
     test_mode: bool
 
-
-class CloudAPIKeyUpdateApiKeyRequest(TypedDict, total=False):
+class CloudAPIKeyRegenerateApiKeyRequest(_CloudAPIKeyRegenerateApiKeyRequestRequired, total=False):
     description: str
+    expire_at: str
+    roles: Sequence[str]
+    service_ids: Sequence[str]
+
+
+class _CloudAPIKeyUpdateApiKeyRequestRequired(TypedDict):
     name: str
 
+class CloudAPIKeyUpdateApiKeyRequest(_CloudAPIKeyUpdateApiKeyRequestRequired, total=False):
+    description: str
 
-class CloudAccountInitialiseRequest(TypedDict, total=False):
+
+class _CloudAccountInitialiseRequestRequired(TypedDict):
     has_accepted_terms: bool
-    user_address: dict[str, Any]
     user_email: str
 
+class CloudAccountInitialiseRequest(_CloudAccountInitialiseRequestRequired, total=False):
+    user_address: dict[str, Any]
 
-class CloudAccountUpdateRequest(TypedDict, total=False):
+
+class CloudAccountUpdateRequest(TypedDict):
     has_accepted_terms: bool
 
 
@@ -10985,8 +11176,10 @@ class CloudAuditReadLogsQuery(TypedDict, total=False):
     to: str
 
 
-class CloudAuditReadStatsQuery(TypedDict, total=False):
+class _CloudAuditReadStatsQueryRequired(TypedDict):
     by: str
+
+class CloudAuditReadStatsQuery(_CloudAuditReadStatsQueryRequired, total=False):
     from_: str
     to: str
 
@@ -11047,9 +11240,11 @@ class CloudBrandingUpdateProjectRequest(TypedDict, total=False):
     typography: dict[str, Any]
 
 
-class CloudOrganizationCreateRequest(TypedDict, total=False):
+class _CloudOrganizationCreateRequestRequired(TypedDict):
     custom_id: str
     name: str
+
+class CloudOrganizationCreateRequest(_CloudOrganizationCreateRequestRequired, total=False):
     tags: Sequence[str]
 
 
@@ -11072,9 +11267,11 @@ class CloudPlanListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class CloudProjectCreateRequest(TypedDict, total=False):
-    custom_id: str
+class _CloudProjectCreateRequestRequired(TypedDict):
     name: str
+
+class CloudProjectCreateRequest(_CloudProjectCreateRequestRequired, total=False):
+    custom_id: str
     tags: Sequence[str]
 
 
@@ -11090,16 +11287,18 @@ class CloudProjectUpdateRequest(TypedDict, total=False):
     tags: Sequence[str]
 
 
-class CloudPublishableKeyUpdateDomainsRequest(TypedDict, total=False):
+class CloudPublishableKeyUpdateDomainsRequest(TypedDict):
     allowed_domains: Sequence[str]
 
 
-class CloudRoleCreateRequest(TypedDict, total=False):
-    description: str
+class _CloudRoleCreateRequestRequired(TypedDict):
     name: str
     permissions: Sequence[str]
     project_id: str
     title: str
+
+class CloudRoleCreateRequest(_CloudRoleCreateRequestRequired, total=False):
+    description: str
 
 
 class CloudRoleUpdateRequest(TypedDict, total=False):
@@ -11122,12 +11321,14 @@ class CloudWebhookReadQuery(TypedDict, total=False):
     events: str
 
 
-class CloudWebhookRegisterRequest(TypedDict, total=False):
-    description: str
+class _CloudWebhookRegisterRequestRequired(TypedDict):
     events: Sequence[str]
+    url: str
+
+class CloudWebhookRegisterRequest(_CloudWebhookRegisterRequestRequired, total=False):
+    description: str
     is_active: bool
     name: str
-    url: str
 
 
 class CloudWebhookUpdateRequest(TypedDict, total=False):
@@ -11138,11 +11339,13 @@ class CloudWebhookUpdateRequest(TypedDict, total=False):
     url: str
 
 
-class CloudZoneCreateRequest(TypedDict, total=False):
-    dkim_authority: str
-    dns_records: Sequence[dict[str, Any]]
+class _CloudZoneCreateRequestRequired(TypedDict):
     domain: str
     provider_id: str
+
+class CloudZoneCreateRequest(_CloudZoneCreateRequestRequired, total=False):
+    dkim_authority: str
+    dns_records: Sequence[dict[str, Any]]
 
 
 class MessagingContactCreateRequest(TypedDict, total=False):
@@ -11156,16 +11359,18 @@ class MessagingContactCreateRequest(TypedDict, total=False):
     reference_id: str
 
 
-class MessagingContactListRequest(TypedDict, total=False):
+class _MessagingContactListRequestRequired(TypedDict):
+    sort: dict[str, str]
+
+class MessagingContactListRequest(_MessagingContactListRequestRequired, total=False):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
-    sort: dict[str, str]
 
 
-class MessagingContactSuppressMessagesRequest(TypedDict, total=False):
+class MessagingContactSuppressMessagesRequest(TypedDict):
     channels: Sequence[str]
 
 
@@ -11186,24 +11391,28 @@ class MessagingConversationCloneRequest(TypedDict, total=False):
     title: str
 
 
-class MessagingConversationCreateRequest(TypedDict, total=False):
-    accepts_replies: bool
+class _MessagingConversationCreateRequestRequired(TypedDict):
     channels: Sequence[str]
-    default_placeholders: dict[str, str]
-    description: str
     recipients: Sequence[dict[str, Any]]
-    reference_id: str
     senders: dict[str, Any]
     title: str
 
+class MessagingConversationCreateRequest(_MessagingConversationCreateRequestRequired, total=False):
+    accepts_replies: bool
+    default_placeholders: dict[str, str]
+    description: str
+    reference_id: str
 
-class MessagingConversationListRequest(TypedDict, total=False):
+
+class _MessagingConversationListRequestRequired(TypedDict):
+    sort: dict[str, str]
+
+class MessagingConversationListRequest(_MessagingConversationListRequestRequired, total=False):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
-    sort: dict[str, str]
 
 
 class MessagingConversationUpdateRequest(TypedDict, total=False):
@@ -11212,15 +11421,18 @@ class MessagingConversationUpdateRequest(TypedDict, total=False):
     title: str
 
 
-class MessagingEmailGetSummaryRequest(TypedDict, total=False):
+class MessagingEmailGetSummaryRequest(TypedDict):
     query: dict[str, Any]
 
 
-class MessagingEmailReadMessagesRequest(TypedDict, total=False):
+class MessagingEmailReadMessagesRequest(TypedDict):
     body: dict[str, Any]
 
 
-class MessagingEmailSendRequest(TypedDict, total=False):
+class _MessagingEmailSendRequestRequired(TypedDict):
+    subject: str
+
+class MessagingEmailSendRequest(_MessagingEmailSendRequestRequired, total=False):
     accepts_replies: bool
     attachments: Sequence[dict[str, Any]]
     bcc: Sequence[str]
@@ -11233,56 +11445,67 @@ class MessagingEmailSendRequest(TypedDict, total=False):
     reply_to: str
     send_at: str
     sender_pool_id: str
-    subject: str
     template_id: str
     text: str
     to: Sequence[Any]
     upload_attachments: bool
 
 
-class MessagingEmailSenderDeleteRequest(TypedDict, total=False):
+class MessagingEmailSenderDeleteRequest(TypedDict):
     params: dict[str, Any]
 
 
-class MessagingEmailSenderDisableRequest(TypedDict, total=False):
+class MessagingEmailSenderDisableRequest(TypedDict):
     params: dict[str, Any]
 
 
-class MessagingEmailSenderEnableRequest(TypedDict, total=False):
+class MessagingEmailSenderEnableRequest(TypedDict):
     params: dict[str, Any]
 
 
-class MessagingEmailSenderListManyRequest(TypedDict, total=False):
+class _MessagingEmailSenderListManyRequestRequired(TypedDict):
+    sort: dict[str, str]
+
+class MessagingEmailSenderListManyRequest(
+    _MessagingEmailSenderListManyRequestRequired,
+    total=False,
+):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
-    sort: dict[str, str]
 
 
-class MessagingEmailSenderListOneRequest(TypedDict, total=False):
+class MessagingEmailSenderListOneRequest(TypedDict):
     params: dict[str, Any]
 
 
-class MessagingEmailSenderPoolAddEmailSendersToPoolRequest(TypedDict, total=False):
+class MessagingEmailSenderPoolAddEmailSendersToPoolRequest(TypedDict):
     senders: Sequence[str]
 
 
-class MessagingEmailSenderPoolCreateRequest(TypedDict, total=False):
+class _MessagingEmailSenderPoolCreateRequestRequired(TypedDict):
     capability: str
-    description: str
     senders: Sequence[str]
     title: str
 
+class MessagingEmailSenderPoolCreateRequest(
+    _MessagingEmailSenderPoolCreateRequestRequired,
+    total=False,
+):
+    description: str
 
-class MessagingMultisendCreateRequest(TypedDict, total=False):
+
+class _MessagingMultisendCreateRequestRequired(TypedDict):
+    message_config: dict[str, Any]
+
+class MessagingMultisendCreateRequest(_MessagingMultisendCreateRequestRequired, total=False):
     accepts_replies: bool
     body: str
     create_conversation: bool
     default_placeholders: dict[str, Any]
     message_channels: Sequence[str]
-    message_config: dict[str, Any]
     message_priority: str
     message_retry_statuses: Sequence[str]
     send_at: str
@@ -11294,52 +11517,63 @@ class MessagingPhoneNumberListAvailableQuery(TypedDict, total=False):
     limit: Any
 
 
-class MessagingPhoneNumberListQuery(TypedDict, total=False):
+class _MessagingPhoneNumberListQueryRequired(TypedDict):
+    sort: dict[str, str]
+
+class MessagingPhoneNumberListQuery(_MessagingPhoneNumberListQueryRequired, total=False):
     filter: dict[str, Any]
     cursor: dict[str, Any]
     query: dict[str, Any]
     search: dict[str, Any]
-    sort: dict[str, str]
     limit: Any
 
 
-class MessagingPhoneNumberPurchaseRequest(TypedDict, total=False):
+class _MessagingPhoneNumberPurchaseRequestRequired(TypedDict):
     callback_url: str
     config: dict[str, Any]
     country_iso_code: str
-    description: str
-    features: dict[str, Any]
-    message_type: str
     phone_number: str
     title: str
     type: str
 
-
-class MessagingProfileCreateRequest(TypedDict, total=False):
+class MessagingPhoneNumberPurchaseRequest(
+    _MessagingPhoneNumberPurchaseRequestRequired,
+    total=False,
+):
     description: str
+    features: dict[str, Any]
+    message_type: str
+
+
+class _MessagingProfileCreateRequestRequired(TypedDict):
     email_config: dict[str, Any]
+    name: str
+    sms_config: dict[str, Any]
+
+class MessagingProfileCreateRequest(_MessagingProfileCreateRequestRequired, total=False):
+    description: str
     features: dict[str, Any]
     message_retention_days: float
     multisend_config: dict[str, Any]
-    name: str
     properties: dict[str, Any]
     resource_region: str
-    sms_config: dict[str, Any]
     verifications_config: dict[str, Any]
 
 
-class MessagingProfileListRequest(TypedDict, total=False):
+class _MessagingProfileListRequestRequired(TypedDict):
+    sort: dict[str, str]
+
+class MessagingProfileListRequest(_MessagingProfileListRequestRequired, total=False):
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
-    sort: dict[str, str]
 
 
-class MessagingProfileUpdateEmailConfigRequest(TypedDict, total=False):
+class MessagingProfileUpdateEmailConfigRequest(TypedDict):
     email_config: dict[str, Any]
 
 
-class MessagingProfileUpdateMultisendConfigRequest(TypedDict, total=False):
+class MessagingProfileUpdateMultisendConfigRequest(TypedDict):
     multisend_config: dict[str, Any]
 
 
@@ -11349,61 +11583,76 @@ class MessagingProfileUpdateRequest(TypedDict, total=False):
     name: str
 
 
-class MessagingProfileUpdateVerificationsConfigRequest(TypedDict, total=False):
+class MessagingProfileUpdateVerificationsConfigRequest(TypedDict):
     verifications_config: dict[str, Any]
 
 
-class MessagingSMSBrandListSmsBrandsRequest(TypedDict, total=False):
-    filter: dict[str, Any]
-    limit: Any
+class _MessagingSMSBrandListSmsBrandsRequestRequired(TypedDict):
     query: dict[str, Any]
     sort: dict[str, str]
 
+class MessagingSMSBrandListSmsBrandsRequest(
+    _MessagingSMSBrandListSmsBrandsRequestRequired,
+    total=False,
+):
+    filter: dict[str, Any]
+    limit: Any
 
-class MessagingSMSBrandUpdateSmsBrandRequest(TypedDict, total=False):
+
+class MessagingSMSBrandUpdateSmsBrandRequest(TypedDict):
     updates: dict[str, Any]
 
 
-class MessagingSMSCampaignCreateSmsCampaignRequest(TypedDict, total=False):
-    age_gated: bool
+class _MessagingSMSCampaignCreateSmsCampaignRequestRequired(TypedDict):
     brand_id: str
     description: str
-    direct_lending: bool
-    embeds_links: bool
-    embeds_phone_numbers: bool
-    help_keywords: Sequence[str]
     help_message: str
     message_flow: str
     message_samples: Sequence[str]
-    opt_in_keywords: Sequence[str]
-    opt_in_message: str
-    opt_out_keywords: Sequence[str]
     opt_out_message: str
     privacy_policy_url: str
-    provision_number_pool: bool
-    sub_use_cases: Sequence[str]
-    subscriber_opt_in: bool
     terms_and_conditions_url: str
     title: str
     use_case: str
 
+class MessagingSMSCampaignCreateSmsCampaignRequest(
+    _MessagingSMSCampaignCreateSmsCampaignRequestRequired,
+    total=False,
+):
+    age_gated: bool
+    direct_lending: bool
+    embeds_links: bool
+    embeds_phone_numbers: bool
+    help_keywords: Sequence[str]
+    opt_in_keywords: Sequence[str]
+    opt_in_message: str
+    opt_out_keywords: Sequence[str]
+    provision_number_pool: bool
+    sub_use_cases: Sequence[str]
+    subscriber_opt_in: bool
 
-class MessagingSMSCampaignListSmsCampaignsRequest(TypedDict, total=False):
-    filter: dict[str, Any]
-    limit: Any
+
+class _MessagingSMSCampaignListSmsCampaignsRequestRequired(TypedDict):
     query: dict[str, Any]
     sort: dict[str, str]
 
+class MessagingSMSCampaignListSmsCampaignsRequest(
+    _MessagingSMSCampaignListSmsCampaignsRequestRequired,
+    total=False,
+):
+    filter: dict[str, Any]
+    limit: Any
 
-class MessagingSMSCampaignUpdateSmsCampaignRequest(TypedDict, total=False):
+
+class MessagingSMSCampaignUpdateSmsCampaignRequest(TypedDict):
     updates: dict[str, Any]
 
 
-class MessagingSMSGetSmsSummaryRequest(TypedDict, total=False):
+class MessagingSMSGetSmsSummaryRequest(TypedDict):
     query: dict[str, Any]
 
 
-class MessagingSMSReadSmsMessagesRequest(TypedDict, total=False):
+class MessagingSMSReadSmsMessagesRequest(TypedDict):
     body: dict[str, Any]
 
 
@@ -11421,42 +11670,57 @@ class MessagingSMSSendSmsRequest(TypedDict, total=False):
     truncate_message: bool
 
 
-class MessagingSMSSenderPoolAddSmsSendersToPoolRequest(TypedDict, total=False):
+class MessagingSMSSenderPoolAddSmsSendersToPoolRequest(TypedDict):
     senders: Sequence[str]
 
 
-class MessagingSMSSenderPoolCreateSmsSenderPoolRequest(TypedDict, total=False):
+class _MessagingSMSSenderPoolCreateSmsSenderPoolRequestRequired(TypedDict):
     capability: str
-    description: str
     senders: Sequence[str]
     title: str
 
+class MessagingSMSSenderPoolCreateSmsSenderPoolRequest(
+    _MessagingSMSSenderPoolCreateSmsSenderPoolRequestRequired,
+    total=False,
+):
+    description: str
 
-class MessagingTemplateCreateMessageRequest(TypedDict, total=False):
+
+class _MessagingTemplateCreateMessageRequestRequired(TypedDict):
     channel: str
     content: str
-    content_limit: float | None
     content_type: str
+    title: str
+
+class MessagingTemplateCreateMessageRequest(
+    _MessagingTemplateCreateMessageRequestRequired,
+    total=False,
+):
+    content_limit: float | None
     description: str
     is_default: bool
     is_favourite: bool
     is_otp_template: bool
     language: str
     template_group_id: str
-    title: str
 
 
 class MessagingTemplateDeleteMessagesRequest(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class MessagingTemplateListMessageRequest(TypedDict, total=False):
+class _MessagingTemplateListMessageRequestRequired(TypedDict):
+    sort: dict[str, str]
+
+class MessagingTemplateListMessageRequest(
+    _MessagingTemplateListMessageRequestRequired,
+    total=False,
+):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
-    sort: dict[str, str]
 
 
 class MessagingTemplateUpdateMessageRequest(TypedDict, total=False):
@@ -11473,30 +11737,37 @@ class MessagingTemplateUpdateMessageRequest(TypedDict, total=False):
     title: str
 
 
-class MessagingVerificationCheckRequest(TypedDict, total=False):
+class MessagingVerificationCheckRequest(TypedDict):
     token: str
 
 
-class MessagingVerificationListMessagesRequest(TypedDict, total=False):
-    cursor: dict[str, Any]
-    filter: dict[str, Any]
-    limit: Any
+class _MessagingVerificationListMessagesRequestRequired(TypedDict):
     query: dict[str, Any]
     sort: dict[str, str]
 
+class MessagingVerificationListMessagesRequest(
+    _MessagingVerificationListMessagesRequestRequired,
+    total=False,
+):
+    cursor: dict[str, Any]
+    filter: dict[str, Any]
+    limit: Any
 
-class MessagingVerificationResendRequest(TypedDict, total=False):
+
+class MessagingVerificationResendRequest(TypedDict):
     params: dict[str, Any]
 
 
-class RelayBroadcastCreateChannelRequest(TypedDict, total=False):
+class _RelayBroadcastCreateChannelRequestRequired(TypedDict):
+    name: str
+
+class RelayBroadcastCreateChannelRequest(_RelayBroadcastCreateChannelRequestRequired, total=False):
     authorization_callback_url: str
     authorization_mode: str
     channel_type: str
     description: str
     history_size: int
     max_connections: int
-    name: str
     reference_id: str
 
 
@@ -11505,9 +11776,11 @@ class RelayBroadcastGenerateAuthTokenRequest(TypedDict, total=False):
     user_id: str
 
 
-class RelayBroadcastPublishToRequest(TypedDict, total=False):
-    data: dict[str, Any]
+class _RelayBroadcastPublishToRequestRequired(TypedDict):
     event: str
+
+class RelayBroadcastPublishToRequest(_RelayBroadcastPublishToRequestRequired, total=False):
+    data: dict[str, Any]
 
 
 class RelayBroadcastReadChannelsQuery(TypedDict, total=False):
@@ -11527,16 +11800,26 @@ class RelayBroadcastUpdateChannelRequest(TypedDict, total=False):
     reference_id: str | None
 
 
-class RelayEventsCreateEventChannelRequest(TypedDict, total=False):
-    description: str
+class _RelayEventsCreateEventChannelRequestRequired(TypedDict):
     name: str
+
+class RelayEventsCreateEventChannelRequest(
+    _RelayEventsCreateEventChannelRequestRequired,
+    total=False,
+):
+    description: str
     reference_id: str
     retention_hours: float
 
 
-class RelayEventsCreateEventSubscriptionRequest(TypedDict, total=False):
-    description: str
+class _RelayEventsCreateEventSubscriptionRequestRequired(TypedDict):
     endpoint_url: str
+
+class RelayEventsCreateEventSubscriptionRequest(
+    _RelayEventsCreateEventSubscriptionRequestRequired,
+    total=False,
+):
+    description: str
     filter_rules: dict[str, Any]
     headers: dict[str, str] | None
     on_failure: Sequence[dict[str, Any]] | None
@@ -11545,8 +11828,10 @@ class RelayEventsCreateEventSubscriptionRequest(TypedDict, total=False):
     retry_policy: dict[str, Any]
 
 
-class RelayEventsPublishEventRequest(TypedDict, total=False):
+class _RelayEventsPublishEventRequestRequired(TypedDict):
     event_type: str
+
+class RelayEventsPublishEventRequest(_RelayEventsPublishEventRequestRequired, total=False):
     payload: dict[str, Any]
     reference_id: str
 
@@ -11597,18 +11882,28 @@ class RelayEventsUpdateEventSubscriptionRequest(TypedDict, total=False):
     status: str
 
 
-class RelayMemorystoreCreateClusterRequest(TypedDict, total=False):
+class _RelayMemorystoreCreateClusterRequestRequired(TypedDict):
+    name: str
+
+class RelayMemorystoreCreateClusterRequest(
+    _RelayMemorystoreCreateClusterRequestRequired,
+    total=False,
+):
     cluster_type: str
     description: str
     max_memory_mb: int
-    name: str
     reference_id: str
     region: str
 
 
-class RelayMemorystoreExecuteCommandRequest(TypedDict, total=False):
-    args: Sequence[Any]
+class _RelayMemorystoreExecuteCommandRequestRequired(TypedDict):
     command: str
+
+class RelayMemorystoreExecuteCommandRequest(
+    _RelayMemorystoreExecuteCommandRequestRequired,
+    total=False,
+):
+    args: Sequence[Any]
 
 
 class RelayMemorystoreReadClustersQuery(TypedDict, total=False):
@@ -11629,10 +11924,15 @@ class RelayPipelinesApprovePipelineGateRequest(TypedDict, total=False):
     approver_data: dict[str, Any]
 
 
-class RelayPipelinesCreatePipelineDefinitionRequest(TypedDict, total=False):
-    description: str
+class _RelayPipelinesCreatePipelineDefinitionRequestRequired(TypedDict):
     endpoint_url: str
     name: str
+
+class RelayPipelinesCreatePipelineDefinitionRequest(
+    _RelayPipelinesCreatePipelineDefinitionRequestRequired,
+    total=False,
+):
+    description: str
     reference_id: str
     retry_policy: dict[str, Any]
     timeout_seconds: float
@@ -11671,16 +11971,28 @@ class RelayPipelinesUpdatePipelineDefinitionRequest(TypedDict, total=False):
     timeout_seconds: float
 
 
-class RelayQueuesBatchEnqueueTasksRequest(TypedDict, total=False):
-    defaults: dict[str, Any]
+class _RelayQueuesBatchEnqueueTasksRequestRequired(TypedDict):
     tasks: Sequence[dict[str, Any]]
 
+class RelayQueuesBatchEnqueueTasksRequest(
+    _RelayQueuesBatchEnqueueTasksRequestRequired,
+    total=False,
+):
+    defaults: dict[str, Any]
 
-class RelayQueuesBatchGetQueueTasksRequest(TypedDict, total=False):
+
+class RelayQueuesBatchGetQueueTasksRequest(TypedDict):
     task_ids: Sequence[str]
 
 
-class RelayQueuesCreateQueueDefinitionRequest(TypedDict, total=False):
+class _RelayQueuesCreateQueueDefinitionRequestRequired(TypedDict):
+    name: str
+    target_url: str
+
+class RelayQueuesCreateQueueDefinitionRequest(
+    _RelayQueuesCreateQueueDefinitionRequestRequired,
+    total=False,
+):
     default_delay_seconds: float
     description: str
     dlq_enabled: bool
@@ -11688,7 +12000,6 @@ class RelayQueuesCreateQueueDefinitionRequest(TypedDict, total=False):
     headers: dict[str, str] | None
     max_concurrent_deliveries: float | None
     max_retries: float
-    name: str
     on_failure: Sequence[dict[str, Any]] | None
     on_success: Sequence[dict[str, Any]] | None
     priority: float
@@ -11703,7 +12014,6 @@ class RelayQueuesCreateQueueDefinitionRequest(TypedDict, total=False):
     status_broadcast_enabled: bool
     status_event_channel_id: str | None
     status_events_enabled: bool
-    target_url: str
     task_retention_days: float
     timeout_seconds: float
     visibility_timeout_seconds: float
@@ -11772,14 +12082,21 @@ class RelayQueuesUpdateQueueDefinitionRequest(TypedDict, total=False):
     visibility_timeout_seconds: float
 
 
-class RelaySchedulerCreateDefinitionRequest(TypedDict, total=False):
+class _RelaySchedulerCreateDefinitionRequestRequired(TypedDict):
+    name: str
+    schedule_type: str
+    target_url: str
+
+class RelaySchedulerCreateDefinitionRequest(
+    _RelaySchedulerCreateDefinitionRequestRequired,
+    total=False,
+):
     cron_expression: str
     description: str
     dlq_enabled: bool
     dlq_retention_days: int
     headers: dict[str, str] | None
     max_retries: int
-    name: str
     on_failure: Sequence[dict[str, Any]] | None
     on_success: Sequence[dict[str, Any]] | None
     one_time_at: str
@@ -11787,8 +12104,6 @@ class RelaySchedulerCreateDefinitionRequest(TypedDict, total=False):
     reference_id: str
     retry_backoff_base_seconds: int
     retry_backoff_strategy: str
-    schedule_type: str
-    target_url: str
     timeout_seconds: int
     timezone: str
 
@@ -11834,25 +12149,31 @@ class RelaySchedulerUpdateDefinitionRequest(TypedDict, total=False):
     timezone: str
 
 
-class RelaySearchAutoSuggestRequest(TypedDict, total=False):
-    field: str
-    limit: float
+class _RelaySearchAutoSuggestRequestRequired(TypedDict):
     prefix: str
 
+class RelaySearchAutoSuggestRequest(_RelaySearchAutoSuggestRequestRequired, total=False):
+    field: str
+    limit: float
 
-class RelaySearchCreateIndexRequest(TypedDict, total=False):
-    description: str
+
+class _RelaySearchCreateIndexRequestRequired(TypedDict):
     name: str
-    reference_id: str
     schema_definition: dict[str, Any]
 
+class RelaySearchCreateIndexRequest(_RelaySearchCreateIndexRequestRequired, total=False):
+    description: str
+    reference_id: str
 
-class RelaySearchIndexDocumentBatchRequest(TypedDict, total=False):
+
+class RelaySearchIndexDocumentBatchRequest(TypedDict):
     documents: Sequence[dict[str, Any]]
 
 
-class RelaySearchIndexDocumentRequest(TypedDict, total=False):
+class _RelaySearchIndexDocumentRequestRequired(TypedDict):
     content: dict[str, Any]
+
+class RelaySearchIndexDocumentRequest(_RelaySearchIndexDocumentRequestRequired, total=False):
     reference_id: str
     search_metadata: dict[str, Any]
 
@@ -11864,12 +12185,14 @@ class RelaySearchReadIndexesQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class RelaySearchSearchQueryRequest(TypedDict, total=False):
+class _RelaySearchSearchQueryRequestRequired(TypedDict):
+    term: str
+
+class RelaySearchSearchQueryRequest(_RelaySearchSearchQueryRequestRequired, total=False):
     filters: dict[str, Any]
     fuzzy: bool
     limit: float
     offset: float
-    term: str
 
 
 class RelaySettingsUpdateEventDefaultsRequest(TypedDict, total=False):
@@ -11899,16 +12222,18 @@ class RelaySettingsUpdateSchedulerDefaultsRequest(TypedDict, total=False):
     timeout_seconds: int | None
 
 
-class StorageContainerChangeClassRequest(TypedDict, total=False):
+class StorageContainerChangeClassRequest(TypedDict):
     storage_class: str
 
 
-class StorageContainerCreateRequest(TypedDict, total=False):
-    is_public: bool
-    lifecycle_policy: dict[str, Any]
+class _StorageContainerCreateRequestRequired(TypedDict):
     name: str
     region: str
     storage_class: str
+
+class StorageContainerCreateRequest(_StorageContainerCreateRequestRequired, total=False):
+    is_public: bool
+    lifecycle_policy: dict[str, Any]
 
 
 class StorageContainerListQuery(TypedDict, total=False):
@@ -11932,38 +12257,48 @@ class StorageContainerUpdateSettingsRequest(TypedDict, total=False):
     image_optimization: dict[str, Any]
 
 
-class StorageContainerUpdateTransitionPolicyRequest(TypedDict, total=False):
+class _StorageContainerUpdateTransitionPolicyRequestRequired(TypedDict):
     is_enabled: bool
+
+class StorageContainerUpdateTransitionPolicyRequest(
+    _StorageContainerUpdateTransitionPolicyRequestRequired,
+    total=False,
+):
     rules: Sequence[dict[str, Any]]
 
 
-class StorageObjectACLGrantObjectAclRequest(TypedDict, total=False):
+class StorageObjectACLGrantObjectAclRequest(TypedDict):
     entries: Sequence[dict[str, Any]]
 
 
-class StorageObjectACLRevokeObjectAclRequest(TypedDict, total=False):
+class StorageObjectACLRevokeObjectAclRequest(TypedDict):
     entries: Sequence[dict[str, Any]]
 
 
-class StorageObjectACLSetObjectPublicRequest(TypedDict, total=False):
+class StorageObjectACLSetObjectPublicRequest(TypedDict):
     is_public: bool
 
 
-class StorageObjectCheckDuplicateQuery(TypedDict, total=False):
+class StorageObjectCheckDuplicateQuery(TypedDict):
     md5_hash: str
 
 
-class StorageObjectCreateDownloadSignedUrlRequest(TypedDict, total=False):
+class StorageObjectCreateDownloadSignedUrlRequest(TypedDict):
     container_name_or_id: str
     path: str
 
 
-class StorageObjectCreateUploadSignedUrlRequest(TypedDict, total=False):
+class _StorageObjectCreateUploadSignedUrlRequestRequired(TypedDict):
     container_name_or_id: str
     content_type: str
-    expires_in_minutes: int
     file_size: int
     path: str
+
+class StorageObjectCreateUploadSignedUrlRequest(
+    _StorageObjectCreateUploadSignedUrlRequestRequired,
+    total=False,
+):
+    expires_in_minutes: int
 
 
 class StorageObjectListQuery(TypedDict, total=False):
@@ -11989,5 +12324,5 @@ class StorageObjectListVersionsQuery(TypedDict, total=False):
     limit: Any
 
 
-class StorageObjectRestoreVersionRequest(TypedDict, total=False):
+class StorageObjectRestoreVersionRequest(TypedDict):
     version_id: str

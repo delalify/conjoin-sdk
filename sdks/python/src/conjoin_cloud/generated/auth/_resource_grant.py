@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -45,7 +46,7 @@ class AuthResourceGrantsResource:
     ) -> AuthResourceGrantGrantResourcePermissionResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/account/{account_id}/resource-grants/grant',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/resource-grants/grant',
             query=None,
             body=data,
             cast_to=AuthResourceGrantGrantResourcePermissionResponse,
@@ -63,7 +64,7 @@ class AuthResourceGrantsResource:
     ) -> AuthResourceGrantRevokeResourcePermissionResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/account/{account_id}/resource-grants/revoke',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/resource-grants/revoke',
             query=None,
             body=data,
             cast_to=AuthResourceGrantRevokeResourcePermissionResponse,
@@ -81,7 +82,7 @@ class AuthResourceGrantsResource:
     ) -> AuthResourceGrantCheckResourcePermissionResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/account/{account_id}/resource-grants/check',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/resource-grants/check',
             query=None,
             body=data,
             cast_to=AuthResourceGrantCheckResourcePermissionResponse,
@@ -98,7 +99,7 @@ class AuthResourceGrantsResource:
     ) -> Page[AuthResourceGrantListItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/resource-grants',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/resource-grants',
             query=query,
             body=None,
             cast_to=Page[AuthResourceGrantListItem],
@@ -129,7 +130,7 @@ class AsyncAuthResourceGrantsResource:
     ) -> AuthResourceGrantGrantResourcePermissionResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/account/{account_id}/resource-grants/grant',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/resource-grants/grant',
             query=None,
             body=data,
             cast_to=AuthResourceGrantGrantResourcePermissionResponse,
@@ -147,7 +148,7 @@ class AsyncAuthResourceGrantsResource:
     ) -> AuthResourceGrantRevokeResourcePermissionResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/account/{account_id}/resource-grants/revoke',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/resource-grants/revoke',
             query=None,
             body=data,
             cast_to=AuthResourceGrantRevokeResourcePermissionResponse,
@@ -165,7 +166,7 @@ class AsyncAuthResourceGrantsResource:
     ) -> AuthResourceGrantCheckResourcePermissionResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/account/{account_id}/resource-grants/check',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/resource-grants/check',
             query=None,
             body=data,
             cast_to=AuthResourceGrantCheckResourcePermissionResponse,
@@ -182,9 +183,13 @@ class AsyncAuthResourceGrantsResource:
     ) -> Page[AuthResourceGrantListItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/resource-grant/{app_id}/organization/{organization_id}/resource-grants',
+            f'auth/organization/resource-grant/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/resource-grants',
             query=query,
             body=None,
             cast_to=Page[AuthResourceGrantListItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -64,7 +65,7 @@ class AuthSessionsResource:
     ) -> AuthSessionReadResponse:
         return self._client.request(
             'GET',
-            f'auth/session/{app_id}/session/{session_id}',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}',
             query=None,
             body=None,
             cast_to=AuthSessionReadResponse,
@@ -80,7 +81,7 @@ class AuthSessionsResource:
     ) -> Page[AuthSessionListItem]:
         return self._client.request(
             'GET',
-            f'auth/session/client/{client_id}/sessions',
+            f'auth/session/client/{_encode_path_param(client_id)}/sessions',
             query=query,
             body=None,
             cast_to=Page[AuthSessionListItem],
@@ -112,7 +113,7 @@ class AuthSessionsResource:
     ) -> AuthSessionUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'auth/session/{app_id}/session/{session_id}/update',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/update',
             query=None,
             body=data,
             cast_to=AuthSessionUpdateResponse,
@@ -129,7 +130,7 @@ class AuthSessionsResource:
     ) -> AuthSessionRefreshResponse:
         return self._client.request(
             'POST',
-            f'auth/session/{app_id}/session/{session_id}/refresh',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/refresh',
             query=None,
             body=data,
             cast_to=AuthSessionRefreshResponse,
@@ -146,7 +147,7 @@ class AuthSessionsResource:
     ) -> AuthSessionValidateResponse:
         return self._client.request(
             'POST',
-            f'auth/session/{app_id}/session/{session_id}/validate',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/validate',
             query=None,
             body=data,
             cast_to=AuthSessionValidateResponse,
@@ -164,7 +165,7 @@ class AuthSessionsResource:
     ) -> AuthSessionRevokeResponse:
         return self._client.request(
             'POST',
-            f'auth/session/{app_id}/client/{client_id}/session/{session_id}/revoke',
+            f'auth/session/{_encode_path_param(app_id)}/client/{_encode_path_param(client_id)}/session/{_encode_path_param(session_id)}/revoke',
             query=None,
             body=data,
             cast_to=AuthSessionRevokeResponse,
@@ -181,7 +182,7 @@ class AuthSessionsResource:
     ) -> AuthSessionRevokeAllForAccountResponse:
         return self._client.request(
             'POST',
-            f'auth/session/{app_id}/account/{account_id}/sessions/revoke',
+            f'auth/session/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/sessions/revoke',
             query=None,
             body=data,
             cast_to=AuthSessionRevokeAllForAccountResponse,
@@ -197,7 +198,7 @@ class AuthSessionsResource:
     ) -> AuthSessionBulkRevokeAccountResponse:
         return self._client.request(
             'POST',
-            f'auth/session/account/{account_id}/sessions/revoke/bulk',
+            f'auth/session/account/{_encode_path_param(account_id)}/sessions/revoke/bulk',
             query=None,
             body=data,
             cast_to=AuthSessionBulkRevokeAccountResponse,
@@ -213,7 +214,7 @@ class AuthSessionsResource:
     ) -> AuthSessionBulkRevokeClientResponse:
         return self._client.request(
             'POST',
-            f'auth/session/client/{client_id}/sessions/revoke/bulk',
+            f'auth/session/client/{_encode_path_param(client_id)}/sessions/revoke/bulk',
             query=None,
             body=data,
             cast_to=AuthSessionBulkRevokeClientResponse,
@@ -317,7 +318,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/session/{app_id}/session/{session_id}',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}',
             query=None,
             body=None,
             cast_to=AuthSessionReadResponse,
@@ -333,7 +334,7 @@ class AsyncAuthSessionsResource:
     ) -> Page[AuthSessionListItem]:
         return await self._client.request(
             'GET',
-            f'auth/session/client/{client_id}/sessions',
+            f'auth/session/client/{_encode_path_param(client_id)}/sessions',
             query=query,
             body=None,
             cast_to=Page[AuthSessionListItem],
@@ -365,7 +366,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/session/{app_id}/session/{session_id}/update',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/update',
             query=None,
             body=data,
             cast_to=AuthSessionUpdateResponse,
@@ -382,7 +383,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionRefreshResponse:
         return await self._client.request(
             'POST',
-            f'auth/session/{app_id}/session/{session_id}/refresh',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/refresh',
             query=None,
             body=data,
             cast_to=AuthSessionRefreshResponse,
@@ -399,7 +400,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionValidateResponse:
         return await self._client.request(
             'POST',
-            f'auth/session/{app_id}/session/{session_id}/validate',
+            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/validate',
             query=None,
             body=data,
             cast_to=AuthSessionValidateResponse,
@@ -417,7 +418,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionRevokeResponse:
         return await self._client.request(
             'POST',
-            f'auth/session/{app_id}/client/{client_id}/session/{session_id}/revoke',
+            f'auth/session/{_encode_path_param(app_id)}/client/{_encode_path_param(client_id)}/session/{_encode_path_param(session_id)}/revoke',
             query=None,
             body=data,
             cast_to=AuthSessionRevokeResponse,
@@ -434,7 +435,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionRevokeAllForAccountResponse:
         return await self._client.request(
             'POST',
-            f'auth/session/{app_id}/account/{account_id}/sessions/revoke',
+            f'auth/session/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/sessions/revoke',
             query=None,
             body=data,
             cast_to=AuthSessionRevokeAllForAccountResponse,
@@ -450,7 +451,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionBulkRevokeAccountResponse:
         return await self._client.request(
             'POST',
-            f'auth/session/account/{account_id}/sessions/revoke/bulk',
+            f'auth/session/account/{_encode_path_param(account_id)}/sessions/revoke/bulk',
             query=None,
             body=data,
             cast_to=AuthSessionBulkRevokeAccountResponse,
@@ -466,7 +467,7 @@ class AsyncAuthSessionsResource:
     ) -> AuthSessionBulkRevokeClientResponse:
         return await self._client.request(
             'POST',
-            f'auth/session/client/{client_id}/sessions/revoke/bulk',
+            f'auth/session/client/{_encode_path_param(client_id)}/sessions/revoke/bulk',
             query=None,
             body=data,
             cast_to=AuthSessionBulkRevokeClientResponse,
@@ -547,3 +548,7 @@ class AsyncAuthSessionsResource:
             cast_to=AuthSessionGetAnalyticsResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

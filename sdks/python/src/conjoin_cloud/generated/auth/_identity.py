@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -41,7 +42,7 @@ class AuthIdentitiesResource:
     ) -> AuthIdentityLinkResponse:
         return self._client.request(
             'POST',
-            f'auth/identity/{app_id}/account/{account_id}/identity/link',
+            f'auth/identity/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/identity/link',
             query=None,
             body=data,
             cast_to=AuthIdentityLinkResponse,
@@ -58,7 +59,7 @@ class AuthIdentitiesResource:
     ) -> AuthIdentityUnlinkResponse:
         return self._client.request(
             'POST',
-            f'auth/identity/{app_id}/account/{account_id}/identity/unlink',
+            f'auth/identity/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/identity/unlink',
             query=None,
             body=data,
             cast_to=AuthIdentityUnlinkResponse,
@@ -74,7 +75,7 @@ class AuthIdentitiesResource:
     ) -> AuthIdentityDiscoverAccountResponse:
         return self._client.request(
             'POST',
-            f'auth/identity/{app_id}/identity/discover',
+            f'auth/identity/{_encode_path_param(app_id)}/identity/discover',
             query=None,
             body=data,
             cast_to=AuthIdentityDiscoverAccountResponse,
@@ -104,7 +105,7 @@ class AsyncAuthIdentitiesResource:
     ) -> AuthIdentityLinkResponse:
         return await self._client.request(
             'POST',
-            f'auth/identity/{app_id}/account/{account_id}/identity/link',
+            f'auth/identity/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/identity/link',
             query=None,
             body=data,
             cast_to=AuthIdentityLinkResponse,
@@ -121,7 +122,7 @@ class AsyncAuthIdentitiesResource:
     ) -> AuthIdentityUnlinkResponse:
         return await self._client.request(
             'POST',
-            f'auth/identity/{app_id}/account/{account_id}/identity/unlink',
+            f'auth/identity/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/identity/unlink',
             query=None,
             body=data,
             cast_to=AuthIdentityUnlinkResponse,
@@ -137,9 +138,13 @@ class AsyncAuthIdentitiesResource:
     ) -> AuthIdentityDiscoverAccountResponse:
         return await self._client.request(
             'POST',
-            f'auth/identity/{app_id}/identity/discover',
+            f'auth/identity/{_encode_path_param(app_id)}/identity/discover',
             query=None,
             body=data,
             cast_to=AuthIdentityDiscoverAccountResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

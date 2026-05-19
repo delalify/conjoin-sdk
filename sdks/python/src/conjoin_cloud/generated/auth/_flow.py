@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -47,7 +48,7 @@ class AuthFlowsResource:
     ) -> AuthFlowStartSignupResponse:
         return self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signup/start',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signup/start',
             query=None,
             body=data,
             cast_to=AuthFlowStartSignupResponse,
@@ -64,7 +65,7 @@ class AuthFlowsResource:
     ) -> AuthFlowCompleteSignupResponse:
         return self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signup/complete',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signup/complete',
             query=None,
             body=data,
             cast_to=AuthFlowCompleteSignupResponse,
@@ -81,7 +82,7 @@ class AuthFlowsResource:
     ) -> AuthFlowStartSigninResponse:
         return self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signin/start',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signin/start',
             query=None,
             body=data,
             cast_to=AuthFlowStartSigninResponse,
@@ -98,7 +99,7 @@ class AuthFlowsResource:
     ) -> AuthFlowCompleteSigninResponse:
         return self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signin/complete',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signin/complete',
             query=None,
             body=data,
             cast_to=AuthFlowCompleteSigninResponse,
@@ -115,7 +116,7 @@ class AuthFlowsResource:
     ) -> AuthFlowStartPasswordResetResponse:
         return self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/password/reset/start',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/password/reset/start',
             query=None,
             body=data,
             cast_to=AuthFlowStartPasswordResetResponse,
@@ -132,7 +133,7 @@ class AuthFlowsResource:
     ) -> AuthFlowCompletePasswordResetResponse:
         return self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/password/reset/complete',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/password/reset/complete',
             query=None,
             body=data,
             cast_to=AuthFlowCompletePasswordResetResponse,
@@ -162,7 +163,7 @@ class AsyncAuthFlowsResource:
     ) -> AuthFlowStartSignupResponse:
         return await self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signup/start',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signup/start',
             query=None,
             body=data,
             cast_to=AuthFlowStartSignupResponse,
@@ -179,7 +180,7 @@ class AsyncAuthFlowsResource:
     ) -> AuthFlowCompleteSignupResponse:
         return await self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signup/complete',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signup/complete',
             query=None,
             body=data,
             cast_to=AuthFlowCompleteSignupResponse,
@@ -196,7 +197,7 @@ class AsyncAuthFlowsResource:
     ) -> AuthFlowStartSigninResponse:
         return await self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signin/start',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signin/start',
             query=None,
             body=data,
             cast_to=AuthFlowStartSigninResponse,
@@ -213,7 +214,7 @@ class AsyncAuthFlowsResource:
     ) -> AuthFlowCompleteSigninResponse:
         return await self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/signin/complete',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signin/complete',
             query=None,
             body=data,
             cast_to=AuthFlowCompleteSigninResponse,
@@ -230,7 +231,7 @@ class AsyncAuthFlowsResource:
     ) -> AuthFlowStartPasswordResetResponse:
         return await self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/password/reset/start',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/password/reset/start',
             query=None,
             body=data,
             cast_to=AuthFlowStartPasswordResetResponse,
@@ -247,9 +248,13 @@ class AsyncAuthFlowsResource:
     ) -> AuthFlowCompletePasswordResetResponse:
         return await self._client.request(
             'POST',
-            f'auth/flow/{app_id}/{client_id}/password/reset/complete',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/password/reset/complete',
             query=None,
             body=data,
             cast_to=AuthFlowCompletePasswordResetResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

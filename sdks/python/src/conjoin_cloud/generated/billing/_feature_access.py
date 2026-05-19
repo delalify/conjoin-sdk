@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -38,7 +39,7 @@ class BillingFeatureAccessesResource:
     ) -> BillingFeatureAccessCheckEntitlementResponse:
         return self._client.request(
             'POST',
-            f'billing/check/{entity_id}',
+            f'billing/check/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingFeatureAccessCheckEntitlementResponse,
@@ -54,7 +55,7 @@ class BillingFeatureAccessesResource:
     ) -> BillingFeatureAccessTrackFeatureUsageResponse:
         return self._client.request(
             'POST',
-            f'billing/track/{entity_id}',
+            f'billing/track/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingFeatureAccessTrackFeatureUsageResponse,
@@ -83,7 +84,7 @@ class AsyncBillingFeatureAccessesResource:
     ) -> BillingFeatureAccessCheckEntitlementResponse:
         return await self._client.request(
             'POST',
-            f'billing/check/{entity_id}',
+            f'billing/check/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingFeatureAccessCheckEntitlementResponse,
@@ -99,9 +100,13 @@ class AsyncBillingFeatureAccessesResource:
     ) -> BillingFeatureAccessTrackFeatureUsageResponse:
         return await self._client.request(
             'POST',
-            f'billing/track/{entity_id}',
+            f'billing/track/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingFeatureAccessTrackFeatureUsageResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -70,7 +71,7 @@ class BillingCreditNotesResource:
     ) -> BillingCreditNoteVoidResponse:
         return self._client.request(
             'PATCH',
-            f'billing/credit-note/void/{credit_note_id}',
+            f'billing/credit-note/void/{_encode_path_param(credit_note_id)}',
             query=None,
             body=None,
             cast_to=BillingCreditNoteVoidResponse,
@@ -85,7 +86,7 @@ class BillingCreditNotesResource:
     ) -> BillingCreditNoteReadBalanceResponse:
         return self._client.request(
             'GET',
-            f'billing/credit-note/balance/{customer_id}',
+            f'billing/credit-note/balance/{_encode_path_param(customer_id)}',
             query=None,
             body=None,
             cast_to=BillingCreditNoteReadBalanceResponse,
@@ -143,7 +144,7 @@ class AsyncBillingCreditNotesResource:
     ) -> BillingCreditNoteVoidResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/credit-note/void/{credit_note_id}',
+            f'billing/credit-note/void/{_encode_path_param(credit_note_id)}',
             query=None,
             body=None,
             cast_to=BillingCreditNoteVoidResponse,
@@ -158,9 +159,13 @@ class AsyncBillingCreditNotesResource:
     ) -> BillingCreditNoteReadBalanceResponse:
         return await self._client.request(
             'GET',
-            f'billing/credit-note/balance/{customer_id}',
+            f'billing/credit-note/balance/{_encode_path_param(customer_id)}',
             query=None,
             body=None,
             cast_to=BillingCreditNoteReadBalanceResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

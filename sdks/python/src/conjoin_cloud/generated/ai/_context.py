@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -75,7 +76,7 @@ class AiContextsResource:
     ) -> AiContextReadIndexResponse:
         return self._client.request(
             'GET',
-            f'ai/context/indexes/{index_id}',
+            f'ai/context/indexes/{_encode_path_param(index_id)}',
             query=None,
             body=None,
             cast_to=AiContextReadIndexResponse,
@@ -90,7 +91,7 @@ class AiContextsResource:
     ) -> AiContextDeleteIndexResponse:
         return self._client.request(
             'DELETE',
-            f'ai/context/indexes/{index_id}/delete',
+            f'ai/context/indexes/{_encode_path_param(index_id)}/delete',
             query=None,
             body=None,
             cast_to=AiContextDeleteIndexResponse,
@@ -105,7 +106,7 @@ class AiContextsResource:
     ) -> AiContextSyncIndexResponse:
         return self._client.request(
             'POST',
-            f'ai/context/indexes/{index_id}/sync',
+            f'ai/context/indexes/{_encode_path_param(index_id)}/sync',
             query=None,
             body=None,
             cast_to=AiContextSyncIndexResponse,
@@ -193,7 +194,7 @@ class AsyncAiContextsResource:
     ) -> AiContextReadIndexResponse:
         return await self._client.request(
             'GET',
-            f'ai/context/indexes/{index_id}',
+            f'ai/context/indexes/{_encode_path_param(index_id)}',
             query=None,
             body=None,
             cast_to=AiContextReadIndexResponse,
@@ -208,7 +209,7 @@ class AsyncAiContextsResource:
     ) -> AiContextDeleteIndexResponse:
         return await self._client.request(
             'DELETE',
-            f'ai/context/indexes/{index_id}/delete',
+            f'ai/context/indexes/{_encode_path_param(index_id)}/delete',
             query=None,
             body=None,
             cast_to=AiContextDeleteIndexResponse,
@@ -223,7 +224,7 @@ class AsyncAiContextsResource:
     ) -> AiContextSyncIndexResponse:
         return await self._client.request(
             'POST',
-            f'ai/context/indexes/{index_id}/sync',
+            f'ai/context/indexes/{_encode_path_param(index_id)}/sync',
             query=None,
             body=None,
             cast_to=AiContextSyncIndexResponse,
@@ -259,3 +260,7 @@ class AsyncAiContextsResource:
             cast_to=Page[AiContextListQueryLogsItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

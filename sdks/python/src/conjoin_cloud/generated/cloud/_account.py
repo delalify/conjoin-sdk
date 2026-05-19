@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -54,7 +55,7 @@ class CloudAccountsResource:
     ) -> CloudAccountReadByProjectResponse:
         return self._client.request(
             'GET',
-            f'cloud/cloud-account/single/{project_id}',
+            f'cloud/cloud-account/single/{_encode_path_param(project_id)}',
             query=None,
             body=None,
             cast_to=CloudAccountReadByProjectResponse,
@@ -70,7 +71,7 @@ class CloudAccountsResource:
     ) -> CloudAccountUpdateResponse:
         return self._client.request(
             'PUT',
-            f'cloud/cloud-account/update/{cloud_account_id}',
+            f'cloud/cloud-account/update/{_encode_path_param(cloud_account_id)}',
             query=None,
             body=data,
             cast_to=CloudAccountUpdateResponse,
@@ -141,7 +142,7 @@ class AsyncCloudAccountsResource:
     ) -> CloudAccountReadByProjectResponse:
         return await self._client.request(
             'GET',
-            f'cloud/cloud-account/single/{project_id}',
+            f'cloud/cloud-account/single/{_encode_path_param(project_id)}',
             query=None,
             body=None,
             cast_to=CloudAccountReadByProjectResponse,
@@ -157,7 +158,7 @@ class AsyncCloudAccountsResource:
     ) -> CloudAccountUpdateResponse:
         return await self._client.request(
             'PUT',
-            f'cloud/cloud-account/update/{cloud_account_id}',
+            f'cloud/cloud-account/update/{_encode_path_param(cloud_account_id)}',
             query=None,
             body=data,
             cast_to=CloudAccountUpdateResponse,
@@ -192,3 +193,7 @@ class AsyncCloudAccountsResource:
             cast_to=CloudAccountRefreshResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

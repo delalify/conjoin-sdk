@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -40,7 +41,7 @@ class AuthTrustedDevicesResource:
     ) -> Page[AuthTrustedDeviceListItem]:
         return self._client.request(
             'GET',
-            f'auth/trusted-device/{app_id}/account/{account_id}/trusted-devices',
+            f'auth/trusted-device/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/trusted-devices',
             query=query,
             body=None,
             cast_to=Page[AuthTrustedDeviceListItem],
@@ -57,7 +58,7 @@ class AuthTrustedDevicesResource:
     ) -> AuthTrustedDeviceRevokeResponse:
         return self._client.request(
             'POST',
-            f'auth/trusted-device/{app_id}/account/{account_id}/trusted-devices/{trusted_device_id}/revoke',
+            f'auth/trusted-device/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/trusted-devices/{_encode_path_param(trusted_device_id)}/revoke',
             query=None,
             body=None,
             cast_to=AuthTrustedDeviceRevokeResponse,
@@ -73,7 +74,7 @@ class AuthTrustedDevicesResource:
     ) -> AuthTrustedDeviceRevokeAllResponse:
         return self._client.request(
             'POST',
-            f'auth/trusted-device/{app_id}/account/{account_id}/trusted-devices/revoke-all',
+            f'auth/trusted-device/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/trusted-devices/revoke-all',
             query=None,
             body=None,
             cast_to=AuthTrustedDeviceRevokeAllResponse,
@@ -103,7 +104,7 @@ class AsyncAuthTrustedDevicesResource:
     ) -> Page[AuthTrustedDeviceListItem]:
         return await self._client.request(
             'GET',
-            f'auth/trusted-device/{app_id}/account/{account_id}/trusted-devices',
+            f'auth/trusted-device/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/trusted-devices',
             query=query,
             body=None,
             cast_to=Page[AuthTrustedDeviceListItem],
@@ -120,7 +121,7 @@ class AsyncAuthTrustedDevicesResource:
     ) -> AuthTrustedDeviceRevokeResponse:
         return await self._client.request(
             'POST',
-            f'auth/trusted-device/{app_id}/account/{account_id}/trusted-devices/{trusted_device_id}/revoke',
+            f'auth/trusted-device/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/trusted-devices/{_encode_path_param(trusted_device_id)}/revoke',
             query=None,
             body=None,
             cast_to=AuthTrustedDeviceRevokeResponse,
@@ -136,9 +137,13 @@ class AsyncAuthTrustedDevicesResource:
     ) -> AuthTrustedDeviceRevokeAllResponse:
         return await self._client.request(
             'POST',
-            f'auth/trusted-device/{app_id}/account/{account_id}/trusted-devices/revoke-all',
+            f'auth/trusted-device/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/trusted-devices/revoke-all',
             query=None,
             body=None,
             cast_to=AuthTrustedDeviceRevokeAllResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -69,7 +70,7 @@ class CloudRolesResource:
     ) -> CloudRoleUpdateResponse:
         return self._client.request(
             'PUT',
-            f'cloud/custom-role/update/{role_id}',
+            f'cloud/custom-role/update/{_encode_path_param(role_id)}',
             query=None,
             body=data,
             cast_to=CloudRoleUpdateResponse,
@@ -127,9 +128,13 @@ class AsyncCloudRolesResource:
     ) -> CloudRoleUpdateResponse:
         return await self._client.request(
             'PUT',
-            f'cloud/custom-role/update/{role_id}',
+            f'cloud/custom-role/update/{_encode_path_param(role_id)}',
             query=None,
             body=data,
             cast_to=CloudRoleUpdateResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

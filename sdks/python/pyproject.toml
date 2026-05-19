@@ -69,13 +69,13 @@ addopts = "-ra"
 testpaths = ["tests"]
 
 [tool.pyright]
-include = ["src", "tests", "examples"]
+include = ["src", "tests", "examples", "scripts", "codegen"]
 pythonVersion = "3.10"
 typeCheckingMode = "standard"
 
 [tool.ruff]
 line-length = 100
-src = ["src", "tests"]
+src = ["src", "tests", "scripts", "codegen"]
 target-version = "py310"
 
 [tool.ruff.lint]

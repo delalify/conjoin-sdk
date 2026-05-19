@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -72,7 +73,7 @@ class BillingCouponsResource:
     ) -> BillingCouponUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'billing/coupon/{coupon_id}',
+            f'billing/coupon/{_encode_path_param(coupon_id)}',
             query=None,
             body=data,
             cast_to=BillingCouponUpdateResponse,
@@ -87,7 +88,7 @@ class BillingCouponsResource:
     ) -> BillingCouponDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'billing/coupon/{coupon_id}',
+            f'billing/coupon/{_encode_path_param(coupon_id)}',
             query=None,
             body=None,
             cast_to=BillingCouponDeleteResponse,
@@ -146,7 +147,7 @@ class AsyncBillingCouponsResource:
     ) -> BillingCouponUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/coupon/{coupon_id}',
+            f'billing/coupon/{_encode_path_param(coupon_id)}',
             query=None,
             body=data,
             cast_to=BillingCouponUpdateResponse,
@@ -161,9 +162,13 @@ class AsyncBillingCouponsResource:
     ) -> BillingCouponDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'billing/coupon/{coupon_id}',
+            f'billing/coupon/{_encode_path_param(coupon_id)}',
             query=None,
             body=None,
             cast_to=BillingCouponDeleteResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -40,7 +41,7 @@ class AuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryStartRecoveryResponse:
         return self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/start',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/start',
             query=None,
             body=None,
             cast_to=AuthAccountRecoveryStartRecoveryResponse,
@@ -57,7 +58,7 @@ class AuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryVerifyRecoveryResponse:
         return self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/verify',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/verify',
             query=None,
             body=data,
             cast_to=AuthAccountRecoveryVerifyRecoveryResponse,
@@ -74,7 +75,7 @@ class AuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryCompleteRecoveryResponse:
         return self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/complete',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/complete',
             query=None,
             body=data,
             cast_to=AuthAccountRecoveryCompleteRecoveryResponse,
@@ -90,7 +91,7 @@ class AuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryAdminResetAccountResponse:
         return self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/admin-reset',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/admin-reset',
             query=None,
             body=None,
             cast_to=AuthAccountRecoveryAdminResetAccountResponse,
@@ -119,7 +120,7 @@ class AsyncAuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryStartRecoveryResponse:
         return await self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/start',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/start',
             query=None,
             body=None,
             cast_to=AuthAccountRecoveryStartRecoveryResponse,
@@ -136,7 +137,7 @@ class AsyncAuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryVerifyRecoveryResponse:
         return await self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/verify',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/verify',
             query=None,
             body=data,
             cast_to=AuthAccountRecoveryVerifyRecoveryResponse,
@@ -153,7 +154,7 @@ class AsyncAuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryCompleteRecoveryResponse:
         return await self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/complete',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/complete',
             query=None,
             body=data,
             cast_to=AuthAccountRecoveryCompleteRecoveryResponse,
@@ -169,9 +170,13 @@ class AsyncAuthAccountRecoveriesResource:
     ) -> AuthAccountRecoveryAdminResetAccountResponse:
         return await self._client.request(
             'POST',
-            f'auth/recovery/{app_id}/account/{account_id}/recovery/admin-reset',
+            f'auth/recovery/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/recovery/admin-reset',
             query=None,
             body=None,
             cast_to=AuthAccountRecoveryAdminResetAccountResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

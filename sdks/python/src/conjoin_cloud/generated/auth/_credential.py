@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -77,7 +78,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialCreatePasswordResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/password/create',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/password/create',
             query=None,
             body=data,
             cast_to=AuthCredentialCreatePasswordResponse,
@@ -94,7 +95,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialRotatePasswordResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/password/rotate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/password/rotate',
             query=None,
             body=data,
             cast_to=AuthCredentialRotatePasswordResponse,
@@ -111,7 +112,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialEnrollTotpResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/enroll',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/enroll',
             query=None,
             body=data,
             cast_to=AuthCredentialEnrollTotpResponse,
@@ -128,7 +129,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialActivateTotpResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/activate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/activate',
             query=None,
             body=data,
             cast_to=AuthCredentialActivateTotpResponse,
@@ -145,7 +146,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialRotateTotpRecoveryCodesResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/recovery/rotate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/recovery/rotate',
             query=None,
             body=data,
             cast_to=AuthCredentialRotateTotpRecoveryCodesResponse,
@@ -162,7 +163,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialConsumeTotpRecoveryCodeResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/recovery/consume',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/recovery/consume',
             query=None,
             body=data,
             cast_to=AuthCredentialConsumeTotpRecoveryCodeResponse,
@@ -179,7 +180,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialEnrollSmsMfaResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/enroll',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/enroll',
             query=None,
             body=data,
             cast_to=AuthCredentialEnrollSmsMfaResponse,
@@ -196,7 +197,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialActivateSmsMfaResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/activate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/activate',
             query=None,
             body=data,
             cast_to=AuthCredentialActivateSmsMfaResponse,
@@ -213,7 +214,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialVerifySmsMfaResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifySmsMfaResponse,
@@ -229,7 +230,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialSendSmsMfaChallengeResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/challenge',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/challenge',
             query=None,
             body=None,
             cast_to=AuthCredentialSendSmsMfaChallengeResponse,
@@ -246,7 +247,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialEnrollEmailMfaResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/enroll',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/enroll',
             query=None,
             body=data,
             cast_to=AuthCredentialEnrollEmailMfaResponse,
@@ -263,7 +264,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialActivateEmailMfaResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/activate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/activate',
             query=None,
             body=data,
             cast_to=AuthCredentialActivateEmailMfaResponse,
@@ -280,7 +281,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialVerifyEmailMfaResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifyEmailMfaResponse,
@@ -296,7 +297,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialSendEmailMfaChallengeResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/challenge',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/challenge',
             query=None,
             body=None,
             cast_to=AuthCredentialSendEmailMfaChallengeResponse,
@@ -312,7 +313,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialReadApiKeyUsageResponse:
         return self._client.request(
             'GET',
-            f'auth/credential/{app_id}/account/{account_id}/credentials/api-keys/usage-stats',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credentials/api-keys/usage-stats',
             query=None,
             body=None,
             cast_to=AuthCredentialReadApiKeyUsageResponse,
@@ -329,7 +330,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialIssueApiKeyResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/issue',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/issue',
             query=None,
             body=data,
             cast_to=AuthCredentialIssueApiKeyResponse,
@@ -346,7 +347,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialRotateApiKeyResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/rotate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/rotate',
             query=None,
             body=data,
             cast_to=AuthCredentialRotateApiKeyResponse,
@@ -363,7 +364,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialRevokeApiKeyResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/revoke',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/revoke',
             query=None,
             body=data,
             cast_to=AuthCredentialRevokeApiKeyResponse,
@@ -381,7 +382,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialUpdateApiKeyResponse:
         return self._client.request(
             'PATCH',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/{credential_id}/update',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/{_encode_path_param(credential_id)}/update',
             query=None,
             body=data,
             cast_to=AuthCredentialUpdateApiKeyResponse,
@@ -398,7 +399,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialStartPasskeyRegistrationResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/registration/start',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/registration/start',
             query=None,
             body=data,
             cast_to=AuthCredentialStartPasskeyRegistrationResponse,
@@ -415,7 +416,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialVerifyPasskeyRegistrationResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/registration/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/registration/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifyPasskeyRegistrationResponse,
@@ -431,7 +432,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialStartPasskeyenticationResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/authentication/start',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/authentication/start',
             query=None,
             body=None,
             cast_to=AuthCredentialStartPasskeyenticationResponse,
@@ -448,7 +449,7 @@ class AuthCredentialsResource:
     ) -> AuthCredentialVerifyPasskeyenticationResponse:
         return self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/authentication/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/authentication/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifyPasskeyenticationResponse,
@@ -478,7 +479,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialCreatePasswordResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/password/create',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/password/create',
             query=None,
             body=data,
             cast_to=AuthCredentialCreatePasswordResponse,
@@ -495,7 +496,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialRotatePasswordResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/password/rotate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/password/rotate',
             query=None,
             body=data,
             cast_to=AuthCredentialRotatePasswordResponse,
@@ -512,7 +513,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialEnrollTotpResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/enroll',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/enroll',
             query=None,
             body=data,
             cast_to=AuthCredentialEnrollTotpResponse,
@@ -529,7 +530,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialActivateTotpResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/activate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/activate',
             query=None,
             body=data,
             cast_to=AuthCredentialActivateTotpResponse,
@@ -546,7 +547,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialRotateTotpRecoveryCodesResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/recovery/rotate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/recovery/rotate',
             query=None,
             body=data,
             cast_to=AuthCredentialRotateTotpRecoveryCodesResponse,
@@ -563,7 +564,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialConsumeTotpRecoveryCodeResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/totp/recovery/consume',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/recovery/consume',
             query=None,
             body=data,
             cast_to=AuthCredentialConsumeTotpRecoveryCodeResponse,
@@ -580,7 +581,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialEnrollSmsMfaResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/enroll',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/enroll',
             query=None,
             body=data,
             cast_to=AuthCredentialEnrollSmsMfaResponse,
@@ -597,7 +598,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialActivateSmsMfaResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/activate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/activate',
             query=None,
             body=data,
             cast_to=AuthCredentialActivateSmsMfaResponse,
@@ -614,7 +615,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialVerifySmsMfaResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifySmsMfaResponse,
@@ -630,7 +631,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialSendSmsMfaChallengeResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/challenge',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/challenge',
             query=None,
             body=None,
             cast_to=AuthCredentialSendSmsMfaChallengeResponse,
@@ -647,7 +648,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialEnrollEmailMfaResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/enroll',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/enroll',
             query=None,
             body=data,
             cast_to=AuthCredentialEnrollEmailMfaResponse,
@@ -664,7 +665,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialActivateEmailMfaResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/activate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/activate',
             query=None,
             body=data,
             cast_to=AuthCredentialActivateEmailMfaResponse,
@@ -681,7 +682,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialVerifyEmailMfaResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifyEmailMfaResponse,
@@ -697,7 +698,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialSendEmailMfaChallengeResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/mfa/email/challenge',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/challenge',
             query=None,
             body=None,
             cast_to=AuthCredentialSendEmailMfaChallengeResponse,
@@ -713,7 +714,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialReadApiKeyUsageResponse:
         return await self._client.request(
             'GET',
-            f'auth/credential/{app_id}/account/{account_id}/credentials/api-keys/usage-stats',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credentials/api-keys/usage-stats',
             query=None,
             body=None,
             cast_to=AuthCredentialReadApiKeyUsageResponse,
@@ -730,7 +731,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialIssueApiKeyResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/issue',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/issue',
             query=None,
             body=data,
             cast_to=AuthCredentialIssueApiKeyResponse,
@@ -747,7 +748,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialRotateApiKeyResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/rotate',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/rotate',
             query=None,
             body=data,
             cast_to=AuthCredentialRotateApiKeyResponse,
@@ -764,7 +765,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialRevokeApiKeyResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/revoke',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/revoke',
             query=None,
             body=data,
             cast_to=AuthCredentialRevokeApiKeyResponse,
@@ -782,7 +783,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialUpdateApiKeyResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/credential/{app_id}/account/{account_id}/credential/api-key/{credential_id}/update',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/api-key/{_encode_path_param(credential_id)}/update',
             query=None,
             body=data,
             cast_to=AuthCredentialUpdateApiKeyResponse,
@@ -799,7 +800,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialStartPasskeyRegistrationResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/registration/start',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/registration/start',
             query=None,
             body=data,
             cast_to=AuthCredentialStartPasskeyRegistrationResponse,
@@ -816,7 +817,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialVerifyPasskeyRegistrationResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/registration/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/registration/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifyPasskeyRegistrationResponse,
@@ -832,7 +833,7 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialStartPasskeyenticationResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/authentication/start',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/authentication/start',
             query=None,
             body=None,
             cast_to=AuthCredentialStartPasskeyenticationResponse,
@@ -849,9 +850,13 @@ class AsyncAuthCredentialsResource:
     ) -> AuthCredentialVerifyPasskeyenticationResponse:
         return await self._client.request(
             'POST',
-            f'auth/credential/{app_id}/account/{account_id}/credential/passkey/authentication/verify',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/passkey/authentication/verify',
             query=None,
             body=data,
             cast_to=AuthCredentialVerifyPasskeyenticationResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

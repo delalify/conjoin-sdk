@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -49,7 +50,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoiceCreateResponse:
         return self._client.request(
             'POST',
-            f'billing/invoice/{entity_id}/create',
+            f'billing/invoice/{_encode_path_param(entity_id)}/create',
             query=None,
             body=data,
             cast_to=BillingInvoiceCreateResponse,
@@ -65,7 +66,7 @@ class BillingInvoicesResource:
     ) -> Page[BillingInvoiceListItem]:
         return self._client.request(
             'GET',
-            f'billing/invoice/{entity_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingInvoiceListItem],
@@ -82,7 +83,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoiceUpdateResponse:
         return self._client.request(
             'PUT',
-            f'billing/invoice/{entity_id}/update/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/update/{_encode_path_param(invoice_id)}',
             query=None,
             body=data,
             cast_to=BillingInvoiceUpdateResponse,
@@ -98,7 +99,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoiceFinalizeResponse:
         return self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/finalize/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/finalize/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceFinalizeResponse,
@@ -115,7 +116,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoicePayResponse:
         return self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/pay/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/pay/{_encode_path_param(invoice_id)}',
             query=None,
             body=data,
             cast_to=BillingInvoicePayResponse,
@@ -131,7 +132,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoiceVoidResponse:
         return self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/void/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/void/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceVoidResponse,
@@ -148,7 +149,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoiceMarkPaidResponse:
         return self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/mark-paid/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/mark-paid/{_encode_path_param(invoice_id)}',
             query=None,
             body=data,
             cast_to=BillingInvoiceMarkPaidResponse,
@@ -164,7 +165,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoiceSendResponse:
         return self._client.request(
             'POST',
-            f'billing/invoice/{entity_id}/send/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/send/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceSendResponse,
@@ -180,7 +181,7 @@ class BillingInvoicesResource:
     ) -> BillingInvoiceReadPdfResponse:
         return self._client.request(
             'GET',
-            f'billing/invoice/{entity_id}/pdf/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/pdf/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceReadPdfResponse,
@@ -209,7 +210,7 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoiceCreateResponse:
         return await self._client.request(
             'POST',
-            f'billing/invoice/{entity_id}/create',
+            f'billing/invoice/{_encode_path_param(entity_id)}/create',
             query=None,
             body=data,
             cast_to=BillingInvoiceCreateResponse,
@@ -225,7 +226,7 @@ class AsyncBillingInvoicesResource:
     ) -> Page[BillingInvoiceListItem]:
         return await self._client.request(
             'GET',
-            f'billing/invoice/{entity_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingInvoiceListItem],
@@ -242,7 +243,7 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoiceUpdateResponse:
         return await self._client.request(
             'PUT',
-            f'billing/invoice/{entity_id}/update/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/update/{_encode_path_param(invoice_id)}',
             query=None,
             body=data,
             cast_to=BillingInvoiceUpdateResponse,
@@ -258,7 +259,7 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoiceFinalizeResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/finalize/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/finalize/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceFinalizeResponse,
@@ -275,7 +276,7 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoicePayResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/pay/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/pay/{_encode_path_param(invoice_id)}',
             query=None,
             body=data,
             cast_to=BillingInvoicePayResponse,
@@ -291,7 +292,7 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoiceVoidResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/void/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/void/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceVoidResponse,
@@ -308,7 +309,7 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoiceMarkPaidResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/invoice/{entity_id}/mark-paid/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/mark-paid/{_encode_path_param(invoice_id)}',
             query=None,
             body=data,
             cast_to=BillingInvoiceMarkPaidResponse,
@@ -324,7 +325,7 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoiceSendResponse:
         return await self._client.request(
             'POST',
-            f'billing/invoice/{entity_id}/send/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/send/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceSendResponse,
@@ -340,9 +341,13 @@ class AsyncBillingInvoicesResource:
     ) -> BillingInvoiceReadPdfResponse:
         return await self._client.request(
             'GET',
-            f'billing/invoice/{entity_id}/pdf/{invoice_id}',
+            f'billing/invoice/{_encode_path_param(entity_id)}/pdf/{_encode_path_param(invoice_id)}',
             query=None,
             body=None,
             cast_to=BillingInvoiceReadPdfResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -51,7 +52,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundleCreateResponse:
         return self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingPriceBundleCreateResponse,
@@ -68,7 +69,7 @@ class BillingPriceBundlesResource:
     ) -> Page[BillingPriceBundleListItem]:
         return self._client.request(
             'GET',
-            f'billing/price-bundle/{entity_id}/{reference_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingPriceBundleListItem],
@@ -85,7 +86,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundleUpdateResponse:
         return self._client.request(
             'PUT',
-            f'billing/price-bundle/{entity_id}/{reference_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=None,
             body=data,
             cast_to=BillingPriceBundleUpdateResponse,
@@ -101,7 +102,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundleArchiveResponse:
         return self._client.request(
             'PATCH',
-            f'billing/price-bundle/{entity_id}/{reference_id}/archive',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/archive',
             query=None,
             body=None,
             cast_to=BillingPriceBundleArchiveResponse,
@@ -117,7 +118,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundleRestoreResponse:
         return self._client.request(
             'PATCH',
-            f'billing/price-bundle/{entity_id}/{reference_id}/restore',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/restore',
             query=None,
             body=None,
             cast_to=BillingPriceBundleRestoreResponse,
@@ -133,7 +134,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundlePublishResponse:
         return self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}/{reference_id}/publish',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/publish',
             query=None,
             body=None,
             cast_to=BillingPriceBundlePublishResponse,
@@ -149,7 +150,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundleActivateResponse:
         return self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}/activate',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/activate',
             query=None,
             body=data,
             cast_to=BillingPriceBundleActivateResponse,
@@ -166,7 +167,7 @@ class BillingPriceBundlesResource:
     ) -> Page[BillingPriceBundleReadActivationsItem]:
         return self._client.request(
             'GET',
-            f'billing/price-bundle/{entity_id}/activations/{customer_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/activations/{_encode_path_param(customer_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingPriceBundleReadActivationsItem],
@@ -183,7 +184,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundleDeactivateResponse:
         return self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}/deactivate/{activation_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/deactivate/{_encode_path_param(activation_id)}',
             query=None,
             body=data,
             cast_to=BillingPriceBundleDeactivateResponse,
@@ -199,7 +200,7 @@ class BillingPriceBundlesResource:
     ) -> BillingPriceBundleReadAvailableBundleTransitionsResponse:
         return self._client.request(
             'GET',
-            f'billing/price-bundle/{entity_id}/transitions/{customer_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/transitions/{_encode_path_param(customer_id)}',
             query=None,
             body=None,
             cast_to=BillingPriceBundleReadAvailableBundleTransitionsResponse,
@@ -228,7 +229,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundleCreateResponse:
         return await self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingPriceBundleCreateResponse,
@@ -245,7 +246,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> Page[BillingPriceBundleListItem]:
         return await self._client.request(
             'GET',
-            f'billing/price-bundle/{entity_id}/{reference_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingPriceBundleListItem],
@@ -262,7 +263,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundleUpdateResponse:
         return await self._client.request(
             'PUT',
-            f'billing/price-bundle/{entity_id}/{reference_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=None,
             body=data,
             cast_to=BillingPriceBundleUpdateResponse,
@@ -278,7 +279,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundleArchiveResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/price-bundle/{entity_id}/{reference_id}/archive',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/archive',
             query=None,
             body=None,
             cast_to=BillingPriceBundleArchiveResponse,
@@ -294,7 +295,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundleRestoreResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/price-bundle/{entity_id}/{reference_id}/restore',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/restore',
             query=None,
             body=None,
             cast_to=BillingPriceBundleRestoreResponse,
@@ -310,7 +311,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundlePublishResponse:
         return await self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}/{reference_id}/publish',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/publish',
             query=None,
             body=None,
             cast_to=BillingPriceBundlePublishResponse,
@@ -326,7 +327,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundleActivateResponse:
         return await self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}/activate',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/activate',
             query=None,
             body=data,
             cast_to=BillingPriceBundleActivateResponse,
@@ -343,7 +344,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> Page[BillingPriceBundleReadActivationsItem]:
         return await self._client.request(
             'GET',
-            f'billing/price-bundle/{entity_id}/activations/{customer_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/activations/{_encode_path_param(customer_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingPriceBundleReadActivationsItem],
@@ -360,7 +361,7 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundleDeactivateResponse:
         return await self._client.request(
             'POST',
-            f'billing/price-bundle/{entity_id}/deactivate/{activation_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/deactivate/{_encode_path_param(activation_id)}',
             query=None,
             body=data,
             cast_to=BillingPriceBundleDeactivateResponse,
@@ -376,9 +377,13 @@ class AsyncBillingPriceBundlesResource:
     ) -> BillingPriceBundleReadAvailableBundleTransitionsResponse:
         return await self._client.request(
             'GET',
-            f'billing/price-bundle/{entity_id}/transitions/{customer_id}',
+            f'billing/price-bundle/{_encode_path_param(entity_id)}/transitions/{_encode_path_param(customer_id)}',
             query=None,
             body=None,
             cast_to=BillingPriceBundleReadAvailableBundleTransitionsResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

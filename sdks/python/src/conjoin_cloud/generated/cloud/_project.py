@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -42,7 +43,7 @@ class CloudProjectsResource:
     ) -> CloudProjectCreateResponse:
         return self._client.request(
             'POST',
-            f'cloud/project/{domain_id}/new',
+            f'cloud/project/{_encode_path_param(domain_id)}/new',
             query=None,
             body=data,
             cast_to=CloudProjectCreateResponse,
@@ -73,7 +74,7 @@ class CloudProjectsResource:
     ) -> Page[CloudProjectListItem]:
         return self._client.request(
             'GET',
-            f'cloud/project/many/{domain_id}',
+            f'cloud/project/many/{_encode_path_param(domain_id)}',
             query=query,
             body=None,
             cast_to=Page[CloudProjectListItem],
@@ -88,7 +89,7 @@ class CloudProjectsResource:
     ) -> CloudProjectReadResponse:
         return self._client.request(
             'GET',
-            f'cloud/project/public/single/{project_id}',
+            f'cloud/project/public/single/{_encode_path_param(project_id)}',
             query=None,
             body=None,
             cast_to=CloudProjectReadResponse,
@@ -117,7 +118,7 @@ class AsyncCloudProjectsResource:
     ) -> CloudProjectCreateResponse:
         return await self._client.request(
             'POST',
-            f'cloud/project/{domain_id}/new',
+            f'cloud/project/{_encode_path_param(domain_id)}/new',
             query=None,
             body=data,
             cast_to=CloudProjectCreateResponse,
@@ -148,7 +149,7 @@ class AsyncCloudProjectsResource:
     ) -> Page[CloudProjectListItem]:
         return await self._client.request(
             'GET',
-            f'cloud/project/many/{domain_id}',
+            f'cloud/project/many/{_encode_path_param(domain_id)}',
             query=query,
             body=None,
             cast_to=Page[CloudProjectListItem],
@@ -163,9 +164,13 @@ class AsyncCloudProjectsResource:
     ) -> CloudProjectReadResponse:
         return await self._client.request(
             'GET',
-            f'cloud/project/public/single/{project_id}',
+            f'cloud/project/public/single/{_encode_path_param(project_id)}',
             query=None,
             body=None,
             cast_to=CloudProjectReadResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

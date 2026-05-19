@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -40,7 +41,7 @@ class AuthClientsResource:
     ) -> AuthClientCreateResponse:
         return self._client.request(
             'POST',
-            f'auth/client/{app_id}/client/create',
+            f'auth/client/{_encode_path_param(app_id)}/client/create',
             query=None,
             body=data,
             cast_to=AuthClientCreateResponse,
@@ -56,7 +57,7 @@ class AuthClientsResource:
     ) -> AuthClientReadResponse:
         return self._client.request(
             'GET',
-            f'auth/client/{app_id}/client/{client_id}',
+            f'auth/client/{_encode_path_param(app_id)}/client/{_encode_path_param(client_id)}',
             query=None,
             body=None,
             cast_to=AuthClientReadResponse,
@@ -72,7 +73,7 @@ class AuthClientsResource:
     ) -> Page[AuthClientListItem]:
         return self._client.request(
             'GET',
-            f'auth/client/{app_id}/client',
+            f'auth/client/{_encode_path_param(app_id)}/client',
             query=query,
             body=None,
             cast_to=Page[AuthClientListItem],
@@ -101,7 +102,7 @@ class AsyncAuthClientsResource:
     ) -> AuthClientCreateResponse:
         return await self._client.request(
             'POST',
-            f'auth/client/{app_id}/client/create',
+            f'auth/client/{_encode_path_param(app_id)}/client/create',
             query=None,
             body=data,
             cast_to=AuthClientCreateResponse,
@@ -117,7 +118,7 @@ class AsyncAuthClientsResource:
     ) -> AuthClientReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/client/{app_id}/client/{client_id}',
+            f'auth/client/{_encode_path_param(app_id)}/client/{_encode_path_param(client_id)}',
             query=None,
             body=None,
             cast_to=AuthClientReadResponse,
@@ -133,9 +134,13 @@ class AsyncAuthClientsResource:
     ) -> Page[AuthClientListItem]:
         return await self._client.request(
             'GET',
-            f'auth/client/{app_id}/client',
+            f'auth/client/{_encode_path_param(app_id)}/client',
             query=query,
             body=None,
             cast_to=Page[AuthClientListItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

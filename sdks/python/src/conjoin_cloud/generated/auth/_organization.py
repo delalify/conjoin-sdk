@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -60,7 +61,7 @@ class AuthOrganizationsResource:
     ) -> AuthOrganizationReadResponse:
         return self._client.request(
             'GET',
-            f'auth/organization/{organization_id}',
+            f'auth/organization/{_encode_path_param(organization_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationReadResponse,
@@ -91,7 +92,7 @@ class AuthOrganizationsResource:
     ) -> AuthOrganizationUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/{organization_id}/update',
+            f'auth/organization/{_encode_path_param(organization_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateResponse,
@@ -107,7 +108,7 @@ class AuthOrganizationsResource:
     ) -> AuthOrganizationUpdateSettingsResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/{organization_id}/settings/update',
+            f'auth/organization/{_encode_path_param(organization_id)}/settings/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateSettingsResponse,
@@ -123,7 +124,7 @@ class AuthOrganizationsResource:
     ) -> AuthOrganizationDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'auth/organization/{organization_id}/delete',
+            f'auth/organization/{_encode_path_param(organization_id)}/delete',
             query=None,
             body=data,
             cast_to=AuthOrganizationDeleteResponse,
@@ -166,7 +167,7 @@ class AsyncAuthOrganizationsResource:
     ) -> AuthOrganizationReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/organization/{organization_id}',
+            f'auth/organization/{_encode_path_param(organization_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationReadResponse,
@@ -197,7 +198,7 @@ class AsyncAuthOrganizationsResource:
     ) -> AuthOrganizationUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/{organization_id}/update',
+            f'auth/organization/{_encode_path_param(organization_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateResponse,
@@ -213,7 +214,7 @@ class AsyncAuthOrganizationsResource:
     ) -> AuthOrganizationUpdateSettingsResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/{organization_id}/settings/update',
+            f'auth/organization/{_encode_path_param(organization_id)}/settings/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateSettingsResponse,
@@ -229,9 +230,13 @@ class AsyncAuthOrganizationsResource:
     ) -> AuthOrganizationDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'auth/organization/{organization_id}/delete',
+            f'auth/organization/{_encode_path_param(organization_id)}/delete',
             query=None,
             body=data,
             cast_to=AuthOrganizationDeleteResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

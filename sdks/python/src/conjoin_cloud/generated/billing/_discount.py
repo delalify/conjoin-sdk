@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -69,7 +70,7 @@ class BillingDiscountsResource:
     ) -> BillingDiscountDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'billing/discount/{discount_id}',
+            f'billing/discount/{_encode_path_param(discount_id)}',
             query=None,
             body=None,
             cast_to=BillingDiscountDeleteResponse,
@@ -127,9 +128,13 @@ class AsyncBillingDiscountsResource:
     ) -> BillingDiscountDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'billing/discount/{discount_id}',
+            f'billing/discount/{_encode_path_param(discount_id)}',
             query=None,
             body=None,
             cast_to=BillingDiscountDeleteResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

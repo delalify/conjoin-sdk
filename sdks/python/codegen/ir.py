@@ -265,7 +265,10 @@ def _request_schema(
     return content_type, schema if isinstance(schema, dict) else None
 
 
-def _response_schema(spec: dict[str, Any], operation: dict[str, Any]) -> tuple[str, str, dict[str, Any]]:
+def _response_schema(
+    spec: dict[str, Any],
+    operation: dict[str, Any],
+) -> tuple[str, str, dict[str, Any]]:
     responses = operation.get("responses")
     if not isinstance(responses, dict):
         return "200", "application/json", {}

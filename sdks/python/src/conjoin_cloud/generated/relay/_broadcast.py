@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -92,7 +93,7 @@ class RelayBroadcastsResource:
     ) -> RelayBroadcastUpdateChannelResponse:
         return self._client.request(
             'PATCH',
-            f'relay/broadcast/channels/{channel_id}/update',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/update',
             query=None,
             body=data,
             cast_to=RelayBroadcastUpdateChannelResponse,
@@ -107,7 +108,7 @@ class RelayBroadcastsResource:
     ) -> RelayBroadcastDeleteChannelResponse:
         return self._client.request(
             'DELETE',
-            f'relay/broadcast/channels/{channel_id}/delete',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayBroadcastDeleteChannelResponse,
@@ -123,7 +124,7 @@ class RelayBroadcastsResource:
     ) -> RelayBroadcastGenerateAuthTokenResponse:
         return self._client.request(
             'POST',
-            f'relay/broadcast/channels/{channel_id}/auth-token',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/auth-token',
             query=None,
             body=data,
             cast_to=RelayBroadcastGenerateAuthTokenResponse,
@@ -139,7 +140,7 @@ class RelayBroadcastsResource:
     ) -> RelayBroadcastPublishToResponse:
         return self._client.request(
             'POST',
-            f'relay/broadcast/channels/{channel_id}/publish',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/publish',
             query=None,
             body=data,
             cast_to=RelayBroadcastPublishToResponse,
@@ -154,7 +155,7 @@ class RelayBroadcastsResource:
     ) -> RelayBroadcastReadPresenceResponse:
         return self._client.request(
             'GET',
-            f'relay/broadcast/channels/{channel_id}/presence',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/presence',
             query=None,
             body=None,
             cast_to=RelayBroadcastReadPresenceResponse,
@@ -227,7 +228,7 @@ class AsyncRelayBroadcastsResource:
     ) -> RelayBroadcastUpdateChannelResponse:
         return await self._client.request(
             'PATCH',
-            f'relay/broadcast/channels/{channel_id}/update',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/update',
             query=None,
             body=data,
             cast_to=RelayBroadcastUpdateChannelResponse,
@@ -242,7 +243,7 @@ class AsyncRelayBroadcastsResource:
     ) -> RelayBroadcastDeleteChannelResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/broadcast/channels/{channel_id}/delete',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayBroadcastDeleteChannelResponse,
@@ -258,7 +259,7 @@ class AsyncRelayBroadcastsResource:
     ) -> RelayBroadcastGenerateAuthTokenResponse:
         return await self._client.request(
             'POST',
-            f'relay/broadcast/channels/{channel_id}/auth-token',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/auth-token',
             query=None,
             body=data,
             cast_to=RelayBroadcastGenerateAuthTokenResponse,
@@ -274,7 +275,7 @@ class AsyncRelayBroadcastsResource:
     ) -> RelayBroadcastPublishToResponse:
         return await self._client.request(
             'POST',
-            f'relay/broadcast/channels/{channel_id}/publish',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/publish',
             query=None,
             body=data,
             cast_to=RelayBroadcastPublishToResponse,
@@ -289,9 +290,13 @@ class AsyncRelayBroadcastsResource:
     ) -> RelayBroadcastReadPresenceResponse:
         return await self._client.request(
             'GET',
-            f'relay/broadcast/channels/{channel_id}/presence',
+            f'relay/broadcast/channels/{_encode_path_param(channel_id)}/presence',
             query=None,
             body=None,
             cast_to=RelayBroadcastReadPresenceResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

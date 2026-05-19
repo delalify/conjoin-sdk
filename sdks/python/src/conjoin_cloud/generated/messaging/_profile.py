@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -66,7 +67,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileEnableResponse:
         return self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/enable',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/enable',
             query=None,
             body=None,
             cast_to=MessagingProfileEnableResponse,
@@ -81,7 +82,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileDisableResponse:
         return self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/disable',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/disable',
             query=None,
             body=None,
             cast_to=MessagingProfileDisableResponse,
@@ -96,7 +97,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileCloseResponse:
         return self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/close',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/close',
             query=None,
             body=None,
             cast_to=MessagingProfileCloseResponse,
@@ -112,7 +113,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}',
+            f'messaging/profiles/{_encode_path_param(profile_id)}',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateResponse,
@@ -127,7 +128,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileReadResponse:
         return self._client.request(
             'GET',
-            f'messaging/profiles/{profile_id}',
+            f'messaging/profiles/{_encode_path_param(profile_id)}',
             query=None,
             body=None,
             cast_to=MessagingProfileReadResponse,
@@ -142,7 +143,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'messaging/profiles/{profile_id}',
+            f'messaging/profiles/{_encode_path_param(profile_id)}',
             query=None,
             body=None,
             cast_to=MessagingProfileDeleteResponse,
@@ -158,7 +159,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileUpdateEmailConfigResponse:
         return self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/emails-config',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/emails-config',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateEmailConfigResponse,
@@ -174,7 +175,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileUpdateMultisendConfigResponse:
         return self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/multisend-config',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/multisend-config',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateMultisendConfigResponse,
@@ -190,7 +191,7 @@ class MessagingProfilesResource:
     ) -> MessagingProfileUpdateVerificationsConfigResponse:
         return self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/verifications-config',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/verifications-config',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateVerificationsConfigResponse,
@@ -248,7 +249,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileEnableResponse:
         return await self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/enable',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/enable',
             query=None,
             body=None,
             cast_to=MessagingProfileEnableResponse,
@@ -263,7 +264,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileDisableResponse:
         return await self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/disable',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/disable',
             query=None,
             body=None,
             cast_to=MessagingProfileDisableResponse,
@@ -278,7 +279,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileCloseResponse:
         return await self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/close',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/close',
             query=None,
             body=None,
             cast_to=MessagingProfileCloseResponse,
@@ -294,7 +295,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}',
+            f'messaging/profiles/{_encode_path_param(profile_id)}',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateResponse,
@@ -309,7 +310,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileReadResponse:
         return await self._client.request(
             'GET',
-            f'messaging/profiles/{profile_id}',
+            f'messaging/profiles/{_encode_path_param(profile_id)}',
             query=None,
             body=None,
             cast_to=MessagingProfileReadResponse,
@@ -324,7 +325,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'messaging/profiles/{profile_id}',
+            f'messaging/profiles/{_encode_path_param(profile_id)}',
             query=None,
             body=None,
             cast_to=MessagingProfileDeleteResponse,
@@ -340,7 +341,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileUpdateEmailConfigResponse:
         return await self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/emails-config',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/emails-config',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateEmailConfigResponse,
@@ -356,7 +357,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileUpdateMultisendConfigResponse:
         return await self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/multisend-config',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/multisend-config',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateMultisendConfigResponse,
@@ -372,7 +373,7 @@ class AsyncMessagingProfilesResource:
     ) -> MessagingProfileUpdateVerificationsConfigResponse:
         return await self._client.request(
             'PATCH',
-            f'messaging/profiles/{profile_id}/verifications-config',
+            f'messaging/profiles/{_encode_path_param(profile_id)}/verifications-config',
             query=None,
             body=data,
             cast_to=MessagingProfileUpdateVerificationsConfigResponse,
@@ -393,3 +394,7 @@ class AsyncMessagingProfilesResource:
             cast_to=Page[MessagingProfileListItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

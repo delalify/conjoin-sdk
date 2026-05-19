@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -43,7 +44,7 @@ class BillingCustomersResource:
     ) -> BillingCustomerCreateResponse:
         return self._client.request(
             'POST',
-            f'billing/customer/{entity_id}',
+            f'billing/customer/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingCustomerCreateResponse,
@@ -59,7 +60,7 @@ class BillingCustomersResource:
     ) -> Page[BillingCustomerListItem]:
         return self._client.request(
             'GET',
-            f'billing/customer/{entity_id}',
+            f'billing/customer/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingCustomerListItem],
@@ -76,7 +77,7 @@ class BillingCustomersResource:
     ) -> BillingCustomerUpdateResponse:
         return self._client.request(
             'PUT',
-            f'billing/customer/{entity_id}/{customer_id}',
+            f'billing/customer/{_encode_path_param(entity_id)}/{_encode_path_param(customer_id)}',
             query=None,
             body=data,
             cast_to=BillingCustomerUpdateResponse,
@@ -92,7 +93,7 @@ class BillingCustomersResource:
     ) -> BillingCustomerArchiveResponse:
         return self._client.request(
             'PATCH',
-            f'billing/customer/{entity_id}/{customer_id}/archive',
+            f'billing/customer/{_encode_path_param(entity_id)}/{_encode_path_param(customer_id)}/archive',
             query=None,
             body=None,
             cast_to=BillingCustomerArchiveResponse,
@@ -108,7 +109,7 @@ class BillingCustomersResource:
     ) -> BillingCustomerRestoreResponse:
         return self._client.request(
             'PATCH',
-            f'billing/customer/{entity_id}/{customer_id}/restore',
+            f'billing/customer/{_encode_path_param(entity_id)}/{_encode_path_param(customer_id)}/restore',
             query=None,
             body=None,
             cast_to=BillingCustomerRestoreResponse,
@@ -137,7 +138,7 @@ class AsyncBillingCustomersResource:
     ) -> BillingCustomerCreateResponse:
         return await self._client.request(
             'POST',
-            f'billing/customer/{entity_id}',
+            f'billing/customer/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingCustomerCreateResponse,
@@ -153,7 +154,7 @@ class AsyncBillingCustomersResource:
     ) -> Page[BillingCustomerListItem]:
         return await self._client.request(
             'GET',
-            f'billing/customer/{entity_id}',
+            f'billing/customer/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingCustomerListItem],
@@ -170,7 +171,7 @@ class AsyncBillingCustomersResource:
     ) -> BillingCustomerUpdateResponse:
         return await self._client.request(
             'PUT',
-            f'billing/customer/{entity_id}/{customer_id}',
+            f'billing/customer/{_encode_path_param(entity_id)}/{_encode_path_param(customer_id)}',
             query=None,
             body=data,
             cast_to=BillingCustomerUpdateResponse,
@@ -186,7 +187,7 @@ class AsyncBillingCustomersResource:
     ) -> BillingCustomerArchiveResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/customer/{entity_id}/{customer_id}/archive',
+            f'billing/customer/{_encode_path_param(entity_id)}/{_encode_path_param(customer_id)}/archive',
             query=None,
             body=None,
             cast_to=BillingCustomerArchiveResponse,
@@ -202,9 +203,13 @@ class AsyncBillingCustomersResource:
     ) -> BillingCustomerRestoreResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/customer/{entity_id}/{customer_id}/restore',
+            f'billing/customer/{_encode_path_param(entity_id)}/{_encode_path_param(customer_id)}/restore',
             query=None,
             body=None,
             cast_to=BillingCustomerRestoreResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

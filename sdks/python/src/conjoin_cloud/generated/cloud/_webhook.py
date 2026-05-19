@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -73,7 +74,7 @@ class CloudWebhooksResource:
     ) -> CloudWebhookUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'cloud/cloud-webhook/{webhook_id}',
+            f'cloud/cloud-webhook/{_encode_path_param(webhook_id)}',
             query=None,
             body=data,
             cast_to=CloudWebhookUpdateResponse,
@@ -88,7 +89,7 @@ class CloudWebhooksResource:
     ) -> CloudWebhookDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'cloud/cloud-webhook/{webhook_id}',
+            f'cloud/cloud-webhook/{_encode_path_param(webhook_id)}',
             query=None,
             body=None,
             cast_to=CloudWebhookDeleteResponse,
@@ -161,7 +162,7 @@ class AsyncCloudWebhooksResource:
     ) -> CloudWebhookUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'cloud/cloud-webhook/{webhook_id}',
+            f'cloud/cloud-webhook/{_encode_path_param(webhook_id)}',
             query=None,
             body=data,
             cast_to=CloudWebhookUpdateResponse,
@@ -176,7 +177,7 @@ class AsyncCloudWebhooksResource:
     ) -> CloudWebhookDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'cloud/cloud-webhook/{webhook_id}',
+            f'cloud/cloud-webhook/{_encode_path_param(webhook_id)}',
             query=None,
             body=None,
             cast_to=CloudWebhookDeleteResponse,
@@ -196,3 +197,7 @@ class AsyncCloudWebhooksResource:
             cast_to=Page[CloudWebhookReadEventsItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

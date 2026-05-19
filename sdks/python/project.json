@@ -6,15 +6,20 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 -m codegen",
+        "command": "python3 scripts/run_python.py -m codegen",
         "cwd": "{projectRoot}"
       },
+      "inputs": [
+        "{workspaceRoot}/spec/openapi.json",
+        "{projectRoot}/codegen/**/*",
+        "{projectRoot}/scripts/run_python.py"
+      ],
       "outputs": ["{projectRoot}/src/conjoin_cloud/generated"]
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 -m hatchling build",
+        "command": "python3 scripts/run_python.py -m hatchling build",
         "cwd": "{projectRoot}"
       },
       "dependsOn": [],
@@ -23,14 +28,14 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 -m ruff check src tests examples",
+        "command": "python3 scripts/run_python.py -m ruff check src tests examples scripts codegen",
         "cwd": "{projectRoot}"
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 -m pyright",
+        "command": "python3 scripts/run_python.py -m pyright",
         "cwd": "{projectRoot}"
       },
       "inputs": ["default"],
@@ -39,14 +44,14 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 -m ruff format src tests examples",
+        "command": "python3 scripts/run_python.py -m ruff format src tests examples scripts codegen",
         "cwd": "{projectRoot}"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "python3 -m pytest",
+        "command": "python3 scripts/run_python.py -m pytest",
         "cwd": "{projectRoot}"
       }
     }

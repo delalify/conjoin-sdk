@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._request_options import RequestOptions, coerce_request_options
@@ -56,7 +57,7 @@ class MessagingMultisendsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'GET',
-            f'messaging/multisend/{message_id}',
+            f'messaging/multisend/{_encode_path_param(message_id)}',
             query=None,
             body=None,
             cast_to=MessagingMultisendReadResponse,
@@ -103,7 +104,7 @@ class AsyncMessagingMultisendsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'GET',
-            f'messaging/multisend/{message_id}',
+            f'messaging/multisend/{_encode_path_param(message_id)}',
             query=None,
             body=None,
             cast_to=MessagingMultisendReadResponse,
@@ -114,7 +115,8 @@ class AsyncMessagingMultisendsResource:
 def _require_messaging_profile(profile_id: str | None) -> str:
     if profile_id is None or not profile_id.strip():
         raise ConjoinConfigurationError(
-            "Messaging profile scope is required; call client.messaging.with_profile(...)"
+            "Messaging profile scope is required; "
+            "call client.messaging.with_profile(...)"
         )
     return profile_id.strip()
 
@@ -133,3 +135,7 @@ def _with_messaging_profile(
         headers=headers,
         auth=options.auth,
     )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

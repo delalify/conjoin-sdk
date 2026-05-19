@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -54,7 +55,7 @@ class BillingSubscriptionsResource:
     ) -> BillingSubscriptionCreateResponse:
         return self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/create',
+            f'billing/subscription/{_encode_path_param(entity_id)}/create',
             query=None,
             body=data,
             cast_to=BillingSubscriptionCreateResponse,
@@ -70,7 +71,7 @@ class BillingSubscriptionsResource:
     ) -> Page[BillingSubscriptionListItem]:
         return self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionListItem],
@@ -87,7 +88,7 @@ class BillingSubscriptionsResource:
     ) -> BillingSubscriptionUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'billing/subscription/{entity_id}/metadata/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/metadata/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionUpdateResponse,
@@ -104,7 +105,7 @@ class BillingSubscriptionsResource:
     ) -> BillingSubscriptionUpdatePlansResponse:
         return self._client.request(
             'PATCH',
-            f'billing/subscription/{entity_id}/plans/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/plans/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionUpdatePlansResponse,
@@ -121,7 +122,7 @@ class BillingSubscriptionsResource:
     ) -> BillingSubscriptionCancelResponse:
         return self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/cancel/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/cancel/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionCancelResponse,
@@ -138,7 +139,7 @@ class BillingSubscriptionsResource:
     ) -> BillingSubscriptionPauseResponse:
         return self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/pause/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/pause/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionPauseResponse,
@@ -154,7 +155,7 @@ class BillingSubscriptionsResource:
     ) -> BillingSubscriptionResumeResponse:
         return self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/resume/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/resume/{_encode_path_param(subscription_id)}',
             query=None,
             body=None,
             cast_to=BillingSubscriptionResumeResponse,
@@ -171,7 +172,7 @@ class BillingSubscriptionsResource:
     ) -> BillingSubscriptionRecordUsageResponse:
         return self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/usage/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/usage/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionRecordUsageResponse,
@@ -187,7 +188,7 @@ class BillingSubscriptionsResource:
     ) -> Page[BillingSubscriptionReadUsageSummaryItem]:
         return self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/usage-summary',
+            f'billing/subscription/{_encode_path_param(entity_id)}/usage-summary',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionReadUsageSummaryItem],
@@ -204,7 +205,7 @@ class BillingSubscriptionsResource:
     ) -> Page[BillingSubscriptionReadCyclesItem]:
         return self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/cycles/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/cycles/{_encode_path_param(subscription_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionReadCyclesItem],
@@ -233,7 +234,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> BillingSubscriptionCreateResponse:
         return await self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/create',
+            f'billing/subscription/{_encode_path_param(entity_id)}/create',
             query=None,
             body=data,
             cast_to=BillingSubscriptionCreateResponse,
@@ -249,7 +250,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> Page[BillingSubscriptionListItem]:
         return await self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionListItem],
@@ -266,7 +267,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> BillingSubscriptionUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/subscription/{entity_id}/metadata/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/metadata/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionUpdateResponse,
@@ -283,7 +284,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> BillingSubscriptionUpdatePlansResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/subscription/{entity_id}/plans/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/plans/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionUpdatePlansResponse,
@@ -300,7 +301,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> BillingSubscriptionCancelResponse:
         return await self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/cancel/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/cancel/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionCancelResponse,
@@ -317,7 +318,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> BillingSubscriptionPauseResponse:
         return await self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/pause/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/pause/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionPauseResponse,
@@ -333,7 +334,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> BillingSubscriptionResumeResponse:
         return await self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/resume/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/resume/{_encode_path_param(subscription_id)}',
             query=None,
             body=None,
             cast_to=BillingSubscriptionResumeResponse,
@@ -350,7 +351,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> BillingSubscriptionRecordUsageResponse:
         return await self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/usage/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/usage/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionRecordUsageResponse,
@@ -366,7 +367,7 @@ class AsyncBillingSubscriptionsResource:
     ) -> Page[BillingSubscriptionReadUsageSummaryItem]:
         return await self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/usage-summary',
+            f'billing/subscription/{_encode_path_param(entity_id)}/usage-summary',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionReadUsageSummaryItem],
@@ -383,9 +384,13 @@ class AsyncBillingSubscriptionsResource:
     ) -> Page[BillingSubscriptionReadCyclesItem]:
         return await self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/cycles/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/cycles/{_encode_path_param(subscription_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionReadCyclesItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

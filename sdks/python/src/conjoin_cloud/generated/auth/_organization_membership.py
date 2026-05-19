@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -43,7 +44,7 @@ class AuthOrganizationMembershipsResource:
     ) -> AuthOrganizationMembershipCreateMembershipResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/create',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationMembershipCreateMembershipResponse,
@@ -60,7 +61,7 @@ class AuthOrganizationMembershipsResource:
     ) -> Page[AuthOrganizationMembershipListMembershipsItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/list',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationMembershipListMembershipsItem],
@@ -78,7 +79,7 @@ class AuthOrganizationMembershipsResource:
     ) -> AuthOrganizationMembershipUpdateMembershipResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/{membership_id}/update',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/{_encode_path_param(membership_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationMembershipUpdateMembershipResponse,
@@ -95,7 +96,7 @@ class AuthOrganizationMembershipsResource:
     ) -> AuthOrganizationMembershipDeleteMembershipResponse:
         return self._client.request(
             'DELETE',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/{membership_id}/delete',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/{_encode_path_param(membership_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationMembershipDeleteMembershipResponse,
@@ -125,7 +126,7 @@ class AsyncAuthOrganizationMembershipsResource:
     ) -> AuthOrganizationMembershipCreateMembershipResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/create',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationMembershipCreateMembershipResponse,
@@ -142,7 +143,7 @@ class AsyncAuthOrganizationMembershipsResource:
     ) -> Page[AuthOrganizationMembershipListMembershipsItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/list',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationMembershipListMembershipsItem],
@@ -160,7 +161,7 @@ class AsyncAuthOrganizationMembershipsResource:
     ) -> AuthOrganizationMembershipUpdateMembershipResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/{membership_id}/update',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/{_encode_path_param(membership_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationMembershipUpdateMembershipResponse,
@@ -177,9 +178,13 @@ class AsyncAuthOrganizationMembershipsResource:
     ) -> AuthOrganizationMembershipDeleteMembershipResponse:
         return await self._client.request(
             'DELETE',
-            f'auth/organization/membership/{app_id}/organization/{organization_id}/membership/{membership_id}/delete',
+            f'auth/organization/membership/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/membership/{_encode_path_param(membership_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationMembershipDeleteMembershipResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

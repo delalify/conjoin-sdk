@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._models import Page
@@ -50,7 +51,7 @@ class MessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/email/senders/verify/{sender_id}',
+            f'messaging/email/senders/verify/{_encode_path_param(sender_id)}',
             query=None,
             body=None,
             cast_to=MessagingEmailSenderVerifyResponse,
@@ -85,7 +86,7 @@ class MessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'GET',
-            f'messaging/email/senders/{sender_id}',
+            f'messaging/email/senders/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderListOneResponse,
@@ -103,7 +104,7 @@ class MessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'DELETE',
-            f'messaging/email/senders/{sender_id}',
+            f'messaging/email/senders/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderDeleteResponse,
@@ -138,7 +139,7 @@ class MessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/email/senders/enable/{sender_id}',
+            f'messaging/email/senders/enable/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderEnableResponse,
@@ -156,7 +157,7 @@ class MessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/email/senders/disable/{sender_id}',
+            f'messaging/email/senders/disable/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderDisableResponse,
@@ -174,7 +175,7 @@ class MessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/email/senders/transfers/{sender_id}/{project_id}',
+            f'messaging/email/senders/transfers/{_encode_path_param(sender_id)}/{_encode_path_param(project_id)}',
             query=None,
             body=None,
             cast_to=MessagingEmailSenderTransferResponse,
@@ -204,7 +205,7 @@ class AsyncMessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/email/senders/verify/{sender_id}',
+            f'messaging/email/senders/verify/{_encode_path_param(sender_id)}',
             query=None,
             body=None,
             cast_to=MessagingEmailSenderVerifyResponse,
@@ -239,7 +240,7 @@ class AsyncMessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'GET',
-            f'messaging/email/senders/{sender_id}',
+            f'messaging/email/senders/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderListOneResponse,
@@ -257,7 +258,7 @@ class AsyncMessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'DELETE',
-            f'messaging/email/senders/{sender_id}',
+            f'messaging/email/senders/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderDeleteResponse,
@@ -292,7 +293,7 @@ class AsyncMessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/email/senders/enable/{sender_id}',
+            f'messaging/email/senders/enable/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderEnableResponse,
@@ -310,7 +311,7 @@ class AsyncMessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/email/senders/disable/{sender_id}',
+            f'messaging/email/senders/disable/{_encode_path_param(sender_id)}',
             query=None,
             body=data,
             cast_to=MessagingEmailSenderDisableResponse,
@@ -328,7 +329,7 @@ class AsyncMessagingEmailSendersResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/email/senders/transfers/{sender_id}/{project_id}',
+            f'messaging/email/senders/transfers/{_encode_path_param(sender_id)}/{_encode_path_param(project_id)}',
             query=None,
             body=None,
             cast_to=MessagingEmailSenderTransferResponse,
@@ -339,7 +340,8 @@ class AsyncMessagingEmailSendersResource:
 def _require_messaging_profile(profile_id: str | None) -> str:
     if profile_id is None or not profile_id.strip():
         raise ConjoinConfigurationError(
-            "Messaging profile scope is required; call client.messaging.with_profile(...)"
+            "Messaging profile scope is required; "
+            "call client.messaging.with_profile(...)"
         )
     return profile_id.strip()
 
@@ -358,3 +360,7 @@ def _with_messaging_profile(
         headers=headers,
         auth=options.auth,
     )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -82,7 +83,7 @@ class RelayPipelinesResource:
     ) -> RelayPipelinesUpdatePipelineDefinitionResponse:
         return self._client.request(
             'PATCH',
-            f'relay/pipelines/{pipeline_id}/update',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/update',
             query=None,
             body=data,
             cast_to=RelayPipelinesUpdatePipelineDefinitionResponse,
@@ -97,7 +98,7 @@ class RelayPipelinesResource:
     ) -> RelayPipelinesDeletePipelineDefinitionResponse:
         return self._client.request(
             'DELETE',
-            f'relay/pipelines/{pipeline_id}/delete',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayPipelinesDeletePipelineDefinitionResponse,
@@ -113,7 +114,7 @@ class RelayPipelinesResource:
     ) -> RelayPipelinesTriggerPipelineRunResponse:
         return self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/trigger',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/trigger',
             query=None,
             body=data,
             cast_to=RelayPipelinesTriggerPipelineRunResponse,
@@ -129,7 +130,7 @@ class RelayPipelinesResource:
     ) -> Page[RelayPipelinesReadPipelineRunsItem]:
         return self._client.request(
             'GET',
-            f'relay/pipelines/{pipeline_id}/runs',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs',
             query=query,
             body=None,
             cast_to=Page[RelayPipelinesReadPipelineRunsItem],
@@ -145,7 +146,7 @@ class RelayPipelinesResource:
     ) -> RelayPipelinesReadPipelineRunResponse:
         return self._client.request(
             'GET',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}',
             query=None,
             body=None,
             cast_to=RelayPipelinesReadPipelineRunResponse,
@@ -161,7 +162,7 @@ class RelayPipelinesResource:
     ) -> RelayPipelinesCancelPipelineRunResponse:
         return self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}/cancel',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}/cancel',
             query=None,
             body=None,
             cast_to=RelayPipelinesCancelPipelineRunResponse,
@@ -179,7 +180,7 @@ class RelayPipelinesResource:
     ) -> RelayPipelinesApprovePipelineGateResponse:
         return self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}/gates/{step_id}/approve',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}/gates/{_encode_path_param(step_id)}/approve',
             query=None,
             body=data,
             cast_to=RelayPipelinesApprovePipelineGateResponse,
@@ -197,7 +198,7 @@ class RelayPipelinesResource:
     ) -> RelayPipelinesRejectPipelineGateResponse:
         return self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}/gates/{step_id}/reject',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}/gates/{_encode_path_param(step_id)}/reject',
             query=None,
             body=data,
             cast_to=RelayPipelinesRejectPipelineGateResponse,
@@ -256,7 +257,7 @@ class AsyncRelayPipelinesResource:
     ) -> RelayPipelinesUpdatePipelineDefinitionResponse:
         return await self._client.request(
             'PATCH',
-            f'relay/pipelines/{pipeline_id}/update',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/update',
             query=None,
             body=data,
             cast_to=RelayPipelinesUpdatePipelineDefinitionResponse,
@@ -271,7 +272,7 @@ class AsyncRelayPipelinesResource:
     ) -> RelayPipelinesDeletePipelineDefinitionResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/pipelines/{pipeline_id}/delete',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayPipelinesDeletePipelineDefinitionResponse,
@@ -287,7 +288,7 @@ class AsyncRelayPipelinesResource:
     ) -> RelayPipelinesTriggerPipelineRunResponse:
         return await self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/trigger',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/trigger',
             query=None,
             body=data,
             cast_to=RelayPipelinesTriggerPipelineRunResponse,
@@ -303,7 +304,7 @@ class AsyncRelayPipelinesResource:
     ) -> Page[RelayPipelinesReadPipelineRunsItem]:
         return await self._client.request(
             'GET',
-            f'relay/pipelines/{pipeline_id}/runs',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs',
             query=query,
             body=None,
             cast_to=Page[RelayPipelinesReadPipelineRunsItem],
@@ -319,7 +320,7 @@ class AsyncRelayPipelinesResource:
     ) -> RelayPipelinesReadPipelineRunResponse:
         return await self._client.request(
             'GET',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}',
             query=None,
             body=None,
             cast_to=RelayPipelinesReadPipelineRunResponse,
@@ -335,7 +336,7 @@ class AsyncRelayPipelinesResource:
     ) -> RelayPipelinesCancelPipelineRunResponse:
         return await self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}/cancel',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}/cancel',
             query=None,
             body=None,
             cast_to=RelayPipelinesCancelPipelineRunResponse,
@@ -353,7 +354,7 @@ class AsyncRelayPipelinesResource:
     ) -> RelayPipelinesApprovePipelineGateResponse:
         return await self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}/gates/{step_id}/approve',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}/gates/{_encode_path_param(step_id)}/approve',
             query=None,
             body=data,
             cast_to=RelayPipelinesApprovePipelineGateResponse,
@@ -371,9 +372,13 @@ class AsyncRelayPipelinesResource:
     ) -> RelayPipelinesRejectPipelineGateResponse:
         return await self._client.request(
             'POST',
-            f'relay/pipelines/{pipeline_id}/runs/{run_id}/gates/{step_id}/reject',
+            f'relay/pipelines/{_encode_path_param(pipeline_id)}/runs/{_encode_path_param(run_id)}/gates/{_encode_path_param(step_id)}/reject',
             query=None,
             body=data,
             cast_to=RelayPipelinesRejectPipelineGateResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

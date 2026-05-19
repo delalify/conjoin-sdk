@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._models import Page
@@ -72,7 +73,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/conversations/clone/{conversation_id}',
+            f'messaging/conversations/clone/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=MessagingConversationCloneResponse,
@@ -89,7 +90,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/conversations/wipe/{conversation_id}',
+            f'messaging/conversations/wipe/{_encode_path_param(conversation_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationDeleteResponse,
@@ -107,7 +108,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/conversations/archive/{conversation_id}',
+            f'messaging/conversations/archive/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=MessagingConversationArchiveResponse,
@@ -125,7 +126,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/conversations/{conversation_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=MessagingConversationUpdateResponse,
@@ -143,7 +144,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=Page[MessagingConversationListItem],
@@ -161,7 +162,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/messages/{parent_message_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/messages/{_encode_path_param(parent_message_id)}',
             query=None,
             body=None,
             cast_to=Page[MessagingConversationReadMessagesItem],
@@ -179,7 +180,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'GET',
-            f'messaging/conversations/{conversation_id}/recipients/{recipient_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/{_encode_path_param(recipient_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationReadOneRecipientResponse,
@@ -197,7 +198,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'DELETE',
-            f'messaging/conversations/{conversation_id}/recipients/{recipient_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/{_encode_path_param(recipient_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationDeleteRecipientsResponse,
@@ -214,7 +215,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/recipients',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients',
             query=None,
             body=None,
             cast_to=Page[MessagingConversationReadManyRecipientsItem],
@@ -231,7 +232,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/recipients/new',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/new',
             query=None,
             body=None,
             cast_to=MessagingConversationAddOneRecipientResponse,
@@ -248,7 +249,7 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/recipients/batch',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/batch',
             query=None,
             body=None,
             cast_to=Page[MessagingConversationAddManyRecipientsItem],
@@ -296,7 +297,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/conversations/clone/{conversation_id}',
+            f'messaging/conversations/clone/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=MessagingConversationCloneResponse,
@@ -313,7 +314,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/conversations/wipe/{conversation_id}',
+            f'messaging/conversations/wipe/{_encode_path_param(conversation_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationDeleteResponse,
@@ -331,7 +332,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/conversations/archive/{conversation_id}',
+            f'messaging/conversations/archive/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=MessagingConversationArchiveResponse,
@@ -349,7 +350,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/conversations/{conversation_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=MessagingConversationUpdateResponse,
@@ -367,7 +368,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}',
             query=None,
             body=data,
             cast_to=Page[MessagingConversationListItem],
@@ -385,7 +386,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/messages/{parent_message_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/messages/{_encode_path_param(parent_message_id)}',
             query=None,
             body=None,
             cast_to=Page[MessagingConversationReadMessagesItem],
@@ -403,7 +404,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'GET',
-            f'messaging/conversations/{conversation_id}/recipients/{recipient_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/{_encode_path_param(recipient_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationReadOneRecipientResponse,
@@ -421,7 +422,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'DELETE',
-            f'messaging/conversations/{conversation_id}/recipients/{recipient_id}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/{_encode_path_param(recipient_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationDeleteRecipientsResponse,
@@ -438,7 +439,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/recipients',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients',
             query=None,
             body=None,
             cast_to=Page[MessagingConversationReadManyRecipientsItem],
@@ -455,7 +456,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/recipients/new',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/new',
             query=None,
             body=None,
             cast_to=MessagingConversationAddOneRecipientResponse,
@@ -472,7 +473,7 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/conversations/{conversation_id}/recipients/batch',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/recipients/batch',
             query=None,
             body=None,
             cast_to=Page[MessagingConversationAddManyRecipientsItem],
@@ -483,7 +484,8 @@ class AsyncMessagingConversationsResource:
 def _require_messaging_profile(profile_id: str | None) -> str:
     if profile_id is None or not profile_id.strip():
         raise ConjoinConfigurationError(
-            "Messaging profile scope is required; call client.messaging.with_profile(...)"
+            "Messaging profile scope is required; "
+            "call client.messaging.with_profile(...)"
         )
     return profile_id.strip()
 
@@ -502,3 +504,7 @@ def _with_messaging_profile(
         headers=headers,
         auth=options.auth,
     )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

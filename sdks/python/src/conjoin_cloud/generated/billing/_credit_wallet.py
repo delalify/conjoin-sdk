@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -73,7 +74,7 @@ class BillingCreditWalletsResource:
     ) -> BillingCreditWalletUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'billing/credit-wallet/{wallet_id}',
+            f'billing/credit-wallet/{_encode_path_param(wallet_id)}',
             query=None,
             body=data,
             cast_to=BillingCreditWalletUpdateResponse,
@@ -147,7 +148,7 @@ class AsyncBillingCreditWalletsResource:
     ) -> BillingCreditWalletUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/credit-wallet/{wallet_id}',
+            f'billing/credit-wallet/{_encode_path_param(wallet_id)}',
             query=None,
             body=data,
             cast_to=BillingCreditWalletUpdateResponse,
@@ -168,3 +169,7 @@ class AsyncBillingCreditWalletsResource:
             cast_to=BillingCreditWalletGrantCreditsResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

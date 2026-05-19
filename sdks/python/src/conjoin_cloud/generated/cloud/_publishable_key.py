@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -68,7 +69,7 @@ class CloudPublishableKeysResource:
     ) -> CloudPublishableKeyRotateResponse:
         return self._client.request(
             'POST',
-            f'cloud/publishable-key/{publishable_key_id}/rotate',
+            f'cloud/publishable-key/{_encode_path_param(publishable_key_id)}/rotate',
             query=None,
             body=None,
             cast_to=CloudPublishableKeyRotateResponse,
@@ -84,7 +85,7 @@ class CloudPublishableKeysResource:
     ) -> CloudPublishableKeyUpdateDomainsResponse:
         return self._client.request(
             'PATCH',
-            f'cloud/publishable-key/{publishable_key_id}/domains',
+            f'cloud/publishable-key/{_encode_path_param(publishable_key_id)}/domains',
             query=None,
             body=data,
             cast_to=CloudPublishableKeyUpdateDomainsResponse,
@@ -99,7 +100,7 @@ class CloudPublishableKeysResource:
     ) -> CloudPublishableKeyRevokeResponse:
         return self._client.request(
             'DELETE',
-            f'cloud/publishable-key/{publishable_key_id}',
+            f'cloud/publishable-key/{_encode_path_param(publishable_key_id)}',
             query=None,
             body=None,
             cast_to=CloudPublishableKeyRevokeResponse,
@@ -155,7 +156,7 @@ class AsyncCloudPublishableKeysResource:
     ) -> CloudPublishableKeyRotateResponse:
         return await self._client.request(
             'POST',
-            f'cloud/publishable-key/{publishable_key_id}/rotate',
+            f'cloud/publishable-key/{_encode_path_param(publishable_key_id)}/rotate',
             query=None,
             body=None,
             cast_to=CloudPublishableKeyRotateResponse,
@@ -171,7 +172,7 @@ class AsyncCloudPublishableKeysResource:
     ) -> CloudPublishableKeyUpdateDomainsResponse:
         return await self._client.request(
             'PATCH',
-            f'cloud/publishable-key/{publishable_key_id}/domains',
+            f'cloud/publishable-key/{_encode_path_param(publishable_key_id)}/domains',
             query=None,
             body=data,
             cast_to=CloudPublishableKeyUpdateDomainsResponse,
@@ -186,9 +187,13 @@ class AsyncCloudPublishableKeysResource:
     ) -> CloudPublishableKeyRevokeResponse:
         return await self._client.request(
             'DELETE',
-            f'cloud/publishable-key/{publishable_key_id}',
+            f'cloud/publishable-key/{_encode_path_param(publishable_key_id)}',
             query=None,
             body=None,
             cast_to=CloudPublishableKeyRevokeResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

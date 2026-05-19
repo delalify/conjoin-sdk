@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -87,7 +88,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesUpdateQueueDefinitionResponse:
         return self._client.request(
             'PATCH',
-            f'relay/queues/{queue_id}/update',
+            f'relay/queues/{_encode_path_param(queue_id)}/update',
             query=None,
             body=data,
             cast_to=RelayQueuesUpdateQueueDefinitionResponse,
@@ -102,7 +103,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesDeleteQueueDefinitionResponse:
         return self._client.request(
             'DELETE',
-            f'relay/queues/{queue_id}/delete',
+            f'relay/queues/{_encode_path_param(queue_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayQueuesDeleteQueueDefinitionResponse,
@@ -117,7 +118,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesPauseQueueResponse:
         return self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/pause',
+            f'relay/queues/{_encode_path_param(queue_id)}/pause',
             query=None,
             body=None,
             cast_to=RelayQueuesPauseQueueResponse,
@@ -132,7 +133,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesResumeQueueResponse:
         return self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/resume',
+            f'relay/queues/{_encode_path_param(queue_id)}/resume',
             query=None,
             body=None,
             cast_to=RelayQueuesResumeQueueResponse,
@@ -148,7 +149,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesEnqueueTaskResponse:
         return self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/enqueue',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/enqueue',
             query=None,
             body=data,
             cast_to=RelayQueuesEnqueueTaskResponse,
@@ -164,7 +165,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesBatchEnqueueTasksResponse:
         return self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/enqueue-batch',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/enqueue-batch',
             query=None,
             body=data,
             cast_to=RelayQueuesBatchEnqueueTasksResponse,
@@ -180,7 +181,7 @@ class RelayQueuesResource:
     ) -> Page[RelayQueuesReadQueueTasksItem]:
         return self._client.request(
             'GET',
-            f'relay/queues/{queue_id}/tasks',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks',
             query=query,
             body=None,
             cast_to=Page[RelayQueuesReadQueueTasksItem],
@@ -196,7 +197,7 @@ class RelayQueuesResource:
     ) -> Page[RelayQueuesReadDeadLetterTasksItem]:
         return self._client.request(
             'GET',
-            f'relay/queues/{queue_id}/dead-letter',
+            f'relay/queues/{_encode_path_param(queue_id)}/dead-letter',
             query=query,
             body=None,
             cast_to=Page[RelayQueuesReadDeadLetterTasksItem],
@@ -212,7 +213,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesReplayDeadLetterTaskResponse:
         return self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/dead-letter/{dlq_entry_id}/replay',
+            f'relay/queues/{_encode_path_param(queue_id)}/dead-letter/{_encode_path_param(dlq_entry_id)}/replay',
             query=None,
             body=None,
             cast_to=RelayQueuesReplayDeadLetterTaskResponse,
@@ -228,7 +229,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesBatchGetQueueTasksResponse:
         return self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/batch',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/batch',
             query=None,
             body=data,
             cast_to=RelayQueuesBatchGetQueueTasksResponse,
@@ -244,7 +245,7 @@ class RelayQueuesResource:
     ) -> RelayQueuesPurgeQueueTasksResponse:
         return self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/purge',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/purge',
             query=None,
             body=data,
             cast_to=RelayQueuesPurgeQueueTasksResponse,
@@ -303,7 +304,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesUpdateQueueDefinitionResponse:
         return await self._client.request(
             'PATCH',
-            f'relay/queues/{queue_id}/update',
+            f'relay/queues/{_encode_path_param(queue_id)}/update',
             query=None,
             body=data,
             cast_to=RelayQueuesUpdateQueueDefinitionResponse,
@@ -318,7 +319,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesDeleteQueueDefinitionResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/queues/{queue_id}/delete',
+            f'relay/queues/{_encode_path_param(queue_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayQueuesDeleteQueueDefinitionResponse,
@@ -333,7 +334,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesPauseQueueResponse:
         return await self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/pause',
+            f'relay/queues/{_encode_path_param(queue_id)}/pause',
             query=None,
             body=None,
             cast_to=RelayQueuesPauseQueueResponse,
@@ -348,7 +349,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesResumeQueueResponse:
         return await self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/resume',
+            f'relay/queues/{_encode_path_param(queue_id)}/resume',
             query=None,
             body=None,
             cast_to=RelayQueuesResumeQueueResponse,
@@ -364,7 +365,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesEnqueueTaskResponse:
         return await self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/enqueue',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/enqueue',
             query=None,
             body=data,
             cast_to=RelayQueuesEnqueueTaskResponse,
@@ -380,7 +381,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesBatchEnqueueTasksResponse:
         return await self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/enqueue-batch',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/enqueue-batch',
             query=None,
             body=data,
             cast_to=RelayQueuesBatchEnqueueTasksResponse,
@@ -396,7 +397,7 @@ class AsyncRelayQueuesResource:
     ) -> Page[RelayQueuesReadQueueTasksItem]:
         return await self._client.request(
             'GET',
-            f'relay/queues/{queue_id}/tasks',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks',
             query=query,
             body=None,
             cast_to=Page[RelayQueuesReadQueueTasksItem],
@@ -412,7 +413,7 @@ class AsyncRelayQueuesResource:
     ) -> Page[RelayQueuesReadDeadLetterTasksItem]:
         return await self._client.request(
             'GET',
-            f'relay/queues/{queue_id}/dead-letter',
+            f'relay/queues/{_encode_path_param(queue_id)}/dead-letter',
             query=query,
             body=None,
             cast_to=Page[RelayQueuesReadDeadLetterTasksItem],
@@ -428,7 +429,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesReplayDeadLetterTaskResponse:
         return await self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/dead-letter/{dlq_entry_id}/replay',
+            f'relay/queues/{_encode_path_param(queue_id)}/dead-letter/{_encode_path_param(dlq_entry_id)}/replay',
             query=None,
             body=None,
             cast_to=RelayQueuesReplayDeadLetterTaskResponse,
@@ -444,7 +445,7 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesBatchGetQueueTasksResponse:
         return await self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/batch',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/batch',
             query=None,
             body=data,
             cast_to=RelayQueuesBatchGetQueueTasksResponse,
@@ -460,9 +461,13 @@ class AsyncRelayQueuesResource:
     ) -> RelayQueuesPurgeQueueTasksResponse:
         return await self._client.request(
             'POST',
-            f'relay/queues/{queue_id}/tasks/purge',
+            f'relay/queues/{_encode_path_param(queue_id)}/tasks/purge',
             query=None,
             body=data,
             cast_to=RelayQueuesPurgeQueueTasksResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

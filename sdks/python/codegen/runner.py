@@ -14,7 +14,10 @@ def main() -> None:
     render_all(groups)
     operation_count = sum(len(group.operations) for group in groups)
     _remove_bytecode_caches()
-    print(f"Generated Python SDK resources for {operation_count} operations in {len(groups)} groups.")
+    print(
+        f"Generated Python SDK resources for {operation_count} operations "
+        f"in {len(groups)} groups."
+    )
 
 
 def _remove_bytecode_caches() -> None:

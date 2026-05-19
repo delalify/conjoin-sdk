@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -60,7 +61,7 @@ class AuthAppsResource:
     ) -> AuthAppReadResponse:
         return self._client.request(
             'GET',
-            f'auth/app/{app_id}',
+            f'auth/app/{_encode_path_param(app_id)}',
             query=None,
             body=None,
             cast_to=AuthAppReadResponse,
@@ -91,7 +92,7 @@ class AuthAppsResource:
     ) -> AuthAppUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'auth/app/{app_id}/update',
+            f'auth/app/{_encode_path_param(app_id)}/update',
             query=None,
             body=data,
             cast_to=AuthAppUpdateResponse,
@@ -107,7 +108,7 @@ class AuthAppsResource:
     ) -> AuthAppUpdateSettingsResponse:
         return self._client.request(
             'PATCH',
-            f'auth/app/{app_id}/settings/update',
+            f'auth/app/{_encode_path_param(app_id)}/settings/update',
             query=None,
             body=data,
             cast_to=AuthAppUpdateSettingsResponse,
@@ -123,7 +124,7 @@ class AuthAppsResource:
     ) -> AuthAppUpdateCustomAttributesResponse:
         return self._client.request(
             'PUT',
-            f'auth/app/{app_id}/settings/custom-attributes-schema',
+            f'auth/app/{_encode_path_param(app_id)}/settings/custom-attributes-schema',
             query=None,
             body=data,
             cast_to=AuthAppUpdateCustomAttributesResponse,
@@ -166,7 +167,7 @@ class AsyncAuthAppsResource:
     ) -> AuthAppReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/app/{app_id}',
+            f'auth/app/{_encode_path_param(app_id)}',
             query=None,
             body=None,
             cast_to=AuthAppReadResponse,
@@ -197,7 +198,7 @@ class AsyncAuthAppsResource:
     ) -> AuthAppUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/app/{app_id}/update',
+            f'auth/app/{_encode_path_param(app_id)}/update',
             query=None,
             body=data,
             cast_to=AuthAppUpdateResponse,
@@ -213,7 +214,7 @@ class AsyncAuthAppsResource:
     ) -> AuthAppUpdateSettingsResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/app/{app_id}/settings/update',
+            f'auth/app/{_encode_path_param(app_id)}/settings/update',
             query=None,
             body=data,
             cast_to=AuthAppUpdateSettingsResponse,
@@ -229,9 +230,13 @@ class AsyncAuthAppsResource:
     ) -> AuthAppUpdateCustomAttributesResponse:
         return await self._client.request(
             'PUT',
-            f'auth/app/{app_id}/settings/custom-attributes-schema',
+            f'auth/app/{_encode_path_param(app_id)}/settings/custom-attributes-schema',
             query=None,
             body=data,
             cast_to=AuthAppUpdateCustomAttributesResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

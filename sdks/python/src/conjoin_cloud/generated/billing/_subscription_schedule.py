@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -43,7 +44,7 @@ class BillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleCreateResponse:
         return self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionScheduleCreateResponse,
@@ -60,7 +61,7 @@ class BillingSubscriptionSchedulesResource:
     ) -> Page[BillingSubscriptionScheduleListItem]:
         return self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionScheduleListItem],
@@ -77,7 +78,7 @@ class BillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleGetResponse:
         return self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}/{schedule_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}/{_encode_path_param(schedule_id)}',
             query=None,
             body=None,
             cast_to=BillingSubscriptionScheduleGetResponse,
@@ -94,7 +95,7 @@ class BillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleCancelResponse:
         return self._client.request(
             'DELETE',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}/{schedule_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}/{_encode_path_param(schedule_id)}',
             query=None,
             body=None,
             cast_to=BillingSubscriptionScheduleCancelResponse,
@@ -111,7 +112,7 @@ class BillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleReleaseResponse:
         return self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}/{schedule_id}/release',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}/{_encode_path_param(schedule_id)}/release',
             query=None,
             body=None,
             cast_to=BillingSubscriptionScheduleReleaseResponse,
@@ -141,7 +142,7 @@ class AsyncBillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleCreateResponse:
         return await self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}',
             query=None,
             body=data,
             cast_to=BillingSubscriptionScheduleCreateResponse,
@@ -158,7 +159,7 @@ class AsyncBillingSubscriptionSchedulesResource:
     ) -> Page[BillingSubscriptionScheduleListItem]:
         return await self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingSubscriptionScheduleListItem],
@@ -175,7 +176,7 @@ class AsyncBillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleGetResponse:
         return await self._client.request(
             'GET',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}/{schedule_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}/{_encode_path_param(schedule_id)}',
             query=None,
             body=None,
             cast_to=BillingSubscriptionScheduleGetResponse,
@@ -192,7 +193,7 @@ class AsyncBillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleCancelResponse:
         return await self._client.request(
             'DELETE',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}/{schedule_id}',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}/{_encode_path_param(schedule_id)}',
             query=None,
             body=None,
             cast_to=BillingSubscriptionScheduleCancelResponse,
@@ -209,9 +210,13 @@ class AsyncBillingSubscriptionSchedulesResource:
     ) -> BillingSubscriptionScheduleReleaseResponse:
         return await self._client.request(
             'POST',
-            f'billing/subscription/{entity_id}/schedules/{subscription_id}/{schedule_id}/release',
+            f'billing/subscription/{_encode_path_param(entity_id)}/schedules/{_encode_path_param(subscription_id)}/{_encode_path_param(schedule_id)}/release',
             query=None,
             body=None,
             cast_to=BillingSubscriptionScheduleReleaseResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

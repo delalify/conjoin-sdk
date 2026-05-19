@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -83,7 +84,7 @@ class StorageObjectsResource:
     ) -> StorageObjectRenameResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-object/rename/{container_name_or_id}/{old_name}/{new_name}',
+            f'storage/storage-object/rename/{_encode_path_param(container_name_or_id)}/{_encode_path_param(old_name)}/{_encode_path_param(new_name)}',
             query=None,
             body=None,
             cast_to=StorageObjectRenameResponse,
@@ -99,7 +100,7 @@ class StorageObjectsResource:
     ) -> StorageObjectArchiveResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-object/archive/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/archive/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageObjectArchiveResponse,
@@ -115,7 +116,7 @@ class StorageObjectsResource:
     ) -> StorageObjectRestoreResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-object/restore/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/restore/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageObjectRestoreResponse,
@@ -132,7 +133,7 @@ class StorageObjectsResource:
     ) -> StorageObjectDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'storage/storage-object/{container_name_or_id}/{prefix}/{name}',
+            f'storage/storage-object/{_encode_path_param(container_name_or_id)}/{_encode_path_param(prefix)}/{_encode_path_param(name)}',
             query=None,
             body=None,
             cast_to=StorageObjectDeleteResponse,
@@ -148,7 +149,7 @@ class StorageObjectsResource:
     ) -> StorageObjectReadResponse:
         return self._client.request(
             'GET',
-            f'storage/storage-object/details/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/details/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageObjectReadResponse,
@@ -164,7 +165,7 @@ class StorageObjectsResource:
     ) -> Page[StorageObjectListItem]:
         return self._client.request(
             'GET',
-            f'storage/storage-object/list/{container_name_or_id}',
+            f'storage/storage-object/list/{_encode_path_param(container_name_or_id)}',
             query=query,
             body=None,
             cast_to=Page[StorageObjectListItem],
@@ -181,7 +182,7 @@ class StorageObjectsResource:
     ) -> Page[StorageObjectListVersionsItem]:
         return self._client.request(
             'GET',
-            f'storage/storage-object/versions/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/versions/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=query,
             body=None,
             cast_to=Page[StorageObjectListVersionsItem],
@@ -198,7 +199,7 @@ class StorageObjectsResource:
     ) -> StorageObjectRestoreVersionResponse:
         return self._client.request(
             'POST',
-            f'storage/storage-object/versions/restore/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/versions/restore/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageObjectRestoreVersionResponse,
@@ -214,7 +215,7 @@ class StorageObjectsResource:
     ) -> StorageObjectCheckDuplicateResponse:
         return self._client.request(
             'GET',
-            f'storage/storage-object/check-duplicate/{container_name_or_id}',
+            f'storage/storage-object/check-duplicate/{_encode_path_param(container_name_or_id)}',
             query=query,
             body=None,
             cast_to=StorageObjectCheckDuplicateResponse,
@@ -274,7 +275,7 @@ class AsyncStorageObjectsResource:
     ) -> StorageObjectRenameResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-object/rename/{container_name_or_id}/{old_name}/{new_name}',
+            f'storage/storage-object/rename/{_encode_path_param(container_name_or_id)}/{_encode_path_param(old_name)}/{_encode_path_param(new_name)}',
             query=None,
             body=None,
             cast_to=StorageObjectRenameResponse,
@@ -290,7 +291,7 @@ class AsyncStorageObjectsResource:
     ) -> StorageObjectArchiveResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-object/archive/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/archive/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageObjectArchiveResponse,
@@ -306,7 +307,7 @@ class AsyncStorageObjectsResource:
     ) -> StorageObjectRestoreResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-object/restore/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/restore/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageObjectRestoreResponse,
@@ -323,7 +324,7 @@ class AsyncStorageObjectsResource:
     ) -> StorageObjectDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'storage/storage-object/{container_name_or_id}/{prefix}/{name}',
+            f'storage/storage-object/{_encode_path_param(container_name_or_id)}/{_encode_path_param(prefix)}/{_encode_path_param(name)}',
             query=None,
             body=None,
             cast_to=StorageObjectDeleteResponse,
@@ -339,7 +340,7 @@ class AsyncStorageObjectsResource:
     ) -> StorageObjectReadResponse:
         return await self._client.request(
             'GET',
-            f'storage/storage-object/details/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/details/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageObjectReadResponse,
@@ -355,7 +356,7 @@ class AsyncStorageObjectsResource:
     ) -> Page[StorageObjectListItem]:
         return await self._client.request(
             'GET',
-            f'storage/storage-object/list/{container_name_or_id}',
+            f'storage/storage-object/list/{_encode_path_param(container_name_or_id)}',
             query=query,
             body=None,
             cast_to=Page[StorageObjectListItem],
@@ -372,7 +373,7 @@ class AsyncStorageObjectsResource:
     ) -> Page[StorageObjectListVersionsItem]:
         return await self._client.request(
             'GET',
-            f'storage/storage-object/versions/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/versions/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=query,
             body=None,
             cast_to=Page[StorageObjectListVersionsItem],
@@ -389,7 +390,7 @@ class AsyncStorageObjectsResource:
     ) -> StorageObjectRestoreVersionResponse:
         return await self._client.request(
             'POST',
-            f'storage/storage-object/versions/restore/{container_name_or_id}/{object_name_or_id}',
+            f'storage/storage-object/versions/restore/{_encode_path_param(container_name_or_id)}/{_encode_path_param(object_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageObjectRestoreVersionResponse,
@@ -405,9 +406,13 @@ class AsyncStorageObjectsResource:
     ) -> StorageObjectCheckDuplicateResponse:
         return await self._client.request(
             'GET',
-            f'storage/storage-object/check-duplicate/{container_name_or_id}',
+            f'storage/storage-object/check-duplicate/{_encode_path_param(container_name_or_id)}',
             query=query,
             body=None,
             cast_to=StorageObjectCheckDuplicateResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

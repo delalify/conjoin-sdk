@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -103,7 +104,7 @@ class AiInferencesResource:
     ) -> AiInferenceReadRequestResponse:
         return self._client.request(
             'GET',
-            f'ai/inference/requests/{request_id}',
+            f'ai/inference/requests/{_encode_path_param(request_id)}',
             query=None,
             body=None,
             cast_to=AiInferenceReadRequestResponse,
@@ -191,9 +192,13 @@ class AsyncAiInferencesResource:
     ) -> AiInferenceReadRequestResponse:
         return await self._client.request(
             'GET',
-            f'ai/inference/requests/{request_id}',
+            f'ai/inference/requests/{_encode_path_param(request_id)}',
             query=None,
             body=None,
             cast_to=AiInferenceReadRequestResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

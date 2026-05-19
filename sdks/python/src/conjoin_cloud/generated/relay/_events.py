@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -85,7 +86,7 @@ class RelayEventsResource:
     ) -> RelayEventsUpdateEventChannelResponse:
         return self._client.request(
             'PATCH',
-            f'relay/events/channels/{channel_id}/update',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/update',
             query=None,
             body=data,
             cast_to=RelayEventsUpdateEventChannelResponse,
@@ -100,7 +101,7 @@ class RelayEventsResource:
     ) -> RelayEventsDeleteEventChannelResponse:
         return self._client.request(
             'DELETE',
-            f'relay/events/channels/{channel_id}/delete',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayEventsDeleteEventChannelResponse,
@@ -116,7 +117,7 @@ class RelayEventsResource:
     ) -> RelayEventsCreateEventSubscriptionResponse:
         return self._client.request(
             'POST',
-            f'relay/events/channels/{channel_id}/subscriptions/create',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions/create',
             query=None,
             body=data,
             cast_to=RelayEventsCreateEventSubscriptionResponse,
@@ -132,7 +133,7 @@ class RelayEventsResource:
     ) -> Page[RelayEventsReadEventSubscriptionsItem]:
         return self._client.request(
             'GET',
-            f'relay/events/channels/{channel_id}/subscriptions',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions',
             query=query,
             body=None,
             cast_to=Page[RelayEventsReadEventSubscriptionsItem],
@@ -149,7 +150,7 @@ class RelayEventsResource:
     ) -> RelayEventsUpdateEventSubscriptionResponse:
         return self._client.request(
             'PATCH',
-            f'relay/events/channels/{channel_id}/subscriptions/{subscription_id}/update',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions/{_encode_path_param(subscription_id)}/update',
             query=None,
             body=data,
             cast_to=RelayEventsUpdateEventSubscriptionResponse,
@@ -165,7 +166,7 @@ class RelayEventsResource:
     ) -> RelayEventsDeleteEventSubscriptionResponse:
         return self._client.request(
             'DELETE',
-            f'relay/events/channels/{channel_id}/subscriptions/{subscription_id}/delete',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions/{_encode_path_param(subscription_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayEventsDeleteEventSubscriptionResponse,
@@ -181,7 +182,7 @@ class RelayEventsResource:
     ) -> RelayEventsPublishEventResponse:
         return self._client.request(
             'POST',
-            f'relay/events/channels/{channel_id}/publish',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/publish',
             query=None,
             body=data,
             cast_to=RelayEventsPublishEventResponse,
@@ -197,7 +198,7 @@ class RelayEventsResource:
     ) -> Page[RelayEventsReadItem]:
         return self._client.request(
             'GET',
-            f'relay/events/channels/{channel_id}/events',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/events',
             query=query,
             body=None,
             cast_to=Page[RelayEventsReadItem],
@@ -213,7 +214,7 @@ class RelayEventsResource:
     ) -> RelayEventsReplayResponse:
         return self._client.request(
             'POST',
-            f'relay/events/channels/{channel_id}/replay',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/replay',
             query=None,
             body=data,
             cast_to=RelayEventsReplayResponse,
@@ -272,7 +273,7 @@ class AsyncRelayEventsResource:
     ) -> RelayEventsUpdateEventChannelResponse:
         return await self._client.request(
             'PATCH',
-            f'relay/events/channels/{channel_id}/update',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/update',
             query=None,
             body=data,
             cast_to=RelayEventsUpdateEventChannelResponse,
@@ -287,7 +288,7 @@ class AsyncRelayEventsResource:
     ) -> RelayEventsDeleteEventChannelResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/events/channels/{channel_id}/delete',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayEventsDeleteEventChannelResponse,
@@ -303,7 +304,7 @@ class AsyncRelayEventsResource:
     ) -> RelayEventsCreateEventSubscriptionResponse:
         return await self._client.request(
             'POST',
-            f'relay/events/channels/{channel_id}/subscriptions/create',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions/create',
             query=None,
             body=data,
             cast_to=RelayEventsCreateEventSubscriptionResponse,
@@ -319,7 +320,7 @@ class AsyncRelayEventsResource:
     ) -> Page[RelayEventsReadEventSubscriptionsItem]:
         return await self._client.request(
             'GET',
-            f'relay/events/channels/{channel_id}/subscriptions',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions',
             query=query,
             body=None,
             cast_to=Page[RelayEventsReadEventSubscriptionsItem],
@@ -336,7 +337,7 @@ class AsyncRelayEventsResource:
     ) -> RelayEventsUpdateEventSubscriptionResponse:
         return await self._client.request(
             'PATCH',
-            f'relay/events/channels/{channel_id}/subscriptions/{subscription_id}/update',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions/{_encode_path_param(subscription_id)}/update',
             query=None,
             body=data,
             cast_to=RelayEventsUpdateEventSubscriptionResponse,
@@ -352,7 +353,7 @@ class AsyncRelayEventsResource:
     ) -> RelayEventsDeleteEventSubscriptionResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/events/channels/{channel_id}/subscriptions/{subscription_id}/delete',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/subscriptions/{_encode_path_param(subscription_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayEventsDeleteEventSubscriptionResponse,
@@ -368,7 +369,7 @@ class AsyncRelayEventsResource:
     ) -> RelayEventsPublishEventResponse:
         return await self._client.request(
             'POST',
-            f'relay/events/channels/{channel_id}/publish',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/publish',
             query=None,
             body=data,
             cast_to=RelayEventsPublishEventResponse,
@@ -384,7 +385,7 @@ class AsyncRelayEventsResource:
     ) -> Page[RelayEventsReadItem]:
         return await self._client.request(
             'GET',
-            f'relay/events/channels/{channel_id}/events',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/events',
             query=query,
             body=None,
             cast_to=Page[RelayEventsReadItem],
@@ -400,9 +401,13 @@ class AsyncRelayEventsResource:
     ) -> RelayEventsReplayResponse:
         return await self._client.request(
             'POST',
-            f'relay/events/channels/{channel_id}/replay',
+            f'relay/events/channels/{_encode_path_param(channel_id)}/replay',
             query=None,
             body=data,
             cast_to=RelayEventsReplayResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

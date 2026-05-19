@@ -67,12 +67,19 @@ def render_all(groups: tuple[ResourceGroup, ...], output_root: Path = OUTPUT_ROO
                 typed_dicts[entry.query_type] = TypedDictDef(
                     name=entry.query_type,
                     fields=tuple(
-                        _parameter_field(parameter.name, parameter.schema)
+                        _parameter_field(
+                            parameter.name,
+                            parameter.schema,
+                            required=parameter.required,
+                        )
                         for parameter in entry.operation.query_parameters
                     ),
                 )
 
-    _write(output_root / "_models.py", _render_models(tuple(models.values()), tuple(typed_dicts.values())))
+    _write(
+        output_root / "_models.py",
+        _render_models(tuple(models.values()), tuple(typed_dicts.values())),
+    )
 
     for group, entries in sorted(rendered_groups, key=lambda item: _group_sort_key(item[0])):
         service_dir = output_root / to_snake(group.service)
@@ -162,17 +169,39 @@ def _render_model(model: ModelDef) -> list[str]:
             lines.append(f"    {field.python_name}: {annotation}{default}")
             continue
         default_expr = "..." if field.required else "None"
-        lines.extend(_field_assignment_lines(field.python_name, annotation, default_expr, field.wire_name))
+        lines.extend(
+            _field_assignment_lines(field.python_name, annotation, default_expr, field.wire_name)
+        )
     return lines
 
 
 def _render_typed_dict(typed_dict: TypedDictDef) -> list[str]:
-    lines = [f"class {typed_dict.name}(TypedDict, total=False):"]
+    required_fields = tuple(field for field in typed_dict.fields if field.required)
+    optional_fields = tuple(field for field in typed_dict.fields if not field.required)
     if not typed_dict.fields:
+        lines = _class_header(typed_dict.name, ("TypedDict", "total=False"))
         return [*lines, "    pass"]
+
+    if required_fields and optional_fields:
+        required_name = f"_{typed_dict.name}Required"
+        lines = _class_header(required_name, ("TypedDict",))
+        lines.extend(f"    {field.python_name}: {field.annotation}" for field in required_fields)
+        lines.extend(["", *_class_header(typed_dict.name, (required_name, "total=False"))])
+        lines.extend(f"    {field.python_name}: {field.annotation}" for field in optional_fields)
+        return lines
+
+    bases = ("TypedDict",) if required_fields else ("TypedDict", "total=False")
+    lines = _class_header(typed_dict.name, bases)
     for field in typed_dict.fields:
         lines.append(f"    {field.python_name}: {field.annotation}")
     return lines
+
+
+def _class_header(name: str, bases: tuple[str, ...]) -> list[str]:
+    line = f"class {name}({', '.join(bases)}):"
+    if len(line) <= 100:
+        return [line]
+    return [f"class {name}(", *(f"    {base}," for base in bases), "):"]
 
 
 def _render_resource_module(group: ResourceGroup, entries: tuple[MethodEntry, ...]) -> str:
@@ -182,8 +211,10 @@ def _render_resource_module(group: ResourceGroup, entries: tuple[MethodEntry, ..
         "",
         "from collections.abc import Mapping",
         "from typing import TYPE_CHECKING, Any",
-        "",
     ]
+    if any(entry.operation.path_parameters for entry in entries):
+        lines.append("from urllib.parse import quote")
+    lines.append("")
     if any(_needs_configuration_error(entry.operation) for entry in entries):
         lines.append("from conjoin_cloud._errors import ConjoinConfigurationError")
     if any(entry.response_type.startswith("Page[") for entry in entries):
@@ -282,11 +313,15 @@ def _render_method(entry: MethodEntry, *, is_async: bool) -> list[str]:
     if operation.requires_messaging_profile:
         lines.append("        profile_id = _require_messaging_profile(self._profile_id)")
     if operation.auth_mode == "scim_bearer":
-        lines.append("        request_options = _with_scim_bearer(request_options, self._scim_token)")
+        lines.append(
+            "        request_options = _with_scim_bearer(request_options, self._scim_token)"
+        )
     elif operation.auth_mode == "none":
         lines.append("        request_options = _with_auth_none(request_options)")
     if operation.requires_messaging_profile:
-        lines.append("        request_options = _with_messaging_profile(request_options, profile_id)")
+        lines.append(
+            "        request_options = _with_messaging_profile(request_options, profile_id)"
+        )
 
     lines.append(f"        return {await_prefix}self._client.request(")
     lines.append(f"            {operation.http_method!r},")
@@ -333,7 +368,9 @@ def _render_service_module(
     for group in service_groups:
         attr = resource_attribute_name(group.resource)
         class_base = f"{group.service_pascal}{pluralize(group.resource_pascal)}Resource"
-        lines.extend(_assignment_lines(f"self.{attr}", f"{class_base}(client, profile_id=profile_id)"))
+        lines.extend(
+            _assignment_lines(f"self.{attr}", f"{class_base}(client, profile_id=profile_id)")
+        )
     if service == "messaging":
         lines.extend(
             [
@@ -361,13 +398,18 @@ def _render_service_module(
     for group in service_groups:
         attr = resource_attribute_name(group.resource)
         class_base = f"Async{group.service_pascal}{pluralize(group.resource_pascal)}Resource"
-        lines.extend(_assignment_lines(f"self.{attr}", f"{class_base}(client, profile_id=profile_id)"))
+        lines.extend(
+            _assignment_lines(f"self.{attr}", f"{class_base}(client, profile_id=profile_id)")
+        )
     if service == "messaging":
         lines.extend(
             [
                 "",
                 f"    def with_profile(self, profile_id: str) -> Async{service_pascal}Resource:",
-                f"        return Async{service_pascal}Resource(self._client, profile_id=profile_id)",
+                (
+                    f"        return Async{service_pascal}Resource("
+                    "self._client, profile_id=profile_id)"
+                ),
             ]
         )
     lines.append("")
@@ -469,7 +511,8 @@ def _render_helpers(entries: tuple[MethodEntry, ...]) -> list[str]:
                 "def _require_messaging_profile(profile_id: str | None) -> str:",
                 "    if profile_id is None or not profile_id.strip():",
                 "        raise ConjoinConfigurationError(",
-                "            \"Messaging profile scope is required; call client.messaging.with_profile(...)\"",
+                "            \"Messaging profile scope is required; \"",
+                "            \"call client.messaging.with_profile(...)\"",
                 "        )",
                 "    return profile_id.strip()",
                 "",
@@ -490,6 +533,15 @@ def _render_helpers(entries: tuple[MethodEntry, ...]) -> list[str]:
                 "    )",
             ]
         )
+    if any(entry.operation.path_parameters for entry in entries):
+        lines.extend(
+            [
+                "",
+                "",
+                "def _encode_path_param(value: str) -> str:",
+                "    return quote(value, safe=\"\")",
+            ]
+        )
     if any(entry.operation.auth_mode == "scim_bearer" for entry in entries):
         lines.extend(
             [
@@ -500,7 +552,9 @@ def _render_helpers(entries: tuple[MethodEntry, ...]) -> list[str]:
                 "    scim_token: str | None,",
                 ") -> RequestOptions:",
                 "    if scim_token is None or not scim_token.strip():",
-                "        raise ConjoinConfigurationError(\"SCIM token is required for tenant SCIM operations\")",
+                "        raise ConjoinConfigurationError(",
+                "            \"SCIM token is required for tenant SCIM operations\"",
+                "        )",
                 "    options = coerce_request_options(request_options)",
                 "    return RequestOptions(",
                 "        timeout=options.timeout,",
@@ -575,7 +629,10 @@ def _path_expression(operation: Operation) -> str:
     if not operation.path_parameters:
         return repr(path)
     for parameter in operation.path_parameters:
-        path = path.replace(f"{{{parameter.name}}}", f"{{{parameter.python_name}}}")
+        path = path.replace(
+            f"{{{parameter.name}}}",
+            f"{{_encode_path_param({parameter.python_name})}}",
+        )
     return f"f{path!r}"
 
 
@@ -633,12 +690,12 @@ def _aliases(fields: dict[str, Any]) -> dict[str, str]:
     return aliases
 
 
-def _parameter_field(name: str, schema: dict[str, Any]) -> FieldDef:
+def _parameter_field(name: str, schema: dict[str, Any], *, required: bool) -> FieldDef:
     return FieldDef(
         wire_name=name,
         python_name=to_snake(name),
         annotation=schema_annotation(schema),
-        required=False,
+        required=required,
     )
 
 

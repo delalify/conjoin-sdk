@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._models import Page
@@ -64,7 +65,7 @@ class MessagingContactsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/contacts/{contact_id}/unsubscribe',
+            f'messaging/contacts/{_encode_path_param(contact_id)}/unsubscribe',
             query=None,
             body=data,
             cast_to=MessagingContactSuppressMessagesResponse,
@@ -82,7 +83,7 @@ class MessagingContactsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/contacts/{contact_id}',
+            f'messaging/contacts/{_encode_path_param(contact_id)}',
             query=None,
             body=data,
             cast_to=MessagingContactUpdateResponse,
@@ -99,7 +100,7 @@ class MessagingContactsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'DELETE',
-            f'messaging/contacts/{contact_id}',
+            f'messaging/contacts/{_encode_path_param(contact_id)}',
             query=None,
             body=None,
             cast_to=MessagingContactDeleteResponse,
@@ -164,7 +165,7 @@ class AsyncMessagingContactsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/contacts/{contact_id}/unsubscribe',
+            f'messaging/contacts/{_encode_path_param(contact_id)}/unsubscribe',
             query=None,
             body=data,
             cast_to=MessagingContactSuppressMessagesResponse,
@@ -182,7 +183,7 @@ class AsyncMessagingContactsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/contacts/{contact_id}',
+            f'messaging/contacts/{_encode_path_param(contact_id)}',
             query=None,
             body=data,
             cast_to=MessagingContactUpdateResponse,
@@ -199,7 +200,7 @@ class AsyncMessagingContactsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'DELETE',
-            f'messaging/contacts/{contact_id}',
+            f'messaging/contacts/{_encode_path_param(contact_id)}',
             query=None,
             body=None,
             cast_to=MessagingContactDeleteResponse,
@@ -227,7 +228,8 @@ class AsyncMessagingContactsResource:
 def _require_messaging_profile(profile_id: str | None) -> str:
     if profile_id is None or not profile_id.strip():
         raise ConjoinConfigurationError(
-            "Messaging profile scope is required; call client.messaging.with_profile(...)"
+            "Messaging profile scope is required; "
+            "call client.messaging.with_profile(...)"
         )
     return profile_id.strip()
 
@@ -246,3 +248,7 @@ def _with_messaging_profile(
         headers=headers,
         auth=options.auth,
     )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

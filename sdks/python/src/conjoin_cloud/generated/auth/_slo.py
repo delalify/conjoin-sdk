@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -41,7 +42,7 @@ class AuthSLOsResource:
     ) -> AuthSLOOidcLogoutResponse:
         return self._client.request(
             'POST',
-            f'auth/slo/{app_id}/account/{account_id}/slo/oidc',
+            f'auth/slo/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/slo/oidc',
             query=None,
             body=data,
             cast_to=AuthSLOOidcLogoutResponse,
@@ -58,7 +59,7 @@ class AuthSLOsResource:
     ) -> AuthSLOSamlSpLogoutResponse:
         return self._client.request(
             'POST',
-            f'auth/slo/{app_id}/account/{account_id}/slo/saml/sp-initiated',
+            f'auth/slo/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/slo/saml/sp-initiated',
             query=None,
             body=data,
             cast_to=AuthSLOSamlSpLogoutResponse,
@@ -74,7 +75,7 @@ class AuthSLOsResource:
     ) -> AuthSLOSamlIdpLogoutResponse:
         return self._client.request(
             'POST',
-            f'auth/slo/{app_id}/slo/saml/idp-initiated',
+            f'auth/slo/{_encode_path_param(app_id)}/slo/saml/idp-initiated',
             query=None,
             body=data,
             cast_to=AuthSLOSamlIdpLogoutResponse,
@@ -104,7 +105,7 @@ class AsyncAuthSLOsResource:
     ) -> AuthSLOOidcLogoutResponse:
         return await self._client.request(
             'POST',
-            f'auth/slo/{app_id}/account/{account_id}/slo/oidc',
+            f'auth/slo/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/slo/oidc',
             query=None,
             body=data,
             cast_to=AuthSLOOidcLogoutResponse,
@@ -121,7 +122,7 @@ class AsyncAuthSLOsResource:
     ) -> AuthSLOSamlSpLogoutResponse:
         return await self._client.request(
             'POST',
-            f'auth/slo/{app_id}/account/{account_id}/slo/saml/sp-initiated',
+            f'auth/slo/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/slo/saml/sp-initiated',
             query=None,
             body=data,
             cast_to=AuthSLOSamlSpLogoutResponse,
@@ -137,9 +138,13 @@ class AsyncAuthSLOsResource:
     ) -> AuthSLOSamlIdpLogoutResponse:
         return await self._client.request(
             'POST',
-            f'auth/slo/{app_id}/slo/saml/idp-initiated',
+            f'auth/slo/{_encode_path_param(app_id)}/slo/saml/idp-initiated',
             query=None,
             body=data,
             cast_to=AuthSLOSamlIdpLogoutResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

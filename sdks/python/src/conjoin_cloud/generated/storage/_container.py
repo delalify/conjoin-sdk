@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -82,7 +83,7 @@ class StorageContainersResource:
     ) -> StorageContainerReadResponse:
         return self._client.request(
             'GET',
-            f'storage/storage-container/details/{container_name_or_id}',
+            f'storage/storage-container/details/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerReadResponse,
@@ -97,7 +98,7 @@ class StorageContainersResource:
     ) -> StorageContainerArchiveResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-container/archive/{container_name_or_id}',
+            f'storage/storage-container/archive/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerArchiveResponse,
@@ -112,7 +113,7 @@ class StorageContainersResource:
     ) -> StorageContainerRestoreResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-container/restore/{container_name_or_id}',
+            f'storage/storage-container/restore/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerRestoreResponse,
@@ -128,7 +129,7 @@ class StorageContainersResource:
     ) -> StorageContainerUpdateLifecyclePolicyResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-container/lifecycle-policy/{container_name_or_id}',
+            f'storage/storage-container/lifecycle-policy/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerUpdateLifecyclePolicyResponse,
@@ -144,7 +145,7 @@ class StorageContainersResource:
     ) -> StorageContainerUpdateSettingsResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-container/settings/{container_name_or_id}',
+            f'storage/storage-container/settings/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerUpdateSettingsResponse,
@@ -160,7 +161,7 @@ class StorageContainersResource:
     ) -> StorageContainerRequestDeletionResponse:
         return self._client.request(
             'DELETE',
-            f'storage/storage-container/{container_name_or_id}',
+            f'storage/storage-container/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerRequestDeletionResponse,
@@ -175,7 +176,7 @@ class StorageContainersResource:
     ) -> StorageContainerCancelDeletionResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-container/cancel-deletion/{container_name_or_id}',
+            f'storage/storage-container/cancel-deletion/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerCancelDeletionResponse,
@@ -191,7 +192,7 @@ class StorageContainersResource:
     ) -> StorageContainerChangeClassResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-container/storage-class/{container_name_or_id}',
+            f'storage/storage-container/storage-class/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerChangeClassResponse,
@@ -207,7 +208,7 @@ class StorageContainersResource:
     ) -> StorageContainerUpdateTransitionPolicyResponse:
         return self._client.request(
             'PATCH',
-            f'storage/storage-container/transition-policy/{container_name_or_id}',
+            f'storage/storage-container/transition-policy/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerUpdateTransitionPolicyResponse,
@@ -265,7 +266,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerReadResponse:
         return await self._client.request(
             'GET',
-            f'storage/storage-container/details/{container_name_or_id}',
+            f'storage/storage-container/details/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerReadResponse,
@@ -280,7 +281,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerArchiveResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-container/archive/{container_name_or_id}',
+            f'storage/storage-container/archive/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerArchiveResponse,
@@ -295,7 +296,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerRestoreResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-container/restore/{container_name_or_id}',
+            f'storage/storage-container/restore/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerRestoreResponse,
@@ -311,7 +312,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerUpdateLifecyclePolicyResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-container/lifecycle-policy/{container_name_or_id}',
+            f'storage/storage-container/lifecycle-policy/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerUpdateLifecyclePolicyResponse,
@@ -327,7 +328,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerUpdateSettingsResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-container/settings/{container_name_or_id}',
+            f'storage/storage-container/settings/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerUpdateSettingsResponse,
@@ -343,7 +344,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerRequestDeletionResponse:
         return await self._client.request(
             'DELETE',
-            f'storage/storage-container/{container_name_or_id}',
+            f'storage/storage-container/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerRequestDeletionResponse,
@@ -358,7 +359,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerCancelDeletionResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-container/cancel-deletion/{container_name_or_id}',
+            f'storage/storage-container/cancel-deletion/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=None,
             cast_to=StorageContainerCancelDeletionResponse,
@@ -374,7 +375,7 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerChangeClassResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-container/storage-class/{container_name_or_id}',
+            f'storage/storage-container/storage-class/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerChangeClassResponse,
@@ -390,9 +391,13 @@ class AsyncStorageContainersResource:
     ) -> StorageContainerUpdateTransitionPolicyResponse:
         return await self._client.request(
             'PATCH',
-            f'storage/storage-container/transition-policy/{container_name_or_id}',
+            f'storage/storage-container/transition-policy/{_encode_path_param(container_name_or_id)}',
             query=None,
             body=data,
             cast_to=StorageContainerUpdateTransitionPolicyResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

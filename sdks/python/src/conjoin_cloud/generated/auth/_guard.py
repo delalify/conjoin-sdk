@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -48,7 +49,7 @@ class AuthGuardsResource:
     ) -> Page[AuthGuardReadEventsItem]:
         return self._client.request(
             'GET',
-            f'auth/guard/{app_id}/guard/events',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/events',
             query=query,
             body=None,
             cast_to=Page[AuthGuardReadEventsItem],
@@ -64,7 +65,7 @@ class AuthGuardsResource:
     ) -> AuthGuardUpdateSettingsResponse:
         return self._client.request(
             'PATCH',
-            f'auth/guard/{app_id}/guard/settings',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/settings',
             query=None,
             body=data,
             cast_to=AuthGuardUpdateSettingsResponse,
@@ -80,7 +81,7 @@ class AuthGuardsResource:
     ) -> AuthGuardAddTrustedIpResponse:
         return self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/trusted-ips',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/trusted-ips',
             query=None,
             body=data,
             cast_to=AuthGuardAddTrustedIpResponse,
@@ -96,7 +97,7 @@ class AuthGuardsResource:
     ) -> AuthGuardRemoveTrustedIpResponse:
         return self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/trusted-ips/remove',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/trusted-ips/remove',
             query=None,
             body=data,
             cast_to=AuthGuardRemoveTrustedIpResponse,
@@ -111,7 +112,7 @@ class AuthGuardsResource:
     ) -> AuthGuardListAnonymousIpsResponse:
         return self._client.request(
             'GET',
-            f'auth/guard/{app_id}/guard/anonymous-ips',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/anonymous-ips',
             query=None,
             body=None,
             cast_to=AuthGuardListAnonymousIpsResponse,
@@ -127,7 +128,7 @@ class AuthGuardsResource:
     ) -> AuthGuardAddAnonymousIpsResponse:
         return self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/anonymous-ips',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/anonymous-ips',
             query=None,
             body=data,
             cast_to=AuthGuardAddAnonymousIpsResponse,
@@ -143,7 +144,7 @@ class AuthGuardsResource:
     ) -> AuthGuardRemoveAnonymousIpsResponse:
         return self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/anonymous-ips/remove',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/anonymous-ips/remove',
             query=None,
             body=data,
             cast_to=AuthGuardRemoveAnonymousIpsResponse,
@@ -172,7 +173,7 @@ class AsyncAuthGuardsResource:
     ) -> Page[AuthGuardReadEventsItem]:
         return await self._client.request(
             'GET',
-            f'auth/guard/{app_id}/guard/events',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/events',
             query=query,
             body=None,
             cast_to=Page[AuthGuardReadEventsItem],
@@ -188,7 +189,7 @@ class AsyncAuthGuardsResource:
     ) -> AuthGuardUpdateSettingsResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/guard/{app_id}/guard/settings',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/settings',
             query=None,
             body=data,
             cast_to=AuthGuardUpdateSettingsResponse,
@@ -204,7 +205,7 @@ class AsyncAuthGuardsResource:
     ) -> AuthGuardAddTrustedIpResponse:
         return await self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/trusted-ips',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/trusted-ips',
             query=None,
             body=data,
             cast_to=AuthGuardAddTrustedIpResponse,
@@ -220,7 +221,7 @@ class AsyncAuthGuardsResource:
     ) -> AuthGuardRemoveTrustedIpResponse:
         return await self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/trusted-ips/remove',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/trusted-ips/remove',
             query=None,
             body=data,
             cast_to=AuthGuardRemoveTrustedIpResponse,
@@ -235,7 +236,7 @@ class AsyncAuthGuardsResource:
     ) -> AuthGuardListAnonymousIpsResponse:
         return await self._client.request(
             'GET',
-            f'auth/guard/{app_id}/guard/anonymous-ips',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/anonymous-ips',
             query=None,
             body=None,
             cast_to=AuthGuardListAnonymousIpsResponse,
@@ -251,7 +252,7 @@ class AsyncAuthGuardsResource:
     ) -> AuthGuardAddAnonymousIpsResponse:
         return await self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/anonymous-ips',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/anonymous-ips',
             query=None,
             body=data,
             cast_to=AuthGuardAddAnonymousIpsResponse,
@@ -267,9 +268,13 @@ class AsyncAuthGuardsResource:
     ) -> AuthGuardRemoveAnonymousIpsResponse:
         return await self._client.request(
             'POST',
-            f'auth/guard/{app_id}/guard/anonymous-ips/remove',
+            f'auth/guard/{_encode_path_param(app_id)}/guard/anonymous-ips/remove',
             query=None,
             body=data,
             cast_to=AuthGuardRemoveAnonymousIpsResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -41,7 +42,7 @@ class AuthStepUpsResource:
     ) -> AuthStepUpRequestResponse:
         return self._client.request(
             'POST',
-            f'auth/step-up/{app_id}/account/{account_id}/step-up/request',
+            f'auth/step-up/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/step-up/request',
             query=None,
             body=data,
             cast_to=AuthStepUpRequestResponse,
@@ -58,7 +59,7 @@ class AuthStepUpsResource:
     ) -> AuthStepUpVerifyResponse:
         return self._client.request(
             'POST',
-            f'auth/step-up/{app_id}/account/{account_id}/step-up/verify',
+            f'auth/step-up/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/step-up/verify',
             query=None,
             body=data,
             cast_to=AuthStepUpVerifyResponse,
@@ -75,7 +76,7 @@ class AuthStepUpsResource:
     ) -> AuthStepUpValidateResponse:
         return self._client.request(
             'POST',
-            f'auth/step-up/{app_id}/account/{account_id}/step-up/validate',
+            f'auth/step-up/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/step-up/validate',
             query=None,
             body=data,
             cast_to=AuthStepUpValidateResponse,
@@ -105,7 +106,7 @@ class AsyncAuthStepUpsResource:
     ) -> AuthStepUpRequestResponse:
         return await self._client.request(
             'POST',
-            f'auth/step-up/{app_id}/account/{account_id}/step-up/request',
+            f'auth/step-up/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/step-up/request',
             query=None,
             body=data,
             cast_to=AuthStepUpRequestResponse,
@@ -122,7 +123,7 @@ class AsyncAuthStepUpsResource:
     ) -> AuthStepUpVerifyResponse:
         return await self._client.request(
             'POST',
-            f'auth/step-up/{app_id}/account/{account_id}/step-up/verify',
+            f'auth/step-up/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/step-up/verify',
             query=None,
             body=data,
             cast_to=AuthStepUpVerifyResponse,
@@ -139,9 +140,13 @@ class AsyncAuthStepUpsResource:
     ) -> AuthStepUpValidateResponse:
         return await self._client.request(
             'POST',
-            f'auth/step-up/{app_id}/account/{account_id}/step-up/validate',
+            f'auth/step-up/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/step-up/validate',
             query=None,
             body=data,
             cast_to=AuthStepUpValidateResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

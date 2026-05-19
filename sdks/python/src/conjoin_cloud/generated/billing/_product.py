@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -44,7 +45,7 @@ class BillingProductsResource:
     ) -> BillingProductCreateResponse:
         return self._client.request(
             'POST',
-            f'billing/product/{entity_id}',
+            f'billing/product/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingProductCreateResponse,
@@ -61,7 +62,7 @@ class BillingProductsResource:
     ) -> Page[BillingProductListItem]:
         return self._client.request(
             'GET',
-            f'billing/product/{entity_id}/{reference_id}',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingProductListItem],
@@ -78,7 +79,7 @@ class BillingProductsResource:
     ) -> BillingProductUpdateResponse:
         return self._client.request(
             'PUT',
-            f'billing/product/{entity_id}/{reference_id}',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=None,
             body=data,
             cast_to=BillingProductUpdateResponse,
@@ -94,7 +95,7 @@ class BillingProductsResource:
     ) -> BillingProductDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'billing/product/{entity_id}/{reference_id}',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=None,
             body=None,
             cast_to=BillingProductDeleteResponse,
@@ -110,7 +111,7 @@ class BillingProductsResource:
     ) -> BillingProductArchiveResponse:
         return self._client.request(
             'PATCH',
-            f'billing/product/{entity_id}/{reference_id}/archive',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/archive',
             query=None,
             body=None,
             cast_to=BillingProductArchiveResponse,
@@ -126,7 +127,7 @@ class BillingProductsResource:
     ) -> BillingProductRestoreResponse:
         return self._client.request(
             'PATCH',
-            f'billing/product/{entity_id}/{reference_id}/restore',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/restore',
             query=None,
             body=None,
             cast_to=BillingProductRestoreResponse,
@@ -155,7 +156,7 @@ class AsyncBillingProductsResource:
     ) -> BillingProductCreateResponse:
         return await self._client.request(
             'POST',
-            f'billing/product/{entity_id}',
+            f'billing/product/{_encode_path_param(entity_id)}',
             query=None,
             body=data,
             cast_to=BillingProductCreateResponse,
@@ -172,7 +173,7 @@ class AsyncBillingProductsResource:
     ) -> Page[BillingProductListItem]:
         return await self._client.request(
             'GET',
-            f'billing/product/{entity_id}/{reference_id}',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=query,
             body=None,
             cast_to=Page[BillingProductListItem],
@@ -189,7 +190,7 @@ class AsyncBillingProductsResource:
     ) -> BillingProductUpdateResponse:
         return await self._client.request(
             'PUT',
-            f'billing/product/{entity_id}/{reference_id}',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=None,
             body=data,
             cast_to=BillingProductUpdateResponse,
@@ -205,7 +206,7 @@ class AsyncBillingProductsResource:
     ) -> BillingProductDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'billing/product/{entity_id}/{reference_id}',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}',
             query=None,
             body=None,
             cast_to=BillingProductDeleteResponse,
@@ -221,7 +222,7 @@ class AsyncBillingProductsResource:
     ) -> BillingProductArchiveResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/product/{entity_id}/{reference_id}/archive',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/archive',
             query=None,
             body=None,
             cast_to=BillingProductArchiveResponse,
@@ -237,9 +238,13 @@ class AsyncBillingProductsResource:
     ) -> BillingProductRestoreResponse:
         return await self._client.request(
             'PATCH',
-            f'billing/product/{entity_id}/{reference_id}/restore',
+            f'billing/product/{_encode_path_param(entity_id)}/{_encode_path_param(reference_id)}/restore',
             query=None,
             body=None,
             cast_to=BillingProductRestoreResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

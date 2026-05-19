@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -59,7 +60,7 @@ class CloudAPIKeysResource:
     ) -> CloudAPIKeyRegenerateApiKeyResponse:
         return self._client.request(
             'POST',
-            f'cloud/api-key/regenerate/{api_key_id}',
+            f'cloud/api-key/regenerate/{_encode_path_param(api_key_id)}',
             query=None,
             body=data,
             cast_to=CloudAPIKeyRegenerateApiKeyResponse,
@@ -75,7 +76,7 @@ class CloudAPIKeysResource:
     ) -> CloudAPIKeyUpdateApiKeyResponse:
         return self._client.request(
             'PATCH',
-            f'cloud/api-key/update-info/{api_key_id}',
+            f'cloud/api-key/update-info/{_encode_path_param(api_key_id)}',
             query=None,
             body=data,
             cast_to=CloudAPIKeyUpdateApiKeyResponse,
@@ -105,7 +106,7 @@ class CloudAPIKeysResource:
     ) -> CloudAPIKeyDeleteApiKeyResponse:
         return self._client.request(
             'DELETE',
-            f'cloud/api-key/{api_key_id}',
+            f'cloud/api-key/{_encode_path_param(api_key_id)}',
             query=None,
             body=None,
             cast_to=CloudAPIKeyDeleteApiKeyResponse,
@@ -149,7 +150,7 @@ class AsyncCloudAPIKeysResource:
     ) -> CloudAPIKeyRegenerateApiKeyResponse:
         return await self._client.request(
             'POST',
-            f'cloud/api-key/regenerate/{api_key_id}',
+            f'cloud/api-key/regenerate/{_encode_path_param(api_key_id)}',
             query=None,
             body=data,
             cast_to=CloudAPIKeyRegenerateApiKeyResponse,
@@ -165,7 +166,7 @@ class AsyncCloudAPIKeysResource:
     ) -> CloudAPIKeyUpdateApiKeyResponse:
         return await self._client.request(
             'PATCH',
-            f'cloud/api-key/update-info/{api_key_id}',
+            f'cloud/api-key/update-info/{_encode_path_param(api_key_id)}',
             query=None,
             body=data,
             cast_to=CloudAPIKeyUpdateApiKeyResponse,
@@ -195,9 +196,13 @@ class AsyncCloudAPIKeysResource:
     ) -> CloudAPIKeyDeleteApiKeyResponse:
         return await self._client.request(
             'DELETE',
-            f'cloud/api-key/{api_key_id}',
+            f'cloud/api-key/{_encode_path_param(api_key_id)}',
             query=None,
             body=None,
             cast_to=CloudAPIKeyDeleteApiKeyResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

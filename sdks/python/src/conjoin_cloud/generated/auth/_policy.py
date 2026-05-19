@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -44,7 +45,7 @@ class AuthPoliciesResource:
     ) -> AuthPolicyCreateResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/create',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/create',
             query=None,
             body=data,
             cast_to=AuthPolicyCreateResponse,
@@ -61,7 +62,7 @@ class AuthPoliciesResource:
     ) -> AuthPolicyReadResponse:
         return self._client.request(
             'GET',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/{policy_id}',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/{_encode_path_param(policy_id)}',
             query=None,
             body=None,
             cast_to=AuthPolicyReadResponse,
@@ -78,7 +79,7 @@ class AuthPoliciesResource:
     ) -> Page[AuthPolicyListItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy',
             query=query,
             body=None,
             cast_to=Page[AuthPolicyListItem],
@@ -96,7 +97,7 @@ class AuthPoliciesResource:
     ) -> AuthPolicyUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/{policy_id}/update',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/{_encode_path_param(policy_id)}/update',
             query=None,
             body=data,
             cast_to=AuthPolicyUpdateResponse,
@@ -113,7 +114,7 @@ class AuthPoliciesResource:
     ) -> AuthPolicyDeleteResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/{policy_id}/delete',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/{_encode_path_param(policy_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthPolicyDeleteResponse,
@@ -143,7 +144,7 @@ class AsyncAuthPoliciesResource:
     ) -> AuthPolicyCreateResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/create',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/create',
             query=None,
             body=data,
             cast_to=AuthPolicyCreateResponse,
@@ -160,7 +161,7 @@ class AsyncAuthPoliciesResource:
     ) -> AuthPolicyReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/{policy_id}',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/{_encode_path_param(policy_id)}',
             query=None,
             body=None,
             cast_to=AuthPolicyReadResponse,
@@ -177,7 +178,7 @@ class AsyncAuthPoliciesResource:
     ) -> Page[AuthPolicyListItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy',
             query=query,
             body=None,
             cast_to=Page[AuthPolicyListItem],
@@ -195,7 +196,7 @@ class AsyncAuthPoliciesResource:
     ) -> AuthPolicyUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/{policy_id}/update',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/{_encode_path_param(policy_id)}/update',
             query=None,
             body=data,
             cast_to=AuthPolicyUpdateResponse,
@@ -212,9 +213,13 @@ class AsyncAuthPoliciesResource:
     ) -> AuthPolicyDeleteResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/policy/{app_id}/organization/{organization_id}/policy/{policy_id}/delete',
+            f'auth/organization/policy/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/policy/{_encode_path_param(policy_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthPolicyDeleteResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

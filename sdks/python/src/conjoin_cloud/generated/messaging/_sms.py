@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._models import Page
@@ -66,7 +67,7 @@ class MessagingSMsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/sms/messages/{message_id}',
+            f'messaging/sms/messages/{_encode_path_param(message_id)}',
             query=None,
             body=data,
             cast_to=Page[MessagingSMSReadSmsMessagesItem],
@@ -131,7 +132,7 @@ class AsyncMessagingSMsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/sms/messages/{message_id}',
+            f'messaging/sms/messages/{_encode_path_param(message_id)}',
             query=None,
             body=data,
             cast_to=Page[MessagingSMSReadSmsMessagesItem],
@@ -183,7 +184,8 @@ def _wire_mapping(
 def _require_messaging_profile(profile_id: str | None) -> str:
     if profile_id is None or not profile_id.strip():
         raise ConjoinConfigurationError(
-            "Messaging profile scope is required; call client.messaging.with_profile(...)"
+            "Messaging profile scope is required; "
+            "call client.messaging.with_profile(...)"
         )
     return profile_id.strip()
 
@@ -202,3 +204,7 @@ def _with_messaging_profile(
         headers=headers,
         auth=options.auth,
     )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

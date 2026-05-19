@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -38,7 +39,7 @@ class AuthPasskeysResource:
     ) -> Page[AuthPasskeyListItem]:
         return self._client.request(
             'GET',
-            f'auth/passkey/{app_id}/account/{account_id}/passkeys',
+            f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys',
             query=None,
             body=None,
             cast_to=Page[AuthPasskeyListItem],
@@ -55,7 +56,7 @@ class AuthPasskeysResource:
     ) -> AuthPasskeyReadResponse:
         return self._client.request(
             'GET',
-            f'auth/passkey/{app_id}/account/{account_id}/passkeys/{credential_id}',
+            f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys/{_encode_path_param(credential_id)}',
             query=None,
             body=None,
             cast_to=AuthPasskeyReadResponse,
@@ -72,7 +73,7 @@ class AuthPasskeysResource:
     ) -> AuthPasskeyDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'auth/passkey/{app_id}/account/{account_id}/passkeys/{credential_id}/delete',
+            f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys/{_encode_path_param(credential_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthPasskeyDeleteResponse,
@@ -101,7 +102,7 @@ class AsyncAuthPasskeysResource:
     ) -> Page[AuthPasskeyListItem]:
         return await self._client.request(
             'GET',
-            f'auth/passkey/{app_id}/account/{account_id}/passkeys',
+            f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys',
             query=None,
             body=None,
             cast_to=Page[AuthPasskeyListItem],
@@ -118,7 +119,7 @@ class AsyncAuthPasskeysResource:
     ) -> AuthPasskeyReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/passkey/{app_id}/account/{account_id}/passkeys/{credential_id}',
+            f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys/{_encode_path_param(credential_id)}',
             query=None,
             body=None,
             cast_to=AuthPasskeyReadResponse,
@@ -135,9 +136,13 @@ class AsyncAuthPasskeysResource:
     ) -> AuthPasskeyDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'auth/passkey/{app_id}/account/{account_id}/passkeys/{credential_id}/delete',
+            f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys/{_encode_path_param(credential_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthPasskeyDeleteResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

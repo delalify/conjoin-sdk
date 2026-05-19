@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -42,7 +43,7 @@ class AuthAuthorizationsResource:
     ) -> AuthAuthorizationAuthorizeActionResponse:
         return self._client.request(
             'POST',
-            f'auth/authorization/{app_id}/organization/{organization_id}/authorize',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/authorize',
             query=None,
             body=data,
             cast_to=AuthAuthorizationAuthorizeActionResponse,
@@ -59,7 +60,7 @@ class AuthAuthorizationsResource:
     ) -> AuthAuthorizationCheckRoleResponse:
         return self._client.request(
             'POST',
-            f'auth/authorization/{app_id}/organization/{organization_id}/has-role',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/has-role',
             query=None,
             body=data,
             cast_to=AuthAuthorizationCheckRoleResponse,
@@ -76,7 +77,7 @@ class AuthAuthorizationsResource:
     ) -> AuthAuthorizationReadEffectivePermissionsResponse:
         return self._client.request(
             'GET',
-            f'auth/authorization/{app_id}/organization/{organization_id}/account/{account_id}/effective-permissions',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/effective-permissions',
             query=None,
             body=None,
             cast_to=AuthAuthorizationReadEffectivePermissionsResponse,
@@ -94,7 +95,7 @@ class AuthAuthorizationsResource:
     ) -> AuthAuthorizationRemoveRolePermissionResponse:
         return self._client.request(
             'POST',
-            f'auth/authorization/{app_id}/organization/{organization_id}/role/{role_id}/permission/remove',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permission/remove',
             query=None,
             body=data,
             cast_to=AuthAuthorizationRemoveRolePermissionResponse,
@@ -124,7 +125,7 @@ class AsyncAuthAuthorizationsResource:
     ) -> AuthAuthorizationAuthorizeActionResponse:
         return await self._client.request(
             'POST',
-            f'auth/authorization/{app_id}/organization/{organization_id}/authorize',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/authorize',
             query=None,
             body=data,
             cast_to=AuthAuthorizationAuthorizeActionResponse,
@@ -141,7 +142,7 @@ class AsyncAuthAuthorizationsResource:
     ) -> AuthAuthorizationCheckRoleResponse:
         return await self._client.request(
             'POST',
-            f'auth/authorization/{app_id}/organization/{organization_id}/has-role',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/has-role',
             query=None,
             body=data,
             cast_to=AuthAuthorizationCheckRoleResponse,
@@ -158,7 +159,7 @@ class AsyncAuthAuthorizationsResource:
     ) -> AuthAuthorizationReadEffectivePermissionsResponse:
         return await self._client.request(
             'GET',
-            f'auth/authorization/{app_id}/organization/{organization_id}/account/{account_id}/effective-permissions',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/account/{_encode_path_param(account_id)}/effective-permissions',
             query=None,
             body=None,
             cast_to=AuthAuthorizationReadEffectivePermissionsResponse,
@@ -176,9 +177,13 @@ class AsyncAuthAuthorizationsResource:
     ) -> AuthAuthorizationRemoveRolePermissionResponse:
         return await self._client.request(
             'POST',
-            f'auth/authorization/{app_id}/organization/{organization_id}/role/{role_id}/permission/remove',
+            f'auth/authorization/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permission/remove',
             query=None,
             body=data,
             cast_to=AuthAuthorizationRemoveRolePermissionResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

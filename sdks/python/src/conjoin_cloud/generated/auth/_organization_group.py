@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -51,7 +52,7 @@ class AuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupCreateGroupResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/create',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupCreateGroupResponse,
@@ -68,7 +69,7 @@ class AuthOrganizationGroupsResource:
     ) -> Page[AuthOrganizationGroupListGroupsItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/list',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationGroupListGroupsItem],
@@ -86,7 +87,7 @@ class AuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupUpdateGroupResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/update',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupUpdateGroupResponse,
@@ -103,7 +104,7 @@ class AuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupDeleteGroupResponse:
         return self._client.request(
             'DELETE',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/delete',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationGroupDeleteGroupResponse,
@@ -121,7 +122,7 @@ class AuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupAddGroupMemberResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/add',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/add',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupAddGroupMemberResponse,
@@ -139,7 +140,7 @@ class AuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupRemoveGroupMemberResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/remove',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/remove',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupRemoveGroupMemberResponse,
@@ -157,7 +158,7 @@ class AuthOrganizationGroupsResource:
     ) -> Page[AuthOrganizationGroupListGroupMembersItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/list',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationGroupListGroupMembersItem],
@@ -175,7 +176,7 @@ class AuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupBulkSyncGroupMembersResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/bulk-sync',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/bulk-sync',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupBulkSyncGroupMembersResponse,
@@ -205,7 +206,7 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupCreateGroupResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/create',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupCreateGroupResponse,
@@ -222,7 +223,7 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> Page[AuthOrganizationGroupListGroupsItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/list',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationGroupListGroupsItem],
@@ -240,7 +241,7 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupUpdateGroupResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/update',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupUpdateGroupResponse,
@@ -257,7 +258,7 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupDeleteGroupResponse:
         return await self._client.request(
             'DELETE',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/delete',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationGroupDeleteGroupResponse,
@@ -275,7 +276,7 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupAddGroupMemberResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/add',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/add',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupAddGroupMemberResponse,
@@ -293,7 +294,7 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupRemoveGroupMemberResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/remove',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/remove',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupRemoveGroupMemberResponse,
@@ -311,7 +312,7 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> Page[AuthOrganizationGroupListGroupMembersItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/list',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationGroupListGroupMembersItem],
@@ -329,9 +330,13 @@ class AsyncAuthOrganizationGroupsResource:
     ) -> AuthOrganizationGroupBulkSyncGroupMembersResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/group/{app_id}/organization/{organization_id}/group/{group_id}/member/bulk-sync',
+            f'auth/organization/group/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/group/{_encode_path_param(group_id)}/member/bulk-sync',
             query=None,
             body=data,
             cast_to=AuthOrganizationGroupBulkSyncGroupMembersResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

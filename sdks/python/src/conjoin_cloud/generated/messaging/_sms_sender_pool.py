@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._request_options import RequestOptions, coerce_request_options
@@ -60,7 +61,7 @@ class MessagingSMSSenderPoolsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/sms/sender-pools/{pool_id}/senders',
+            f'messaging/sms/sender-pools/{_encode_path_param(pool_id)}/senders',
             query=None,
             body=data,
             cast_to=MessagingSMSSenderPoolAddSmsSendersToPoolResponse,
@@ -77,7 +78,7 @@ class MessagingSMSSenderPoolsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'GET',
-            f'messaging/sms/sender-pools/{pool_id}',
+            f'messaging/sms/sender-pools/{_encode_path_param(pool_id)}',
             query=None,
             body=None,
             cast_to=MessagingSMSSenderPoolGetSmsSenderPoolResponse,
@@ -94,7 +95,7 @@ class MessagingSMSSenderPoolsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'DELETE',
-            f'messaging/sms/sender-pools/{pool_id}',
+            f'messaging/sms/sender-pools/{_encode_path_param(pool_id)}',
             query=None,
             body=None,
             cast_to=MessagingSMSSenderPoolDeleteSmsSenderPoolResponse,
@@ -142,7 +143,7 @@ class AsyncMessagingSMSSenderPoolsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/sms/sender-pools/{pool_id}/senders',
+            f'messaging/sms/sender-pools/{_encode_path_param(pool_id)}/senders',
             query=None,
             body=data,
             cast_to=MessagingSMSSenderPoolAddSmsSendersToPoolResponse,
@@ -159,7 +160,7 @@ class AsyncMessagingSMSSenderPoolsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'GET',
-            f'messaging/sms/sender-pools/{pool_id}',
+            f'messaging/sms/sender-pools/{_encode_path_param(pool_id)}',
             query=None,
             body=None,
             cast_to=MessagingSMSSenderPoolGetSmsSenderPoolResponse,
@@ -176,7 +177,7 @@ class AsyncMessagingSMSSenderPoolsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'DELETE',
-            f'messaging/sms/sender-pools/{pool_id}',
+            f'messaging/sms/sender-pools/{_encode_path_param(pool_id)}',
             query=None,
             body=None,
             cast_to=MessagingSMSSenderPoolDeleteSmsSenderPoolResponse,
@@ -187,7 +188,8 @@ class AsyncMessagingSMSSenderPoolsResource:
 def _require_messaging_profile(profile_id: str | None) -> str:
     if profile_id is None or not profile_id.strip():
         raise ConjoinConfigurationError(
-            "Messaging profile scope is required; call client.messaging.with_profile(...)"
+            "Messaging profile scope is required; "
+            "call client.messaging.with_profile(...)"
         )
     return profile_id.strip()
 
@@ -206,3 +208,7 @@ def _with_messaging_profile(
         headers=headers,
         auth=options.auth,
     )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

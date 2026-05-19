@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -43,7 +44,7 @@ class AuthOrganizationInvitationsResource:
     ) -> AuthOrganizationInvitationCreateInvitationResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/create',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationInvitationCreateInvitationResponse,
@@ -60,7 +61,7 @@ class AuthOrganizationInvitationsResource:
     ) -> Page[AuthOrganizationInvitationListInvitationsItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/list',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationInvitationListInvitationsItem],
@@ -77,7 +78,7 @@ class AuthOrganizationInvitationsResource:
     ) -> AuthOrganizationInvitationRevokeInvitationResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/{invitation_id}/revoke',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/{_encode_path_param(invitation_id)}/revoke',
             query=None,
             body=None,
             cast_to=AuthOrganizationInvitationRevokeInvitationResponse,
@@ -95,7 +96,7 @@ class AuthOrganizationInvitationsResource:
     ) -> AuthOrganizationInvitationResendInvitationResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/{invitation_id}/resend',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/{_encode_path_param(invitation_id)}/resend',
             query=None,
             body=data,
             cast_to=AuthOrganizationInvitationResendInvitationResponse,
@@ -125,7 +126,7 @@ class AsyncAuthOrganizationInvitationsResource:
     ) -> AuthOrganizationInvitationCreateInvitationResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/create',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationInvitationCreateInvitationResponse,
@@ -142,7 +143,7 @@ class AsyncAuthOrganizationInvitationsResource:
     ) -> Page[AuthOrganizationInvitationListInvitationsItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/list',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/list',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationInvitationListInvitationsItem],
@@ -159,7 +160,7 @@ class AsyncAuthOrganizationInvitationsResource:
     ) -> AuthOrganizationInvitationRevokeInvitationResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/{invitation_id}/revoke',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/{_encode_path_param(invitation_id)}/revoke',
             query=None,
             body=None,
             cast_to=AuthOrganizationInvitationRevokeInvitationResponse,
@@ -177,9 +178,13 @@ class AsyncAuthOrganizationInvitationsResource:
     ) -> AuthOrganizationInvitationResendInvitationResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/invitation/{app_id}/organization/{organization_id}/invitation/{invitation_id}/resend',
+            f'auth/organization/invitation/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/invitation/{_encode_path_param(invitation_id)}/resend',
             query=None,
             body=data,
             cast_to=AuthOrganizationInvitationResendInvitationResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

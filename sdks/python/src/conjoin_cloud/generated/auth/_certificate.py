@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -38,7 +39,7 @@ class AuthCertificatesResource:
     ) -> Page[AuthCertificateListItem]:
         return self._client.request(
             'GET',
-            f'auth/certificate/{app_id}/certificate/list',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/list',
             query=None,
             body=None,
             cast_to=Page[AuthCertificateListItem],
@@ -53,7 +54,7 @@ class AuthCertificatesResource:
     ) -> AuthCertificateReadActiveResponse:
         return self._client.request(
             'GET',
-            f'auth/certificate/{app_id}/certificate/active',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/active',
             query=None,
             body=None,
             cast_to=AuthCertificateReadActiveResponse,
@@ -68,7 +69,7 @@ class AuthCertificatesResource:
     ) -> AuthCertificateRotateResponse:
         return self._client.request(
             'POST',
-            f'auth/certificate/{app_id}/certificate/rotate',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/rotate',
             query=None,
             body=None,
             cast_to=AuthCertificateRotateResponse,
@@ -83,7 +84,7 @@ class AuthCertificatesResource:
     ) -> AuthCertificateSyncMetadataResponse:
         return self._client.request(
             'POST',
-            f'auth/certificate/{app_id}/certificate/metadata/sync',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/metadata/sync',
             query=None,
             body=None,
             cast_to=AuthCertificateSyncMetadataResponse,
@@ -111,7 +112,7 @@ class AsyncAuthCertificatesResource:
     ) -> Page[AuthCertificateListItem]:
         return await self._client.request(
             'GET',
-            f'auth/certificate/{app_id}/certificate/list',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/list',
             query=None,
             body=None,
             cast_to=Page[AuthCertificateListItem],
@@ -126,7 +127,7 @@ class AsyncAuthCertificatesResource:
     ) -> AuthCertificateReadActiveResponse:
         return await self._client.request(
             'GET',
-            f'auth/certificate/{app_id}/certificate/active',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/active',
             query=None,
             body=None,
             cast_to=AuthCertificateReadActiveResponse,
@@ -141,7 +142,7 @@ class AsyncAuthCertificatesResource:
     ) -> AuthCertificateRotateResponse:
         return await self._client.request(
             'POST',
-            f'auth/certificate/{app_id}/certificate/rotate',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/rotate',
             query=None,
             body=None,
             cast_to=AuthCertificateRotateResponse,
@@ -156,9 +157,13 @@ class AsyncAuthCertificatesResource:
     ) -> AuthCertificateSyncMetadataResponse:
         return await self._client.request(
             'POST',
-            f'auth/certificate/{app_id}/certificate/metadata/sync',
+            f'auth/certificate/{_encode_path_param(app_id)}/certificate/metadata/sync',
             query=None,
             body=None,
             cast_to=AuthCertificateSyncMetadataResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

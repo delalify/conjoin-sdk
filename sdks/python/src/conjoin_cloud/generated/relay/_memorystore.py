@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -75,7 +76,7 @@ class RelayMemorystoresResource:
     ) -> RelayMemorystoreReadClusterResponse:
         return self._client.request(
             'GET',
-            f'relay/memorystore/clusters/{cluster_id}',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}',
             query=None,
             body=None,
             cast_to=RelayMemorystoreReadClusterResponse,
@@ -91,7 +92,7 @@ class RelayMemorystoresResource:
     ) -> RelayMemorystoreUpdateClusterResponse:
         return self._client.request(
             'PATCH',
-            f'relay/memorystore/clusters/{cluster_id}/update',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/update',
             query=None,
             body=data,
             cast_to=RelayMemorystoreUpdateClusterResponse,
@@ -106,7 +107,7 @@ class RelayMemorystoresResource:
     ) -> RelayMemorystoreSuspendClusterResponse:
         return self._client.request(
             'POST',
-            f'relay/memorystore/clusters/{cluster_id}/suspend',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/suspend',
             query=None,
             body=None,
             cast_to=RelayMemorystoreSuspendClusterResponse,
@@ -121,7 +122,7 @@ class RelayMemorystoresResource:
     ) -> RelayMemorystoreDeleteClusterResponse:
         return self._client.request(
             'DELETE',
-            f'relay/memorystore/clusters/{cluster_id}/delete',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayMemorystoreDeleteClusterResponse,
@@ -137,7 +138,7 @@ class RelayMemorystoresResource:
     ) -> RelayMemorystoreExecuteCommandResponse:
         return self._client.request(
             'POST',
-            f'relay/memorystore/clusters/{cluster_id}/command',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/command',
             query=None,
             body=data,
             cast_to=RelayMemorystoreExecuteCommandResponse,
@@ -195,7 +196,7 @@ class AsyncRelayMemorystoresResource:
     ) -> RelayMemorystoreReadClusterResponse:
         return await self._client.request(
             'GET',
-            f'relay/memorystore/clusters/{cluster_id}',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}',
             query=None,
             body=None,
             cast_to=RelayMemorystoreReadClusterResponse,
@@ -211,7 +212,7 @@ class AsyncRelayMemorystoresResource:
     ) -> RelayMemorystoreUpdateClusterResponse:
         return await self._client.request(
             'PATCH',
-            f'relay/memorystore/clusters/{cluster_id}/update',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/update',
             query=None,
             body=data,
             cast_to=RelayMemorystoreUpdateClusterResponse,
@@ -226,7 +227,7 @@ class AsyncRelayMemorystoresResource:
     ) -> RelayMemorystoreSuspendClusterResponse:
         return await self._client.request(
             'POST',
-            f'relay/memorystore/clusters/{cluster_id}/suspend',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/suspend',
             query=None,
             body=None,
             cast_to=RelayMemorystoreSuspendClusterResponse,
@@ -241,7 +242,7 @@ class AsyncRelayMemorystoresResource:
     ) -> RelayMemorystoreDeleteClusterResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/memorystore/clusters/{cluster_id}/delete',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/delete',
             query=None,
             body=None,
             cast_to=RelayMemorystoreDeleteClusterResponse,
@@ -257,9 +258,13 @@ class AsyncRelayMemorystoresResource:
     ) -> RelayMemorystoreExecuteCommandResponse:
         return await self._client.request(
             'POST',
-            f'relay/memorystore/clusters/{cluster_id}/command',
+            f'relay/memorystore/clusters/{_encode_path_param(cluster_id)}/command',
             query=None,
             body=data,
             cast_to=RelayMemorystoreExecuteCommandResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

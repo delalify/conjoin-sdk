@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -38,7 +39,7 @@ class AuthRoleAssignmentLogsResource:
     ) -> Page[AuthRoleAssignmentLogListItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/role-assignment-log/{app_id}/organization/{organization_id}/role-assignment-logs',
+            f'auth/organization/role-assignment-log/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role-assignment-logs',
             query=query,
             body=None,
             cast_to=Page[AuthRoleAssignmentLogListItem],
@@ -68,9 +69,13 @@ class AsyncAuthRoleAssignmentLogsResource:
     ) -> Page[AuthRoleAssignmentLogListItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/role-assignment-log/{app_id}/organization/{organization_id}/role-assignment-logs',
+            f'auth/organization/role-assignment-log/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role-assignment-logs',
             query=query,
             body=None,
             cast_to=Page[AuthRoleAssignmentLogListItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

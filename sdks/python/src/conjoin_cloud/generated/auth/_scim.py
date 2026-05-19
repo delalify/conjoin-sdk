@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._request_options import RequestOptions, coerce_request_options
@@ -122,7 +123,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Users',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users',
             query=None,
             body=None,
             cast_to=AuthSCIMScimListUsersResponse,
@@ -140,7 +141,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'POST',
-            f'auth/scim/v2/{project_id}/{app_id}/Users',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users',
             query=None,
             body=_wire_body(data, _SCIM_CREATE_USER_BODY_ALIASES),
             cast_to=AuthSCIMScimCreateUserResponse,
@@ -158,7 +159,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimGetUserResponse,
@@ -177,7 +178,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'PUT',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=_wire_body(data, _SCIM_REPLACE_USER_BODY_ALIASES),
             cast_to=AuthSCIMScimReplaceUserResponse,
@@ -195,7 +196,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'PATCH',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimPatchUserResponse,
@@ -213,7 +214,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'DELETE',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=None,
@@ -230,7 +231,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups',
             query=None,
             body=None,
             cast_to=AuthSCIMScimListGroupsResponse,
@@ -248,7 +249,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'POST',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups',
             query=None,
             body=_wire_body(data, _SCIM_CREATE_GROUP_BODY_ALIASES),
             cast_to=AuthSCIMScimCreateGroupResponse,
@@ -266,7 +267,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimGetGroupResponse,
@@ -285,7 +286,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'PUT',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=_wire_body(data, _SCIM_REPLACE_GROUP_BODY_ALIASES),
             cast_to=AuthSCIMScimReplaceGroupResponse,
@@ -303,7 +304,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'PATCH',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimPatchGroupMembersResponse,
@@ -321,7 +322,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'DELETE',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=None,
@@ -338,7 +339,7 @@ class AuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return self._client.request(
             'POST',
-            f'auth/scim/v2/{project_id}/{app_id}/Bulk',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Bulk',
             query=None,
             body=None,
             cast_to=AuthSCIMScimBulkOperationsResponse,
@@ -416,7 +417,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Users',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users',
             query=None,
             body=None,
             cast_to=AuthSCIMScimListUsersResponse,
@@ -434,7 +435,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'POST',
-            f'auth/scim/v2/{project_id}/{app_id}/Users',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users',
             query=None,
             body=_wire_body(data, _SCIM_CREATE_USER_BODY_ALIASES),
             cast_to=AuthSCIMScimCreateUserResponse,
@@ -452,7 +453,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimGetUserResponse,
@@ -471,7 +472,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'PUT',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=_wire_body(data, _SCIM_REPLACE_USER_BODY_ALIASES),
             cast_to=AuthSCIMScimReplaceUserResponse,
@@ -489,7 +490,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'PATCH',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimPatchUserResponse,
@@ -507,7 +508,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'DELETE',
-            f'auth/scim/v2/{project_id}/{app_id}/Users/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Users/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=None,
@@ -524,7 +525,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups',
             query=None,
             body=None,
             cast_to=AuthSCIMScimListGroupsResponse,
@@ -542,7 +543,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'POST',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups',
             query=None,
             body=_wire_body(data, _SCIM_CREATE_GROUP_BODY_ALIASES),
             cast_to=AuthSCIMScimCreateGroupResponse,
@@ -560,7 +561,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'GET',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimGetGroupResponse,
@@ -579,7 +580,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'PUT',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=_wire_body(data, _SCIM_REPLACE_GROUP_BODY_ALIASES),
             cast_to=AuthSCIMScimReplaceGroupResponse,
@@ -597,7 +598,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'PATCH',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=AuthSCIMScimPatchGroupMembersResponse,
@@ -615,7 +616,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'DELETE',
-            f'auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Groups/{_encode_path_param(id)}',
             query=None,
             body=None,
             cast_to=None,
@@ -632,7 +633,7 @@ class AsyncAuthSCIMsResource:
         request_options = _with_scim_bearer(request_options, self._scim_token)
         return await self._client.request(
             'POST',
-            f'auth/scim/v2/{project_id}/{app_id}/Bulk',
+            f'auth/scim/v2/{_encode_path_param(project_id)}/{_encode_path_param(app_id)}/Bulk',
             query=None,
             body=None,
             cast_to=AuthSCIMScimBulkOperationsResponse,
@@ -664,12 +665,18 @@ def _wire_mapping(
     return mapped
 
 
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")
+
+
 def _with_scim_bearer(
     request_options: RequestOptions | Mapping[str, Any] | None,
     scim_token: str | None,
 ) -> RequestOptions:
     if scim_token is None or not scim_token.strip():
-        raise ConjoinConfigurationError("SCIM token is required for tenant SCIM operations")
+        raise ConjoinConfigurationError(
+            "SCIM token is required for tenant SCIM operations"
+        )
     options = coerce_request_options(request_options)
     return RequestOptions(
         timeout=options.timeout,

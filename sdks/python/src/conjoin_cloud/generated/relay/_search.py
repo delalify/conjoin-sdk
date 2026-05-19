@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -78,7 +79,7 @@ class RelaySearchesResource:
     ) -> RelaySearchDeleteIndexResponse:
         return self._client.request(
             'DELETE',
-            f'relay/search/indexes/{index_id}/delete',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/delete',
             query=None,
             body=None,
             cast_to=RelaySearchDeleteIndexResponse,
@@ -94,7 +95,7 @@ class RelaySearchesResource:
     ) -> RelaySearchIndexDocumentResponse:
         return self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/documents',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/documents',
             query=None,
             body=data,
             cast_to=RelaySearchIndexDocumentResponse,
@@ -110,7 +111,7 @@ class RelaySearchesResource:
     ) -> Page[RelaySearchIndexDocumentBatchItem]:
         return self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/documents/batch',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/documents/batch',
             query=None,
             body=data,
             cast_to=Page[RelaySearchIndexDocumentBatchItem],
@@ -126,7 +127,7 @@ class RelaySearchesResource:
     ) -> RelaySearchRemoveDocumentResponse:
         return self._client.request(
             'DELETE',
-            f'relay/search/indexes/{index_id}/documents/{document_id}',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/documents/{_encode_path_param(document_id)}',
             query=None,
             body=None,
             cast_to=RelaySearchRemoveDocumentResponse,
@@ -142,7 +143,7 @@ class RelaySearchesResource:
     ) -> RelaySearchSearchQueryResponse:
         return self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/query',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/query',
             query=None,
             body=data,
             cast_to=RelaySearchSearchQueryResponse,
@@ -158,7 +159,7 @@ class RelaySearchesResource:
     ) -> RelaySearchAutoSuggestResponse:
         return self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/suggest',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/suggest',
             query=None,
             body=data,
             cast_to=RelaySearchAutoSuggestResponse,
@@ -216,7 +217,7 @@ class AsyncRelaySearchesResource:
     ) -> RelaySearchDeleteIndexResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/search/indexes/{index_id}/delete',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/delete',
             query=None,
             body=None,
             cast_to=RelaySearchDeleteIndexResponse,
@@ -232,7 +233,7 @@ class AsyncRelaySearchesResource:
     ) -> RelaySearchIndexDocumentResponse:
         return await self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/documents',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/documents',
             query=None,
             body=data,
             cast_to=RelaySearchIndexDocumentResponse,
@@ -248,7 +249,7 @@ class AsyncRelaySearchesResource:
     ) -> Page[RelaySearchIndexDocumentBatchItem]:
         return await self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/documents/batch',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/documents/batch',
             query=None,
             body=data,
             cast_to=Page[RelaySearchIndexDocumentBatchItem],
@@ -264,7 +265,7 @@ class AsyncRelaySearchesResource:
     ) -> RelaySearchRemoveDocumentResponse:
         return await self._client.request(
             'DELETE',
-            f'relay/search/indexes/{index_id}/documents/{document_id}',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/documents/{_encode_path_param(document_id)}',
             query=None,
             body=None,
             cast_to=RelaySearchRemoveDocumentResponse,
@@ -280,7 +281,7 @@ class AsyncRelaySearchesResource:
     ) -> RelaySearchSearchQueryResponse:
         return await self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/query',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/query',
             query=None,
             body=data,
             cast_to=RelaySearchSearchQueryResponse,
@@ -296,9 +297,13 @@ class AsyncRelaySearchesResource:
     ) -> RelaySearchAutoSuggestResponse:
         return await self._client.request(
             'POST',
-            f'relay/search/indexes/{index_id}/suggest',
+            f'relay/search/indexes/{_encode_path_param(index_id)}/suggest',
             query=None,
             body=data,
             cast_to=RelaySearchAutoSuggestResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
@@ -40,7 +41,7 @@ class AuthOrganizationRolePermissionsResource:
     ) -> AuthOrganizationRolePermissionAssignOrgRolePermissionResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/role/permission/{organization_id}/{role_id}/assign',
+            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/assign',
             query=None,
             body=data,
             cast_to=AuthOrganizationRolePermissionAssignOrgRolePermissionResponse,
@@ -57,7 +58,7 @@ class AuthOrganizationRolePermissionsResource:
     ) -> Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/role/permission/{organization_id}/{role_id}',
+            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem],
@@ -87,7 +88,7 @@ class AsyncAuthOrganizationRolePermissionsResource:
     ) -> AuthOrganizationRolePermissionAssignOrgRolePermissionResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/role/permission/{organization_id}/{role_id}/assign',
+            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/assign',
             query=None,
             body=data,
             cast_to=AuthOrganizationRolePermissionAssignOrgRolePermissionResponse,
@@ -104,9 +105,13 @@ class AsyncAuthOrganizationRolePermissionsResource:
     ) -> Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/role/permission/{organization_id}/{role_id}',
+            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem],
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")

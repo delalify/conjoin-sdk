@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
+from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
@@ -53,7 +54,7 @@ class CloudZonesResource:
     ) -> CloudZoneReadResponse:
         return self._client.request(
             'GET',
-            f'cloud/cloud-zones/{zone_id}',
+            f'cloud/cloud-zones/{_encode_path_param(zone_id)}',
             query=None,
             body=None,
             cast_to=CloudZoneReadResponse,
@@ -68,7 +69,7 @@ class CloudZonesResource:
     ) -> CloudZoneDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'cloud/cloud-zones/{zone_id}',
+            f'cloud/cloud-zones/{_encode_path_param(zone_id)}',
             query=None,
             body=None,
             cast_to=CloudZoneDeleteResponse,
@@ -83,7 +84,7 @@ class CloudZonesResource:
     ) -> CloudZoneVerifyDnsResponse:
         return self._client.request(
             'PATCH',
-            f'cloud/cloud-zones/verify-dns/{zone_id}',
+            f'cloud/cloud-zones/verify-dns/{_encode_path_param(zone_id)}',
             query=None,
             body=None,
             cast_to=CloudZoneVerifyDnsResponse,
@@ -126,7 +127,7 @@ class AsyncCloudZonesResource:
     ) -> CloudZoneReadResponse:
         return await self._client.request(
             'GET',
-            f'cloud/cloud-zones/{zone_id}',
+            f'cloud/cloud-zones/{_encode_path_param(zone_id)}',
             query=None,
             body=None,
             cast_to=CloudZoneReadResponse,
@@ -141,7 +142,7 @@ class AsyncCloudZonesResource:
     ) -> CloudZoneDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'cloud/cloud-zones/{zone_id}',
+            f'cloud/cloud-zones/{_encode_path_param(zone_id)}',
             query=None,
             body=None,
             cast_to=CloudZoneDeleteResponse,
@@ -156,9 +157,13 @@ class AsyncCloudZonesResource:
     ) -> CloudZoneVerifyDnsResponse:
         return await self._client.request(
             'PATCH',
-            f'cloud/cloud-zones/verify-dns/{zone_id}',
+            f'cloud/cloud-zones/verify-dns/{_encode_path_param(zone_id)}',
             query=None,
             body=None,
             cast_to=CloudZoneVerifyDnsResponse,
             request_options=request_options,
         )
+
+
+def _encode_path_param(value: str) -> str:
+    return quote(value, safe="")
