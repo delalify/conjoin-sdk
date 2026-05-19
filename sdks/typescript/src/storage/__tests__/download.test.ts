@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ConjoinStorageError } from '../../core/errors'
 import type { ConjoinClient, ResolvedConfig } from '../../core/types'
 import { DEFAULT_API_VERSION } from '../../core/version'
+import { createStorageObjects } from '../../generated/modules/storage-object'
 import { createStorageDownloader } from '../download'
 
 const config: ResolvedConfig = Object.freeze({
@@ -35,6 +36,30 @@ afterEach(() => {
 })
 
 describe('createStorageDownloader', () => {
+  it('uses the same download signed-url endpoint as the generated storage object resource', async () => {
+    const client = createMockClient(
+      vi.fn().mockResolvedValue({
+        url: 'https://storage.example.com/file.txt',
+        headers: {},
+      }),
+    )
+
+    fetchSpy.mockResolvedValue(new Response('file contents', { status: 200 }))
+
+    await createStorageObjects(client).createDownloadSignedUrl({
+      container_name_or_id: 'bucket',
+      path: 'file.txt',
+    })
+    const generatedPath = vi.mocked(client.fetch).mock.calls[0]?.[0]
+
+    await createStorageDownloader(client).download({
+      container: 'bucket',
+      path: 'file.txt',
+    })
+
+    expect(vi.mocked(client.fetch).mock.calls[1]?.[0]).toBe(generatedPath)
+  })
+
   describe('successful download', () => {
     it('fetches from the signed URL with returned headers', async () => {
       const client = createMockClient(

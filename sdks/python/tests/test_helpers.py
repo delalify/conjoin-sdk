@@ -87,6 +87,29 @@ def chat_completion_payload() -> dict[str, Any]:
     }
 
 
+def ai_inference_payload() -> dict[str, Any]:
+    return {
+        "request_id": "ai_req_123",
+        "conjoin_account_id": "cnj_acct_123",
+        "conjoin_project_id": "cnj_proj_123",
+        "live_mode": False,
+        "conjoin_request_id": VALID_REQUEST_ID,
+        "model": "conjoin-test",
+        "provider": "conjoin",
+        "request_type": "chat_completion",
+        "status": "completed",
+        "token_usage": {"input_tokens": 1, "output_tokens": 2, "total_tokens": 3},
+        "cost_usd": 0.01,
+        "latency_ms": 10,
+        "streaming_enabled": False,
+        "policy_applied": False,
+        "is_byok": False,
+        "context_used": False,
+        "date_created": "2026-01-01T00:00:00Z",
+        "date_updated": "2026-01-01T00:00:00Z",
+    }
+
+
 def chat_chunk_payload(content: str = "Hello") -> dict[str, Any]:
     return {
         "id": "chatcmpl_chunk_123",
@@ -101,6 +124,99 @@ def chat_chunk_payload(content: str = "Hello") -> dict[str, Any]:
             }
         ],
     }
+
+
+def test_ai_chat_helper_endpoint_matches_generated_chat_completion_endpoint() -> None:
+    api_paths: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        api_paths.append(request.url.path.removeprefix("/v1/"))
+        if json.loads(request.content).get("stream") is True:
+            return httpx.Response(
+                200,
+                stream=TrackingSyncStream([b"data: [DONE]\n\n"]),
+                request=request,
+            )
+        if len(api_paths) == 1:
+            return conjoin_response(request, ai_inference_payload())
+        return conjoin_response(request, chat_completion_payload())
+
+    client = make_client(handler)
+    try:
+        client.ai.inferences.create_chat_completion(
+            data={"model": "conjoin-test", "messages": [{"role": "user", "content": "Hello"}]},
+        )
+        client.ai.chat.complete(
+            model="conjoin-test",
+            messages=[{"role": "user", "content": "Hello"}],
+        )
+        list(
+            client.ai.chat.stream(
+                model="conjoin-test",
+                messages=[{"role": "user", "content": "Hello"}],
+            )
+        )
+    finally:
+        client.close()
+
+    generated_path = api_paths[0]
+    assert api_paths == [generated_path, generated_path, generated_path]
+
+
+def test_storage_helper_signed_url_endpoints_match_generated_resources() -> None:
+    api_paths: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.host == "api.conjoin.cloud":
+            api_paths.append(request.url.path.removeprefix("/v1/"))
+            if request.url.path.endswith("download/signed-url"):
+                return conjoin_response(
+                    request,
+                    {"url": "https://storage.example.com/download", "headers": {}},
+                )
+            return conjoin_response(
+                request,
+                {
+                    "upload_url": "https://storage.example.com/upload",
+                    "required_fields": {"method": "PUT", "headers": {}},
+                    "upload_mode": "single",
+                },
+            )
+
+        return httpx.Response(200, text="downloaded", request=request)
+
+    client = make_client(handler)
+    try:
+        client.storage.objects.create_upload_signed_url(
+            data={
+                "container_name_or_id": "bucket",
+                "path": "file.txt",
+                "content_type": "text/plain",
+                "file_size": 4,
+            }
+        )
+        client.storage.upload(
+            container="bucket",
+            path="file.txt",
+            content_type="text/plain",
+            body=b"data",
+        )
+        client.storage.objects.create_download_signed_url(
+            data={"container_name_or_id": "bucket", "path": "file.txt"}
+        )
+        download = client.storage.download(container="bucket", path="file.txt")
+        download.close()
+    finally:
+        client.close()
+
+    generated_upload_path = api_paths[0]
+    generated_download_path = api_paths[2]
+    assert api_paths == [
+        generated_upload_path,
+        generated_upload_path,
+        generated_download_path,
+        generated_download_path,
+    ]
 
 
 def test_storage_single_upload_uses_signed_url_without_managed_auth_headers() -> None:

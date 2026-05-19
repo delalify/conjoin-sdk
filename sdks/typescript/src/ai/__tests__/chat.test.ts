@@ -3,6 +3,7 @@ import { ConjoinError } from '../../core/errors'
 import { CONJOIN_REQUEST_ID_HEADER } from '../../core/request-tracing'
 import type { ConjoinClient, ResolvedConfig } from '../../core/types'
 import { DEFAULT_API_VERSION } from '../../core/version'
+import { createAiInferences } from '../../generated/modules/ai-inference'
 import { createAiChat } from '../chat'
 import type { ChatCompletionChunk, ChatCompletionParams, ChatCompletionResponse } from '../types'
 
@@ -71,6 +72,31 @@ const streamFrom = (chunks: string[]): ReadableStream<Uint8Array> =>
   })
 
 describe('createAiChat', () => {
+  it('uses the same endpoint as the generated chat completion resource', async () => {
+    const client = createMockClient({
+      fetch: vi.fn().mockResolvedValue(chatResponse),
+      fetchRaw: vi.fn().mockResolvedValue(new Response(streamFrom(['data: [DONE]\n\n']), { status: 200 })),
+    })
+
+    await createAiInferences(client).createChatCompletion({
+      messages: [{ role: 'user', content: 'Hello' }],
+      model: 'conjoin-test',
+      stream: false,
+    })
+    const generatedPath = vi.mocked(client.fetch).mock.calls[0]?.[0]
+
+    await createAiChat(client).complete(chatParams)
+    const helperCompletePath = vi.mocked(client.fetch).mock.calls[1]?.[0]
+
+    for await (const _chunk of createAiChat(client).stream(chatParams)) {
+      throw new Error('DONE-only stream should not yield chunks')
+    }
+    const helperStreamPath = vi.mocked(client.fetchRaw).mock.calls[0]?.[0]
+
+    expect(helperCompletePath).toBe(generatedPath)
+    expect(helperStreamPath).toBe(generatedPath)
+  })
+
   it('requests a non-streaming chat completion', async () => {
     const signal = new AbortController().signal
     const client = createMockClient({
