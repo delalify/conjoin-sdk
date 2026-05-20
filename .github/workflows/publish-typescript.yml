@@ -1,14 +1,8 @@
-name: Publish
+name: Publish TypeScript
 
 on:
   workflow_dispatch:
     inputs:
-      project:
-        description: 'SDK project to publish'
-        required: true
-        type: choice
-        options:
-          - sdk-typescript
       version:
         description: 'Version bump (patch, minor, major, or explicit like 1.2.3)'
         required: true
@@ -81,17 +75,15 @@ jobs:
 
       - name: Release
         env:
-          SDK_PROJECT: ${{ inputs.project }}
           VERSION: ${{ inputs.version }}
           DRY_RUN_FLAG: ${{ inputs.dry-run && '--dry-run' || '' }}
           FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
-        run: pnpm nx release "$VERSION" --projects="$SDK_PROJECT" $DRY_RUN_FLAG $FIRST_RELEASE_FLAG --skip-publish
+        run: pnpm nx release "$VERSION" --projects=sdk-typescript $DRY_RUN_FLAG $FIRST_RELEASE_FLAG --skip-publish
 
       - name: Publish
         if: ${{ !inputs.dry-run }}
         env:
-          SDK_PROJECT: ${{ inputs.project }}
           NPM_CONFIG_PROVENANCE: true
           FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
-        run: pnpm nx release publish --projects="$SDK_PROJECT" $FIRST_RELEASE_FLAG --verbose
+        run: pnpm nx release publish --projects=sdk-typescript $FIRST_RELEASE_FLAG --verbose
