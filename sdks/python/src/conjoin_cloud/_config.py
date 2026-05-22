@@ -22,6 +22,7 @@ class ResolvedConfig:
     base_url: str
     api_version: str
     timeout: float
+    conjoin_request_id: str | None
     max_retries: int
     backoff_seconds: float
     strict_response_validation: bool
@@ -41,6 +42,7 @@ def resolve_config(
     base_url: str | None,
     api_version: str | None,
     timeout: float | None,
+    conjoin_request_id: str | None,
     max_retries: int | None,
     backoff_seconds: float | None,
     strict_response_validation: bool,
@@ -56,6 +58,7 @@ def resolve_config(
         base_url=_resolve_base_url(base_url),
         api_version=_resolve_non_blank("api_version", api_version) or DEFAULT_API_VERSION,
         timeout=_resolve_timeout(timeout),
+        conjoin_request_id=conjoin_request_id,
         max_retries=_resolve_max_retries(max_retries),
         backoff_seconds=_resolve_backoff_seconds(backoff_seconds),
         strict_response_validation=strict_response_validation,

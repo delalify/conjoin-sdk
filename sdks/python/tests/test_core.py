@@ -28,9 +28,12 @@ from conjoin_cloud import (
     RequestOptions,
 )
 from conjoin_cloud._multipart import MultipartBody
+from conjoin_cloud._request_tracing import is_valid_conjoin_request_id
 from conjoin_cloud._transport import CONJOIN_REQUEST_ID_HEADER
 
 VALID_REQUEST_ID = "cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c1"
+CONFIGURED_REQUEST_ID = "cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c2"
+HEADER_REQUEST_ID = "cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c3"
 
 
 class Widget(ConjoinModel):
@@ -193,6 +196,162 @@ def test_request_id_is_omitted_by_default_and_included_when_supplied() -> None:
     assert seen_request_ids == [None, VALID_REQUEST_ID]
 
 
+def test_configured_header_and_per_call_request_id_precedence() -> None:
+    seen_request_ids: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        return json_response(request)
+
+    client = make_client(handler, conjoin_request_id=CONFIGURED_REQUEST_ID)
+
+    try:
+        client.request("GET", "billing/customers")
+        client.request(
+            "GET",
+            "billing/customers",
+            request_options=RequestOptions(
+                headers={CONJOIN_REQUEST_ID_HEADER.lower(): HEADER_REQUEST_ID}
+            ),
+        )
+        client.request(
+            "GET",
+            "billing/customers",
+            request_options=RequestOptions(
+                conjoin_request_id=VALID_REQUEST_ID,
+                headers={CONJOIN_REQUEST_ID_HEADER: HEADER_REQUEST_ID},
+            ),
+        )
+    finally:
+        client.close()
+
+    assert seen_request_ids == [CONFIGURED_REQUEST_ID, HEADER_REQUEST_ID, VALID_REQUEST_ID]
+
+
+def test_invalid_configured_request_id_is_omitted() -> None:
+    seen_request_ids: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        return json_response(request)
+
+    client = make_client(handler, conjoin_request_id="not-valid")
+
+    try:
+        client.request("GET", "billing/customers")
+    finally:
+        client.close()
+
+    assert seen_request_ids == [None]
+
+
+def test_with_request_trace_uses_one_generated_request_id_for_scope() -> None:
+    seen_request_ids: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        return json_response(request)
+
+    def scoped_call(scoped_client: Conjoin, request_id: str) -> str:
+        assert is_valid_conjoin_request_id(request_id)
+        assert scoped_client.config.conjoin_request_id == request_id
+        scoped_client.request("GET", "billing/customers")
+        scoped_client.request("GET", "billing/customers/cust_123")
+        return request_id
+
+    client = make_client(handler)
+
+    try:
+        request_id = client.with_request_trace(scoped_call)
+    finally:
+        client.close()
+
+    assert seen_request_ids == [request_id, request_id]
+
+
+def test_with_request_trace_accepts_explicit_request_id() -> None:
+    seen_request_ids: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        return json_response(request)
+
+    def scoped_call(scoped_client: Conjoin, request_id: str) -> str:
+        scoped_client.request("GET", "billing/customers")
+        return request_id
+
+    client = make_client(handler)
+
+    try:
+        request_id = client.with_request_trace(scoped_call, request_id=VALID_REQUEST_ID)
+    finally:
+        client.close()
+
+    assert request_id == VALID_REQUEST_ID
+    assert seen_request_ids == [VALID_REQUEST_ID]
+
+
+def test_with_request_trace_uses_configured_request_id() -> None:
+    seen_request_ids: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        return json_response(request)
+
+    def scoped_call(scoped_client: Conjoin, request_id: str) -> str:
+        scoped_client.request("GET", "billing/customers")
+        return request_id
+
+    client = make_client(handler, conjoin_request_id=CONFIGURED_REQUEST_ID)
+
+    try:
+        request_id = client.with_request_trace(scoped_call)
+    finally:
+        client.close()
+
+    assert request_id == CONFIGURED_REQUEST_ID
+    assert seen_request_ids == [CONFIGURED_REQUEST_ID]
+
+
+def test_with_request_trace_replaces_invalid_request_id() -> None:
+    seen_request_ids: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        return json_response(request)
+
+    def scoped_call(scoped_client: Conjoin, request_id: str) -> str:
+        scoped_client.request("GET", "billing/customers")
+        return request_id
+
+    client = make_client(handler)
+
+    try:
+        request_id = client.with_request_trace(scoped_call, request_id="not-valid")
+    finally:
+        client.close()
+
+    assert is_valid_conjoin_request_id(request_id)
+    assert request_id != "not-valid"
+    assert seen_request_ids == [request_id]
+
+
+def test_scoped_sync_client_does_not_close_parent_injected_client() -> None:
+    injected = httpx.Client(transport=httpx.MockTransport(json_response))
+    client = Conjoin(api_key="ck_test_123", http_client=injected, max_retries=0)
+
+    def scoped_call(scoped_client: Conjoin, request_id: str) -> str:
+        scoped_client.close()
+        return request_id
+
+    try:
+        client.with_request_trace(scoped_call)
+        client.close()
+        assert not injected.is_closed
+    finally:
+        injected.close()
+
+
 def test_rejects_absolute_request_paths_to_protect_managed_auth_headers() -> None:
     client = make_client(json_response)
 
@@ -323,6 +482,73 @@ def test_retries_429_and_respects_retry_after_without_changing_request_id() -> N
     assert result["id"] == "wgt_123"
     assert attempts == 2
     assert seen_request_ids == [VALID_REQUEST_ID, VALID_REQUEST_ID]
+
+
+def test_retries_preserve_configured_request_id() -> None:
+    seen_request_ids: list[str | None] = []
+    attempts = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        if attempts == 1:
+            return httpx.Response(500, json={"message": "Failed"}, request=request)
+        return json_response(request)
+
+    http_client = httpx.Client(transport=httpx.MockTransport(handler))
+    client = Conjoin(
+        api_key="ck_test_123",
+        conjoin_request_id=CONFIGURED_REQUEST_ID,
+        http_client=http_client,
+        max_retries=1,
+        backoff_seconds=0,
+    )
+
+    try:
+        result = client.request("GET", "billing/customers")
+    finally:
+        client.close()
+        http_client.close()
+
+    assert result["id"] == "wgt_123"
+    assert attempts == 2
+    assert seen_request_ids == [CONFIGURED_REQUEST_ID, CONFIGURED_REQUEST_ID]
+
+
+def test_retries_preserve_scoped_request_id() -> None:
+    seen_request_ids: list[str | None] = []
+    attempts = 0
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        nonlocal attempts
+        attempts += 1
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        if attempts == 1:
+            return httpx.Response(500, json={"message": "Failed"}, request=request)
+        return json_response(request)
+
+    http_client = httpx.Client(transport=httpx.MockTransport(handler))
+    client = Conjoin(
+        api_key="ck_test_123",
+        http_client=http_client,
+        max_retries=1,
+        backoff_seconds=0,
+    )
+
+    def scoped_call(scoped_client: Conjoin, request_id: str) -> str:
+        result = scoped_client.request("GET", "billing/customers")
+        assert result["id"] == "wgt_123"
+        return request_id
+
+    try:
+        request_id = client.with_request_trace(scoped_call)
+    finally:
+        client.close()
+        http_client.close()
+
+    assert attempts == 2
+    assert seen_request_ids == [request_id, request_id]
 
 
 def test_retries_500_then_succeeds() -> None:
@@ -576,6 +802,39 @@ def test_async_client_matches_core_request_behavior() -> None:
     asyncio.run(run())
 
     assert seen_headers[0][CONJOIN_REQUEST_ID_HEADER] == VALID_REQUEST_ID
+
+
+def test_async_with_request_trace_matches_sync_behavior() -> None:
+    seen_request_ids: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request_ids.append(request.headers.get(CONJOIN_REQUEST_ID_HEADER))
+        return json_response(request)
+
+    async def run() -> None:
+        http_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+        client = AsyncConjoin(api_key="ck_test_123", http_client=http_client, max_retries=0)
+
+        async def scoped_call(scoped_client: AsyncConjoin, request_id: str) -> str:
+            assert scoped_client.config.conjoin_request_id == request_id
+            await scoped_client.request("GET", "billing/customers")
+            await scoped_client.request("GET", "billing/customers/cust_123")
+            return request_id
+
+        try:
+            request_id = await client.with_request_trace(
+                scoped_call,
+                request_id=VALID_REQUEST_ID,
+            )
+        finally:
+            await client.aclose()
+            await http_client.aclose()
+
+        assert request_id == VALID_REQUEST_ID
+
+    asyncio.run(run())
+
+    assert seen_request_ids == [VALID_REQUEST_ID, VALID_REQUEST_ID]
 
 
 def test_async_context_manager_closes_owned_client() -> None:

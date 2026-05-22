@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import Any, TypeVar, overload
 
 import httpx
@@ -8,6 +8,7 @@ import httpx
 from conjoin_cloud._config import ResolvedConfig, resolve_config
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._request_options import RequestOptions
+from conjoin_cloud._request_tracing import resolve_conjoin_request_id
 from conjoin_cloud._response import WithResponse
 from conjoin_cloud._transport import (
     create_with_response,
@@ -31,6 +32,7 @@ class Conjoin(SyncGeneratedResourcesMixin):
         base_url: str | None = None,
         api_version: str | None = None,
         timeout: float | None = None,
+        conjoin_request_id: str | None = None,
         max_retries: int | None = None,
         backoff_seconds: float | None = None,
         http_client: httpx.Client | None = None,
@@ -47,6 +49,7 @@ class Conjoin(SyncGeneratedResourcesMixin):
             base_url=base_url,
             api_version=api_version,
             timeout=timeout,
+            conjoin_request_id=conjoin_request_id,
             max_retries=max_retries,
             backoff_seconds=backoff_seconds,
             strict_response_validation=strict_response_validation,
@@ -113,6 +116,29 @@ class Conjoin(SyncGeneratedResourcesMixin):
             return create_with_response(response, data)
 
         return data
+
+    def with_request_trace(
+        self,
+        callback: Callable[[Conjoin, str], T],
+        request_id: str | None = None,
+    ) -> T:
+        resolved_request_id = resolve_conjoin_request_id(
+            request_id if request_id is not None else self.config.conjoin_request_id
+        )
+        scoped_client = Conjoin(
+            api_key=self.config.api_key,
+            publishable_key=self.config.publishable_key,
+            base_url=self.config.base_url,
+            api_version=self.config.api_version,
+            timeout=self.config.timeout,
+            conjoin_request_id=resolved_request_id,
+            max_retries=self.config.max_retries,
+            backoff_seconds=self.config.backoff_seconds,
+            http_client=self._client,
+            strict_response_validation=self.config.strict_response_validation,
+        )
+
+        return callback(scoped_client, resolved_request_id)
 
     def close(self) -> None:
         if self._owns_client:

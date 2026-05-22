@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import re
 import time
 from collections.abc import Mapping
 from email.utils import parsedate_to_datetime
@@ -34,14 +33,14 @@ from conjoin_cloud._request_options import (
     coerce_request_options,
     resolve_auth_override,
 )
+from conjoin_cloud._request_tracing import (
+    CONJOIN_REQUEST_ID_HEADER,
+    get_conjoin_request_id_from_headers,
+    is_valid_conjoin_request_id,
+)
 from conjoin_cloud._response import WithResponse, preview_body
 from conjoin_cloud._version import __version__
 
-CONJOIN_REQUEST_ID_HEADER = "Conjoin-Request-Id"
-REQUEST_ID_PREFIX = "cnj_req_"
-REQUEST_ID_PATTERN = re.compile(
-    r"^cnj_req_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-)
 SDK_VERSION_HEADER = "X-Conjoin-SDK-Version"
 API_VERSION_HEADER = "X-Conjoin-API-Version"
 
@@ -90,11 +89,15 @@ def build_headers(
     if authorization is not None:
         headers["Authorization"] = authorization
 
-    request_id_from_headers = _extract_request_id(options.headers)
+    request_id_from_headers = get_conjoin_request_id_from_headers(options.headers)
     extra_headers = _safe_extra_headers(options.headers)
     headers.update(extra_headers)
 
-    request_id = _select_request_id(options.conjoin_request_id, request_id_from_headers)
+    request_id = _select_request_id(
+        options.conjoin_request_id,
+        request_id_from_headers,
+        config.conjoin_request_id,
+    )
     if request_id is not None:
         headers[CONJOIN_REQUEST_ID_HEADER] = request_id
 
@@ -477,26 +480,11 @@ def _safe_extra_headers(headers: Mapping[str, str] | None) -> dict[str, str]:
     return safe
 
 
-def _extract_request_id(headers: Mapping[str, str] | None) -> str | None:
-    if headers is None:
-        return None
-
-    for name, value in headers.items():
-        if name.lower() == CONJOIN_REQUEST_ID_HEADER.lower():
-            return str(value)
-
-    return None
-
-
-def _select_request_id(*values: str | None) -> str | None:
+def _select_request_id(*values: object) -> str | None:
     for value in values:
-        if isinstance(value, str) and _is_valid_request_id(value):
+        if is_valid_conjoin_request_id(value):
             return value
     return None
-
-
-def _is_valid_request_id(value: str) -> bool:
-    return bool(REQUEST_ID_PATTERN.fullmatch(value))
 
 
 def _flatten_query(query: Mapping[str, Any]) -> list[tuple[str, str]]:
