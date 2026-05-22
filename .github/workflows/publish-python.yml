@@ -127,13 +127,13 @@ jobs:
           "${args[@]}"
 
       - name: Build release distributions
-        if: ${{ !inputs['dry-run'] }}
+        if: ${{ inputs['dry-run'] == false }}
         run: |
           rm -rf sdks/python/dist
           pnpm nx run sdk-python:build
 
       - name: Upload distributions
-        if: ${{ !inputs['dry-run'] }}
+        if: ${{ inputs['dry-run'] == false }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: python-distributions
@@ -144,7 +144,7 @@ jobs:
   publish-pypi:
     name: Publish to PyPI
     needs: release
-    if: ${{ !inputs['dry-run'] && inputs.repository == 'pypi' }}
+    if: ${{ inputs['dry-run'] == false && inputs.repository == 'pypi' }}
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -166,7 +166,7 @@ jobs:
   publish-testpypi:
     name: Publish to TestPyPI
     needs: release
-    if: ${{ !inputs['dry-run'] && inputs.repository == 'testpypi' }}
+    if: ${{ inputs['dry-run'] == false && inputs.repository == 'testpypi' }}
     runs-on: ubuntu-latest
     permissions:
       actions: read

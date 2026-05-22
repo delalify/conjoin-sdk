@@ -5,7 +5,11 @@
       "{projectRoot}/**/*",
       "sharedGlobals"
     ],
-    "sharedGlobals": [],
+    "sharedGlobals": [
+      "{workspaceRoot}/package.json",
+      "{workspaceRoot}/pnpm-lock.yaml",
+      "{workspaceRoot}/pnpm-workspace.yaml"
+    ],
     "production": [
       "default",
       "!{projectRoot}/**/*.test.ts",

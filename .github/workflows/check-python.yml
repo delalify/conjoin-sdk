@@ -1,0 +1,57 @@
+name: Check Python SDK
+
+on:
+  workflow_call:
+    inputs:
+      base:
+        required: true
+        type: string
+      head:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Python ${{ matrix.python-version }}
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.10', '3.13' ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: sdks/python/pyproject.toml
+
+      - name: Install Node dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Python dependencies
+        run: python -m pip install -e "sdks/python[dev]"
+
+      - name: Generate affected Python SDK
+        run: pnpm nx affected -t generate --base="${{ inputs.base }}" --head="${{ inputs.head }}" --exclude=sdk-typescript --outputStyle=static
+
+      - name: Check affected Python SDK
+        run: pnpm nx affected -t lint typecheck build test --base="${{ inputs.base }}" --head="${{ inputs.head }}" --exclude=sdk-typescript --outputStyle=static
