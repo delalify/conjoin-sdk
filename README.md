@@ -1,58 +1,62 @@
 # Conjoin SDKs
 
-Official SDKs for [Conjoin](https://conjoin.delalify.com) — auth, billing, storage, messaging, relay, AI, runtime, database, and cloud platform management. One package per language, tree-shakeable from top to bottom.
+This repository contains the official SDK packages for Conjoin. Each SDK lives in its own package directory, follows the conventions of its language ecosystem, and generates typed API bindings from `spec/openapi.json`.
 
-## Packages
+## SDK Catalog
 
-| Language | Package | Source | Status |
-|---|---|---|---|
-| TypeScript / JavaScript | [`@conjoin-cloud/sdk`](https://www.npmjs.com/package/@conjoin-cloud/sdk) | [`sdks/typescript`](./sdks/typescript) | Available |
-| Python | `conjoin-cloud` | `sdks/python` | Planned |
-| Go | `github.com/delalify/conjoin-cloud-go` | `sdks/go` | Planned |
-| PHP | `conjoin-cloud/sdk` | `sdks/php` | Planned |
+| SDK | Package | Source | Guide |
+| --- | --- | --- | --- |
+| TypeScript and JavaScript | [`@conjoin-cloud/sdk`](https://www.npmjs.com/package/@conjoin-cloud/sdk) | [`sdks/typescript`](./sdks/typescript) | [`sdks/typescript/README.md`](./sdks/typescript/README.md) |
+| Python | `conjoin-cloud` | [`sdks/python`](./sdks/python) | [`sdks/python/README.md`](./sdks/python/README.md) |
 
-For language-specific install, configuration, and API documentation, see each package's README.
+Each SDK guide covers installation, authentication, generated resources, errors, examples, and package-local development.
 
-## Repository layout
+## Shared API Source
 
-```
-conjoin-sdk/
-├── sdks/                  Per-language SDK packages
-│   └── typescript/        @conjoin-cloud/sdk
-├── spec/                  OpenAPI source-of-truth
-└── .github/workflows/     CI and publish pipelines
-```
+`spec/openapi.json` is the source schema for generated resources. SDK generators read the schema and produce language-specific clients, models, and request helpers. Hand-written helpers stay inside each SDK package when a language needs runtime-specific behavior.
 
-The OpenAPI spec at `spec/openapi.json` is the source of truth. Each SDK's codegen reads it to produce typed bindings.
+## Repository Layout
+
+- `sdks/` contains one package directory per SDK.
+- `spec/` contains the OpenAPI schema and validation script.
+- `.github/workflows/` contains CI and publish workflows.
+- `package.json` and `nx.json` define the shared task graph.
 
 ## Development
 
-This repo is an Nx-managed pnpm monorepo.
+Install the root tooling once:
 
 ```bash
 pnpm install
-pnpm nx run sdk-typescript:generate    # regenerate codegen from the spec
-pnpm nx run sdk-typescript:typecheck   # tsc --noEmit
-pnpm nx run sdk-typescript:lint        # biome check
-pnpm nx run sdk-typescript:build       # tsup
-pnpm nx run sdk-typescript:test        # vitest
 ```
 
-Or from each package directory:
+Run all SDK targets through Nx from the repository root:
 
 ```bash
-cd sdks/typescript
-pnpm test
+pnpm nx run-many -t generate
+pnpm nx run-many -t typecheck
+pnpm nx run-many -t lint
+pnpm nx run-many -t build
+pnpm nx run-many -t test
 ```
 
-## Releasing
+Run one SDK target by project name:
 
-Releases are driven from GitHub Actions via the [Publish workflow](.github/workflows/publish.yml). Each SDK is versioned independently; tags follow `{projectName}@v{version}` (e.g. `sdk-typescript@v0.1.0`). The workflow runs lint, typecheck, build, and tests before any publish, supports dry runs, and emits signed npm provenance attestations.
+```bash
+pnpm nx run sdk-typescript:test
+pnpm nx run sdk-python:test
+```
+
+Some SDKs need package-local setup before root tasks can run. Read the SDK guide before working inside a package.
+
+## Releases
+
+The [TypeScript publish workflow](.github/workflows/publish-typescript.yml) publishes the npm package, and the [Python publish workflow](.github/workflows/publish-python.yml) publishes the Python package. Nx versions packages independently and uses tags in the `{projectName}@v{version}` format, such as `sdk-typescript@v0.1.0`. The publish workflows run generation, linting, type checks, builds, and tests before publishing.
 
 ## Contributing
 
-Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup and guidelines.
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for setup and contribution guidelines.
 
 ## License
 
-[MIT](./LICENSE)
+This repository uses the [MIT](./LICENSE) license.

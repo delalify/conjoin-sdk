@@ -5,6 +5,13 @@ import { APP_ID, describeAuthSdkContractCases, PROJECT_ID } from './auth-test-ut
 
 const SCIM_USER_ID = 'scim_user_123'
 const SCIM_GROUP_ID = 'scim_group_123'
+const SCIM_TOKEN = 'scim_token_contract'
+const publicScimHeaders = {
+  authorization: undefined,
+}
+const tenantScimHeaders = {
+  authorization: `Bearer ${SCIM_TOKEN}`,
+}
 const scimUserBody = {
   active: true,
   emails: [{ primary: true, type: 'work', value: 'owner@example.com' }],
@@ -61,6 +68,7 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     name: 'gets SCIM service provider config',
     method: 'GET',
     path: '/v1/auth/scim/v2/ServiceProviderConfig',
+    expectedHeaders: publicScimHeaders,
     response: scimResponse(serviceProviderConfigFixture),
     run: context => createAuthSCIMs(context.client).scimGetServiceProviderConfig(),
     assertResult: result => expect(result).toEqual(serviceProviderConfigFixture),
@@ -69,6 +77,7 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     name: 'gets SCIM schemas',
     method: 'GET',
     path: '/v1/auth/scim/v2/Schemas',
+    expectedHeaders: publicScimHeaders,
     response: scimResponse(resourceListFixture),
     run: context => createAuthSCIMs(context.client).scimGetSchemas(),
     assertResult: result => expect(result).toEqual(resourceListFixture),
@@ -77,6 +86,7 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     name: 'gets SCIM resource types',
     method: 'GET',
     path: '/v1/auth/scim/v2/ResourceTypes',
+    expectedHeaders: publicScimHeaders,
     response: scimResponse(resourceListFixture),
     run: context => createAuthSCIMs(context.client).scimGetResourceTypes(),
     assertResult: result => expect(result).toEqual(resourceListFixture),
@@ -87,8 +97,9 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Users',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Users`,
     expectedPathParams: { app_id: APP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(resourceListFixture),
-    run: context => createAuthSCIMs(context.client).scimListUsers(PROJECT_ID, APP_ID),
+    run: context => createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimListUsers(PROJECT_ID, APP_ID),
     assertResult: result => expect(result).toEqual(resourceListFixture),
   },
   {
@@ -98,8 +109,10 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     expectedBody: scimUserBody,
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Users`,
     expectedPathParams: { app_id: APP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(userFixture, 201),
-    run: context => createAuthSCIMs(context.client).scimCreateUser(PROJECT_ID, APP_ID, scimUserBody),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimCreateUser(PROJECT_ID, APP_ID, scimUserBody),
     assertResult: result => expect(result).toEqual(userFixture),
   },
   {
@@ -108,8 +121,10 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Users/{id}',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Users/${SCIM_USER_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_USER_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(userFixture),
-    run: context => createAuthSCIMs(context.client).scimGetUser(PROJECT_ID, APP_ID, SCIM_USER_ID),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimGetUser(PROJECT_ID, APP_ID, SCIM_USER_ID),
     assertResult: result => expect(result).toEqual(userFixture),
   },
   {
@@ -119,8 +134,15 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     expectedBody: scimUserBody,
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Users/${SCIM_USER_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_USER_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(userFixture),
-    run: context => createAuthSCIMs(context.client).scimReplaceUser(PROJECT_ID, APP_ID, SCIM_USER_ID, scimUserBody),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimReplaceUser(
+        PROJECT_ID,
+        APP_ID,
+        SCIM_USER_ID,
+        scimUserBody,
+      ),
     assertResult: result => expect(result).toEqual(userFixture),
   },
   {
@@ -129,8 +151,10 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Users/{id}',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Users/${SCIM_USER_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_USER_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(userFixture),
-    run: context => createAuthSCIMs(context.client).scimPatchUser(PROJECT_ID, APP_ID, SCIM_USER_ID),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimPatchUser(PROJECT_ID, APP_ID, SCIM_USER_ID),
     assertResult: result => expect(result).toEqual(userFixture),
   },
   {
@@ -139,10 +163,11 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Users/{id}',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Users/${SCIM_USER_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_USER_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse({}, 204),
     run: async context => {
       await expect(
-        createAuthSCIMs(context.client).scimDeactivateUser(PROJECT_ID, APP_ID, SCIM_USER_ID),
+        createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimDeactivateUser(PROJECT_ID, APP_ID, SCIM_USER_ID),
       ).rejects.toThrow(SyntaxError)
     },
     assertResult: result => expect(result).toBeUndefined(),
@@ -153,8 +178,9 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Groups',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Groups`,
     expectedPathParams: { app_id: APP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(resourceListFixture),
-    run: context => createAuthSCIMs(context.client).scimListGroups(PROJECT_ID, APP_ID),
+    run: context => createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimListGroups(PROJECT_ID, APP_ID),
     assertResult: result => expect(result).toEqual(resourceListFixture),
   },
   {
@@ -164,8 +190,10 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     expectedBody: scimGroupBody,
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Groups`,
     expectedPathParams: { app_id: APP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(groupFixture, 201),
-    run: context => createAuthSCIMs(context.client).scimCreateGroup(PROJECT_ID, APP_ID, scimGroupBody),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimCreateGroup(PROJECT_ID, APP_ID, scimGroupBody),
     assertResult: result => expect(result).toEqual(groupFixture),
   },
   {
@@ -174,8 +202,10 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Groups/${SCIM_GROUP_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_GROUP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(groupFixture),
-    run: context => createAuthSCIMs(context.client).scimGetGroup(PROJECT_ID, APP_ID, SCIM_GROUP_ID),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimGetGroup(PROJECT_ID, APP_ID, SCIM_GROUP_ID),
     assertResult: result => expect(result).toEqual(groupFixture),
   },
   {
@@ -185,8 +215,15 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     expectedBody: scimGroupBody,
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Groups/${SCIM_GROUP_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_GROUP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(groupFixture),
-    run: context => createAuthSCIMs(context.client).scimReplaceGroup(PROJECT_ID, APP_ID, SCIM_GROUP_ID, scimGroupBody),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimReplaceGroup(
+        PROJECT_ID,
+        APP_ID,
+        SCIM_GROUP_ID,
+        scimGroupBody,
+      ),
     assertResult: result => expect(result).toEqual(groupFixture),
   },
   {
@@ -195,8 +232,14 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Groups/${SCIM_GROUP_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_GROUP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(groupFixture),
-    run: context => createAuthSCIMs(context.client).scimPatchGroupMembers(PROJECT_ID, APP_ID, SCIM_GROUP_ID),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimPatchGroupMembers(
+        PROJECT_ID,
+        APP_ID,
+        SCIM_GROUP_ID,
+      ),
     assertResult: result => expect(result).toEqual(groupFixture),
   },
   {
@@ -205,11 +248,12 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Groups/${SCIM_GROUP_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_GROUP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse({}, 204),
     run: async context => {
-      await expect(createAuthSCIMs(context.client).scimDeleteGroup(PROJECT_ID, APP_ID, SCIM_GROUP_ID)).rejects.toThrow(
-        SyntaxError,
-      )
+      await expect(
+        createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimDeleteGroup(PROJECT_ID, APP_ID, SCIM_GROUP_ID),
+      ).rejects.toThrow(SyntaxError)
     },
     assertResult: result => expect(result).toBeUndefined(),
   },
@@ -219,8 +263,9 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Bulk',
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Bulk`,
     expectedPathParams: { app_id: APP_ID, project_id: PROJECT_ID },
+    expectedHeaders: tenantScimHeaders,
     response: scimResponse(bulkFixture),
-    run: context => createAuthSCIMs(context.client).scimBulkOperations(PROJECT_ID, APP_ID),
+    run: context => createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimBulkOperations(PROJECT_ID, APP_ID),
     assertResult: result => expect(result).toEqual(bulkFixture),
   },
 ])

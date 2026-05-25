@@ -11,7 +11,7 @@ type GetSummaryData = NonNullable<operations['getEmailSummary']['responses']['20
 export function createMessagingEmails(client: ConjoinClient) {
   return {
     send: (data: SendBody) =>
-      client.fetch<SendData>('messaging/email/send', { method: 'POST', body: data }),
+      client.fetch<SendData>('messaging/email/send', { method: 'POST', body: data, contentType: 'multipart/form-data' }),
 
     readMessages: (messageId: string, data: ReadMessagesBody) =>
       client.fetchList<ReadMessagesData>(`messaging/email/messages/${messageId}`, { method: 'POST', body: data }),

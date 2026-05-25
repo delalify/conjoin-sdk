@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { ConjoinClient, ResolvedConfig } from '../../core/types'
+import { DEFAULT_API_VERSION } from '../../core/version'
 import { createMessaging } from '../index'
 
 const config: ResolvedConfig = Object.freeze({
   apiKey: 'ck_test_123',
-  apiVersion: '2026-03-31',
+  apiVersion: DEFAULT_API_VERSION,
   baseUrl: 'https://api.conjoin.cloud',
   retry: Object.freeze({ backoffMs: 100, maxRetries: 0 }),
   timeout: 30_000,
@@ -31,6 +32,7 @@ describe('createMessaging', () => {
     expect(client.fetch).toHaveBeenCalledWith('messaging/email/send', {
       method: 'POST',
       body: { to: 'user@example.com' },
+      contentType: 'multipart/form-data',
       headers: { 'Messaging-Profile-ID': 'msg_profile_123' },
     })
     expect(client.fetchList).toHaveBeenCalledWith('messaging/email/messages/msg_123', {

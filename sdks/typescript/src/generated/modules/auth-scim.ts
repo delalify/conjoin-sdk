@@ -1,4 +1,4 @@
-import type { ConjoinClient } from '../../core/types'
+import type { ConjoinClient, RequestOptions } from '../../core/types'
 import type { operations } from '../api-types'
 
 type ScimGetServiceProviderConfigResponse = operations['scimGetServiceProviderConfig']['responses']['200']['content']['application/json']
@@ -22,54 +22,66 @@ type ScimPatchGroupMembersResponse = operations['scimPatchGroupMembers']['respon
 type ScimDeleteGroupResponse = operations['scimDeleteGroup']['responses']['204']['content']['application/json']
 type ScimBulkOperationsResponse = operations['scimBulkOperations']['responses']['200']['content']['application/json']
 
-export function createAuthSCIMs(client: ConjoinClient) {
+export type AuthSCIMOptions = {
+  scimToken?: string
+}
+
+function scimBearerRequestOptions(scimToken: string | undefined): RequestOptions {
+  if (!scimToken || scimToken.trim().length === 0) {
+    throw new Error('SCIM token is required for tenant SCIM operations')
+  }
+
+  return { auth: { type: 'bearer', token: scimToken } }
+}
+
+export function createAuthSCIMs(client: ConjoinClient, options: AuthSCIMOptions = {}) {
   return {
     scimGetServiceProviderConfig: () =>
-      client.fetch<ScimGetServiceProviderConfigResponse>('auth/scim/v2/ServiceProviderConfig'),
+      client.fetch<ScimGetServiceProviderConfigResponse>('auth/scim/v2/ServiceProviderConfig', { auth: { type: 'none' } }),
 
     scimGetSchemas: () =>
-      client.fetch<ScimGetSchemasResponse>('auth/scim/v2/Schemas'),
+      client.fetch<ScimGetSchemasResponse>('auth/scim/v2/Schemas', { auth: { type: 'none' } }),
 
     scimGetResourceTypes: () =>
-      client.fetch<ScimGetResourceTypesResponse>('auth/scim/v2/ResourceTypes'),
+      client.fetch<ScimGetResourceTypesResponse>('auth/scim/v2/ResourceTypes', { auth: { type: 'none' } }),
 
     scimListUsers: (projectId: string, appId: string) =>
-      client.fetch<ScimListUsersResponse>(`auth/scim/v2/${projectId}/${appId}/Users`),
+      client.fetch<ScimListUsersResponse>(`auth/scim/v2/${projectId}/${appId}/Users`, { ...scimBearerRequestOptions(options.scimToken) }),
 
     scimCreateUser: (projectId: string, appId: string, data: ScimCreateUserBody) =>
-      client.fetch<ScimCreateUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users`, { method: 'POST', body: data }),
+      client.fetch<ScimCreateUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users`, { method: 'POST', body: data, ...scimBearerRequestOptions(options.scimToken) }),
 
     scimGetUser: (projectId: string, appId: string, id: string) =>
-      client.fetch<ScimGetUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`),
+      client.fetch<ScimGetUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`, { ...scimBearerRequestOptions(options.scimToken) }),
 
     scimReplaceUser: (projectId: string, appId: string, id: string, data: ScimReplaceUserBody) =>
-      client.fetch<ScimReplaceUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`, { method: 'PUT', body: data }),
+      client.fetch<ScimReplaceUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`, { method: 'PUT', body: data, ...scimBearerRequestOptions(options.scimToken) }),
 
     scimPatchUser: (projectId: string, appId: string, id: string) =>
-      client.fetch<ScimPatchUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`, { method: 'PATCH' }),
+      client.fetch<ScimPatchUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`, { method: 'PATCH', ...scimBearerRequestOptions(options.scimToken) }),
 
     scimDeactivateUser: (projectId: string, appId: string, id: string) =>
-      client.fetch<ScimDeactivateUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`, { method: 'DELETE' }),
+      client.fetch<ScimDeactivateUserResponse>(`auth/scim/v2/${projectId}/${appId}/Users/${id}`, { method: 'DELETE', ...scimBearerRequestOptions(options.scimToken) }),
 
     scimListGroups: (projectId: string, appId: string) =>
-      client.fetch<ScimListGroupsResponse>(`auth/scim/v2/${projectId}/${appId}/Groups`),
+      client.fetch<ScimListGroupsResponse>(`auth/scim/v2/${projectId}/${appId}/Groups`, { ...scimBearerRequestOptions(options.scimToken) }),
 
     scimCreateGroup: (projectId: string, appId: string, data: ScimCreateGroupBody) =>
-      client.fetch<ScimCreateGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups`, { method: 'POST', body: data }),
+      client.fetch<ScimCreateGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups`, { method: 'POST', body: data, ...scimBearerRequestOptions(options.scimToken) }),
 
     scimGetGroup: (projectId: string, appId: string, id: string) =>
-      client.fetch<ScimGetGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`),
+      client.fetch<ScimGetGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`, { ...scimBearerRequestOptions(options.scimToken) }),
 
     scimReplaceGroup: (projectId: string, appId: string, id: string, data: ScimReplaceGroupBody) =>
-      client.fetch<ScimReplaceGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`, { method: 'PUT', body: data }),
+      client.fetch<ScimReplaceGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`, { method: 'PUT', body: data, ...scimBearerRequestOptions(options.scimToken) }),
 
     scimPatchGroupMembers: (projectId: string, appId: string, id: string) =>
-      client.fetch<ScimPatchGroupMembersResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`, { method: 'PATCH' }),
+      client.fetch<ScimPatchGroupMembersResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`, { method: 'PATCH', ...scimBearerRequestOptions(options.scimToken) }),
 
     scimDeleteGroup: (projectId: string, appId: string, id: string) =>
-      client.fetch<ScimDeleteGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`, { method: 'DELETE' }),
+      client.fetch<ScimDeleteGroupResponse>(`auth/scim/v2/${projectId}/${appId}/Groups/${id}`, { method: 'DELETE', ...scimBearerRequestOptions(options.scimToken) }),
 
     scimBulkOperations: (projectId: string, appId: string) =>
-      client.fetch<ScimBulkOperationsResponse>(`auth/scim/v2/${projectId}/${appId}/Bulk`, { method: 'POST' }),
+      client.fetch<ScimBulkOperationsResponse>(`auth/scim/v2/${projectId}/${appId}/Bulk`, { method: 'POST', ...scimBearerRequestOptions(options.scimToken) }),
   }
 }
