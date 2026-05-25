@@ -45,7 +45,7 @@ importers:
         specifier: 5.90.20
         version: 5.90.20
       express:
-        specifier: '>=4.0.0'
+        specifier: '>=4.22.2'
         version: 5.2.1
       jose:
         specifier: 6.2.3
