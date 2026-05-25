@@ -1,4 +1,4 @@
-name: Publish
+name: Publish TypeScript
 
 on:
   workflow_dispatch:
@@ -76,14 +76,32 @@ jobs:
       - name: Release
         env:
           VERSION: ${{ inputs.version }}
-          DRY_RUN_FLAG: ${{ inputs.dry-run && '--dry-run' || '' }}
-          FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
-        run: pnpm nx release "$VERSION" $DRY_RUN_FLAG $FIRST_RELEASE_FLAG --skip-publish
+        run: |
+          args=(pnpm nx release "$VERSION" --projects=sdk-typescript --skip-publish)
+
+          if [[ "$DRY_RUN" == "true" ]]; then
+            args+=(--dry-run)
+          fi
+
+          if [[ "$FIRST_RELEASE" == "true" ]]; then
+            args+=(--first-release)
+          fi
+
+          "${args[@]}"
 
       - name: Publish
-        if: ${{ !inputs.dry-run }}
+        if: ${{ inputs['dry-run'] == false }}
         env:
           NPM_CONFIG_PROVENANCE: true
-          FIRST_RELEASE_FLAG: ${{ inputs.first-release && '--first-release' || '' }}
-        run: pnpm nx release publish $FIRST_RELEASE_FLAG --verbose
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+        run: |
+          args=(pnpm nx release publish --projects=sdk-typescript --verbose)
+
+          if [[ "$FIRST_RELEASE" == "true" ]]; then
+            args+=(--first-release)
+          fi
+
+          "${args[@]}"

@@ -1,12 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ConjoinStorageError } from '../../core/errors'
 import type { ConjoinClient, ResolvedConfig } from '../../core/types'
+import { DEFAULT_API_VERSION } from '../../core/version'
+import { createStorageObjects } from '../../generated/modules/storage-object'
 import { createStorageUploader } from '../upload'
 
 const config: ResolvedConfig = Object.freeze({
   apiKey: 'ck_test_123',
   baseUrl: 'https://api.conjoin.cloud',
-  apiVersion: '2026-03-31',
+  apiVersion: DEFAULT_API_VERSION,
   timeout: 30_000,
   retry: Object.freeze({ maxRetries: 0, backoffMs: 100 }),
 })
@@ -37,6 +39,35 @@ afterEach(() => {
 const CHUNK_SIZE = 256 * 1024
 
 describe('createStorageUploader', () => {
+  it('uses the same upload signed-url endpoint as the generated storage object resource', async () => {
+    const client = createMockClient(
+      vi.fn().mockResolvedValue({
+        upload_url: 'https://storage.example.com/upload',
+        required_fields: { method: 'PUT' as const, headers: {} },
+        upload_mode: 'single' as const,
+      }),
+    )
+
+    fetchSpy.mockResolvedValue(new Response(null, { status: 200 }))
+
+    await createStorageObjects(client).createUploadSignedUrl({
+      container_name_or_id: 'bucket',
+      path: 'file.txt',
+      content_type: 'text/plain',
+      file_size: 4,
+    })
+    const generatedPath = vi.mocked(client.fetch).mock.calls[0]?.[0]
+
+    await createStorageUploader(client).upload({
+      container: 'bucket',
+      path: 'file.txt',
+      contentType: 'text/plain',
+      body: new Uint8Array([1, 2, 3, 4]),
+    })
+
+    expect(vi.mocked(client.fetch).mock.calls[1]?.[0]).toBe(generatedPath)
+  })
+
   describe('single upload flow', () => {
     it('sends the file to the signed URL with correct method and headers', async () => {
       const client = createMockClient(

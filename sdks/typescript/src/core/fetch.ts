@@ -26,35 +26,138 @@ function buildUrl(config: ResolvedConfig, path: string, query?: Record<string, u
   return url
 }
 
-function withoutConjoinRequestIdHeader(headers?: Record<string, string>): Record<string, string> {
+function withoutManagedHeaders(headers?: Record<string, string>): Record<string, string> {
   if (!headers) {
     return {}
   }
 
   return Object.fromEntries(
-    Object.entries(headers).filter(([name]) => name.toLowerCase() !== CONJOIN_REQUEST_ID_HEADER.toLowerCase()),
+    Object.entries(headers).filter(([name]) => {
+      const normalizedName = name.toLowerCase()
+      return normalizedName !== 'authorization' && normalizedName !== CONJOIN_REQUEST_ID_HEADER.toLowerCase()
+    }),
   )
+}
+
+function withoutContentTypeHeader(headers: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(Object.entries(headers).filter(([name]) => name.toLowerCase() !== 'content-type'))
+}
+
+function resolveAuthorizationHeader(config: ResolvedConfig, auth: RequestOptions['auth']): string | undefined {
+  if (auth?.type === 'none') {
+    return undefined
+  }
+
+  if (auth?.type === 'bearer') {
+    if (auth.token.trim().length === 0) {
+      throw new ConjoinAuthenticationError('Bearer token must not be empty')
+    }
+
+    return `Bearer ${auth.token}`
+  }
+
+  const authKey = config.apiKey ?? config.publishableKey
+  return authKey ? `Bearer ${authKey}` : undefined
 }
 
 function buildHeaders(
   config: ResolvedConfig,
   extra?: Record<string, string>,
   conjoinRequestId?: string,
+  auth?: RequestOptions['auth'],
+  contentType: RequestOptions['contentType'] = 'application/json',
 ): Record<string, string> {
-  const authKey = config.apiKey ?? config.publishableKey
-  const extraHeaders = withoutConjoinRequestIdHeader(extra)
+  const authorization = resolveAuthorizationHeader(config, auth)
+  const extraHeaders =
+    contentType === 'multipart/form-data'
+      ? withoutContentTypeHeader(withoutManagedHeaders(extra))
+      : withoutManagedHeaders(extra)
   const requestId = [conjoinRequestId, getConjoinRequestIdFromHeaders(extra), config.conjoinRequestId].find(
     isValidConjoinRequestId,
   )
   const headers: Record<string, string> = {
-    ...(authKey ? { Authorization: `Bearer ${authKey}` } : {}),
-    'Content-Type': 'application/json',
+    ...(authorization ? { Authorization: authorization } : {}),
+    ...(contentType === 'application/json' ? { 'Content-Type': 'application/json' } : {}),
     'X-Conjoin-SDK-Version': SDK_VERSION,
     'X-Conjoin-API-Version': config.apiVersion,
     ...extraHeaders,
     ...(requestId ? { [CONJOIN_REQUEST_ID_HEADER]: requestId } : {}),
   }
   return headers
+}
+
+function isFormDataBody(body: unknown): body is FormData {
+  if (typeof FormData !== 'undefined' && body instanceof FormData) {
+    return true
+  }
+
+  return (
+    Boolean(body) &&
+    typeof body === 'object' &&
+    Object.prototype.toString.call(body) === '[object FormData]' &&
+    typeof (body as { append?: unknown }).append === 'function'
+  )
+}
+
+function isBlobBody(body: unknown): body is Blob {
+  if (typeof Blob !== 'undefined' && body instanceof Blob) {
+    return true
+  }
+
+  return Boolean(body) && typeof body === 'object' && Object.prototype.toString.call(body) === '[object Blob]'
+}
+
+function appendFormDataValue(formData: FormData, key: string, value: unknown): void {
+  if (value === undefined || value === null) {
+    return
+  }
+
+  if (isBlobBody(value)) {
+    formData.append(key, value)
+    return
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      appendFormDataValue(formData, key, item)
+    }
+    return
+  }
+
+  if (typeof value === 'object') {
+    formData.append(key, JSON.stringify(value))
+    return
+  }
+
+  formData.append(key, String(value))
+}
+
+function buildFormData(body: unknown): FormData {
+  if (isFormDataBody(body)) {
+    return body
+  }
+
+  if (!body || typeof body !== 'object' || Array.isArray(body) || isBlobBody(body)) {
+    throw new TypeError('multipart/form-data request body must be a FormData instance or object')
+  }
+
+  const formData = new FormData()
+  for (const [key, value] of Object.entries(body)) {
+    appendFormDataValue(formData, key, value)
+  }
+  return formData
+}
+
+function buildRequestBody(body: unknown, contentType: RequestOptions['contentType']): BodyInit | undefined {
+  if (body === undefined) {
+    return undefined
+  }
+
+  if (contentType === 'multipart/form-data') {
+    return buildFormData(body)
+  }
+
+  return JSON.stringify(body)
 }
 
 function readResponseRequestId(response: Response): string | undefined {
@@ -166,7 +269,9 @@ export async function conjoinFetchRaw(
   options: RequestOptions = {},
 ): Promise<Response> {
   const url = buildUrl(config, path, options.query)
-  const headers = buildHeaders(config, options.headers, options.conjoinRequestId)
+  const contentType = options.contentType ?? 'application/json'
+  const headers = buildHeaders(config, options.headers, options.conjoinRequestId, options.auth, contentType)
+  const body = buildRequestBody(options.body, contentType)
 
   const maxRetries = config.retry.maxRetries
   const backoffMs = config.retry.backoffMs
@@ -180,7 +285,7 @@ export async function conjoinFetchRaw(
       const response = await fetch(url, {
         method: options.method ?? 'GET',
         headers,
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body,
         signal: signals,
       })
 

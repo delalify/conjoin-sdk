@@ -33,6 +33,7 @@ type OperationInfo = {
   hasDataProperty: boolean
   isListResponse: boolean
   hasQueryParams: boolean
+  authMode: 'default' | 'none' | 'scimBearer'
   tag: string
 }
 
@@ -53,6 +54,10 @@ function getFirstContentType(contentMap: Record<string, unknown> | undefined): s
   if (!contentMap) return 'application/json'
   const keys = Object.keys(contentMap)
   return keys[0] ?? 'application/json'
+}
+
+function isMultipartRequest(op: OperationInfo): boolean {
+  return op.requestContentType.toLowerCase() === 'multipart/form-data'
 }
 
 function getResponseSchemaProperties(
@@ -77,6 +82,32 @@ function getResponseSchemaProperties(
 
   const properties = schema.properties as Record<string, unknown> | undefined
   return properties || schema
+}
+
+function resolveAuthMode(operation: Record<string, unknown>): OperationInfo['authMode'] {
+  const security = operation.security
+
+  if (!Array.isArray(security)) {
+    return 'default'
+  }
+
+  if (security.length === 0) {
+    return 'none'
+  }
+
+  if (
+    security.some(requirement => {
+      if (!requirement || typeof requirement !== 'object') {
+        return false
+      }
+
+      return Object.hasOwn(requirement, 'scimBearer')
+    })
+  ) {
+    return 'scimBearer'
+  }
+
+  return 'default'
 }
 
 function collectOperations(spec: Record<string, unknown>): ResourceGroup[] {
@@ -154,6 +185,7 @@ function collectOperations(spec: Record<string, unknown>): ResourceGroup[] {
           hasDataProperty: hasData,
           isListResponse: isList,
           hasQueryParams: hasQuery,
+          authMode: resolveAuthMode(operation),
           tag,
         })
       }
@@ -221,9 +253,18 @@ function generateMethodSignature(op: OperationInfo, methodName: string): string 
   }
   if (op.hasRequestBody) {
     options.push('body: data')
+    if (isMultipartRequest(op)) {
+      options.push("contentType: 'multipart/form-data'")
+    }
   }
   if (op.hasQueryParams && (op.isListResponse || op.httpMethod === 'get')) {
     options.push('query: query as Record<string, unknown>')
+  }
+  if (op.authMode === 'none') {
+    options.push("auth: { type: 'none' }")
+  }
+  if (op.authMode === 'scimBearer') {
+    options.push('...scimBearerRequestOptions(options.scimToken)')
   }
 
   const optionsStr = options.length > 0 ? `, { ${options.join(', ')} }` : ''
@@ -265,8 +306,9 @@ function resolveCollisions(entries: Array<{ name: string; op: OperationInfo }>, 
 
 function generateModuleFile(group: ResourceGroup): string {
   const lines: string[] = []
+  const hasScimBearerOperations = group.operations.some(op => op.authMode === 'scimBearer')
 
-  lines.push("import type { ConjoinClient } from '../../core/types'")
+  lines.push(`import type { ConjoinClient${hasScimBearerOperations ? ', RequestOptions' : ''} } from '../../core/types'`)
   lines.push("import type { operations } from '../api-types'")
   lines.push('')
 
@@ -294,7 +336,21 @@ function generateModuleFile(group: ResourceGroup): string {
   lines.push('')
 
   const factoryName = `create${group.servicePascal}${pluralize(group.resourcePascal)}`
-  lines.push(`export function ${factoryName}(client: ConjoinClient) {`)
+  if (hasScimBearerOperations) {
+    lines.push('export type AuthSCIMOptions = {')
+    lines.push('  scimToken?: string')
+    lines.push('}')
+    lines.push('')
+    lines.push('function scimBearerRequestOptions(scimToken: string | undefined): RequestOptions {')
+    lines.push("  if (!scimToken || scimToken.trim().length === 0) {")
+    lines.push("    throw new Error('SCIM token is required for tenant SCIM operations')")
+    lines.push('  }')
+    lines.push('')
+    lines.push("  return { auth: { type: 'bearer', token: scimToken } }")
+    lines.push('}')
+    lines.push('')
+  }
+  lines.push(`export function ${factoryName}(client: ConjoinClient${hasScimBearerOperations ? ', options: AuthSCIMOptions = {}' : ''}) {`)
   lines.push('  return {')
 
   for (let i = 0; i < methodEntries.length; i++) {
@@ -320,7 +376,12 @@ function generateBarrelIndex(groups: ResourceGroup[], service: string): string {
   for (const group of serviceGroups) {
     const fileName = `${group.service}-${toKebabCase(group.resource)}`
     const factoryName = `create${group.servicePascal}${pluralize(group.resourcePascal)}`
-    lines.push(`export { ${factoryName} } from './${fileName}'`)
+    const exports = [factoryName]
+    if (group.operations.some(op => op.authMode === 'scimBearer')) {
+      exports.push('type AuthSCIMOptions')
+    }
+
+    lines.push(`export { ${exports.join(', ')} } from './${fileName}'`)
   }
 
   lines.push('')

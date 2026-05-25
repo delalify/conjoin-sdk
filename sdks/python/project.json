@@ -1,0 +1,64 @@
+{
+  "name": "sdk-python",
+  "sourceRoot": "sdks/python/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "versionActions": "./tools/release/python-version-actions.cjs"
+    }
+  },
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/run_python.py -m codegen",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{workspaceRoot}/spec/openapi.json",
+        "{projectRoot}/codegen/**/*",
+        "{projectRoot}/scripts/run_python.py"
+      ],
+      "outputs": ["{projectRoot}/src/conjoin_cloud/generated"]
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/run_python.py -m hatchling build",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": [],
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/run_python.py -m ruff check src tests examples scripts codegen",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/run_python.py -m pyright",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": ["default"],
+      "cache": true
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/run_python.py -m ruff format src tests examples scripts codegen",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python3 scripts/run_python.py -m pytest",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

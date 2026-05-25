@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
+import { DEFAULT_API_VERSION } from '../../../src/core/version'
 import type { ConjoinContractServer } from './conjoin-contract-server'
 import { startConjoinContractServer } from './conjoin-contract-server'
 import { conjoinList, conjoinSuccess } from './response-fixtures'
@@ -40,7 +41,7 @@ describe('Conjoin contract server', () => {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-conjoin-api-version': '2026-03-31',
+        'x-conjoin-api-version': DEFAULT_API_VERSION,
       },
       body: JSON.stringify({
         name: 'Demo project',
@@ -75,7 +76,7 @@ describe('Conjoin contract server', () => {
         name: 'Demo project',
       },
     })
-    expect(request?.headers['x-conjoin-api-version']).toBe('2026-03-31')
+    expect(request?.headers['x-conjoin-api-version']).toBe(DEFAULT_API_VERSION)
   })
 
   it('rejects route registration outside the OpenAPI contract', async () => {

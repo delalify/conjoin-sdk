@@ -1,29 +1,31 @@
 # @conjoin-cloud/sdk
 
-The official TypeScript SDK for [Conjoin](https://conjoin.delalify.com). Nine products, sixteen tree-shakeable subpath imports, ESM + CJS, signed npm provenance.
+`@conjoin-cloud/sdk` is the official TypeScript SDK for [Conjoin](https://conjoin.delalify.com). The package provides generated REST resources, storage helpers, AI chat helpers, framework adapters, server verification helpers, retries, request tracing, and typed errors.
+
+The package ships ESM and CJS builds. Each product has its own subpath export, so bundlers can include the code you import.
 
 [![npm version](https://img.shields.io/npm/v/@conjoin-cloud/sdk)](https://www.npmjs.com/package/@conjoin-cloud/sdk)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
 
 ## Install
 
+Install the package with your package manager:
+
 ```bash
 npm install @conjoin-cloud/sdk
-# pnpm add @conjoin-cloud/sdk
-# yarn add @conjoin-cloud/sdk
+pnpm add @conjoin-cloud/sdk
+yarn add @conjoin-cloud/sdk
 ```
 
-Optional peers — install only what you actually use:
+Install peer dependencies for the entry points you import:
 
-| Peer | Required for |
-|---|---|
-| `react`, `react-dom` (>=18) | `@conjoin-cloud/sdk/react` |
-| `next` (>=14) | `@conjoin-cloud/sdk/next` |
-| `express` (>=4), `@types/express` | `@conjoin-cloud/sdk/express` |
-| `hono` (>=4) | `@conjoin-cloud/sdk/hono` |
-| `expo-secure-store` (>=13) | `@conjoin-cloud/sdk/expo` |
+- Install `react` and `react-dom` `>=18.0.0` when you import `@conjoin-cloud/sdk/react`.
+- Install `next` `>=16.2.6` when you import `@conjoin-cloud/sdk/next`.
+- Install `express` `>=4.0.0` and `@types/express` `>=4.0.0` when you import `@conjoin-cloud/sdk/express`.
+- Install `hono` `>=4.12.19` when you import `@conjoin-cloud/sdk/hono`.
+- Install `expo-secure-store` `>=13.0.2` when you import `@conjoin-cloud/sdk/expo`.
 
-## Quick start
+## Quick Start
 
 ```ts
 import { createConjoinClient } from '@conjoin-cloud/sdk'
@@ -39,38 +41,37 @@ const customer = await customers.create('entity_123', {
   name: 'Acme Corp',
   email: 'billing@acme.com',
 })
+
+console.log(customer.customer_id)
 ```
 
-Each subpath import only pulls in the code for that product. Importing `@conjoin-cloud/sdk/billing` does not bundle `auth`, `storage`, or anything else.
+Import the product entry point you need. Importing `@conjoin-cloud/sdk/billing` keeps the bundle focused on billing code.
 
-## Subpath exports
+## Subpath Exports
 
-| Export | What it ships |
-|---|---|
-| `@conjoin-cloud/sdk` | `createConjoinClient`, error classes, shared types |
-| `@conjoin-cloud/sdk/auth` | Accounts, sessions, OAuth, organizations, passkeys, MFA, SCIM |
-| `@conjoin-cloud/sdk/billing` | Customers, subscriptions, invoices, products, prices, payment methods, entitlements |
-| `@conjoin-cloud/sdk/storage` | Containers, objects, signed uploads, signed downloads, ACLs |
-| `@conjoin-cloud/sdk/messaging` | Email, SMS, contacts, conversations, templates, OTP — profile-scoped |
-| `@conjoin-cloud/sdk/relay` | WebSocket broadcast, queues, events, scheduler, memorystore, search |
-| `@conjoin-cloud/sdk/ai` | Chat completions (streaming + non-streaming), models, providers, usage |
-| `@conjoin-cloud/sdk/cloud` | Platform — API keys, roles, projects, webhooks, audit, plans |
-| `@conjoin-cloud/sdk/database` | Reserved; not yet implemented |
-| `@conjoin-cloud/sdk/runtime` | Reserved; not yet implemented |
-| `@conjoin-cloud/sdk/react` | Web React hooks, components, `<ConjoinProvider>` |
-| `@conjoin-cloud/sdk/expo` | Expo React Native hooks and `<ConjoinProvider>` |
-| `@conjoin-cloud/sdk/server` | `verifyToken`, `verifyWebhook`, `createConjoinServer`, `fetchConjoinBranding` |
-| `@conjoin-cloud/sdk/next` | `auth()`, `currentAccount()`, `conjoinProxy`, `createRouteMatcher` |
-| `@conjoin-cloud/sdk/express` | `conjoinMiddleware`, `getAuth`, `requireAuth` |
-| `@conjoin-cloud/sdk/hono` | `conjoinMiddleware`, `getAuth`, `requireAuth` |
+- Import `@conjoin-cloud/sdk` for `createConjoinClient`, shared types, and error classes.
+- Import `@conjoin-cloud/sdk/auth` for accounts, sessions, OAuth, organizations, passkeys, MFA, and SCIM.
+- Import `@conjoin-cloud/sdk/billing` for customers, subscriptions, invoices, products, prices, payment methods, and entitlements.
+- Import `@conjoin-cloud/sdk/storage` for containers, objects, signed uploads, signed downloads, and ACLs.
+- Import `@conjoin-cloud/sdk/messaging` for email, SMS, contacts, conversations, templates, OTP, and profile-scoped clients.
+- Import `@conjoin-cloud/sdk/relay` for WebSocket broadcast, queues, events, scheduler, memorystore, and search.
+- Import `@conjoin-cloud/sdk/ai` for chat completions, streaming, models, providers, and usage resources.
+- Import `@conjoin-cloud/sdk/cloud` for API keys, roles, projects, webhooks, audit resources, and plans.
+- Import `@conjoin-cloud/sdk/react` for web React hooks, components, and `<ConjoinProvider>`.
+- Import `@conjoin-cloud/sdk/expo` for Expo React Native hooks and `<ConjoinProvider>`.
+- Import `@conjoin-cloud/sdk/server` for `verifyToken`, `verifyWebhook`, `createConjoinServer`, and `fetchConjoinBranding`.
+- Import `@conjoin-cloud/sdk/next` for `auth()`, `currentAccount()`, `conjoinProxy`, and `createRouteMatcher`.
+- Import `@conjoin-cloud/sdk/express` for `conjoinMiddleware`, `getAuth`, and `requireAuth`.
+- Import `@conjoin-cloud/sdk/hono` for `conjoinMiddleware`, `getAuth`, and `requireAuth`.
+- Import `@conjoin-cloud/sdk/database` and `@conjoin-cloud/sdk/runtime` for reserved entry points.
 
 ## Configuration
 
+Create one client and pass it to generated resource factories:
+
 ```ts
 const conjoin = createConjoinClient({
-  apiKey: 'ck_live_...',           // server-side
-  // or:
-  publishableKey: 'pk_live_...',   // browser-side
+  apiKey: 'ck_live_...',
   baseUrl: 'https://api.conjoin.cloud',
   apiVersion: '2025-01-01',
   timeout: 30_000,
@@ -81,38 +82,34 @@ const conjoin = createConjoinClient({
 })
 ```
 
-You must provide either `apiKey` or `publishableKey`. Keys prefixed with `ck_test_` and `pk_test_` hit the test environment; `ck_live_` and `pk_live_` keys hit production.
+Use `apiKey` on the server. Use `publishableKey` in browser and mobile clients. Keys with the `ck_test_` and `pk_test_` prefixes use the test environment. Keys with the `ck_live_` and `pk_live_` prefixes use production.
 
-The SDK retries automatically on `429` and `5xx` responses with exponential backoff (initial `backoffMs`, doubled each retry, up to `maxRetries`). Authentication and validation errors are not retried.
+The SDK retries `429` and `5xx` responses with exponential backoff. It starts with `backoffMs`, doubles the delay after each failed try, and stops after `maxRetries`. Authentication and validation errors return immediately.
 
 ## Auth
 
 ```ts
-import { createAuthAccounts, createAuthSessions } from '@conjoin-cloud/sdk/auth'
+import { createAuthAccounts } from '@conjoin-cloud/sdk/auth'
 
 const accounts = createAuthAccounts(conjoin)
-const sessions = createAuthSessions(conjoin)
 
 const account = await accounts.create('app_123', {
-  email: 'user@example.com',
-  password: 'a-secure-password',
+  name: 'Taylor Morgan',
+  primary_email: 'member@example.com',
+  reference_id: 'member_123',
 })
 
-const session = await sessions.create('app_123', { /* session payload */ })
+console.log(account.account_id)
 ```
 
-`appId` is the first argument on every auth call because accounts and sessions are scoped to a Conjoin auth application.
+Pass `appId` as the first argument on auth calls because accounts and sessions are scoped to a Conjoin auth application.
 
 ## Billing
 
 ```ts
-import {
-  createBillingCustomers,
-  createBillingSubscriptions,
-} from '@conjoin-cloud/sdk/billing'
+import { createBillingCustomers } from '@conjoin-cloud/sdk/billing'
 
 const customers = createBillingCustomers(conjoin)
-const subscriptions = createBillingSubscriptions(conjoin)
 
 const customer = await customers.create('entity_123', {
   name: 'Acme Corp',
@@ -120,64 +117,76 @@ const customer = await customers.create('entity_123', {
 })
 
 const page = await customers.list('entity_123', { limit: 20 })
+
 if (page.cursor?.next) {
-  await customers.list('entity_123', { limit: 20, cursor: page.cursor.next })
+  await customers.list('entity_123', {
+    limit: 20,
+    cursor: page.cursor.next,
+  })
 }
 ```
 
-`entityId` is the first argument on every billing call. List endpoints return cursor-based pagination on `cursor.next`.
+Pass `entityId` as the first argument on billing calls. List endpoints return cursor-based pagination through `cursor.next`.
 
 ## Storage
 
-Uploads and downloads use signed URLs under the hood, so they work from the browser or from server runtimes without proxying bytes through the API.
+Uploads and downloads use signed URLs, so browser and server code can move bytes directly to storage:
 
 ```ts
-import { createStorageUploader, createStorageDownloader } from '@conjoin-cloud/sdk/storage'
+import {
+  createStorageDownloader,
+  createStorageUploader,
+} from '@conjoin-cloud/sdk/storage'
 
 const uploader = createStorageUploader(conjoin)
 const downloader = createStorageDownloader(conjoin)
 
 await uploader.upload({
-  container: 'my-bucket',
-  path: 'reports/q4.pdf',
+  container: 'reports',
+  path: 'finance/q4.pdf',
   contentType: 'application/pdf',
-  body: file,                          // File | Blob | Buffer | ArrayBuffer | Uint8Array | ReadableStream
-  onProgress: ({ percentage }) => console.log(`${percentage.toFixed(1)}%`),
+  body: file,
+  onProgress: ({ percentage }) => {
+    console.log(`${percentage.toFixed(1)}%`)
+  },
 })
 
 const result = await downloader.download({
-  container: 'my-bucket',
-  path: 'reports/q4.pdf',
+  container: 'reports',
+  path: 'finance/q4.pdf',
 })
+
 const blob = await result.blob()
 ```
 
-For container and ACL administration, use `createStorageContainers(conjoin)` and `createStorageObjectAcls(conjoin)`.
+Use `createStorageContainers(conjoin)` for container administration. Use `createStorageObjectAcls(conjoin)` for object ACLs.
 
 ## Messaging
 
-Messaging operations are scoped to a profile, sent via the `Messaging-Profile-ID` header. Use the `createMessaging` helper to bind a profile once.
+Messaging operations use the `Messaging-Profile-ID` header. Bind a profile once with `createMessaging`:
 
 ```ts
 import { createMessaging } from '@conjoin-cloud/sdk/messaging'
 
-const messaging = createMessaging(conjoin, { profileId: 'mp_123' })
+const messaging = createMessaging(conjoin, {
+  profileId: 'msg_profile_123',
+})
 
 await messaging.sms.sendSms({
   to: '+15551234567',
-  body: 'Your code is 482910',
+  body: 'Your verification code is 482910.',
 })
 
 await messaging.emails.send({
-  to: 'user@example.com',
+  to: 'member@example.com',
   subject: 'Welcome',
-  html: '<h1>Welcome aboard</h1>',
+  html: '<h1>Welcome to Acme</h1>',
 })
 ```
 
-`messaging` exposes namespaces: `emails`, `sms`, `multisend`, `contacts`, `conversations`, `templates`, `verifications`, `analytics`, `emailSenders`, `emailRecipients`, `smsSenders`, `smsBrands`, `smsCampaigns`, `smsRecipients`, `phoneNumbers`, and `profiles`.
+The profiled messaging client exposes `emails`, `sms`, `multisend`, `contacts`, `conversations`, `templates`, `verifications`, `analytics`, `emailSenders`, `smsSenders`, `smsBrands`, `smsCampaigns`, `phoneNumbers`, and `profiles`.
 
-## AI — chat
+## AI Chat
 
 ```ts
 import { createAiChat } from '@conjoin-cloud/sdk/ai'
@@ -185,14 +194,15 @@ import { createAiChat } from '@conjoin-cloud/sdk/ai'
 const chat = createAiChat(conjoin)
 
 const response = await chat.complete({
-  model: 'conjoin-4',
+  model: 'your-model-id',
   messages: [{ role: 'user', content: 'Explain cursor-based pagination.' }],
 })
 
 const stream = chat.stream({
-  model: 'conjoin-4',
-  messages: [{ role: 'user', content: 'Stream me a haiku.' }],
+  model: 'your-model-id',
+  messages: [{ role: 'user', content: 'Draft a short payment reminder.' }],
 })
+
 for await (const chunk of stream) {
   process.stdout.write(chunk.choices?.[0]?.delta?.content ?? '')
 }
@@ -200,30 +210,37 @@ for await (const chunk of stream) {
 stream.controller.abort()
 ```
 
-`stream` returns an `AsyncIterable<ChatCompletionChunk>` plus an `AbortController` for cancellation.
+`stream` returns an `AsyncIterable<ChatCompletionChunk>` and an `AbortController`.
 
-## Relay — broadcast
+## Relay Broadcast
 
 ```ts
 import { createBroadcastConnection } from '@conjoin-cloud/sdk/relay'
 
 const broadcast = createBroadcastConnection(conjoin, {
-  channels: ['chat:room-42'],
+  channels: ['support:room-42'],
 })
 
 broadcast.on('message', (channel, data) => {
   console.log(`[${channel}]`, data)
 })
 
-await broadcast.publish('chat:room-42', { user: 'alice', text: 'Hi everyone' })
+await broadcast.publish('support:room-42', {
+  user: 'alice',
+  text: 'The ticket is ready for review.',
+})
 ```
 
-For queues, events, scheduler, memorystore, and search, use the per-resource factories from `@conjoin-cloud/sdk/relay` (e.g. `createRelayQueues`, `createRelayEvents`, `createRelayScheduler`).
+Use the per-resource relay factories for queues, events, scheduler, memorystore, and search.
 
-## React — web
+## React
 
 ```tsx
-import { ConjoinProvider, useAuth, useSession, useAccount } from '@conjoin-cloud/sdk/react'
+import {
+  ConjoinProvider,
+  useAccount,
+  useAuth,
+} from '@conjoin-cloud/sdk/react'
 import '@conjoin-cloud/sdk/react/styles.css'
 
 function App() {
@@ -236,26 +253,30 @@ function App() {
 
 function Profile() {
   const { isLoaded, isSignedIn } = useAuth()
-  const session = useSession()
   const account = useAccount()
 
-  if (!isLoaded) return <div>Loading…</div>
-  if (!isSignedIn) return <a href="/sign-in">Sign in</a>
+  if (!isLoaded) {
+    return <div>Loading...</div>
+  }
+
+  if (!isSignedIn) {
+    return <a href="/sign-in">Sign in</a>
+  }
 
   return <div>Hello, {account.account?.email}</div>
 }
 ```
 
-`ConjoinProvider` accepts `publishableKey`, `config` (full SDK config object — typically derived from `fetchConjoinBranding`), `appearance` (theme `'light' | 'dark' | 'system'` and CSS variable overrides), and `cssLayerName` (for scoped Tailwind/CSS layers).
+`ConjoinProvider` accepts `publishableKey`, `config`, `appearance`, and `cssLayerName`. Hooks include `useAuth`, `useSession`, `useAccount`, `useOrg`, `useEntitlements`, `useCheckout`, `useBundles`, `useChannel`, `useStorageUpload`, `useConjoinStatus`, and `useConjoinTheme`.
 
-Available hooks: `useAuth`, `useSession`, `useAccount`, `useOrg`, `useEntitlements`, `useCheckout`, `useBundles`, `useChannel`, `useStorageUpload`, `useConjoinStatus`, `useConjoinTheme`.
+Components include `<SignIn>`, `<SignUp>`, `<AccountButton>`, `<AccountProfile>`, `<OrgSwitcher>`, and `<PricingTable>`.
 
-Available components: `<SignIn>`, `<SignUp>`, `<AccountButton>`, `<AccountProfile>`, `<OrgSwitcher>`, `<PricingTable>`.
-
-## Expo — React Native
+## Expo
 
 ```tsx
-import { ConjoinProvider, useAuth, useSession } from '@conjoin-cloud/sdk/expo'
+import {
+  ConjoinProvider,
+} from '@conjoin-cloud/sdk/expo'
 
 export default function Root({ children }) {
   return (
@@ -266,9 +287,9 @@ export default function Root({ children }) {
 }
 ```
 
-The Expo entry uses `expo-secure-store` for token persistence. The hook surface is identical to the web entry except components (which are web-only).
+The Expo entry uses `expo-secure-store` for token persistence. Its hook surface matches the web entry, and its components stay web-only.
 
-## Server — verification
+## Server Verification
 
 ```ts
 import { verifyToken, verifyWebhook } from '@conjoin-cloud/sdk/server'
@@ -284,84 +305,119 @@ console.log(verified.accountId, verified.sessionId, verified.organizationId)
 const ok = verifyWebhook(rawBody, signatureHeader, webhookSecret)
 ```
 
-`verifyToken` uses `jose` with a remote JWKS cached per `jwksUrl`. `verifyWebhook` is constant-time HMAC-SHA256 on a hex signature.
+`verifyToken` uses `jose` with a remote JWKS cached per `jwksUrl`. `verifyWebhook` checks a hex HMAC-SHA256 signature in constant time.
 
-## Next.js — App Router
+## Next.js App Router
 
-```ts
-// app/layout.tsx — client side
+Wrap client UI with the React provider:
+
+```tsx
 import { ConjoinProvider } from '@conjoin-cloud/sdk/react'
 
-// app/api/route.ts — server side
-import { auth, currentAccount } from '@conjoin-cloud/sdk/next'
-
-export async function GET() {
-  const a = await auth()
-  if (!a) return new Response('Unauthorized', { status: 401 })
-  return Response.json({ accountId: a.accountId, getToken: a.getToken() })
+export default function RootLayout({ children }) {
+  return (
+    <ConjoinProvider publishableKey="pk_live_...">
+      {children}
+    </ConjoinProvider>
+  )
 }
 ```
 
-For middleware-edge route protection:
+Read authenticated state in route handlers:
 
 ```ts
-// middleware.ts
+import { auth } from '@conjoin-cloud/sdk/next'
+
+export async function GET() {
+  const session = await auth()
+
+  if (session === null) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+
+  return Response.json({ accountId: session.accountId })
+}
+```
+
+Protect middleware routes with `conjoinProxy`:
+
+```ts
 import { conjoinProxy, createRouteMatcher } from '@conjoin-cloud/sdk/next'
 import { NextResponse } from 'next/server'
 
 const isProtected = createRouteMatcher(['/dashboard(.*)', '/settings(.*)'])
 
 export default conjoinProxy((auth, req) => {
-  if (isProtected(req) && !auth) {
+  if (isProtected(req) && auth === null) {
     return NextResponse.redirect(new URL('/sign-in', req.url))
   }
 })
 ```
 
-The proxy reads a client-state cookie at the edge (no JWT verification) — it's for routing decisions, not authorization. For real auth checks inside Server Components and Route Handlers, use `auth()`, which verifies the JWT against your JWKS.
+The proxy reads a client-state cookie at the edge for routing decisions. Use `auth()` inside Server Components and Route Handlers when you need JWT verification.
 
 ## Express
 
 ```ts
 import express from 'express'
-import cookieParser from 'cookie-parser'
-import { conjoinMiddleware, requireAuth } from '@conjoin-cloud/sdk/express'
+import {
+  conjoinMiddleware,
+  getAuth,
+  requireAuth,
+} from '@conjoin-cloud/sdk/express'
 
 const app = express()
-app.use(cookieParser())
+
 app.use(conjoinMiddleware({
   jwksUrl: 'https://your-tenant.conjoin.cloud/.well-known/jwks.json',
 }))
 
 app.get('/me', requireAuth, (req, res) => {
-  res.json({ accountId: req.auth!.accountId })
+  const auth = getAuth(req)
+
+  if (auth === null) {
+    res.status(401).json({ error: 'Unauthorized' })
+    return
+  }
+
+  res.json({ accountId: auth.accountId })
 })
 ```
 
-`req.auth` is `VerifiedToken | null`. `requireAuth` short-circuits with `401` if missing. `getAuth(req)` returns the auth object or null.
+`getAuth(req)` returns `VerifiedToken | null`. `requireAuth` returns `401` when authentication is missing.
 
 ## Hono
 
 ```ts
 import { Hono } from 'hono'
-import { conjoinMiddleware, requireAuth } from '@conjoin-cloud/sdk/hono'
+import {
+  conjoinMiddleware,
+  getAuth,
+  requireAuth,
+} from '@conjoin-cloud/sdk/hono'
 
 const app = new Hono()
+
 app.use('*', conjoinMiddleware({
   jwksUrl: 'https://your-tenant.conjoin.cloud/.well-known/jwks.json',
 }))
 
-app.get('/me', requireAuth, (c) => {
-  const auth = c.get('auth')
-  return c.json({ accountId: auth!.accountId })
+app.get('/me', requireAuth, c => {
+  const auth = getAuth(c)
+
+  if (auth === null) {
+    return c.json({ error: 'Unauthorized' }, 401)
+  }
+
+  return c.json({ accountId: auth.accountId })
 })
 ```
 
-`c.get('auth')` is `VerifiedToken | null`. `requireAuth` short-circuits with `401`. `getAuth(c)` returns the auth object or null.
+`getAuth(c)` returns `VerifiedToken | null`. `requireAuth` returns `401` when authentication is missing.
 
 ## Errors
 
-Every error extends `ConjoinError`. Catch broadly or narrow to a specific class.
+Every SDK error extends `ConjoinError`:
 
 ```ts
 import {
@@ -375,49 +431,54 @@ import {
 } from '@conjoin-cloud/sdk'
 
 try {
-  await customers.create('entity_123', data)
+  const customerInput = {
+    name: 'Acme Corp',
+    email: 'billing@acme.com',
+  }
+
+  await customers.create('entity_123', customerInput)
 } catch (err) {
   if (err instanceof ConjoinValidationError) {
     for (const field of err.errors) {
       console.log(`${field.path}: ${field.message}`)
     }
   } else if (err instanceof ConjoinRateLimitError) {
-    // err.retryAfter is in seconds
+    console.log(`Retry after ${err.retryAfter} seconds.`)
   } else if (err instanceof ConjoinAuthenticationError) {
-    // 401, invalid or expired key
+    console.log('The API key is invalid or expired.')
+  } else if (err instanceof ConjoinError) {
+    console.log(err.message)
   }
 }
 ```
 
-| Class | When |
-|---|---|
-| `ConjoinAuthenticationError` | 401, invalid or missing key |
-| `ConjoinValidationError` | 400, 422, with field-level details on `.errors` |
-| `ConjoinRateLimitError` | 429, retry-after on `.retryAfter` |
-| `ConjoinNetworkError` | DNS failure, connection refused |
-| `ConjoinTimeoutError` | request exceeded the configured timeout |
-| `ConjoinStorageError` | upload, download, or signed-URL failure |
-| `ConjoinError` | base class for any other API error |
+- `ConjoinAuthenticationError` covers `401` responses.
+- `ConjoinValidationError` covers `400` and `422` responses with field-level details on `.errors`.
+- `ConjoinRateLimitError` covers `429` responses and exposes `.retryAfter`.
+- `ConjoinNetworkError` covers DNS failures and refused connections.
+- `ConjoinTimeoutError` covers requests that exceed the configured timeout.
+- `ConjoinStorageError` covers upload, download, and signed URL failures.
+- `ConjoinError` is the base class for other API errors.
 
-## Bundle
+## Bundle and Runtime
 
-- 16 entry points, one per product or framework integration
-- ESM + CJS for every entry, with matching `.d.ts` files
-- `"sideEffects": ["./dist/react/styles.css"]` — only the React stylesheet has side effects
-- Tree-shakeable factory functions (no static classes)
-- All optional framework peers are externalised at build time
+- The package exposes 16 entry points, one for each product or framework integration.
+- Every entry point ships ESM, CJS, and `.d.ts` files.
+- The React stylesheet is the only package side effect.
+- Factory functions let bundlers remove unused product code.
+- Optional framework peer dependencies stay external at build time.
 
 ## Requirements
 
-- **Node.js** 20.0.0 or later
-- **TypeScript** 5.x for type-only consumers
-- See the install table above for optional peer versions
+- Node.js 20.0.0 or later is required.
+- TypeScript 5.x works for type-only consumers.
+- Peer dependency versions are listed in the install section.
 
 ## Support
 
-- Documentation: <https://conjoin.delalify.com>
-- Issues: <https://github.com/delalify/conjoin-sdk/issues>
+- Read product documentation at <https://conjoin.delalify.com>.
+- Report SDK issues at <https://github.com/delalify/conjoin-sdk/issues>.
 
 ## License
 
-[MIT](./LICENSE)
+This package uses the [MIT](../../LICENSE) license.
