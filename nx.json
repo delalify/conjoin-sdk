@@ -18,11 +18,23 @@
     ]
   },
   "release": {
-    "projects": [
-      "sdk-typescript",
-      "sdk-python"
-    ],
-    "projectsRelationship": "independent",
+    "groups": {
+      "typescript": {
+        "projects": [
+          "sdk-typescript",
+          "sdk-typescript-react-core",
+          "sdk-typescript-react",
+          "sdk-typescript-expo"
+        ],
+        "projectsRelationship": "fixed"
+      },
+      "python": {
+        "projects": [
+          "sdk-python"
+        ],
+        "projectsRelationship": "independent"
+      }
+    },
     "version": {
       "conventionalCommits": false,
       "updateDependents": "never"

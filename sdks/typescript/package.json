@@ -30,16 +30,13 @@
     "developer-platform"
   ],
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/",
     "provenance": true
   },
-  "sideEffects": [
-    "./dist/react/styles.css"
-  ],
   "exports": {
     ".": {
       "types": "./dist/core/index.d.ts",
@@ -91,11 +88,6 @@
       "import": "./dist/cloud/index.js",
       "require": "./dist/cloud/index.cjs"
     },
-    "./react": {
-      "types": "./dist/react/index.d.ts",
-      "import": "./dist/react/index.js",
-      "require": "./dist/react/index.cjs"
-    },
     "./server": {
       "types": "./dist/server/index.d.ts",
       "import": "./dist/server/index.js",
@@ -115,36 +107,19 @@
       "types": "./dist/hono/index.d.ts",
       "import": "./dist/hono/index.js",
       "require": "./dist/hono/index.cjs"
-    },
-    "./expo": {
-      "types": "./dist/expo/index.d.ts",
-      "import": "./dist/expo/index.js",
-      "require": "./dist/expo/index.cjs"
-    },
-    "./react/styles.css": "./dist/react/styles.css"
+    }
   },
   "files": [
     "dist"
   ],
   "peerDependencies": {
     "@types/express": ">=4.0.0",
-    "expo-secure-store": ">=13.0.2",
     "express": ">=4.0.0",
     "hono": ">=4.12.23",
     "next": ">=16.2.6",
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": ">=18.0.0"
   },
   "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    },
-    "expo-secure-store": {
-      "optional": true
-    },
     "express": {
       "optional": true
     },
@@ -156,6 +131,9 @@
     },
     "next": {
       "optional": true
+    },
+    "react": {
+      "optional": true
     }
   },
   "devDependencies": {
@@ -163,11 +141,9 @@
     "@types/express": "5.0.6",
     "@types/node": "25.9.1",
     "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
     "@vitest/coverage-v8": "4.1.6",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
-    "expo-secure-store": "55.0.13",
     "hono": "4.12.18",
     "next": "16.2.6",
     "openapi-typescript": "7.13.0",
@@ -190,15 +166,6 @@
     "generate": "openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts"
   },
   "dependencies": {
-    "@radix-ui/react-avatar": "1.1.11",
-    "@radix-ui/react-dialog": "1.1.15",
-    "@radix-ui/react-dropdown-menu": "2.1.16",
-    "@radix-ui/react-label": "2.1.8",
-    "@radix-ui/react-popover": "1.1.15",
-    "@radix-ui/react-separator": "1.1.8",
-    "@radix-ui/react-tabs": "1.1.13",
-    "@radix-ui/react-visually-hidden": "1.2.4",
-    "@tanstack/query-core": "5.90.20",
     "jose": "6.2.3"
   }
 }

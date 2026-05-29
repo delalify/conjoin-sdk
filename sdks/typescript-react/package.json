@@ -1,0 +1,85 @@
+{
+  "name": "@conjoin-cloud/react",
+  "version": "0.0.2",
+  "type": "module",
+  "description": "Batteries-included React bindings for Conjoin: the headless provider and hooks plus prebuilt Radix UI components.",
+  "author": "Delalify Engineering (https://delalify.com)",
+  "license": "MIT",
+  "homepage": "https://conjoin.delalify.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delalify/conjoin-sdk.git",
+    "directory": "sdks/typescript-react"
+  },
+  "bugs": {
+    "url": "https://github.com/delalify/conjoin-sdk/issues"
+  },
+  "keywords": [
+    "sdk",
+    "conjoin",
+    "typescript",
+    "react",
+    "components",
+    "ui",
+    "auth",
+    "billing",
+    "storage",
+    "relay",
+    "developer-platform"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "sideEffects": [
+    "./dist/styles.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@conjoin-cloud/react-core": "workspace:*",
+    "@conjoin-cloud/sdk": "workspace:*",
+    "@radix-ui/react-avatar": "1.1.11",
+    "@radix-ui/react-dialog": "1.1.15",
+    "@radix-ui/react-dropdown-menu": "2.1.16",
+    "@radix-ui/react-label": "2.1.8",
+    "@radix-ui/react-popover": "1.1.15",
+    "@radix-ui/react-separator": "1.1.8",
+    "@radix-ui/react-tabs": "1.1.13",
+    "@radix-ui/react-visually-hidden": "1.2.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.6",
+    "@types/node": "25.9.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.6"
+  },
+  "scripts": {
+    "build": "tsup",
+    "lint": "biome check src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}

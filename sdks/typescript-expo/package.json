@@ -1,0 +1,77 @@
+{
+  "name": "@conjoin-cloud/expo",
+  "version": "0.0.2",
+  "type": "module",
+  "description": "React Native bindings for Conjoin: native provider, secure-store transport, and the headless auth and data hooks for Expo apps.",
+  "author": "Delalify Engineering (https://delalify.com)",
+  "license": "MIT",
+  "homepage": "https://conjoin.delalify.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delalify/conjoin-sdk.git",
+    "directory": "sdks/typescript-expo"
+  },
+  "bugs": {
+    "url": "https://github.com/delalify/conjoin-sdk/issues"
+  },
+  "keywords": [
+    "sdk",
+    "conjoin",
+    "typescript",
+    "react-native",
+    "expo",
+    "hooks",
+    "auth",
+    "billing",
+    "storage",
+    "relay",
+    "developer-platform"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "expo-secure-store": ">=13.0.2",
+    "react": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "expo-secure-store": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@conjoin-cloud/react-core": "workspace:*",
+    "@conjoin-cloud/sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.6",
+    "@types/node": "25.9.1",
+    "@types/react": "19.2.14",
+    "expo-secure-store": "55.0.13",
+    "react": "19.2.6",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.6"
+  },
+  "scripts": {
+    "build": "tsup",
+    "lint": "biome check src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}

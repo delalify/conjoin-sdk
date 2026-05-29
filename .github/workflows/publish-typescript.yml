@@ -80,7 +80,7 @@ jobs:
           FIRST_RELEASE: ${{ inputs['first-release'] }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
         run: |
-          args=(pnpm nx release "$VERSION" --projects=sdk-typescript --skip-publish)
+          args=(pnpm nx release "$VERSION" --groups=typescript --skip-publish)
 
           if [[ "$DRY_RUN" == "true" ]]; then
             args+=(--dry-run)
@@ -98,7 +98,7 @@ jobs:
           NPM_CONFIG_PROVENANCE: true
           FIRST_RELEASE: ${{ inputs['first-release'] }}
         run: |
-          args=(pnpm nx release publish --projects=sdk-typescript --verbose)
+          args=(pnpm nx release publish --groups=typescript --verbose)
 
           if [[ "$FIRST_RELEASE" == "true" ]]; then
             args+=(--first-release)

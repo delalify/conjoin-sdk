@@ -1,0 +1,83 @@
+{
+  "name": "@conjoin-cloud/react-core",
+  "version": "0.0.2",
+  "type": "module",
+  "description": "Headless React bindings for Conjoin: framework-agnostic provider and hooks, plus an SSR-safe web provider, theme, and transport. No UI components.",
+  "author": "Delalify Engineering (https://delalify.com)",
+  "license": "MIT",
+  "homepage": "https://conjoin.delalify.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delalify/conjoin-sdk.git",
+    "directory": "sdks/typescript-react-core"
+  },
+  "bugs": {
+    "url": "https://github.com/delalify/conjoin-sdk/issues"
+  },
+  "keywords": [
+    "sdk",
+    "conjoin",
+    "typescript",
+    "react",
+    "hooks",
+    "headless",
+    "auth",
+    "billing",
+    "storage",
+    "relay",
+    "developer-platform"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./web": {
+      "types": "./dist/web/index.d.ts",
+      "import": "./dist/web/index.js",
+      "require": "./dist/web/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@conjoin-cloud/sdk": "workspace:*",
+    "@tanstack/query-core": "5.90.20"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.6",
+    "@types/node": "25.9.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.6"
+  },
+  "scripts": {
+    "build": "tsup",
+    "lint": "biome check src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}

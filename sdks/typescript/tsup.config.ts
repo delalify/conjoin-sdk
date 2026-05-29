@@ -1,4 +1,3 @@
-import { cpSync, mkdirSync } from 'node:fs'
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
@@ -13,12 +12,10 @@ export default defineConfig({
     'ai/index': 'src/ai/index.ts',
     'runtime/index': 'src/runtime/index.ts',
     'cloud/index': 'src/cloud/index.ts',
-    'react/index': 'src/react/index.ts',
     'server/index': 'src/server/index.ts',
     'next/index': 'src/next/index.ts',
     'express/index': 'src/express/index.ts',
     'hono/index': 'src/hono/index.ts',
-    'expo/index': 'src/expo/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -27,10 +24,8 @@ export default defineConfig({
   clean: true,
   outDir: 'dist',
   external: [
-    'react',
-    'react-dom',
-    'expo-secure-store',
     'node:crypto',
+    'react',
     'next',
     'next/headers',
     'next/server',
@@ -40,9 +35,5 @@ export default defineConfig({
   ],
   define: {
     __CONJOIN_SDK_VERSION__: JSON.stringify(process.env.npm_package_version ?? '0.0.1'),
-  },
-  onSuccess: async () => {
-    mkdirSync('dist/react', { recursive: true })
-    cpSync('src/react/styles/conjoin.css', 'dist/react/styles.css')
   },
 })
