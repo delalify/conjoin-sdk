@@ -35,6 +35,7 @@
     "registry": "https://registry.npmjs.org/",
     "provenance": true
   },
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

@@ -1,5 +1,6 @@
 {
   "name": "sdk-typescript-expo",
+  "tags": ["typescript"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -34,6 +35,7 @@
     },
     "nx-release-publish": {
       "executor": "@nx/js:release-publish",
+      "dependsOn": ["build"],
       "options": {
         "packageRoot": "{projectRoot}"
       }

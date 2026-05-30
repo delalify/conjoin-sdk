@@ -26,13 +26,22 @@
           "sdk-typescript-react",
           "sdk-typescript-expo"
         ],
-        "projectsRelationship": "fixed"
+        "projectsRelationship": "fixed",
+        "releaseTag": {
+          "pattern": "typescript-v{version}"
+        },
+        "changelog": {
+          "createRelease": false
+        }
       },
       "python": {
         "projects": [
           "sdk-python"
         ],
-        "projectsRelationship": "independent"
+        "projectsRelationship": "independent",
+        "releaseTag": {
+          "pattern": "{projectName}@v{version}"
+        }
       }
     },
     "version": {
@@ -50,10 +59,7 @@
       "commit": true,
       "tag": true,
       "push": true,
-      "commitMessage": "chore(release): {projectName}@v{version}"
-    },
-    "releaseTag": {
-      "pattern": "{projectName}@v{version}"
+      "commitMessage": "chore(release): {version}"
     }
   },
   "targetDefaults": {

@@ -47,17 +47,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm nx run sdk-typescript:lint
-
-      - name: Typecheck
-        run: pnpm nx run sdk-typescript:typecheck
-
-      - name: Build
-        run: pnpm nx run sdk-typescript:build
-
-      - name: Test
-        run: pnpm nx run sdk-typescript:test
+      - name: Lint, typecheck, test, and build
+        run: pnpm nx run-many -t lint typecheck test build --projects=tag:typescript
 
       - name: Validate version input
         env:
