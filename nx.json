@@ -29,18 +29,6 @@
         "projectsRelationship": "fixed",
         "releaseTag": {
           "pattern": "typescript-v{version}"
-        },
-        "changelog": {
-          "createRelease": false
-        }
-      },
-      "python": {
-        "projects": [
-          "sdk-python"
-        ],
-        "projectsRelationship": "independent",
-        "releaseTag": {
-          "pattern": "{projectName}@v{version}"
         }
       }
     },
@@ -51,9 +39,7 @@
     "changelog": {
       "automaticFromRef": true,
       "workspaceChangelog": false,
-      "projectChangelogs": {
-        "createRelease": "github"
-      }
+      "projectChangelogs": false
     },
     "git": {
       "commit": true,

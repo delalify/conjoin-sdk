@@ -44,7 +44,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "peerDependencies": {
     "expo-secure-store": ">=13.0.2",

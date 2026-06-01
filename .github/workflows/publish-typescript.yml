@@ -64,12 +64,18 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Release
+      - name: Write changelogs
         env:
           VERSION: ${{ inputs.version }}
           DRY_RUN: ${{ inputs['dry-run'] }}
           FIRST_RELEASE: ${{ inputs['first-release'] }}
-          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: node tools/release/release-typescript.mjs notes
+
+      - name: Version and tag
+        env:
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
         run: |
           args=(pnpm nx release "$VERSION" --groups=typescript --skip-publish)
 
@@ -82,6 +88,14 @@ jobs:
           fi
 
           "${args[@]}"
+
+      - name: Push and create GitHub release
+        if: ${{ inputs['dry-run'] == false }}
+        env:
+          DRY_RUN: ${{ inputs['dry-run'] }}
+          FIRST_RELEASE: ${{ inputs['first-release'] }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
+        run: node tools/release/release-typescript.mjs release
 
       - name: Publish
         if: ${{ inputs['dry-run'] == false }}
