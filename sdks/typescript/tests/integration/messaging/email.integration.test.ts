@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { createConjoinClient } from '../../../src/core/client'
 import { createMessaging, createMessagingEmailSenderPools } from '../../../src/messaging'
+import { expectMultipartFields } from '../contract-server/assertions'
 import { conjoinList, conjoinSuccess } from '../contract-server/response-fixtures'
 import {
   API_KEY,
@@ -63,13 +64,19 @@ const emailSenderUpdateBody = {
 
 describeMessagingSdkContractCases('Messaging email SDK contract integration', [
   {
-    name: 'sends an email',
+    name: 'sends an email as multipart/form-data',
     method: 'POST',
     path: '/v1/messaging/email/send',
-    expectedBody: emailSendBody,
     response: conjoinSuccess(messagingEmailMessageFixture(), { requestId: REQUEST_ID }),
     run: context => context.messaging.emails.send(emailSendBody),
     assertResult: result => expect(result).toEqual(messagingEmailMessageFixture()),
+    assertRequest: request =>
+      expectMultipartFields(request, {
+        from: [emailSendBody.from],
+        html: [emailSendBody.html],
+        subject: [emailSendBody.subject],
+        to: emailSendBody.to,
+      }),
   },
   {
     name: 'reads email messages',

@@ -11,22 +11,30 @@ export class GithubReleaseError extends Error {
   }
 }
 
-export function releaseExists(tag) {
-  return tryRun('gh', ['release', 'view', tag, '--json', 'tagName']).ok
+export function releaseExists(tag, repo) {
+  const args = ['release', 'view', tag, '--json', 'tagName']
+
+  if (repo) {
+    args.push('--repo', repo)
+  }
+
+  return tryRun('gh', args).ok
 }
 
 /**
  * Creates a GitHub release attached to an already-created tag. The notes are
  * passed through a temp file so commit subjects are never interpolated into a
  * shell, and the call is idempotent: a release already present for the tag is
- * left untouched so a re-run after a partial failure does not error.
+ * left untouched so a re-run after a partial failure does not error. The
+ * existence probe and the create target the same resolved repository so the
+ * idempotency check can never read one repo while the create writes another.
  */
 export function createRelease({ tag, title, notes, repo }) {
   if (!tag) {
     throw new GithubReleaseError('A tag is required to create a release', 'MISSING_TAG')
   }
 
-  if (releaseExists(tag)) {
+  if (releaseExists(tag, repo)) {
     return { created: false, tag }
   }
 

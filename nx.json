@@ -1,10 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": [
       "{workspaceRoot}/package.json",
       "{workspaceRoot}/pnpm-lock.yaml",
@@ -50,29 +47,18 @@
   },
   "targetDefaults": {
     "generate": {
-      "dependsOn": [
-        "spec:validate"
-      ],
+      "dependsOn": ["spec:validate"],
       "inputs": [
         "{workspaceRoot}/spec/openapi.json",
         "{projectRoot}/codegen/**/*"
       ],
-      "outputs": [
-        "{projectRoot}/src/generated/**/*"
-      ],
+      "outputs": ["{projectRoot}/src/generated/**/*"],
       "cache": true
     },
     "build": {
-      "dependsOn": [
-        "^build",
-        "generate"
-      ],
-      "inputs": [
-        "production"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
+      "dependsOn": ["^build", "generate"],
+      "inputs": ["production"],
+      "outputs": ["{projectRoot}/dist"],
       "cache": true
     },
     "lint": {

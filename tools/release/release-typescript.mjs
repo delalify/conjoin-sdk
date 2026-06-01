@@ -8,6 +8,7 @@ import {
   renderChangelog,
   tagExists,
 } from './lib/git-history.mjs'
+import { assertCleanExcept } from './lib/git-tree.mjs'
 import { createRelease } from './lib/github-release.mjs'
 import { repoUrl, resolveRepoSlug } from './lib/repo.mjs'
 import { run } from './lib/run.mjs'
@@ -60,7 +61,7 @@ function readManifestVersion(manifestPath) {
 
 function buildEntry({ version, firstRelease }) {
   const slug = resolveRepoSlug()
-  const fromTag = firstRelease ? null : findLastTag(`${TAG_PREFIX}*`)
+  const fromTag = firstRelease ? null : findLastTag(`${TAG_PREFIX}*`, TAG_PREFIX)
   const commits = listScopedCommits({ fromTag, paths: SCOPE_PATHS })
   const date = new Date().toISOString().slice(0, 10)
   const entry = renderChangelog({ version, date, commits, repoUrl: repoUrl(slug) })
@@ -84,6 +85,13 @@ function writeNotes({ version, dryRun, firstRelease }) {
   }
 
   run('git', ['add', '--', ...targets])
+
+  // nx commits the entire index in the following version/tag step, so the tree
+  // must hold nothing beyond these changelog edits before that commit is built.
+  // Codegen or format drift present here would otherwise be folded into the
+  // release commit, tag, and npm tarball.
+  assertCleanExcept(targets)
+
   process.stdout.write(`Wrote and staged ${targets.length} CHANGELOG.md files for ${version}\n`)
 }
 
@@ -107,15 +115,15 @@ function publishRelease({ version, dryRun, firstRelease }) {
     return
   }
 
+  // nx (git.push: true) is the sole owner of pushing the release commit and tag
+  // for the TypeScript track, so this step only verifies the tag is present and
+  // creates the GitHub release. Pushing again here would duplicate that work and
+  // muddy crash-recovery reasoning across the two tracks.
   if (!tagExists(tag)) {
     throw new Error(`Tag ${tag} does not exist; run the nx release step before creating the GitHub release`)
   }
 
   const entry = resolveReleaseNotes({ version, firstRelease })
-
-  run('git', ['push', 'origin', 'HEAD'])
-  run('git', ['push', 'origin', tag])
-
   const slug = resolveRepoSlug()
   const result = createRelease({
     tag,

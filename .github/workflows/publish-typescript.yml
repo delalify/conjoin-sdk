@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version bump (patch, minor, major, or explicit like 1.2.3)'
+        description: 'Version bump (patch, minor, major, or explicit like 1.2.3). To recover from a partial failure, re-run with the explicit version (idempotent); a keyword computes a fresh bump.'
         required: true
         type: string
       dry-run:
@@ -22,6 +22,10 @@ permissions:
   contents: write
   id-token: write
 
+concurrency:
+  group: publish-typescript-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   publish:
     name: Publish to npm
@@ -33,6 +37,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_PAT }}
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
@@ -71,12 +76,26 @@ jobs:
           FIRST_RELEASE: ${{ inputs['first-release'] }}
         run: node tools/release/release-typescript.mjs notes
 
+      # nx release governs only the lone TypeScript group; the Python track
+      # bypasses nx and runs through tools/release/release-python.mjs, so the
+      # nx.json release blocks intentionally cover the TypeScript group alone.
       - name: Version and tag
         env:
           VERSION: ${{ inputs.version }}
           DRY_RUN: ${{ inputs['dry-run'] }}
           FIRST_RELEASE: ${{ inputs['first-release'] }}
+          RELEASE_PAT: ${{ secrets.RELEASE_PAT }}
         run: |
+          if [[ "$DRY_RUN" != "true" ]]; then
+            if [[ -z "$RELEASE_PAT" ]]; then
+              echo "::error::RELEASE_PAT is required to push the release commit and tag"
+              exit 1
+            fi
+
+            git remote set-url origin "https://x-access-token:${RELEASE_PAT}@github.com/${GITHUB_REPOSITORY}.git"
+            trap 'git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"' EXIT
+          fi
+
           args=(pnpm nx release "$VERSION" --groups=typescript --skip-publish)
 
           if [[ "$DRY_RUN" == "true" ]]; then
@@ -89,11 +108,9 @@ jobs:
 
           "${args[@]}"
 
-      - name: Push and create GitHub release
+      - name: Create GitHub release
         if: ${{ inputs['dry-run'] == false }}
         env:
-          DRY_RUN: ${{ inputs['dry-run'] }}
-          FIRST_RELEASE: ${{ inputs['first-release'] }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
         run: node tools/release/release-typescript.mjs release
 

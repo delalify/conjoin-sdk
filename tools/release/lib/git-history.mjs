@@ -1,19 +1,38 @@
 import { run, tryRun } from './run.mjs'
 
-const RECORD_SEPARATOR = '\u001e'
-const FIELD_SEPARATOR = '\u001f'
+// git forbids the NUL byte inside a commit message, so NUL is the one separator
+// a hostile subject can never contain. git emits a literal NUL for the %x00
+// placeholder, so the format string passed through argv stays plain ASCII
+// (spawn rejects a NUL inside an argument) while the output is NUL-framed.
+// The log stream is then a flat list of (hash, shortHash, subject) triples
+// that no control character embedded in a subject can re-frame.
+const GIT_FORMAT_SEPARATOR = '%x00'
+const OUTPUT_SEPARATOR = '\u0000'
+const FIELDS_PER_RECORD = 3
 
 const CONVENTIONAL_HEADER = /^(\w+)(?:\(([^)]+)\))?(!)?:\s*(.+)$/
 
 const RELEASE_COMMIT = /^chore\(release\):/
 
+// Control characters in a subject can mangle the rendered markdown or smuggle
+// terminal escapes through the changelog; strip the C0 range, DEL, and the C1
+// range before the subject is parsed or rendered.
+// biome-ignore lint/suspicious/noControlCharactersInRegex: stripping the control range is the intent of this regex
+const CONTROL_CHARACTERS = /[\u0000-\u001f\u007f-\u009f]/g
+
+const MAX_SUBJECT_LENGTH = 200
+
+const MARKDOWN_METACHARACTERS = /[\\`*_{}[\]()#+.!<>|~]/g
+
+const TAG_REFERENCE = /^[\w./-]+$/
+
 const SECTIONS = [
-  { key: 'feat', title: '🚀 Features' },
-  { key: 'fix', title: '🩹 Fixes' },
-  { key: 'perf', title: '⚡ Performance' },
-  { key: 'refactor', title: '🔨 Refactors' },
-  { key: 'docs', title: '📖 Documentation' },
-  { key: 'other', title: '🧱 Other Changes' },
+  { key: 'feat', title: 'Features' },
+  { key: 'fix', title: 'Fixes' },
+  { key: 'perf', title: 'Performance' },
+  { key: 'refactor', title: 'Refactors' },
+  { key: 'docs', title: 'Documentation' },
+  { key: 'other', title: 'Other Changes' },
 ]
 
 const TYPE_TO_SECTION = new Map([
@@ -32,9 +51,11 @@ export function tagExists(tag) {
  * Finds the most recent existing tag matching the glob, ordered by version so
  * the newest release is chosen even when tags were not created in order. The
  * resolved tag is intersected with the actual tag list so a pattern can never
- * resolve to an attacker-supplied ref.
+ * resolve to an attacker-supplied ref, and its shape is validated against the
+ * expected prefix and a semver core so a malformed tag matching the glob cannot
+ * skew the notes range.
  */
-export function findLastTag(pattern) {
+export function findLastTag(pattern, expectedPrefix) {
   const listed = tryRun('git', ['tag', '--list', pattern, '--sort=-v:refname'])
 
   if (!listed.ok || listed.stdout.length === 0) {
@@ -42,17 +63,59 @@ export function findLastTag(pattern) {
   }
 
   const [first] = listed.stdout.split('\n').filter(line => line.length > 0)
-  return first ?? null
+
+  if (first === undefined) {
+    return null
+  }
+
+  if (!isValidTag(first, expectedPrefix)) {
+    throw new Error(`Resolved last tag "${first}" does not match the expected "${expectedPrefix}<semver>" shape`)
+  }
+
+  return first
 }
 
-function parseCommitRecord(record) {
-  const [hash, shortHash, subject] = record.split(FIELD_SEPARATOR)
+function isValidTag(tag, expectedPrefix) {
+  if (!TAG_REFERENCE.test(tag)) {
+    return false
+  }
 
-  if (!hash || !shortHash || subject === undefined) {
+  if (typeof expectedPrefix === 'string' && expectedPrefix.length > 0) {
+    if (!tag.startsWith(expectedPrefix)) {
+      return false
+    }
+
+    const remainder = tag.slice(expectedPrefix.length)
+    return /^\d+\.\d+\.\d+(?:-[\w.-]+)?$/.test(remainder)
+  }
+
+  return true
+}
+
+function parseRecord(record) {
+  const fields = record.split(OUTPUT_SEPARATOR)
+
+  if (fields.length < FIELDS_PER_RECORD) {
+    return null
+  }
+
+  const hash = fields[0].trim()
+  const shortHash = fields[1].trim()
+  const subject = sanitizeSubject(fields[2])
+
+  if (hash.length === 0 || shortHash.length === 0 || subject.length === 0) {
     return null
   }
 
   return { hash, shortHash, subject }
+}
+
+function sanitizeSubject(value) {
+  if (typeof value !== 'string') {
+    return ''
+  }
+
+  return value.replace(CONTROL_CHARACTERS, '').trim().slice(0, MAX_SUBJECT_LENGTH)
 }
 
 /**
@@ -66,14 +129,12 @@ export function listScopedCommits({ fromTag, paths }) {
   }
 
   const range = fromTag ? `${fromTag}..HEAD` : 'HEAD'
-  const format = ['%H', '%h', '%s'].join(FIELD_SEPARATOR) + RECORD_SEPARATOR
+  const format = ['%H', '%h', '%s'].join(GIT_FORMAT_SEPARATOR)
   const stdout = run('git', ['log', range, `--format=${format}`, '--no-merges', '--', ...paths])
 
   return stdout
-    .split(RECORD_SEPARATOR)
-    .map(entry => entry.replace(/^\n/, ''))
-    .filter(entry => entry.trim().length > 0)
-    .map(parseCommitRecord)
+    .split('\n')
+    .map(parseRecord)
     .filter(commit => commit !== null && !RELEASE_COMMIT.test(commit.subject))
 }
 
@@ -89,17 +150,30 @@ function classify(subject) {
   return { section, scope: scope ?? null, description }
 }
 
+/**
+ * Neutralizes a commit-derived string for inclusion in markdown release notes.
+ * Control characters are stripped first so the renderer is safe even when a
+ * caller passes an unsanitized subject, then markdown and HTML metacharacters
+ * are backslash-escaped so a subject or scope cannot inject formatting, links,
+ * or raw HTML into the notes or the CHANGELOG shipped to npm. The text stays
+ * human-readable; only the structural characters change.
+ */
+function escapeMarkdown(value) {
+  return value.replace(CONTROL_CHARACTERS, '').replace(MARKDOWN_METACHARACTERS, match => `\\${match}`)
+}
+
 function renderEntry(commit, repoUrl) {
   const { scope, description } = classify(commit.subject)
-  const prefix = scope ? `**${scope}:** ` : ''
+  const prefix = scope ? `**${escapeMarkdown(scope)}:** ` : ''
   const link = `([${commit.shortHash}](${repoUrl}/commit/${commit.hash}))`
-  return `- ${prefix}${description} ${link}`
+  return `- ${prefix}${escapeMarkdown(description)} ${link}`
 }
 
 /**
  * Renders markdown release notes grouped by conventional-commit type. The
  * output shape matches across both release tracks so Python and TypeScript
- * notes read identically.
+ * notes read identically. Section headers are plain text so no emoji reaches
+ * the generated notes.
  */
 export function renderChangelog({ version, date, commits, repoUrl }) {
   const buckets = new Map(SECTIONS.map(section => [section.key, []]))

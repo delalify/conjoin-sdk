@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { findLastTag, listScopedCommits, prependChangelog, renderChangelog, tagExists } from './lib/git-history.mjs'
+import { assertCleanExcept } from './lib/git-tree.mjs'
 import { createRelease } from './lib/github-release.mjs'
 import { readManifestVersion, writeManifestVersion } from './lib/pyproject-version.mjs'
 import { repoUrl, resolveRepoSlug } from './lib/repo.mjs'
@@ -61,7 +62,7 @@ async function main() {
   }
 
   const slug = resolveRepoSlug()
-  const fromTag = firstRelease ? null : findLastTag(`${TAG_PREFIX}*`)
+  const fromTag = firstRelease ? null : findLastTag(`${TAG_PREFIX}*`, TAG_PREFIX)
   const commits = listScopedCommits({ fromTag, paths: SCOPE_PATHS })
   const date = new Date().toISOString().slice(0, 10)
   const entry = renderChangelog({ version, date, commits, repoUrl: repoUrl(slug) })
@@ -79,6 +80,11 @@ async function main() {
   writeManifestVersion(MANIFEST, version)
   writeFileSync(CHANGELOG, nextChangelog)
 
+  // The release commit must carry only the manifest and changelog edits, so any
+  // other working-tree drift is surfaced before the commit is built rather than
+  // folded into the release commit, tag, and published distribution.
+  assertCleanExcept([MANIFEST, CHANGELOG])
+
   const hasStagedChanges = stageReleaseFiles()
 
   if (hasStagedChanges) {
@@ -89,6 +95,10 @@ async function main() {
     run('git', ['tag', '-a', tag, '-m', `sdk-python ${version}`])
   }
 
+  // The Python track bypasses nx, so this script is the sole owner of the
+  // commit, tag, and push for it. The TypeScript track delegates the push to nx
+  // (git.push: true); keeping exactly one push owner per track makes the
+  // crash-recovery reasoning uniform across both flows.
   run('git', ['push', 'origin', 'HEAD'])
   run('git', ['push', 'origin', tag])
 
