@@ -1,8 +1,10 @@
+'use client'
+
 export { useAuthFetch } from './hooks/internal/use-auth-fetch'
 export { useConjoinClient } from './hooks/internal/use-conjoin-client'
 export { type ConjoinAccount, useAccount } from './hooks/use-account'
 export { useAuth } from './hooks/use-auth'
-export { useBundles } from './hooks/use-bundles'
+export { type PriceBundleItem, useBundles } from './hooks/use-bundles'
 export { useChannel } from './hooks/use-channel'
 export { useCheckout } from './hooks/use-checkout'
 export { useConjoinStatus } from './hooks/use-conjoin-status'

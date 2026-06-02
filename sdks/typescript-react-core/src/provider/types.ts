@@ -143,7 +143,6 @@ export type ConjoinBranding = {
     reduced_motion_behavior: 'respect' | 'disable' | 'ignore'
   }
   accessibility: {
-    minimum_contrast_ratio: number | null
     focus_ring_style: string | null
     focus_ring_color: string | null
     focus_ring_offset: string | null
@@ -199,5 +198,4 @@ export type ConjoinProviderProps = {
     theme?: 'light' | 'dark' | 'system'
     variables?: Partial<ColorPalette>
   }
-  cssLayerName?: string
 }

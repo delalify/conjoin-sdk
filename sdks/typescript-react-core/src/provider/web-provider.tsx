@@ -9,12 +9,13 @@ import type { ConjoinProviderProps, ConjoinThemeState } from './types'
 
 const webTransport = createWebTransport()
 
-export function ConjoinProvider({ publishableKey, children, config, appearance, cssLayerName }: ConjoinProviderProps) {
+export function ConjoinProvider({ publishableKey, children, config, appearance }: ConjoinProviderProps) {
   const systemTheme = useSystemTheme()
   const themePreference = appearance?.theme ?? 'system'
   const resolvedMode = themePreference === 'system' ? systemTheme : themePreference
 
   const branding = config?.branding ?? null
+  const reducedMotion = branding?.animation?.reduced_motion_behavior ?? 'respect'
 
   const cssVariables = useMemo(
     () => resolveThemeVariables(resolvedMode, branding, appearance?.variables),
@@ -37,12 +38,7 @@ export function ConjoinProvider({ publishableKey, children, config, appearance, 
   return (
     <ConjoinProviderCore publishableKey={publishableKey} config={config} transport={webTransport}>
       <ConjoinThemeContext.Provider value={themeState}>
-        <div
-          data-conjoin-provider=""
-          data-theme={resolvedMode}
-          {...(cssLayerName ? { 'data-css-layer': cssLayerName } : {})}
-          style={style}
-        >
+        <div data-conjoin-provider="" data-theme={resolvedMode} data-reduced-motion={reducedMotion} style={style}>
           {children}
         </div>
       </ConjoinThemeContext.Provider>

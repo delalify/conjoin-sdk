@@ -8,7 +8,7 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   dts: true,
   splitting: true,
-  treeshake: true,
+  treeshake: false,
   clean: true,
   outDir: 'dist',
   external: [

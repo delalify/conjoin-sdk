@@ -10,13 +10,12 @@ export type ConjoinClientContextValue = {
   isConfigLoaded: boolean
 }
 
-export type ConjoinAuthContextValue = {
-  authState: ConjoinAuthState
+export type ConjoinAuthActions = {
   getToken: () => string | null
   signOut: () => Promise<void>
-  has: (params: { role?: string; permission?: string }) => boolean
 }
 
 export const ConjoinClientContext = createContext<ConjoinClientContextValue | null>(null)
-export const ConjoinAuthContext = createContext<ConjoinAuthContextValue | null>(null)
+export const ConjoinAuthStateContext = createContext<ConjoinAuthState | null>(null)
+export const ConjoinAuthActionsContext = createContext<ConjoinAuthActions | null>(null)
 export const ConjoinThemeContext = createContext<ConjoinThemeState | null>(null)

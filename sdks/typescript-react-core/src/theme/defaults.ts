@@ -75,12 +75,21 @@ export const DEFAULT_BORDERS = {
   color_default: 'var(--conjoin-border)',
 }
 
-export const DEFAULT_SHADOWS = {
+export const DEFAULT_LIGHT_SHADOWS = {
   sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
   md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
   lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
   xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
   inner: 'inset 0 2px 4px rgba(0, 0, 0, 0.05)',
+  none: 'none',
+}
+
+export const DEFAULT_DARK_SHADOWS = {
+  sm: '0 1px 2px rgba(0, 0, 0, 0.4)',
+  md: '0 4px 8px -1px rgba(0, 0, 0, 0.5)',
+  lg: '0 12px 20px -4px rgba(0, 0, 0, 0.55)',
+  xl: '0 24px 32px -8px rgba(0, 0, 0, 0.65)',
+  inner: 'inset 0 2px 4px rgba(0, 0, 0, 0.45)',
   none: 'none',
 }
 
@@ -100,4 +109,46 @@ export const DEFAULT_LAYOUT = {
   container_max_width: '1200px',
   content_max_width: '560px',
   sidebar_width: '280px',
+}
+
+export const DEFAULT_COMPONENTS = {
+  button: {
+    border_radius: 'var(--conjoin-radius-md)',
+    font_weight: '500',
+    text_transform: 'none',
+    padding_x: 'calc(var(--conjoin-spacing-unit) * 4)',
+    padding_y: 'calc(var(--conjoin-spacing-unit) * 2.5)',
+  },
+  input: {
+    border_radius: 'var(--conjoin-radius-md)',
+    border_width: 'var(--conjoin-border-width)',
+    padding_x: 'calc(var(--conjoin-spacing-unit) * 3)',
+    padding_y: 'calc(var(--conjoin-spacing-unit) * 2)',
+  },
+  card: {
+    border_radius: 'var(--conjoin-radius-lg)',
+    padding: 'calc(var(--conjoin-spacing-unit) * 6)',
+    shadow: 'var(--conjoin-shadow-md)',
+  },
+  social_button: {
+    border_radius: 'var(--conjoin-radius-md)',
+  },
+  pricing_card: {
+    border_radius: 'var(--conjoin-radius-lg)',
+    highlight_color: 'var(--conjoin-primary)',
+  },
+  file_uploader: {
+    border_style: 'dashed',
+    border_radius: 'var(--conjoin-radius-md)',
+  },
+  chat_widget: {
+    border_radius: 'var(--conjoin-radius-lg)',
+  },
+} satisfies Record<string, Record<string, string>>
+
+export const DEFAULT_ACCESSIBILITY = {
+  focus_ring_style: 'solid',
+  focus_ring_color: 'var(--conjoin-focus-ring)',
+  focus_ring_offset: '2px',
+  focus_ring_width: '2px',
 }

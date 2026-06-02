@@ -1,5 +1,5 @@
-import { useCallback, useContext } from 'react'
-import { ConjoinAuthContext } from '../provider/contexts'
+import { useCallback } from 'react'
+import { useAuthActions } from './internal/use-auth-actions'
 import { useAuthState } from './internal/use-auth-state'
 import { useConjoinClient } from './internal/use-conjoin-client'
 import { useConjoinQuery } from './internal/use-conjoin-query'
@@ -27,7 +27,7 @@ type OrgData = {
 
 export function useOrg() {
   const { sdkConfig } = useConjoinClient()
-  const authContext = useContext(ConjoinAuthContext)
+  const { getToken } = useAuthActions()
   const authState = useAuthState()
   const isSignedIn = authState.isLoaded && authState.isSignedIn
   const orgId = isSignedIn ? authState.organizationId : null
@@ -35,7 +35,7 @@ export function useOrg() {
 
   const queryFn = useCallback(async (): Promise<OrgData> => {
     if (!authDomain || !orgId) throw new Error('Organization context not available')
-    const token = authContext?.getToken()
+    const token = getToken()
     const response = await fetch(`https://${authDomain}/v1/auth/self/organization`, {
       credentials: 'include',
       headers: {
@@ -46,7 +46,7 @@ export function useOrg() {
     if (!response.ok) throw new Error('Failed to fetch organization')
     const body = (await response.json()) as { data: OrgData }
     return body.data
-  }, [authDomain, orgId, authContext])
+  }, [authDomain, orgId, getToken])
 
   const result = useConjoinQuery<OrgData>({
     queryKey: ['conjoin', 'auth', 'organization', orgId],

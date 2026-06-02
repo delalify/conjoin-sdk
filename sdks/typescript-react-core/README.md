@@ -57,7 +57,7 @@ function Profile() {
 }
 ```
 
-`ConjoinProvider` accepts `publishableKey`, `config`, `appearance`, and `cssLayerName`. The hooks include `useAuth`, `useSession`, `useAccount`, `useOrg`, `useEntitlements`, `useCheckout`, `useBundles`, `useChannel`, `useStorageUpload`, `useConjoinStatus`, and `useConjoinTheme`.
+`ConjoinProvider` accepts `publishableKey`, `config`, and `appearance`. The hooks include `useAuth`, `useSession`, `useAccount`, `useOrg`, `useEntitlements`, `useCheckout`, `useBundles`, `useChannel`, `useStorageUpload`, `useConjoinStatus`, and `useConjoinTheme`.
 
 ## Custom Transports
 

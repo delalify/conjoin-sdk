@@ -1,5 +1,5 @@
-import { useCallback, useContext } from 'react'
-import { ConjoinAuthContext } from '../provider/contexts'
+import { useCallback } from 'react'
+import { useAuthActions } from './internal/use-auth-actions'
 import { useAuthState } from './internal/use-auth-state'
 import { useConjoinClient } from './internal/use-conjoin-client'
 import { useConjoinQuery } from './internal/use-conjoin-query'
@@ -22,7 +22,7 @@ export type ConjoinSession = {
 
 export function useSession() {
   const { sdkConfig } = useConjoinClient()
-  const authContext = useContext(ConjoinAuthContext)
+  const { getToken } = useAuthActions()
   const authState = useAuthState()
   const isSignedIn = authState.isLoaded && authState.isSignedIn
   const sessionId = isSignedIn ? authState.sessionId : null
@@ -30,7 +30,7 @@ export function useSession() {
 
   const queryFn = useCallback(async (): Promise<ConjoinSession> => {
     if (!authDomain || !sessionId) throw new Error('Session not available')
-    const token = authContext?.getToken()
+    const token = getToken()
     const response = await fetch(`https://${authDomain}/v1/auth/self/sessions/${sessionId}`, {
       credentials: 'include',
       headers: {
@@ -41,7 +41,7 @@ export function useSession() {
     if (!response.ok) throw new Error('Failed to fetch session')
     const body = (await response.json()) as { data: ConjoinSession }
     return body.data
-  }, [authDomain, sessionId, authContext])
+  }, [authDomain, sessionId, getToken])
 
   const result = useConjoinQuery<ConjoinSession>({
     queryKey: ['conjoin', 'auth', 'session', sessionId],

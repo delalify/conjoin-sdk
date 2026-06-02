@@ -1,7 +1,9 @@
 import { useAuthFetch, useConjoinClient } from '@conjoin-cloud/react-core'
 import * as Label from '@radix-ui/react-label'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
-import { type FormEvent, useCallback, useRef, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useCallback, useRef, useState } from 'react'
+import { BusyContent } from '../internal/busy-content'
+import { OAuthButton } from '../internal/oauth-button'
 
 type SignInStep = 'identifier' | 'password' | 'mfa'
 
@@ -11,6 +13,8 @@ type SignInProps = {
   signUpUrl?: string
   onSignIn?: () => void
 }
+
+const ERROR_ID = 'conjoin-sign-in-error'
 
 export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn }: SignInProps) {
   const { sdkConfig } = useConjoinClient()
@@ -30,6 +34,19 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
   const signInMethods = sdkConfig?.auth.sign_in_methods ?? []
   const oauthMethods = signInMethods.filter(m => m !== 'email_password' && m !== 'email_otp')
   const hasEmailPassword = signInMethods.includes('email_password')
+  const describedBy = error ? ERROR_ID : undefined
+
+  const handleIdentifierChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setIdentifier(e.target.value)
+  }, [])
+
+  const handlePasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }, [])
+
+  const handleMfaChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setMfaCode(e.target.value)
+  }, [])
 
   const handleIdentifierSubmit = useCallback(
     async (e: FormEvent) => {
@@ -154,7 +171,7 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
   if (!isConfigured) {
     return (
       <div data-conjoin-card="">
-        <p data-conjoin-heading="" style={{ textAlign: 'center' }}>
+        <p data-conjoin-heading="" data-conjoin-center="">
           Sign in is not available
         </p>
       </div>
@@ -163,31 +180,29 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
 
   return (
     <div data-conjoin-card="">
-      <h2 data-conjoin-heading="" style={{ fontSize: '1.25rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+      <h2 data-conjoin-heading="" data-level="card">
         Sign in
       </h2>
 
-      {oauthMethods.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      {oauthMethods.length > 0 ? (
+        <div data-conjoin-social-group="">
           {oauthMethods.map(method => (
-            <button key={method} type="button" data-conjoin-social-button="" onClick={() => handleOAuthClick(method)}>
-              Continue with {method.charAt(0).toUpperCase() + method.slice(1)}
-            </button>
+            <OAuthButton key={method} provider={method} onSelect={handleOAuthClick} />
           ))}
         </div>
-      )}
+      ) : null}
 
-      {oauthMethods.length > 0 && hasEmailPassword && <div data-conjoin-divider-text="">or</div>}
+      {oauthMethods.length > 0 && hasEmailPassword ? <div data-conjoin-divider-text="">or</div> : null}
 
-      {error && (
-        <p data-conjoin-field-error="" role="alert">
+      {error ? (
+        <p id={ERROR_ID} data-conjoin-field-error="" role="alert">
           {error}
         </p>
-      )}
+      ) : null}
 
-      {step === 'identifier' && hasEmailPassword && (
+      {step === 'identifier' && hasEmailPassword ? (
         <form onSubmit={handleIdentifierSubmit} noValidate>
-          <div style={{ marginBottom: '1rem' }}>
+          <div data-conjoin-field="" data-gap="wide">
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-identifier">
               Email address
             </Label.Root>
@@ -198,10 +213,11 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
               type="email"
               autoComplete="email"
               value={identifier}
-              onChange={e => setIdentifier(e.target.value)}
+              onChange={handleIdentifierChange}
               placeholder="you@example.com"
               required
-              aria-invalid={!!error}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={describedBy}
               maxLength={320}
             />
           </div>
@@ -210,23 +226,24 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
             type="submit"
             data-conjoin-button=""
             data-variant="primary"
+            data-block="true"
+            data-spacing="stacked"
             disabled={isSubmitting}
             aria-busy={isSubmitting}
-            style={{ width: '100%', marginTop: '0.5rem' }}
           >
-            {isSubmitting ? <span data-conjoin-spinner="" data-size="sm" /> : 'Continue'}
+            <BusyContent busy={isSubmitting} label="Continue" busyLabel="Signing in" />
           </button>
         </form>
-      )}
+      ) : null}
 
-      {step === 'password' && (
+      {step === 'password' ? (
         <form onSubmit={handlePasswordSubmit} noValidate>
           <VisuallyHidden.Root>
             <label htmlFor="conjoin-sign-in-email-hidden">Email</label>
             <input id="conjoin-sign-in-email-hidden" type="email" value={identifier} readOnly autoComplete="email" />
           </VisuallyHidden.Root>
 
-          <div style={{ marginBottom: '1rem' }}>
+          <div data-conjoin-field="" data-gap="wide">
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-password">
               Password
             </Label.Root>
@@ -237,54 +254,50 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
               type="password"
               autoComplete="current-password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
               placeholder="Enter your password"
               required
-              aria-invalid={!!error}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={describedBy}
             />
           </div>
 
-          {forgotPasswordUrl && (
-            <div style={{ textAlign: 'right', marginBottom: '0.75rem' }}>
-              <a
-                href={forgotPasswordUrl}
-                style={{
-                  fontSize: '0.8125rem',
-                  color: 'var(--conjoin-primary)',
-                  textDecoration: 'none',
-                }}
-              >
+          {forgotPasswordUrl ? (
+            <div data-conjoin-forgot="">
+              <a href={forgotPasswordUrl} data-conjoin-link="">
                 Forgot password?
               </a>
             </div>
-          )}
+          ) : null}
 
           <button
             type="submit"
             data-conjoin-button=""
             data-variant="primary"
+            data-block="true"
+            data-spacing="stacked"
             disabled={isSubmitting}
             aria-busy={isSubmitting}
-            style={{ width: '100%', marginTop: '0.5rem' }}
           >
-            {isSubmitting ? <span data-conjoin-spinner="" data-size="sm" /> : 'Sign in'}
+            <BusyContent busy={isSubmitting} label="Sign in" busyLabel="Signing in" />
           </button>
 
           <button
             type="button"
             data-conjoin-button=""
             data-variant="outline"
+            data-block="true"
+            data-spacing="stacked"
             onClick={handleBack}
-            style={{ width: '100%', marginTop: '0.5rem' }}
           >
             Back
           </button>
         </form>
-      )}
+      ) : null}
 
-      {step === 'mfa' && (
+      {step === 'mfa' ? (
         <form onSubmit={handleMfaSubmit} noValidate>
-          <div style={{ marginBottom: '1rem' }}>
+          <div data-conjoin-field="" data-gap="wide">
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-mfa">
               Verification code
             </Label.Root>
@@ -292,15 +305,17 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
               ref={mfaRef}
               id="conjoin-sign-in-mfa"
               data-conjoin-input=""
+              data-mono="true"
               type="text"
               inputMode="numeric"
               autoComplete="one-time-code"
               value={mfaCode}
-              onChange={e => setMfaCode(e.target.value)}
+              onChange={handleMfaChange}
               placeholder="Enter 6-digit code"
               required
               maxLength={8}
-              aria-invalid={!!error}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={describedBy}
             />
           </div>
 
@@ -308,30 +323,24 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
             type="submit"
             data-conjoin-button=""
             data-variant="primary"
+            data-block="true"
+            data-spacing="stacked"
             disabled={isSubmitting}
             aria-busy={isSubmitting}
-            style={{ width: '100%', marginTop: '0.5rem' }}
           >
-            {isSubmitting ? <span data-conjoin-spinner="" data-size="sm" /> : 'Verify'}
+            <BusyContent busy={isSubmitting} label="Verify" busyLabel="Verifying" />
           </button>
         </form>
-      )}
+      ) : null}
 
-      {signUpUrl && (
-        <p
-          style={{
-            textAlign: 'center',
-            fontSize: '0.8125rem',
-            color: 'var(--conjoin-subtle-text)',
-            marginTop: '1.5rem',
-          }}
-        >
+      {signUpUrl ? (
+        <p data-conjoin-prompt="">
           Don't have an account?{' '}
-          <a href={signUpUrl} style={{ color: 'var(--conjoin-primary)', textDecoration: 'none' }}>
+          <a href={signUpUrl} data-conjoin-link="">
             Sign up
           </a>
         </p>
-      )}
+      ) : null}
     </div>
   )
 }

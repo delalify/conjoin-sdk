@@ -1,5 +1,5 @@
-import { useCallback, useContext } from 'react'
-import { ConjoinAuthContext } from '../provider/contexts'
+import { useCallback } from 'react'
+import { useAuthActions } from './internal/use-auth-actions'
 import { useAuthState } from './internal/use-auth-state'
 import { useConjoinClient } from './internal/use-conjoin-client'
 import { useConjoinQuery } from './internal/use-conjoin-query'
@@ -16,14 +16,14 @@ export type ConjoinAccount = {
 
 export function useAccount() {
   const { sdkConfig } = useConjoinClient()
-  const authContext = useContext(ConjoinAuthContext)
+  const { getToken } = useAuthActions()
   const authState = useAuthState()
   const isSignedIn = authState.isLoaded && authState.isSignedIn
   const authDomain = sdkConfig?.auth.domain
 
   const queryFn = useCallback(async (): Promise<ConjoinAccount> => {
     if (!authDomain) throw new Error('Auth domain not configured')
-    const token = authContext?.getToken()
+    const token = getToken()
     const response = await fetch(`https://${authDomain}/v1/auth/self`, {
       credentials: 'include',
       headers: {
@@ -34,7 +34,7 @@ export function useAccount() {
     if (!response.ok) throw new Error('Failed to fetch account')
     const body = (await response.json()) as { data: ConjoinAccount }
     return body.data
-  }, [authDomain, authContext])
+  }, [authDomain, getToken])
 
   const result = useConjoinQuery<ConjoinAccount>({
     queryKey: ['conjoin', 'auth', 'account'],

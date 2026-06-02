@@ -3,11 +3,26 @@ import { QueryClient } from '@tanstack/query-core'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { type AuthManager, createAuthManager } from './auth-manager'
 import { fetchSdkConfig } from './config-fetcher'
-import { ConjoinAuthContext, ConjoinClientContext } from './contexts'
+import {
+  type ConjoinAuthActions,
+  ConjoinAuthActionsContext,
+  ConjoinAuthStateContext,
+  ConjoinClientContext,
+} from './contexts'
 import type { AuthTransport, ConjoinAuthState, ConjoinProviderProps, ConjoinSdkConfig } from './types'
 
 type ConjoinProviderCoreProps = ConjoinProviderProps & {
   transport: AuthTransport
+}
+
+// The auth manager emits a fresh state object on every token refresh, but the
+// rotating accessToken never reaches React (getToken reads the manager's live
+// value). Collapsing updates onto an identity signature keeps refresh ticks
+// from re-rendering every auth consumer on the refresh timer.
+function authStateSignature(state: ConjoinAuthState): string {
+  if (!state.isLoaded) return 'loading'
+  if (!state.isSignedIn) return 'signed-out'
+  return [state.accountId, state.sessionId, state.organizationId, state.organizationRole].join('|')
 }
 
 function mergePartialConfig(partial: Partial<ConjoinSdkConfig>, fallbackBaseUrl: string): ConjoinSdkConfig {
@@ -34,6 +49,14 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
   const [authState, setAuthState] = useState<ConjoinAuthState>({ isLoaded: false })
 
   const authManagerRef = useRef<AuthManager | null>(null)
+  const authSignatureRef = useRef<string | null>(null)
+
+  const handleAuthStateChange = useCallback((next: ConjoinAuthState) => {
+    const signature = authStateSignature(next)
+    if (signature === authSignatureRef.current) return
+    authSignatureRef.current = signature
+    setAuthState(next)
+  }, [])
 
   const client = useMemo(() => {
     return createConjoinClient({
@@ -82,7 +105,7 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
       client,
       transport,
       sdkConfig,
-      onStateChange: setAuthState,
+      onStateChange: handleAuthStateChange,
     })
 
     authManagerRef.current = manager
@@ -92,7 +115,7 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
       manager.destroy()
       authManagerRef.current = null
     }
-  }, [client, transport, sdkConfig])
+  }, [client, transport, sdkConfig, handleAuthStateChange])
 
   const getToken = useCallback(() => {
     return authManagerRef.current?.getToken() ?? null
@@ -102,25 +125,18 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
     await authManagerRef.current?.signOut()
   }, [])
 
-  const has = useCallback(
-    (params: { role?: string; permission?: string }) => {
-      if (!authState.isLoaded || !authState.isSignedIn) return false
-      if (params.role && authState.organizationRole !== params.role) return false
-      return true
-    },
-    [authState],
-  )
-
   const clientContextValue = useMemo(
     () => ({ client, queryClient, sdkConfig, isConfigLoaded }),
     [client, queryClient, sdkConfig, isConfigLoaded],
   )
 
-  const authContextValue = useMemo(() => ({ authState, getToken, signOut, has }), [authState, getToken, signOut, has])
+  const authActions = useMemo<ConjoinAuthActions>(() => ({ getToken, signOut }), [getToken, signOut])
 
   return (
     <ConjoinClientContext.Provider value={clientContextValue}>
-      <ConjoinAuthContext.Provider value={authContextValue}>{children}</ConjoinAuthContext.Provider>
+      <ConjoinAuthActionsContext.Provider value={authActions}>
+        <ConjoinAuthStateContext.Provider value={authState}>{children}</ConjoinAuthStateContext.Provider>
+      </ConjoinAuthActionsContext.Provider>
     </ConjoinClientContext.Provider>
   )
 }

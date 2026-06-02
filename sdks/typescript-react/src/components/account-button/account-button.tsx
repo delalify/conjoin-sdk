@@ -29,17 +29,14 @@ export function AccountButton({ onManageAccount, onSignOut }: AccountButtonProps
   const displayName = account ? [account.first_name, account.last_name].filter(Boolean).join(' ') || account.email : ''
   const email = account?.email ?? ''
   const initials = account ? getInitials(account.first_name, account.last_name, account.email) : ''
+  const showEmail = email !== '' && displayName !== email
 
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button
-          type="button"
-          aria-label="Account menu"
-          style={{ cursor: 'pointer', border: 'none', background: 'none', padding: 0 }}
-        >
+        <button type="button" data-conjoin-trigger="" aria-label="Account menu">
           <Avatar.Root data-conjoin-avatar="" data-size="md">
-            {account?.avatar_url && <Avatar.Image src={account.avatar_url} alt={displayName} />}
+            {account?.avatar_url ? <Avatar.Image src={account.avatar_url} alt={displayName} /> : null}
             <Avatar.Fallback>{initials}</Avatar.Fallback>
           </Avatar.Root>
         </button>
@@ -47,20 +44,18 @@ export function AccountButton({ onManageAccount, onSignOut }: AccountButtonProps
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content data-conjoin-menu-content="" sideOffset={8} align="end">
-          <div style={{ padding: '0.5rem 0.75rem' }}>
-            <p style={{ fontWeight: 500, fontSize: '0.875rem' }}>{displayName}</p>
-            {email && displayName !== email && (
-              <p style={{ fontSize: '0.75rem', color: 'var(--conjoin-subtle-text)', marginTop: '0.125rem' }}>{email}</p>
-            )}
+          <div data-conjoin-menu-header="">
+            <p data-conjoin-menu-name="">{displayName}</p>
+            {showEmail ? <p data-conjoin-menu-email="">{email}</p> : null}
           </div>
 
           <Separator.Root data-conjoin-menu-separator="" />
 
-          {onManageAccount && (
+          {onManageAccount ? (
             <DropdownMenu.Item data-conjoin-menu-item="" onSelect={onManageAccount}>
               Manage account
             </DropdownMenu.Item>
-          )}
+          ) : null}
 
           <DropdownMenu.Item data-conjoin-menu-item="" onSelect={handleSignOut}>
             Sign out

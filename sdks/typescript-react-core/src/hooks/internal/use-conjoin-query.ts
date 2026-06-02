@@ -1,5 +1,5 @@
-import { type QueryKey, QueryObserver, type QueryObserverResult } from '@tanstack/query-core'
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
+import { hashKey, type QueryKey, QueryObserver, type QueryObserverResult } from '@tanstack/query-core'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { useConjoinClient } from './use-conjoin-client'
 
 type ConjoinQueryOptions<TData> = {
@@ -13,8 +13,15 @@ export function useConjoinQuery<TData>(options: ConjoinQueryOptions<TData>): Que
   const { queryClient } = useConjoinClient()
   const { queryKey, queryFn, enabled, staleTime } = options
 
+  const queryKeyHash = hashKey(queryKey)
+  const stableKeyRef = useRef<{ hash: string; key: QueryKey }>({ hash: queryKeyHash, key: queryKey })
+  if (stableKeyRef.current.hash !== queryKeyHash) {
+    stableKeyRef.current = { hash: queryKeyHash, key: queryKey }
+  }
+  const stableKey = stableKeyRef.current.key
+
   const [observer] = useState(
-    () => new QueryObserver<TData, Error>(queryClient, { queryKey, queryFn, enabled, staleTime }),
+    () => new QueryObserver<TData, Error>(queryClient, { queryKey: stableKey, queryFn, enabled, staleTime }),
   )
 
   const subscribe = useMemo(() => {
@@ -34,8 +41,8 @@ export function useConjoinQuery<TData>(options: ConjoinQueryOptions<TData>): Que
   )
 
   useEffect(() => {
-    observer.setOptions({ queryKey, queryFn, enabled, staleTime })
-  }, [observer, queryKey, queryFn, enabled, staleTime])
+    observer.setOptions({ queryKey: stableKey, queryFn, enabled, staleTime })
+  }, [observer, stableKey, queryFn, enabled, staleTime])
 
   return result
 }

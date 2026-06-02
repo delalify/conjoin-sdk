@@ -1,5 +1,5 @@
-import { useCallback, useContext } from 'react'
-import { ConjoinAuthContext } from '../../provider/contexts'
+import { useCallback } from 'react'
+import { useAuthActions } from './use-auth-actions'
 import { useConjoinClient } from './use-conjoin-client'
 
 const VALID_DOMAIN_PATTERN = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
@@ -13,7 +13,7 @@ function validateAuthDomain(domain: string): string {
 
 export function useAuthFetch() {
   const { sdkConfig } = useConjoinClient()
-  const authContext = useContext(ConjoinAuthContext)
+  const { getToken } = useAuthActions()
 
   const authDomain = sdkConfig?.auth.domain ?? null
 
@@ -23,7 +23,7 @@ export function useAuthFetch() {
         throw new Error('Auth domain is not configured')
       }
       const validDomain = validateAuthDomain(authDomain)
-      const token = authContext?.getToken()
+      const token = getToken()
 
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export function useAuthFetch() {
         headers,
       })
     },
-    [authDomain, authContext],
+    [authDomain, getToken],
   )
 
   return { authFetch, authDomain, isConfigured: !!authDomain }

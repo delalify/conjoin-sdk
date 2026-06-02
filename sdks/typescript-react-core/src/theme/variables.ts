@@ -74,3 +74,45 @@ export const LAYOUT_VARIABLE_MAP: Record<string, string> = {
   content_max_width: '--conjoin-content-max-width',
   sidebar_width: '--conjoin-sidebar-width',
 }
+
+export const COMPONENT_VARIABLE_MAP: Record<string, Record<string, string>> = {
+  button: {
+    border_radius: '--conjoin-button-radius',
+    font_weight: '--conjoin-button-font-weight',
+    text_transform: '--conjoin-button-text-transform',
+    padding_x: '--conjoin-button-padding-x',
+    padding_y: '--conjoin-button-padding-y',
+  },
+  input: {
+    border_radius: '--conjoin-input-radius',
+    border_width: '--conjoin-input-border-width',
+    padding_x: '--conjoin-input-padding-x',
+    padding_y: '--conjoin-input-padding-y',
+  },
+  card: {
+    border_radius: '--conjoin-card-radius',
+    padding: '--conjoin-card-padding',
+    shadow: '--conjoin-card-shadow',
+  },
+  social_button: {
+    border_radius: '--conjoin-social-button-radius',
+  },
+  pricing_card: {
+    border_radius: '--conjoin-pricing-card-radius',
+    highlight_color: '--conjoin-pricing-card-highlight',
+  },
+  file_uploader: {
+    border_style: '--conjoin-file-uploader-border-style',
+    border_radius: '--conjoin-file-uploader-radius',
+  },
+  chat_widget: {
+    border_radius: '--conjoin-chat-widget-radius',
+  },
+}
+
+export const ACCESSIBILITY_VARIABLE_MAP: Record<string, string> = {
+  focus_ring_style: '--conjoin-focus-ring-style',
+  focus_ring_color: '--conjoin-focus-ring-color',
+  focus_ring_offset: '--conjoin-focus-ring-offset',
+  focus_ring_width: '--conjoin-focus-ring-width',
+}

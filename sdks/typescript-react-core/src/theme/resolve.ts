@@ -1,17 +1,22 @@
 import type { ColorPalette, ConjoinBranding } from '../provider/types'
 import {
+  DEFAULT_ACCESSIBILITY,
   DEFAULT_ANIMATION,
   DEFAULT_BORDERS,
+  DEFAULT_COMPONENTS,
   DEFAULT_DARK_COLORS,
+  DEFAULT_DARK_SHADOWS,
   DEFAULT_LAYOUT,
   DEFAULT_LIGHT_COLORS,
-  DEFAULT_SHADOWS,
+  DEFAULT_LIGHT_SHADOWS,
   DEFAULT_SPACING,
   DEFAULT_TYPOGRAPHY,
 } from './defaults'
 import {
+  ACCESSIBILITY_VARIABLE_MAP,
   ANIMATION_VARIABLE_MAP,
   BORDER_VARIABLE_MAP,
+  COMPONENT_VARIABLE_MAP,
   CSS_VARIABLE_MAP,
   LAYOUT_VARIABLE_MAP,
   SHADOW_VARIABLE_MAP,
@@ -50,6 +55,7 @@ export function resolveThemeVariables(
   overrides?: Partial<ColorPalette>,
 ): Record<string, string> {
   const defaultColors = mode === 'light' ? DEFAULT_LIGHT_COLORS : DEFAULT_DARK_COLORS
+  const defaultShadows = mode === 'light' ? DEFAULT_LIGHT_SHADOWS : DEFAULT_DARK_SHADOWS
   const brandingColors = branding?.colors?.[mode]
   const resolved = mergeColors(defaultColors, brandingColors, overrides)
 
@@ -72,7 +78,7 @@ export function resolveThemeVariables(
 
   const shadowVars = mapSection(
     (branding?.shadows ?? {}) as Record<string, string | null>,
-    DEFAULT_SHADOWS,
+    defaultShadows,
     SHADOW_VARIABLE_MAP,
   )
 
@@ -97,6 +103,19 @@ export function resolveThemeVariables(
     LAYOUT_VARIABLE_MAP,
   )
 
+  const components = (branding?.components ?? {}) as Record<string, Record<string, string | null> | undefined>
+  const componentVars: Record<string, string> = {}
+  for (const [component, fieldMap] of Object.entries(COMPONENT_VARIABLE_MAP)) {
+    const componentDefaults = DEFAULT_COMPONENTS[component as keyof typeof DEFAULT_COMPONENTS]
+    Object.assign(componentVars, mapSection(components[component] ?? {}, componentDefaults, fieldMap))
+  }
+
+  const accessibilityVars = mapSection(
+    (branding?.accessibility ?? {}) as Record<string, string | number | null>,
+    DEFAULT_ACCESSIBILITY,
+    ACCESSIBILITY_VARIABLE_MAP,
+  )
+
   return {
     ...colorVars,
     ...typographyVars,
@@ -105,5 +124,7 @@ export function resolveThemeVariables(
     ...spacingVars,
     ...animationVars,
     ...layoutVars,
+    ...componentVars,
+    ...accessibilityVars,
   }
 }

@@ -1,6 +1,8 @@
 import { useAuthFetch, useConjoinClient } from '@conjoin-cloud/react-core'
 import * as Label from '@radix-ui/react-label'
-import { type FormEvent, useCallback, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useCallback, useState } from 'react'
+import { BusyContent } from '../internal/busy-content'
+import { OAuthButton } from '../internal/oauth-button'
 
 type SignUpProps = {
   afterSignUpUrl?: string
@@ -21,6 +23,22 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
 
   const signUpEnabled = sdkConfig?.auth.sign_up_enabled !== false
   const oauthMethods = (sdkConfig?.auth.sign_in_methods ?? []).filter(m => m !== 'email_password' && m !== 'email_otp')
+
+  const handleFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value)
+  }, [])
+
+  const handleLastNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value)
+  }, [])
+
+  const handleEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }, [])
+
+  const handlePasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }, [])
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
@@ -81,20 +99,10 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
     [authDomain],
   )
 
-  if (!isConfigured) {
+  if (!isConfigured || !signUpEnabled) {
     return (
       <div data-conjoin-card="">
-        <p data-conjoin-heading="" style={{ textAlign: 'center' }}>
-          Sign up is not available
-        </p>
-      </div>
-    )
-  }
-
-  if (!signUpEnabled) {
-    return (
-      <div data-conjoin-card="">
-        <p data-conjoin-heading="" style={{ textAlign: 'center' }}>
+        <p data-conjoin-heading="" data-conjoin-center="">
           Sign up is not available
         </p>
       </div>
@@ -103,29 +111,27 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
 
   return (
     <div data-conjoin-card="">
-      <h2 data-conjoin-heading="" style={{ fontSize: '1.25rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+      <h2 data-conjoin-heading="" data-level="card">
         Create your account
       </h2>
 
-      {oauthMethods.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      {oauthMethods.length > 0 ? (
+        <div data-conjoin-social-group="">
           {oauthMethods.map(method => (
-            <button key={method} type="button" data-conjoin-social-button="" onClick={() => handleOAuthClick(method)}>
-              Continue with {method.charAt(0).toUpperCase() + method.slice(1)}
-            </button>
+            <OAuthButton key={method} provider={method} onSelect={handleOAuthClick} />
           ))}
           <div data-conjoin-divider-text="">or</div>
         </div>
-      )}
+      ) : null}
 
-      {error && !Object.keys(fieldErrors).length && (
+      {error && !Object.keys(fieldErrors).length ? (
         <p data-conjoin-field-error="" role="alert">
           {error}
         </p>
-      )}
+      ) : null}
 
       <form onSubmit={handleSubmit} noValidate>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
+        <div data-conjoin-field-row="">
           <div>
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-first-name">
               First name
@@ -136,16 +142,16 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
               type="text"
               autoComplete="given-name"
               value={firstName}
-              onChange={e => setFirstName(e.target.value)}
+              onChange={handleFirstNameChange}
               maxLength={100}
-              aria-invalid={!!fieldErrors.first_name}
+              aria-invalid={fieldErrors.first_name ? true : undefined}
               aria-describedby={fieldErrors.first_name ? 'conjoin-err-first-name' : undefined}
             />
-            {fieldErrors.first_name && (
+            {fieldErrors.first_name ? (
               <p id="conjoin-err-first-name" data-conjoin-field-error="">
                 {fieldErrors.first_name}
               </p>
-            )}
+            ) : null}
           </div>
           <div>
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-last-name">
@@ -157,20 +163,20 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
               type="text"
               autoComplete="family-name"
               value={lastName}
-              onChange={e => setLastName(e.target.value)}
+              onChange={handleLastNameChange}
               maxLength={100}
-              aria-invalid={!!fieldErrors.last_name}
+              aria-invalid={fieldErrors.last_name ? true : undefined}
               aria-describedby={fieldErrors.last_name ? 'conjoin-err-last-name' : undefined}
             />
-            {fieldErrors.last_name && (
+            {fieldErrors.last_name ? (
               <p id="conjoin-err-last-name" data-conjoin-field-error="">
                 {fieldErrors.last_name}
               </p>
-            )}
+            ) : null}
           </div>
         </div>
 
-        <div style={{ marginBottom: '0.75rem' }}>
+        <div data-conjoin-field="">
           <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-email">
             Email address
           </Label.Root>
@@ -181,21 +187,21 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
             type="email"
             autoComplete="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             placeholder="you@example.com"
             required
             maxLength={320}
-            aria-invalid={!!fieldErrors.email}
+            aria-invalid={fieldErrors.email ? true : undefined}
             aria-describedby={fieldErrors.email ? 'conjoin-err-email' : undefined}
           />
-          {fieldErrors.email && (
+          {fieldErrors.email ? (
             <p id="conjoin-err-email" data-conjoin-field-error="">
               {fieldErrors.email}
             </p>
-          )}
+          ) : null}
         </div>
 
-        <div style={{ marginBottom: '0.75rem' }}>
+        <div data-conjoin-field="">
           <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-password">
             Password
           </Label.Root>
@@ -206,46 +212,40 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
             type="password"
             autoComplete="new-password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             placeholder="Create a password"
             required
-            aria-invalid={!!fieldErrors.password}
+            aria-invalid={fieldErrors.password ? true : undefined}
             aria-describedby={fieldErrors.password ? 'conjoin-err-password' : undefined}
           />
-          {fieldErrors.password && (
+          {fieldErrors.password ? (
             <p id="conjoin-err-password" data-conjoin-field-error="">
               {fieldErrors.password}
             </p>
-          )}
+          ) : null}
         </div>
 
         <button
           type="submit"
           data-conjoin-button=""
           data-variant="primary"
+          data-block="true"
+          data-spacing="stacked"
           disabled={isSubmitting}
           aria-busy={isSubmitting}
-          style={{ width: '100%', marginTop: '0.5rem' }}
         >
-          {isSubmitting ? <span data-conjoin-spinner="" data-size="sm" /> : 'Create account'}
+          <BusyContent busy={isSubmitting} label="Create account" busyLabel="Creating account" />
         </button>
       </form>
 
-      {signInUrl && (
-        <p
-          style={{
-            textAlign: 'center',
-            fontSize: '0.8125rem',
-            color: 'var(--conjoin-subtle-text)',
-            marginTop: '1.5rem',
-          }}
-        >
+      {signInUrl ? (
+        <p data-conjoin-prompt="">
           Already have an account?{' '}
-          <a href={signInUrl} style={{ color: 'var(--conjoin-primary)', textDecoration: 'none' }}>
+          <a href={signInUrl} data-conjoin-link="">
             Sign in
           </a>
         </p>
-      )}
+      ) : null}
     </div>
   )
 }

@@ -3,14 +3,36 @@ import * as Avatar from '@radix-ui/react-avatar'
 import * as Label from '@radix-ui/react-label'
 import * as Separator from '@radix-ui/react-separator'
 import * as Tabs from '@radix-ui/react-tabs'
-import { type FormEvent, useCallback, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useCallback, useState } from 'react'
+import { BusyContent } from '../internal/busy-content'
+import { Spinner } from '../internal/spinner'
+
+type TabValue = 'profile' | 'security' | 'sessions'
+
+type Feedback = { type: 'success' | 'error'; message: string }
+
+function FeedbackMessage({ feedback }: { feedback: Feedback }) {
+  return (
+    <p data-conjoin-feedback="" data-tone={feedback.type} role={feedback.type === 'error' ? 'alert' : 'status'}>
+      {feedback.message}
+    </p>
+  )
+}
 
 function ProfileTab({ account }: { account: ConjoinAccount }) {
   const { authFetch } = useAuthFetch()
   const [firstName, setFirstName] = useState(account.first_name ?? '')
   const [lastName, setLastName] = useState(account.last_name ?? '')
   const [isSaving, setIsSaving] = useState(false)
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const [feedback, setFeedback] = useState<Feedback | null>(null)
+
+  const handleFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value)
+  }, [])
+
+  const handleLastNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value)
+  }, [])
 
   const handleSave = useCallback(
     async (e: FormEvent) => {
@@ -41,24 +63,25 @@ function ProfileTab({ account }: { account: ConjoinAccount }) {
     [authFetch, firstName, lastName, isSaving],
   )
 
+  const fullName = [account.first_name, account.last_name].filter(Boolean).join(' ') || account.email
+  const fallbackInitial = (account.first_name?.[0] ?? account.email[0]).toUpperCase()
+
   return (
     <form onSubmit={handleSave}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+      <div data-conjoin-profile-head="">
         <Avatar.Root data-conjoin-avatar="" data-size="lg">
-          {account.avatar_url && <Avatar.Image src={account.avatar_url} alt="" />}
-          <Avatar.Fallback>{(account.first_name?.[0] ?? account.email[0]).toUpperCase()}</Avatar.Fallback>
+          {account.avatar_url ? <Avatar.Image src={account.avatar_url} alt="" /> : null}
+          <Avatar.Fallback>{fallbackInitial}</Avatar.Fallback>
         </Avatar.Root>
         <div>
-          <p style={{ fontWeight: 500 }}>
-            {[account.first_name, account.last_name].filter(Boolean).join(' ') || account.email}
-          </p>
-          <p style={{ fontSize: '0.8125rem', color: 'var(--conjoin-subtle-text)' }}>{account.email}</p>
+          <p data-conjoin-profile-name="">{fullName}</p>
+          <p data-conjoin-profile-email="">{account.email}</p>
         </div>
       </div>
 
       <Separator.Root data-conjoin-separator="" />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
+      <div data-conjoin-field-row="">
         <div>
           <Label.Root data-conjoin-label="" htmlFor="conjoin-profile-first">
             First name
@@ -67,7 +90,7 @@ function ProfileTab({ account }: { account: ConjoinAccount }) {
             id="conjoin-profile-first"
             data-conjoin-input=""
             value={firstName}
-            onChange={e => setFirstName(e.target.value)}
+            onChange={handleFirstNameChange}
             maxLength={100}
           />
         </div>
@@ -79,27 +102,16 @@ function ProfileTab({ account }: { account: ConjoinAccount }) {
             id="conjoin-profile-last"
             data-conjoin-input=""
             value={lastName}
-            onChange={e => setLastName(e.target.value)}
+            onChange={handleLastNameChange}
             maxLength={100}
           />
         </div>
       </div>
 
-      {feedback && (
-        <p
-          role={feedback.type === 'error' ? 'alert' : 'status'}
-          style={{
-            fontSize: '0.8125rem',
-            marginBottom: '0.5rem',
-            color: feedback.type === 'success' ? 'var(--conjoin-success)' : 'var(--conjoin-danger)',
-          }}
-        >
-          {feedback.message}
-        </p>
-      )}
+      {feedback ? <FeedbackMessage feedback={feedback} /> : null}
 
       <button type="submit" data-conjoin-button="" data-variant="primary" disabled={isSaving} aria-busy={isSaving}>
-        {isSaving ? <span data-conjoin-spinner="" data-size="sm" /> : 'Save'}
+        <BusyContent busy={isSaving} label="Save" busyLabel="Saving" />
       </button>
     </form>
   )
@@ -110,7 +122,15 @@ function SecurityTab() {
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [isSaving, setIsSaving] = useState(false)
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const [feedback, setFeedback] = useState<Feedback | null>(null)
+
+  const handleCurrentChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentPassword(e.target.value)
+  }, [])
+
+  const handleNewChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value)
+  }, [])
 
   const handleChangePassword = useCallback(
     async (e: FormEvent) => {
@@ -145,11 +165,11 @@ function SecurityTab() {
 
   return (
     <form onSubmit={handleChangePassword}>
-      <h3 data-conjoin-heading="" style={{ fontSize: '1rem', marginBottom: '1rem' }}>
+      <h3 data-conjoin-heading="" data-level="section">
         Change password
       </h3>
 
-      <div style={{ marginBottom: '0.75rem' }}>
+      <div data-conjoin-field="">
         <Label.Root data-conjoin-label="" htmlFor="conjoin-security-current">
           Current password
         </Label.Root>
@@ -159,12 +179,12 @@ function SecurityTab() {
           type="password"
           autoComplete="current-password"
           value={currentPassword}
-          onChange={e => setCurrentPassword(e.target.value)}
+          onChange={handleCurrentChange}
           required
         />
       </div>
 
-      <div style={{ marginBottom: '0.75rem' }}>
+      <div data-conjoin-field="">
         <Label.Root data-conjoin-label="" htmlFor="conjoin-security-new">
           New password
         </Label.Root>
@@ -174,26 +194,15 @@ function SecurityTab() {
           type="password"
           autoComplete="new-password"
           value={newPassword}
-          onChange={e => setNewPassword(e.target.value)}
+          onChange={handleNewChange}
           required
         />
       </div>
 
-      {feedback && (
-        <p
-          role={feedback.type === 'error' ? 'alert' : 'status'}
-          style={{
-            fontSize: '0.8125rem',
-            marginBottom: '0.5rem',
-            color: feedback.type === 'success' ? 'var(--conjoin-success)' : 'var(--conjoin-danger)',
-          }}
-        >
-          {feedback.message}
-        </p>
-      )}
+      {feedback ? <FeedbackMessage feedback={feedback} /> : null}
 
       <button type="submit" data-conjoin-button="" data-variant="primary" disabled={isSaving} aria-busy={isSaving}>
-        {isSaving ? <span data-conjoin-spinner="" data-size="sm" /> : 'Update password'}
+        <BusyContent busy={isSaving} label="Update password" busyLabel="Updating password" />
       </button>
     </form>
   )
@@ -204,32 +213,23 @@ function SessionsTab() {
 
   return (
     <div>
-      <h3 data-conjoin-heading="" style={{ fontSize: '1rem', marginBottom: '1rem' }}>
+      <h3 data-conjoin-heading="" data-level="section">
         Active sessions
       </h3>
 
       {session ? (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '0.75rem',
-            border: 'var(--conjoin-border-width) solid var(--conjoin-border)',
-            borderRadius: 'var(--conjoin-radius-md)',
-          }}
-        >
+        <div data-conjoin-session-row="">
           <div>
-            <p style={{ fontWeight: 500, fontSize: '0.875rem' }}>Current session</p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--conjoin-subtle-text)' }}>
+            <p data-conjoin-session-title="">Current session</p>
+            <p data-conjoin-session-meta="">
               {session.client_info?.device_type ?? 'Unknown device'}
-              {session.client_info?.city ? ` \u00B7 ${session.client_info.city}` : ''}
+              {session.client_info?.city ? ` · ${session.client_info.city}` : ''}
             </p>
           </div>
-          <span style={{ fontSize: '0.75rem', color: 'var(--conjoin-success)', fontWeight: 500 }}>Active</span>
+          <span data-conjoin-session-status="">Active</span>
         </div>
       ) : (
-        <p style={{ fontSize: '0.8125rem', color: 'var(--conjoin-subtle-text)' }}>Loading session data...</p>
+        <p data-conjoin-muted="">Loading session data...</p>
       )}
     </div>
   )
@@ -237,20 +237,25 @@ function SessionsTab() {
 
 export function AccountProfile() {
   const { account } = useAccount()
+  const [activeTab, setActiveTab] = useState<TabValue>('profile')
+
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value as TabValue)
+  }, [])
 
   if (!account) {
     return (
       <div data-conjoin-card="">
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
-          <span data-conjoin-spinner="" data-size="md" />
+        <div data-conjoin-state="">
+          <Spinner size="md" label="Loading account" />
         </div>
       </div>
     )
   }
 
   return (
-    <div data-conjoin-card="" style={{ maxWidth: '640px' }}>
-      <Tabs.Root defaultValue="profile">
+    <div data-conjoin-card="">
+      <Tabs.Root value={activeTab} onValueChange={handleTabChange}>
         <Tabs.List data-conjoin-tabs-list="" aria-label="Account settings sections">
           <Tabs.Trigger data-conjoin-tabs-trigger="" value="profile">
             Profile
@@ -263,16 +268,16 @@ export function AccountProfile() {
           </Tabs.Trigger>
         </Tabs.List>
 
-        <Tabs.Content data-conjoin-tabs-content="" value="profile">
-          <ProfileTab account={account} />
+        <Tabs.Content data-conjoin-tabs-content="" value="profile" forceMount hidden={activeTab !== 'profile'}>
+          {activeTab === 'profile' ? <ProfileTab account={account} /> : null}
         </Tabs.Content>
 
-        <Tabs.Content data-conjoin-tabs-content="" value="security">
-          <SecurityTab />
+        <Tabs.Content data-conjoin-tabs-content="" value="security" forceMount hidden={activeTab !== 'security'}>
+          {activeTab === 'security' ? <SecurityTab /> : null}
         </Tabs.Content>
 
-        <Tabs.Content data-conjoin-tabs-content="" value="sessions">
-          <SessionsTab />
+        <Tabs.Content data-conjoin-tabs-content="" value="sessions" forceMount hidden={activeTab !== 'sessions'}>
+          {activeTab === 'sessions' ? <SessionsTab /> : null}
         </Tabs.Content>
       </Tabs.Root>
     </div>

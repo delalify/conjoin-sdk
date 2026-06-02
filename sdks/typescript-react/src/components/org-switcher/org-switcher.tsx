@@ -2,11 +2,40 @@ import { type ConjoinOrganization, useAuth, useAuthFetch, useOrg } from '@conjoi
 import * as Avatar from '@radix-ui/react-avatar'
 import * as Popover from '@radix-ui/react-popover'
 import * as Separator from '@radix-ui/react-separator'
-import { useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { Spinner } from '../internal/spinner'
 
 type OrgSwitcherProps = {
   onOrgChange?: (orgId: string) => void
 }
+
+type OrgRowProps = {
+  org: ConjoinOrganization
+  isActive: boolean
+  isSwitching: boolean
+  onSwitch: (orgId: string) => void
+}
+
+const OrgRow = memo(function OrgRow({ org, isActive, isSwitching, onSwitch }: OrgRowProps) {
+  const handleClick = useCallback(() => onSwitch(org.id), [onSwitch, org.id])
+
+  return (
+    <button
+      type="button"
+      data-conjoin-menu-item=""
+      data-active={isActive ? 'true' : undefined}
+      onClick={handleClick}
+      disabled={isSwitching}
+      aria-current={isActive ? 'true' : undefined}
+    >
+      <Avatar.Root data-conjoin-avatar="" data-size="sm">
+        {org.logo_url ? <Avatar.Image src={org.logo_url} alt="" /> : null}
+        <Avatar.Fallback>{org.name[0]?.toUpperCase() ?? 'O'}</Avatar.Fallback>
+      </Avatar.Root>
+      <span>{org.name}</span>
+    </button>
+  )
+})
 
 export function OrgSwitcher({ onOrgChange }: OrgSwitcherProps) {
   const { authFetch, isConfigured } = useAuthFetch()
@@ -21,8 +50,9 @@ export function OrgSwitcher({ onOrgChange }: OrgSwitcherProps) {
   useEffect(() => {
     if (!isConfigured || !auth.isLoaded || !auth.isSignedIn) return
 
+    const controller = new AbortController()
     setIsLoading(true)
-    authFetch('/v1/auth/self/organizations')
+    authFetch('/v1/auth/self/organizations', { signal: controller.signal })
       .then(r => {
         if (!r.ok) throw new Error('Failed to fetch organizations')
         return r.json()
@@ -31,11 +61,13 @@ export function OrgSwitcher({ onOrgChange }: OrgSwitcherProps) {
         setOrganizations((body as { data: ConjoinOrganization[] }).data)
       })
       .catch(() => {
-        setOrganizations([])
+        if (!controller.signal.aborted) setOrganizations([])
       })
       .finally(() => {
-        setIsLoading(false)
+        if (!controller.signal.aborted) setIsLoading(false)
       })
+
+    return () => controller.abort()
   }, [isConfigured, auth.isLoaded, auth.isSignedIn, authFetch])
 
   const handleSwitch = useCallback(
@@ -51,7 +83,7 @@ export function OrgSwitcher({ onOrgChange }: OrgSwitcherProps) {
           setIsOpen(false)
         }
       } catch {
-        // Switch failure; popover stays open so user can retry
+        // Switch failure leaves the popover open so the user can retry.
       } finally {
         setIsSwitching(false)
       }
@@ -68,11 +100,11 @@ export function OrgSwitcher({ onOrgChange }: OrgSwitcherProps) {
           type="button"
           data-conjoin-button=""
           data-variant="outline"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          data-conjoin-org-trigger=""
           aria-label={`Current organization: ${organization?.name ?? 'None selected'}`}
         >
           <Avatar.Root data-conjoin-avatar="" data-size="sm">
-            {organization?.logo_url && <Avatar.Image src={organization.logo_url} alt="" />}
+            {organization?.logo_url ? <Avatar.Image src={organization.logo_url} alt="" /> : null}
             <Avatar.Fallback>{organization?.name?.[0]?.toUpperCase() ?? 'O'}</Avatar.Fallback>
           </Avatar.Root>
           <span>{organization?.name ?? 'Select organization'}</span>
@@ -81,58 +113,33 @@ export function OrgSwitcher({ onOrgChange }: OrgSwitcherProps) {
 
       <Popover.Portal>
         <Popover.Content data-conjoin-menu-content="" sideOffset={8} align="start">
-          <div
-            style={{
-              padding: '0.25rem 0.5rem',
-              fontSize: '0.75rem',
-              color: 'var(--conjoin-subtle-text)',
-              fontWeight: 500,
-            }}
-          >
-            Organizations
-          </div>
+          <div data-conjoin-menu-label="">Organizations</div>
 
           <Separator.Root data-conjoin-menu-separator="" />
 
-          {isLoading && (
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '0.75rem' }}>
-              <span data-conjoin-spinner="" data-size="sm" />
+          {isLoading ? (
+            <div data-conjoin-state="">
+              <Spinner size="sm" label="Loading organizations" />
             </div>
-          )}
+          ) : null}
 
-          {!isLoading &&
-            organizations.map(org => (
-              <button
-                key={org.id}
-                type="button"
-                data-conjoin-menu-item=""
-                onClick={() => handleSwitch(org.id)}
-                disabled={isSwitching}
-                style={{
-                  background: org.id === organization?.id ? 'var(--conjoin-subtle)' : 'transparent',
-                }}
-                aria-current={org.id === organization?.id ? 'true' : undefined}
-              >
-                <Avatar.Root data-conjoin-avatar="" data-size="sm">
-                  {org.logo_url && <Avatar.Image src={org.logo_url} alt="" />}
-                  <Avatar.Fallback>{org.name[0]?.toUpperCase() ?? 'O'}</Avatar.Fallback>
-                </Avatar.Root>
-                <span>{org.name}</span>
-              </button>
-            ))}
+          {!isLoading
+            ? organizations.map(org => (
+                <OrgRow
+                  key={org.id}
+                  org={org}
+                  isActive={org.id === organization?.id}
+                  isSwitching={isSwitching}
+                  onSwitch={handleSwitch}
+                />
+              ))
+            : null}
 
-          {!isLoading && organizations.length === 0 && (
-            <p
-              style={{
-                padding: '0.5rem',
-                fontSize: '0.8125rem',
-                color: 'var(--conjoin-subtle-text)',
-                textAlign: 'center',
-              }}
-            >
+          {!isLoading && organizations.length === 0 ? (
+            <p data-conjoin-center="" data-conjoin-menu-label="">
               No organizations
             </p>
-          )}
+          ) : null}
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>

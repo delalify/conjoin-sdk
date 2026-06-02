@@ -1,10 +1,12 @@
 import { createBillingPriceBundles } from '@conjoin-cloud/sdk/billing'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useConjoinClient } from './internal/use-conjoin-client'
 import { useConjoinQuery } from './internal/use-conjoin-query'
 
 type BillingPriceBundlesApi = ReturnType<typeof createBillingPriceBundles>
-type PriceBundleItem = Awaited<ReturnType<BillingPriceBundlesApi['list']>>['data'][number]
+export type PriceBundleItem = Awaited<ReturnType<BillingPriceBundlesApi['list']>>['data'][number]
+
+const EMPTY_BUNDLES: PriceBundleItem[] = []
 
 export function useBundles(entityId: string, referenceId: string) {
   const { client } = useConjoinClient()
@@ -21,9 +23,10 @@ export function useBundles(entityId: string, referenceId: string) {
     enabled: !!entityId && !!referenceId,
   })
 
-  return {
-    bundles: result.data ?? [],
-    isLoading: result.isLoading,
-    error: result.error ?? null,
-  }
+  const bundles = result.data ?? EMPTY_BUNDLES
+
+  return useMemo(
+    () => ({ bundles, isLoading: result.isLoading, error: result.error ?? null }),
+    [bundles, result.isLoading, result.error],
+  )
 }

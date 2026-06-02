@@ -49,11 +49,13 @@ function Profile() {
 }
 ```
 
-`ConjoinProvider` accepts `publishableKey`, `config`, `appearance`, and `cssLayerName`. The hooks include `useAuth`, `useSession`, `useAccount`, `useOrg`, `useEntitlements`, `useCheckout`, `useBundles`, `useChannel`, `useStorageUpload`, `useConjoinStatus`, and `useConjoinTheme`.
+`ConjoinProvider` accepts `publishableKey`, `config`, and `appearance`. The hooks include `useAuth`, `useSession`, `useAccount`, `useOrg`, `useEntitlements`, `useCheckout`, `useBundles`, `useChannel`, `useStorageUpload`, `useConjoinStatus`, and `useConjoinTheme`.
 
 ## Components
 
 Import `<SignIn>`, `<SignUp>`, `<AccountButton>`, `<AccountProfile>`, `<OrgSwitcher>`, and `<PricingTable>` from the root. Each component reads its state from the provider, so wrap your tree with `<ConjoinProvider>` first. The component stylesheet is the only package side effect, so import `@conjoin-cloud/react/styles.css` once at your app root.
+
+All component rules ship inside a single `conjoin` CSS cascade layer. You decide how your own styles rank against the defaults by declaring the layer order yourself. Put `@layer conjoin, app;` at the top of your global stylesheet and any rules you place in your `app` layer win over Conjoin's defaults, regardless of selector specificity.
 
 ## License
 

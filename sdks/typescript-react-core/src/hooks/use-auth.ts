@@ -1,13 +1,25 @@
-import { useContext } from 'react'
-import { ConjoinAuthContext } from '../provider/contexts'
+import { useCallback, useContext } from 'react'
+import { ConjoinAuthActionsContext, ConjoinAuthStateContext } from '../provider/contexts'
 
 export function useAuth() {
-  const context = useContext(ConjoinAuthContext)
-  if (!context) {
+  const authState = useContext(ConjoinAuthStateContext)
+  const actions = useContext(ConjoinAuthActionsContext)
+  if (!authState || !actions) {
     throw new Error('useAuth must be used within a ConjoinProvider')
   }
 
-  const { authState, getToken, signOut, has } = context
+  const { getToken, signOut } = actions
+  const isSignedIn = authState.isLoaded && authState.isSignedIn
+  const organizationRole = authState.isLoaded && authState.isSignedIn ? authState.organizationRole : null
+
+  const has = useCallback(
+    (params: { role?: string; permission?: string }) => {
+      if (!isSignedIn) return false
+      if (params.role && organizationRole !== params.role) return false
+      return true
+    },
+    [isSignedIn, organizationRole],
+  )
 
   if (!authState.isLoaded) {
     return {

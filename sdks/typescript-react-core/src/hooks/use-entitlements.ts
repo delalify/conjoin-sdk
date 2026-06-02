@@ -1,5 +1,5 @@
 import { createBillingEntitlementOverrides } from '@conjoin-cloud/sdk/billing'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useConjoinClient } from './internal/use-conjoin-client'
 import { useConjoinQuery } from './internal/use-conjoin-query'
 
@@ -8,9 +8,10 @@ type EntitlementOverrideItem = Awaited<ReturnType<EntitlementOverridesApi['list'
 
 type EntitlementCheckResult = {
   allowed: boolean
-  balance?: number
   limit?: number
 }
+
+const EMPTY_ENTITLEMENTS: EntitlementOverrideItem[] = []
 
 export function useEntitlements(entityId: string) {
   const { client } = useConjoinClient()
@@ -27,31 +28,23 @@ export function useEntitlements(entityId: string) {
     enabled: !!entityId,
   })
 
-  const entitlements = result.data ?? []
+  const entitlements = useMemo<EntitlementOverrideItem[]>(() => result.data ?? EMPTY_ENTITLEMENTS, [result.data])
 
   const check = useCallback(
     (featureId: string): EntitlementCheckResult => {
-      const record = entitlements as unknown as Array<{
-        feature_id?: string
-        is_active?: boolean
-        balance?: number
-        limit?: number
-      }>
-      const entry = record.find(e => e.feature_id === featureId)
+      const entry = entitlements.find(e => e.feature_id === featureId)
       if (!entry) return { allowed: false }
+      const limit = entry.included_units ?? undefined
       return {
         allowed: entry.is_active === true,
-        balance: entry.balance,
-        limit: entry.limit,
+        limit,
       }
     },
     [entitlements],
   )
 
-  return {
-    entitlements,
-    isLoading: result.isLoading,
-    error: result.error ?? null,
-    check,
-  }
+  return useMemo(
+    () => ({ entitlements, isLoading: result.isLoading, error: result.error ?? null, check }),
+    [entitlements, result.isLoading, result.error, check],
+  )
 }

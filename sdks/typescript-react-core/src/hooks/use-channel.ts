@@ -5,7 +5,7 @@ import {
   type ConnectionState,
   createBroadcastConnection,
 } from '@conjoin-cloud/sdk/relay'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useConjoinClient } from './internal/use-conjoin-client'
 
 type PresenceMember = {
@@ -45,6 +45,8 @@ export function useChannel<
   const [resolvedMembers, setResolvedMembers] = useState<PresenceMember[]>([])
 
   const connectionRef = useRef<BroadcastConnection | null>(null)
+  const maxMessagesRef = useRef(maxMessages)
+  maxMessagesRef.current = maxMessages
 
   useEffect(() => {
     const relayUrl = sdkConfig?.relay.url
@@ -76,8 +78,9 @@ export function useChannel<
         setMemberIds(prev => prev.filter(id => id !== senderId))
       } else {
         setMessages(prev => {
+          const limit = maxMessagesRef.current
           const next = [...prev, message]
-          return next.length > maxMessages ? next.slice(-maxMessages) : next
+          return next.length > limit ? next.slice(-limit) : next
         })
       }
     })
@@ -91,7 +94,7 @@ export function useChannel<
       connection.disconnect()
       connectionRef.current = null
     }
-  }, [client, channelId, sdkConfig?.relay.url, autoConnect, maxMessages])
+  }, [client, channelId, sdkConfig?.relay.url, autoConnect])
 
   useEffect(() => {
     if (!resolvePresence || memberIds.length === 0) return
@@ -131,5 +134,8 @@ export function useChannel<
 
   const members = (resolvePresence ? resolvedMembers : memberIds) as UseChannelReturn<TResolve>['members']
 
-  return { status, error, publish, messages, members, unsubscribe }
+  return useMemo(
+    () => ({ status, error, publish, messages, members, unsubscribe }),
+    [status, error, publish, messages, members, unsubscribe],
+  )
 }
