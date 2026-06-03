@@ -1,10 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": [
       "{workspaceRoot}/package.json",
       "{workspaceRoot}/pnpm-lock.yaml",
@@ -18,11 +15,20 @@
     ]
   },
   "release": {
-    "projects": [
-      "sdk-typescript",
-      "sdk-python"
-    ],
-    "projectsRelationship": "independent",
+    "groups": {
+      "typescript": {
+        "projects": [
+          "sdk-typescript",
+          "sdk-typescript-react-core",
+          "sdk-typescript-react",
+          "sdk-typescript-expo"
+        ],
+        "projectsRelationship": "fixed",
+        "releaseTag": {
+          "pattern": "typescript-v{version}"
+        }
+      }
+    },
     "version": {
       "conventionalCommits": false,
       "updateDependents": "never"
@@ -30,45 +36,29 @@
     "changelog": {
       "automaticFromRef": true,
       "workspaceChangelog": false,
-      "projectChangelogs": {
-        "createRelease": "github"
-      }
+      "projectChangelogs": false
     },
     "git": {
       "commit": true,
       "tag": true,
       "push": true,
-      "commitMessage": "chore(release): {projectName}@v{version}"
-    },
-    "releaseTag": {
-      "pattern": "{projectName}@v{version}"
+      "commitMessage": "chore(release): {version}"
     }
   },
   "targetDefaults": {
     "generate": {
-      "dependsOn": [
-        "spec:validate"
-      ],
+      "dependsOn": ["spec:validate"],
       "inputs": [
         "{workspaceRoot}/spec/openapi.json",
         "{projectRoot}/codegen/**/*"
       ],
-      "outputs": [
-        "{projectRoot}/src/generated/**/*"
-      ],
+      "outputs": ["{projectRoot}/src/generated/**/*"],
       "cache": true
     },
     "build": {
-      "dependsOn": [
-        "^build",
-        "generate"
-      ],
-      "inputs": [
-        "production"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ],
+      "dependsOn": ["^build", "generate"],
+      "inputs": ["production"],
+      "outputs": ["{projectRoot}/dist"],
       "cache": true
     },
     "lint": {

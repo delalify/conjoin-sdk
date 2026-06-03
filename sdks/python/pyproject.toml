@@ -55,6 +55,7 @@ dev = [
 
 [tool.hatch.build.targets.sdist]
 include = [
+  "/CHANGELOG.md",
   "/README.md",
   "/examples",
   "/src",

@@ -1,5 +1,7 @@
 import type { ValidateFunction } from 'ajv'
 import type Ajv2020 from 'ajv/dist/2020'
+import { validateMultipartRequestBody } from './multipart-body-validation'
+import { isMultipartFormData } from './multipart-parser'
 import {
   createSchemaWithComponents,
   formatValidationErrors,
@@ -28,6 +30,7 @@ type StructuredQueryObject = {
 export type ValidateRequestAgainstOperationOptions = {
   document: OpenApiDocument
   match: OpenApiRouteMatch
+  multipartBodyValidators: OpenApiValidatorCache
   parameterAjv: Ajv2020
   parameterValidators: OpenApiValidatorCache
   request: OpenApiContractRequest
@@ -38,6 +41,7 @@ export type ValidateRequestAgainstOperationOptions = {
 export const validateRequestAgainstOperation = ({
   document,
   match,
+  multipartBodyValidators,
   parameterAjv,
   parameterValidators,
   request,
@@ -55,6 +59,8 @@ export const validateRequestAgainstOperation = ({
     ...validateRequestBody({
       document,
       match,
+      multipartBodyAjv: parameterAjv,
+      multipartBodyValidators,
       request,
       requestBodyValidators,
       schemaAjv,
@@ -132,6 +138,8 @@ const validateParameters = ({
 type ValidateRequestBodyOptions = {
   document: OpenApiDocument
   match: OpenApiRouteMatch
+  multipartBodyAjv: Ajv2020
+  multipartBodyValidators: OpenApiValidatorCache
   request: OpenApiContractRequest
   requestBodyValidators: OpenApiValidatorCache
   schemaAjv: Ajv2020
@@ -140,6 +148,8 @@ type ValidateRequestBodyOptions = {
 const validateRequestBody = ({
   document,
   match,
+  multipartBodyAjv,
+  multipartBodyValidators,
   request,
   requestBodyValidators,
   schemaAjv,
@@ -161,6 +171,20 @@ const validateRequestBody = ({
     }
 
     return []
+  }
+
+  const contentType = request.headers['content-type']
+
+  if (isMultipartFormData(contentType)) {
+    return validateMultipartRequestBody({
+      ajv: multipartBodyAjv,
+      contentType,
+      document,
+      match,
+      rawBody: request.body,
+      requestBody,
+      validators: multipartBodyValidators,
+    })
   }
 
   const schema = requestBody.content?.['application/json']?.schema

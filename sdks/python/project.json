@@ -2,11 +2,6 @@
   "name": "sdk-python",
   "sourceRoot": "sdks/python/src",
   "projectType": "library",
-  "release": {
-    "version": {
-      "versionActions": "./tools/release/python-version-actions.cjs"
-    }
-  },
   "targets": {
     "generate": {
       "executor": "nx:run-commands",
