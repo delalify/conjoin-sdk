@@ -48,7 +48,7 @@ Issues = "https://github.com/delalify/conjoin-sdk/issues"
 [project.optional-dependencies]
 dev = [
   "hatchling>=1.28,<2",
-  "pyright>=1.1,<2",
+  "pyright>=1.1.410,<2",
   "pytest>=9,<10",
   "ruff>=0.14,<1",
 ]
