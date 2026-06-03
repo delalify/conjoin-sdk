@@ -19,11 +19,9 @@ yarn add @conjoin-cloud/sdk
 
 Install peer dependencies for the entry points you import:
 
-- Install `react` and `react-dom` `>=18.0.0` when you import `@conjoin-cloud/sdk/react`.
 - Install `next` `>=16.2.6` when you import `@conjoin-cloud/sdk/next`.
 - Install `express` `>=4.0.0` and `@types/express` `>=4.0.0` when you import `@conjoin-cloud/sdk/express`.
 - Install `hono` `>=4.12.19` when you import `@conjoin-cloud/sdk/hono`.
-- Install `expo-secure-store` `>=13.0.2` when you import `@conjoin-cloud/sdk/expo`.
 
 ## Quick Start
 
@@ -57,8 +55,6 @@ Import the product entry point you need. Importing `@conjoin-cloud/sdk/billing` 
 - Import `@conjoin-cloud/sdk/relay` for WebSocket broadcast, queues, events, scheduler, memorystore, and search.
 - Import `@conjoin-cloud/sdk/ai` for chat completions, streaming, models, providers, and usage resources.
 - Import `@conjoin-cloud/sdk/cloud` for API keys, roles, projects, webhooks, audit resources, and plans.
-- Import `@conjoin-cloud/sdk/react` for web React hooks, components, and `<ConjoinProvider>`.
-- Import `@conjoin-cloud/sdk/expo` for Expo React Native hooks and `<ConjoinProvider>`.
 - Import `@conjoin-cloud/sdk/server` for `verifyToken`, `verifyWebhook`, `createConjoinServer`, and `fetchConjoinBranding`.
 - Import `@conjoin-cloud/sdk/next` for `auth()`, `currentAccount()`, `conjoinProxy`, and `createRouteMatcher`.
 - Import `@conjoin-cloud/sdk/express` for `conjoinMiddleware`, `getAuth`, and `requireAuth`.
@@ -233,62 +229,6 @@ await broadcast.publish('support:room-42', {
 
 Use the per-resource relay factories for queues, events, scheduler, memorystore, and search.
 
-## React
-
-```tsx
-import {
-  ConjoinProvider,
-  useAccount,
-  useAuth,
-} from '@conjoin-cloud/sdk/react'
-import '@conjoin-cloud/sdk/react/styles.css'
-
-function App() {
-  return (
-    <ConjoinProvider publishableKey="pk_live_...">
-      <Profile />
-    </ConjoinProvider>
-  )
-}
-
-function Profile() {
-  const { isLoaded, isSignedIn } = useAuth()
-  const account = useAccount()
-
-  if (!isLoaded) {
-    return <div>Loading...</div>
-  }
-
-  if (!isSignedIn) {
-    return <a href="/sign-in">Sign in</a>
-  }
-
-  return <div>Hello, {account.account?.email}</div>
-}
-```
-
-`ConjoinProvider` accepts `publishableKey`, `config`, `appearance`, and `cssLayerName`. Hooks include `useAuth`, `useSession`, `useAccount`, `useOrg`, `useEntitlements`, `useCheckout`, `useBundles`, `useChannel`, `useStorageUpload`, `useConjoinStatus`, and `useConjoinTheme`.
-
-Components include `<SignIn>`, `<SignUp>`, `<AccountButton>`, `<AccountProfile>`, `<OrgSwitcher>`, and `<PricingTable>`.
-
-## Expo
-
-```tsx
-import {
-  ConjoinProvider,
-} from '@conjoin-cloud/sdk/expo'
-
-export default function Root({ children }) {
-  return (
-    <ConjoinProvider publishableKey="pk_live_...">
-      {children}
-    </ConjoinProvider>
-  )
-}
-```
-
-The Expo entry uses `expo-secure-store` for token persistence. Its hook surface matches the web entry, and its components stay web-only.
-
 ## Server Verification
 
 ```ts
@@ -308,20 +248,6 @@ const ok = verifyWebhook(rawBody, signatureHeader, webhookSecret)
 `verifyToken` uses `jose` with a remote JWKS cached per `jwksUrl`. `verifyWebhook` checks a hex HMAC-SHA256 signature in constant time.
 
 ## Next.js App Router
-
-Wrap client UI with the React provider:
-
-```tsx
-import { ConjoinProvider } from '@conjoin-cloud/sdk/react'
-
-export default function RootLayout({ children }) {
-  return (
-    <ConjoinProvider publishableKey="pk_live_...">
-      {children}
-    </ConjoinProvider>
-  )
-}
-```
 
 Read authenticated state in route handlers:
 
@@ -462,15 +388,14 @@ try {
 
 ## Bundle and Runtime
 
-- The package exposes 16 entry points, one for each product or framework integration.
+- The package exposes 14 entry points, one for each product or framework integration.
 - Every entry point ships ESM, CJS, and `.d.ts` files.
-- The React stylesheet is the only package side effect.
 - Factory functions let bundlers remove unused product code.
 - Optional framework peer dependencies stay external at build time.
 
 ## Requirements
 
-- Node.js 20.0.0 or later is required.
+- Node.js 22.0.0 or later is required.
 - TypeScript 5.x works for type-only consumers.
 - Peer dependency versions are listed in the install section.
 
