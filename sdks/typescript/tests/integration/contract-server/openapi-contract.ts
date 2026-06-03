@@ -55,6 +55,7 @@ export const createOpenApiContract = (document: OpenApiDocument): OpenApiContrac
   const parameterValidators = new Map<string, ValidateFunction>()
   const responseValidators = new Map<string, ValidateFunction>()
   const requestBodyValidators = new Map<string, ValidateFunction>()
+  const multipartBodyValidators = new Map<string, ValidateFunction>()
 
   return {
     resolveOperation: (method, path) => resolveOperation(routes, method, path),
@@ -79,6 +80,7 @@ export const createOpenApiContract = (document: OpenApiDocument): OpenApiContrac
       validateRequestAgainstOperation({
         document,
         match,
+        multipartBodyValidators,
         parameterAjv,
         parameterValidators,
         request,

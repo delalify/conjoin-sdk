@@ -1,5 +1,6 @@
 {
   "name": "sdk-typescript",
+  "tags": ["typescript"],
   "targets": {
     "generate": {
       "executor": "nx:run-commands",
@@ -98,6 +99,7 @@
     },
     "nx-release-publish": {
       "executor": "@nx/js:release-publish",
+      "dependsOn": ["build"],
       "options": {
         "packageRoot": "{projectRoot}"
       }

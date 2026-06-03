@@ -3,6 +3,9 @@
   "private": true,
   "license": "MIT",
   "packageManager": "pnpm@10.6.3",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
