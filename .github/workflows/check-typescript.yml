@@ -44,4 +44,4 @@ jobs:
         run: pnpm nx affected -t generate --base="${{ inputs.base }}" --head="${{ inputs.head }}" --exclude=sdk-python --outputStyle=static
 
       - name: Check affected TypeScript SDK
-        run: pnpm nx affected -t lint typecheck build test --base="${{ inputs.base }}" --head="${{ inputs.head }}" --exclude=sdk-python --outputStyle=static
+        run: pnpm nx affected -t lint typecheck build test test:integration --base="${{ inputs.base }}" --head="${{ inputs.head }}" --exclude=sdk-python --outputStyle=static
