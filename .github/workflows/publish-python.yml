@@ -114,17 +114,7 @@ jobs:
           git remote set-url origin "https://x-access-token:${RELEASE_PAT}@github.com/${GITHUB_REPOSITORY}.git"
           trap 'git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"' EXIT
 
-          args=(pnpm nx release "$VERSION" --projects=sdk-python --skip-publish)
-
-          if [[ "$DRY_RUN" == "true" ]]; then
-            args+=(--dry-run)
-          fi
-
-          if [[ "$FIRST_RELEASE" == "true" ]]; then
-            args+=(--first-release)
-          fi
-
-          "${args[@]}"
+          node tools/release/release-python.mjs
 
       - name: Build release distributions
         if: ${{ inputs['dry-run'] == false }}

@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "lib": ["ES2022"],
+    "types": ["node"]
+  },
+  "include": ["src", "tsup.config.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/web",
+    "src/provider/web-provider.tsx",
+    "src/transport/web.ts",
+    "src/theme/dark-mode.ts"
+  ]
+}
