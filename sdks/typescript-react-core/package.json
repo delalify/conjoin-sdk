@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@conjoin-cloud/sdk": "workspace:*",
-    "@tanstack/query-core": "5.90.20"
+    "@tanstack/query-core": "5.100.14"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6",
