@@ -146,9 +146,9 @@ describeCloudSdkContractCases('Cloud zone SDK contract integration', [
     expectedPathParams: {
       zone_id: ZONE_ID,
     },
-    response: conjoinSuccess(zoneFixture()),
+    response: conjoinList([zoneFixture()]),
     run: context => createCloudZones(context.client).read(ZONE_ID),
-    assertResult: result => expect(result).toEqual(zoneFixture()),
+    assertResult: result => expect(result).toMatchObject({ data: [zoneFixture()] }),
   },
   {
     name: 'verifies zone DNS',

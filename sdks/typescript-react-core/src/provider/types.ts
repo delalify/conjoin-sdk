@@ -155,6 +155,16 @@ export type ConjoinBranding = {
   }
 }
 
+/**
+ * Presence-only auth state derived from the readable `__conjoin_auth_cl`
+ * handle cookie. The browser never holds the session token (it is httpOnly),
+ * so this state carries no account, session, or organization identity. Verified
+ * identity hydrates separately from the cookie-authenticated self-surface.
+ *
+ * On the web the handle is read synchronously, so `isLoaded` is always `true`.
+ * The `isLoaded: false` variant remains for SSR or transports that resolve
+ * presence asynchronously.
+ */
 export type ConjoinAuthState =
   | { isLoaded: false }
   | {
@@ -164,24 +174,14 @@ export type ConjoinAuthState =
   | {
       isLoaded: true
       isSignedIn: true
-      accountId: string
-      sessionId: string
-      organizationId: string | null
-      organizationRole: string | null
-      accessToken: string
+      clientId: string
+      referenceId: string
     }
 
 export type AuthTransport = {
   readAuthState: () => ConjoinAuthState
-  storeTokens: (accessToken: string, refreshToken: string) => void | Promise<void>
-  clearTokens: () => void | Promise<void>
-  attachAuth: (headers: Record<string, string>) => Record<string, string>
-  attachCsrf?: (headers: Record<string, string>) => Record<string, string>
-  acquireRefreshLock: <T>(fn: () => Promise<T>) => Promise<T>
-}
-
-export type AuthManagerState = ConjoinAuthState & {
-  isRefreshing: boolean
+  clearHandle: () => void | Promise<void>
+  attachCsrf: (headers: Record<string, string>) => Record<string, string>
 }
 
 export type ConjoinThemeState = {

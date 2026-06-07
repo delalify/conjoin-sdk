@@ -1,10 +1,5 @@
 import { expect } from 'vitest'
-import {
-  createCloudPublishableKeys,
-  createCloudRoles,
-  createCloudSKUCatalogs,
-  createCloudSKUQuotas,
-} from '../../../src/cloud'
+import { createCloudPublishableKeys, createCloudRoles, createCloudSKUCatalogs } from '../../../src/cloud'
 import { conjoinList, conjoinSuccess } from '../contract-server/response-fixtures'
 import {
   describeCloudSdkContractCases,
@@ -13,7 +8,6 @@ import {
   ROLE_ID,
   roleFixture,
   skuCatalogFixture,
-  skuQuotaFixture,
 } from './cloud-test-utils'
 
 const PUBLISHABLE_KEY_ID = 'publishable_key_123'
@@ -152,16 +146,5 @@ describeCloudSdkContractCases('Cloud SKU catalog SDK contract integration', [
     response: conjoinSuccess(skuCatalogFixture()),
     run: context => createCloudSKUCatalogs(context.client).readSingleSkuCatalog('cloud.compute'),
     assertResult: result => expect(result).toEqual(skuCatalogFixture()),
-  },
-])
-
-describeCloudSdkContractCases('Cloud SKU quota SDK contract integration', [
-  {
-    name: 'reads account SKU quotas',
-    method: 'GET',
-    path: '/v1/cloud/sku-quota/account',
-    response: conjoinList([skuQuotaFixture()]),
-    run: context => createCloudSKUQuotas(context.client).readAccountSkuQuotas(),
-    assertResult: result => expect(result).toMatchObject({ data: [skuQuotaFixture()] }),
   },
 ])

@@ -1,6 +1,14 @@
 import type { NextRequest } from 'next/server'
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+vi.mock('../../server/tokens', () => ({
+  verifyToken: vi.fn(),
+}))
+
+import { verifyToken } from '../../server/tokens'
 import { conjoinProxy, createRouteMatcher } from '../proxy'
+
+const mockVerifyToken = vi.mocked(verifyToken)
 
 function createMockRequest(options: { url?: string; cookies?: Record<string, string> } = {}): NextRequest {
   const url = options.url ?? 'https://myapp.com/dashboard'
@@ -17,16 +25,38 @@ function createMockRequest(options: { url?: string; cookies?: Record<string, str
   } as unknown as NextRequest
 }
 
-describe('conjoinProxy', () => {
-  it('calls handler with parsed auth object when cookie is present', () => {
-    const clientState = JSON.stringify({
-      accountId: 'acc_123',
-      sessionId: 'ses_456',
-      orgId: 'org_789',
-      orgRole: 'admin',
-    })
+function verifiedFixture(overrides: Partial<ReturnType<typeof baseVerified>> = {}) {
+  return { ...baseVerified(), ...overrides }
+}
 
-    const req = createMockRequest({ cookies: { __conjoin_auth_cl: clientState } })
+function baseVerified() {
+  return {
+    payload: { sub: 'acc_123' },
+    accountId: 'acc_123',
+    sessionId: 'ses_456',
+    clientId: 'client_123',
+    appId: 'app_123',
+    liveMode: true,
+    organizationId: 'org_789' as string | null,
+    organizationRoles: ['admin'] as string[],
+  }
+}
+
+describe('conjoinProxy', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    process.env.CONJOIN_PUBLISHABLE_KEY = 'pk_test_auth.conjoin.cloud'
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+    delete process.env.CONJOIN_PUBLISHABLE_KEY
+  })
+
+  it('calls handler with verified auth object when the session cookie is valid', async () => {
+    mockVerifyToken.mockResolvedValueOnce(verifiedFixture())
+
+    const req = createMockRequest({ cookies: { __conjoin_auth_sess: 'valid-jwt' } })
     let receivedAuth: unknown
 
     const proxy = conjoinProxy((auth, _req) => {
@@ -34,18 +64,42 @@ describe('conjoinProxy', () => {
       return undefined
     })
 
-    proxy(req)
+    await proxy(req)
 
+    expect(mockVerifyToken).toHaveBeenCalledWith('valid-jwt', {
+      jwksUrl: 'https://auth.conjoin.cloud/.well-known/jwks.json',
+    })
     expect(receivedAuth).toEqual({
       accountId: 'acc_123',
       sessionId: 'ses_456',
+      clientId: 'client_123',
+      appId: 'app_123',
+      liveMode: true,
       organizationId: 'org_789',
-      organizationRole: 'admin',
-      getToken: expect.any(Function),
+      organizationRoles: ['admin'],
+      has: expect.any(Function),
     })
   })
 
-  it('passes null auth when no cookie is present', () => {
+  it('exposes a role-aware has() and stubs permission checks to false', async () => {
+    mockVerifyToken.mockResolvedValueOnce(verifiedFixture({ organizationRoles: ['admin', 'member'] }))
+
+    const req = createMockRequest({ cookies: { __conjoin_auth_sess: 'valid-jwt' } })
+    let has: ((params: { role: string } | { permission: string }) => boolean) | undefined
+
+    const proxy = conjoinProxy(auth => {
+      has = auth?.has
+      return undefined
+    })
+
+    await proxy(req)
+
+    expect(has?.({ role: 'admin' })).toBe(true)
+    expect(has?.({ role: 'owner' })).toBe(false)
+    expect(has?.({ permission: 'billing:write' })).toBe(false)
+  })
+
+  it('passes null auth when no session cookie is present', async () => {
     const req = createMockRequest()
     let receivedAuth: unknown = 'not-set'
 
@@ -54,137 +108,77 @@ describe('conjoinProxy', () => {
       return undefined
     })
 
-    proxy(req)
+    await proxy(req)
+
+    expect(receivedAuth).toBeNull()
+    expect(mockVerifyToken).not.toHaveBeenCalled()
+  })
+
+  it('passes null auth when token verification fails', async () => {
+    mockVerifyToken.mockRejectedValueOnce(new Error('invalid token'))
+
+    const req = createMockRequest({ cookies: { __conjoin_auth_sess: 'bad-jwt' } })
+    let receivedAuth: unknown = 'not-set'
+
+    const proxy = conjoinProxy(auth => {
+      receivedAuth = auth
+      return undefined
+    })
+
+    await proxy(req)
 
     expect(receivedAuth).toBeNull()
   })
 
-  it('returns undefined when no handler is provided', () => {
+  it('returns undefined when no handler is provided', async () => {
     const req = createMockRequest()
     const proxy = conjoinProxy()
-    const result = proxy(req)
+    const result = await proxy(req)
     expect(result).toBeUndefined()
   })
 
-  it('returns handler response value', () => {
-    const req = createMockRequest()
+  it('returns the handler response value', async () => {
+    mockVerifyToken.mockResolvedValueOnce(verifiedFixture())
+    const req = createMockRequest({ cookies: { __conjoin_auth_sess: 'valid-jwt' } })
     const mockResponse = new Response('forbidden', { status: 403 })
 
     const proxy = conjoinProxy(() => mockResponse)
-    const result = proxy(req)
+    const result = await proxy(req)
 
     expect(result).toBe(mockResponse)
   })
 
-  it('throws when getToken is called in proxy context', () => {
-    const clientState = JSON.stringify({
-      accountId: 'acc_123',
-      sessionId: 'ses_456',
-      orgId: null,
-      orgRole: null,
-    })
+  it('awaits an async handler response', async () => {
+    const req = createMockRequest()
+    const mockResponse = new Response('redirect', { status: 307 })
 
-    const req = createMockRequest({ cookies: { __conjoin_auth_cl: clientState } })
+    const proxy = conjoinProxy(async () => mockResponse)
+    const result = await proxy(req)
+
+    expect(result).toBe(mockResponse)
+  })
+
+  it('reflects a cleared organization as no-org first-class state', async () => {
+    mockVerifyToken.mockResolvedValueOnce(verifiedFixture({ organizationId: null, organizationRoles: [] }))
+
+    const req = createMockRequest({ cookies: { __conjoin_auth_sess: 'valid-jwt' } })
+    let receivedAuth:
+      | { organizationId: unknown; organizationRoles: unknown; has: (p: { role: string }) => boolean }
+      | undefined
 
     const proxy = conjoinProxy(auth => {
-      expect(() => auth?.getToken()).toThrow('getToken() is not available in proxy')
+      receivedAuth = auth ?? undefined
       return undefined
     })
 
-    proxy(req)
+    await proxy(req)
+
+    expect(receivedAuth?.organizationId).toBeNull()
+    expect(receivedAuth?.organizationRoles).toEqual([])
+    expect(receivedAuth?.has({ role: 'admin' })).toBe(false)
   })
 
-  it('returns null auth on invalid JSON cookie', () => {
-    const req = createMockRequest({ cookies: { __conjoin_auth_cl: 'not-json' } })
-    let receivedAuth: unknown = 'not-set'
-
-    const proxy = conjoinProxy(auth => {
-      receivedAuth = auth
-      return undefined
-    })
-
-    proxy(req)
-
-    expect(receivedAuth).toBeNull()
-  })
-
-  it('returns null auth when cookie has wrong shape', () => {
-    const req = createMockRequest({ cookies: { __conjoin_auth_cl: JSON.stringify({ foo: 'bar' }) } })
-    let receivedAuth: unknown = 'not-set'
-
-    const proxy = conjoinProxy(auth => {
-      receivedAuth = auth
-      return undefined
-    })
-
-    proxy(req)
-
-    expect(receivedAuth).toBeNull()
-  })
-
-  it('returns null auth when accountId is not a string', () => {
-    const req = createMockRequest({
-      cookies: { __conjoin_auth_cl: JSON.stringify({ accountId: 123, sessionId: 'ses_1' }) },
-    })
-    let receivedAuth: unknown = 'not-set'
-
-    const proxy = conjoinProxy(auth => {
-      receivedAuth = auth
-      return undefined
-    })
-
-    proxy(req)
-
-    expect(receivedAuth).toBeNull()
-  })
-
-  it('handles null org fields gracefully', () => {
-    const clientState = JSON.stringify({
-      accountId: 'acc_123',
-      sessionId: 'ses_456',
-      orgId: null,
-      orgRole: null,
-    })
-
-    const req = createMockRequest({ cookies: { __conjoin_auth_cl: clientState } })
-    let receivedAuth: unknown
-
-    const proxy = conjoinProxy(auth => {
-      receivedAuth = auth
-      return undefined
-    })
-
-    proxy(req)
-
-    const authObj = receivedAuth as { organizationId: unknown; organizationRole: unknown }
-    expect(authObj.organizationId).toBeNull()
-    expect(authObj.organizationRole).toBeNull()
-  })
-
-  it('treats non-string orgId as null', () => {
-    const clientState = JSON.stringify({
-      accountId: 'acc_123',
-      sessionId: 'ses_456',
-      orgId: 42,
-      orgRole: true,
-    })
-
-    const req = createMockRequest({ cookies: { __conjoin_auth_cl: clientState } })
-    let receivedAuth: unknown
-
-    const proxy = conjoinProxy(auth => {
-      receivedAuth = auth
-      return undefined
-    })
-
-    proxy(req)
-
-    const authObj = receivedAuth as { organizationId: unknown; organizationRole: unknown }
-    expect(authObj.organizationId).toBeNull()
-    expect(authObj.organizationRole).toBeNull()
-  })
-
-  it('passes the request object to handler', () => {
+  it('passes the request object to the handler', async () => {
     const req = createMockRequest({ url: 'https://myapp.com/protected' })
     let receivedReq: unknown
 
@@ -193,7 +187,7 @@ describe('conjoinProxy', () => {
       return undefined
     })
 
-    proxy(req)
+    await proxy(req)
 
     expect(receivedReq).toBe(req)
   })

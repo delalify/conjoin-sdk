@@ -97,31 +97,47 @@ export const authAccountFixture = (overrides: Record<string, unknown> = {}) => (
   conjoin_project_id: CONJOIN_PROJECT_ID,
   date_created: DATE_CREATED,
   date_updated: DATE_UPDATED,
-  emails: {
-    others: [
-      {
-        email: 'secondary@example.com',
-        verified: false,
+  emails: [
+    {
+      email: 'owner@example.com',
+      is_primary: true,
+      verification: {
+        status: 'verified',
+        verified_at: DATE_CREATED,
       },
-    ],
-    primary: 'owner@example.com',
-  },
+    },
+    {
+      email: 'secondary@example.com',
+      is_primary: false,
+      verification: {
+        status: 'unverified',
+        verified_at: null,
+      },
+    },
+  ],
   live_mode: false,
   metadata: {
     source: 'contract',
   },
   name: 'Auth Account',
-  phones: {
-    others: [
-      {
-        phone: '+2335550101',
-        verified: false,
+  phones: [
+    {
+      is_primary: true,
+      phone: '+2335550100',
+      verification: {
+        status: 'verified',
+        verified_at: DATE_CREATED,
       },
-    ],
-    primary: '+2335550100',
-  },
-  primary_email: 'owner@example.com',
-  primary_phone: '+2335550100',
+    },
+    {
+      is_primary: false,
+      phone: '+2335550101',
+      verification: {
+        status: 'unverified',
+        verified_at: null,
+      },
+    },
+  ],
   reference_id: 'account_ref_123',
   status: 'active',
   ...overrides,

@@ -1,54 +1,35 @@
 import type { NextRequest } from 'next/server'
-import type { AuthObject } from './types'
+import { verifyToken } from '../server/tokens'
+import { getJwksUrl, resolveConfig } from './config'
+import { toProxyAuthObject } from './identity'
+import type { NextAdapterConfig, ProxyAuthObject } from './types'
 
-const COOKIE_CLIENT_STATE = '__conjoin_auth_cl'
+const COOKIE_SESSION_TOKEN = '__conjoin_auth_sess'
 
-type ClientState = {
-  accountId: string
-  sessionId: string
-  orgId: string | null
-  orgRole: string | null
-}
+export type ConjoinProxyHandler = (
+  auth: ProxyAuthObject | null,
+  req: NextRequest,
+) => Response | undefined | Promise<Response | undefined>
 
-function parseClientState(req: NextRequest): AuthObject | null {
-  const cookie = req.cookies.get(COOKIE_CLIENT_STATE)?.value
-  if (!cookie) return null
+async function resolveProxyAuth(req: NextRequest, jwksUrl: string): Promise<ProxyAuthObject | null> {
+  const token = req.cookies.get(COOKIE_SESSION_TOKEN)?.value
+  if (!token) return null
 
   try {
-    const parsed: unknown = JSON.parse(cookie)
-    if (typeof parsed !== 'object' || parsed === null) return null
-
-    const raw = parsed as Record<string, unknown>
-    if (typeof raw.accountId !== 'string' || typeof raw.sessionId !== 'string') return null
-
-    const state: ClientState = {
-      accountId: raw.accountId,
-      sessionId: raw.sessionId,
-      orgId: typeof raw.orgId === 'string' ? raw.orgId : null,
-      orgRole: typeof raw.orgRole === 'string' ? raw.orgRole : null,
-    }
-
-    return {
-      accountId: state.accountId,
-      sessionId: state.sessionId,
-      organizationId: state.orgId,
-      organizationRole: state.orgRole,
-      getToken: () => {
-        throw new Error(
-          'getToken() is not available in proxy. Use auth() in a Server Component or Route Handler instead.',
-        )
-      },
-    }
+    const verified = await verifyToken(token, { jwksUrl })
+    return toProxyAuthObject(verified)
   } catch {
     return null
   }
 }
 
-export function conjoinProxy(handler?: (auth: AuthObject | null, req: NextRequest) => Response | undefined) {
-  return (req: NextRequest) => {
-    if (!handler) return
+export function conjoinProxy(handler?: ConjoinProxyHandler, overrides?: Partial<NextAdapterConfig>) {
+  const jwksUrl = getJwksUrl(resolveConfig(overrides))
 
-    const authObj = parseClientState(req)
+  return async (req: NextRequest): Promise<Response | undefined> => {
+    if (!handler) return undefined
+
+    const authObj = await resolveProxyAuth(req, jwksUrl)
     return handler(authObj, req)
   }
 }

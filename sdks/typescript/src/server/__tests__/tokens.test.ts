@@ -7,7 +7,7 @@ vi.mock('jose', () => {
 })
 
 import { createRemoteJWKSet, jwtVerify } from 'jose'
-import { verifyToken } from '../tokens'
+import { SESSION_TOKEN_AUDIENCE, verifyToken } from '../tokens'
 
 const mockJwtVerify = vi.mocked(jwtVerify)
 const mockCreateRemoteJWKSet = vi.mocked(createRemoteJWKSet)
@@ -27,11 +27,14 @@ describe('verifyToken', () => {
     mockJwtVerify.mockResolvedValueOnce({
       payload: {
         sub: 'acc_123',
-        sid: 'ses_456',
-        org_id: 'org_789',
-        org_role: 'admin',
+        session_id: 'ses_456',
+        client_id: 'client_123',
+        app_id: 'app_123',
+        live_mode: true,
+        organization_id: 'org_789',
+        organization_roles: ['admin', 'billing_manager'],
         iss: 'https://auth.conjoin.cloud',
-        aud: 'conjoin',
+        aud: SESSION_TOKEN_AUDIENCE,
         exp: Math.floor(Date.now() / 1000) + 3600,
         iat: Math.floor(Date.now() / 1000),
       },
@@ -42,16 +45,22 @@ describe('verifyToken', () => {
 
     expect(result.accountId).toBe('acc_123')
     expect(result.sessionId).toBe('ses_456')
+    expect(result.clientId).toBe('client_123')
+    expect(result.appId).toBe('app_123')
+    expect(result.liveMode).toBe(true)
     expect(result.organizationId).toBe('org_789')
-    expect(result.organizationRole).toBe('admin')
+    expect(result.organizationRoles).toEqual(['admin', 'billing_manager'])
     expect(result.payload.sub).toBe('acc_123')
   })
 
-  it('returns null organization fields when not present', async () => {
+  it('returns null organization id and empty roles when not present', async () => {
     mockJwtVerify.mockResolvedValueOnce({
       payload: {
         sub: 'acc_123',
-        sid: 'ses_456',
+        session_id: 'ses_456',
+        client_id: 'client_123',
+        app_id: 'app_123',
+        live_mode: false,
         iss: 'https://auth.conjoin.cloud',
         exp: Math.floor(Date.now() / 1000) + 3600,
         iat: Math.floor(Date.now() / 1000),
@@ -62,7 +71,39 @@ describe('verifyToken', () => {
     const result = await verifyToken('valid-jwt-token', { jwksUrl: JWKS_URL })
 
     expect(result.organizationId).toBeNull()
-    expect(result.organizationRole).toBeNull()
+    expect(result.organizationRoles).toEqual([])
+    expect(result.liveMode).toBe(false)
+  })
+
+  it('drops non-string entries from organization_roles', async () => {
+    mockJwtVerify.mockResolvedValueOnce({
+      payload: {
+        sub: 'acc_123',
+        session_id: 'ses_456',
+        organization_id: 'org_789',
+        organization_roles: ['admin', 42, null, 'member'],
+      },
+      protectedHeader: { alg: 'RS256' },
+    } as never)
+
+    const result = await verifyToken('valid-jwt-token', { jwksUrl: JWKS_URL })
+
+    expect(result.organizationRoles).toEqual(['admin', 'member'])
+  })
+
+  it('coerces a non-boolean live_mode claim to false', async () => {
+    mockJwtVerify.mockResolvedValueOnce({
+      payload: {
+        sub: 'acc_123',
+        session_id: 'ses_456',
+        live_mode: 'true',
+      },
+      protectedHeader: { alg: 'RS256' },
+    } as never)
+
+    const result = await verifyToken('valid-jwt-token', { jwksUrl: JWKS_URL })
+
+    expect(result.liveMode).toBe(false)
   })
 
   it('throws on expired token', async () => {
@@ -81,7 +122,7 @@ describe('verifyToken', () => {
 
   it('caches JWKS set for the same URL', async () => {
     mockJwtVerify.mockResolvedValue({
-      payload: { sub: 'acc_1', sid: 'ses_1' },
+      payload: { sub: 'acc_1', session_id: 'ses_1' },
       protectedHeader: { alg: 'RS256' },
     } as never)
 
@@ -92,9 +133,23 @@ describe('verifyToken', () => {
     expect(callsForUrl.length).toBeLessThanOrEqual(1)
   })
 
-  it('passes audience and issuer options to jwtVerify', async () => {
+  it('defaults the audience to the session token audience', async () => {
     mockJwtVerify.mockResolvedValueOnce({
-      payload: { sub: 'acc_123', sid: 'ses_456' },
+      payload: { sub: 'acc_123', session_id: 'ses_456' },
+      protectedHeader: { alg: 'RS256' },
+    } as never)
+
+    await verifyToken('valid-jwt-token', { jwksUrl: JWKS_URL })
+
+    expect(mockJwtVerify).toHaveBeenCalledWith('valid-jwt-token', expect.anything(), {
+      audience: SESSION_TOKEN_AUDIENCE,
+      issuer: undefined,
+    })
+  })
+
+  it('passes audience and issuer overrides to jwtVerify', async () => {
+    mockJwtVerify.mockResolvedValueOnce({
+      payload: { sub: 'acc_123', session_id: 'ses_456' },
       protectedHeader: { alg: 'RS256' },
     } as never)
 
@@ -112,7 +167,7 @@ describe('verifyToken', () => {
 
   it('returns empty string for accountId when sub is missing', async () => {
     mockJwtVerify.mockResolvedValueOnce({
-      payload: { sid: 'ses_456' },
+      payload: { session_id: 'ses_456' },
       protectedHeader: { alg: 'RS256' },
     } as never)
 

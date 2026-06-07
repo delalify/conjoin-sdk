@@ -21,6 +21,8 @@ import {
   ENTITY_ID,
   FEATURE_ID,
   FEATURE_KEY,
+  PLAN_ID,
+  SUBSCRIPTION_ID,
 } from './billing-test-utils'
 
 const createEntityBody = {
@@ -96,6 +98,8 @@ const createOverrideBody = {
   customer_id: CUSTOMER_ID,
   feature_id: FEATURE_ID,
   included_units: 25,
+  plan_id: PLAN_ID,
+  subscription_id: SUBSCRIPTION_ID,
   value_type: 'numeric' as const,
 }
 const updateOverrideBody = { included_units: 50 }

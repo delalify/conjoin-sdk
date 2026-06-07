@@ -4,7 +4,7 @@ import { getConjoinRequestIdFromHeaders } from '../core/request-tracing'
 import { verifyToken } from '../server/tokens'
 import type { ConjoinEnv, ConjoinHonoOptions } from './types'
 
-const DEFAULT_COOKIE_NAME = '__conjoin_auth_at'
+const DEFAULT_COOKIE_NAME = '__conjoin_auth_sess'
 
 export function conjoinMiddleware(options: ConjoinHonoOptions): MiddlewareHandler<ConjoinEnv> {
   const cookieName = options.cookieName ?? DEFAULT_COOKIE_NAME

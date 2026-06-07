@@ -1,5 +1,10 @@
 import type { AuthTransport, ConjoinAuthState } from '../provider/types'
 
+const CLIENT_HANDLE_COOKIE = '__conjoin_auth_cl'
+const CSRF_COOKIE = '__conjoin_auth_csrf'
+
+const SAFE_HANDLE_IDENTIFIER = /^[\w.:-]+$/
+
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null
   const prefix = `${name}=`
@@ -12,24 +17,33 @@ function getCookie(name: string): string | null {
   return null
 }
 
-type AuthCookiePayload = {
-  accountId: string
-  sessionId: string
-  orgId: string | null
-  orgRole: string | null
+type ClientHandle = {
+  client_id: string
+  reference_id: string
 }
 
-function parseAuthCookie(): AuthCookiePayload | null {
-  const raw = getCookie('__conjoin_auth_cl')
+function parseClientHandle(): ClientHandle | null {
+  const raw = getCookie(CLIENT_HANDLE_COOKIE)
   if (!raw) return null
+  let parsed: unknown
   try {
-    const parsed = JSON.parse(raw)
-    if (typeof parsed !== 'object' || parsed === null) return null
-    if (typeof parsed.accountId !== 'string' || typeof parsed.sessionId !== 'string') return null
-    return parsed as AuthCookiePayload
+    parsed = JSON.parse(raw)
   } catch {
     return null
   }
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    return null
+  }
+  const candidate = parsed as Record<string, unknown>
+  const clientId = candidate.client_id
+  const referenceId = candidate.reference_id
+  if (typeof clientId !== 'string' || !SAFE_HANDLE_IDENTIFIER.test(clientId)) {
+    return null
+  }
+  if (typeof referenceId !== 'string' || !SAFE_HANDLE_IDENTIFIER.test(referenceId)) {
+    return null
+  }
+  return { client_id: clientId, reference_id: referenceId }
 }
 
 function deleteCookie(name: string) {
@@ -45,47 +59,29 @@ function deleteCookie(name: string) {
 export function createWebTransport(): AuthTransport {
   return {
     readAuthState(): ConjoinAuthState {
-      const parsed = parseAuthCookie()
-      if (!parsed) {
+      const handle = parseClientHandle()
+      if (!handle) {
         return { isLoaded: true, isSignedIn: false }
       }
 
       return {
         isLoaded: true,
         isSignedIn: true,
-        accountId: parsed.accountId,
-        sessionId: parsed.sessionId,
-        organizationId: parsed.orgId,
-        organizationRole: parsed.orgRole,
-        accessToken: '',
+        clientId: handle.client_id,
+        referenceId: handle.reference_id,
       }
     },
 
-    storeTokens() {
-      // Tokens are HttpOnly cookies managed by the auth server
-    },
-
-    clearTokens() {
-      deleteCookie('__conjoin_auth_cl')
-    },
-
-    attachAuth(headers: Record<string, string>): Record<string, string> {
-      return headers
+    clearHandle() {
+      deleteCookie(CLIENT_HANDLE_COOKIE)
     },
 
     attachCsrf(headers: Record<string, string>): Record<string, string> {
-      const csrf = getCookie('__conjoin_auth_csrf')
+      const csrf = getCookie(CSRF_COOKIE)
       if (csrf) {
-        return { ...headers, 'X-CSRF-Token': csrf }
+        return { ...headers, 'x-csrf-token': csrf }
       }
       return headers
-    },
-
-    async acquireRefreshLock<T>(fn: () => Promise<T>): Promise<T> {
-      if (typeof navigator !== 'undefined' && 'locks' in navigator) {
-        return navigator.locks.request('conjoin-token-refresh', fn)
-      }
-      return fn()
     },
   }
 }

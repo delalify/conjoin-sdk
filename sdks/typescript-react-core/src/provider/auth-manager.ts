@@ -1,40 +1,24 @@
-import type { ConjoinClient } from '@conjoin-cloud/sdk'
 import type { AuthTransport, ConjoinAuthState, ConjoinSdkConfig } from './types'
 
 type AuthManagerOptions = {
-  client: ConjoinClient
   transport: AuthTransport
   sdkConfig: ConjoinSdkConfig | null
   onStateChange: (state: ConjoinAuthState) => void
 }
 
-type TokenPayload = {
-  sub: string
-  sid: string
-  org_id?: string
-  org_role?: string
-  exp: number
-}
+const VALID_DOMAIN_PATTERN = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
 
-const REFRESH_MARGIN_MS = 60_000
-
-function decodeTokenPayload(token: string): TokenPayload | null {
-  try {
-    const parts = token.split('.')
-    if (parts.length !== 3) return null
-    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))
-    return payload as TokenPayload
-  } catch {
-    return null
-  }
-}
-
+/**
+ * Presence-only auth manager. The browser never holds the session token (it is
+ * an httpOnly cookie), so this manager decodes no token and runs no refresh.
+ * Signed-in presence and the readable client handle are derived synchronously
+ * from the `__conjoin_auth_cl` cookie through the transport. Verified identity
+ * (account, organizations, roles) hydrates separately from the self-surface.
+ */
 export function createAuthManager(options: AuthManagerOptions) {
   const { transport, onStateChange } = options
 
   let currentState: ConjoinAuthState = { isLoaded: false }
-  let refreshTimer: ReturnType<typeof setTimeout> | null = null
-  let refreshPromise: Promise<void> | null = null
 
   function setState(next: ConjoinAuthState) {
     currentState = next
@@ -45,136 +29,38 @@ export function createAuthManager(options: AuthManagerOptions) {
     return currentState
   }
 
-  function scheduleRefresh(expiresAt: number) {
-    if (refreshTimer) clearTimeout(refreshTimer)
-
-    const now = Date.now()
-    const refreshAt = expiresAt * 1000 - REFRESH_MARGIN_MS
-    const delay = Math.max(refreshAt - now, 0)
-
-    refreshTimer = setTimeout(() => {
-      refreshTokens().catch(() => {
-        setState({ isLoaded: true, isSignedIn: false })
-      })
-    }, delay)
-  }
-
-  async function refreshTokens(): Promise<void> {
-    if (refreshPromise) return refreshPromise
-
-    refreshPromise = transport.acquireRefreshLock(async () => {
-      try {
-        const authDomain = options.sdkConfig?.auth.domain
-        if (!authDomain) return
-
-        const response = await fetch(`https://${authDomain}/v1/auth/self/sessions/refresh`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            ...transport.attachAuth({}),
-            ...(transport.attachCsrf ? transport.attachCsrf({}) : {}),
-          },
-        })
-
-        if (!response.ok) {
-          await transport.clearTokens()
-          setState({ isLoaded: true, isSignedIn: false })
-          return
-        }
-
-        const body = (await response.json()) as { data: { access_token: string; refresh_token: string } }
-        const { access_token, refresh_token } = body.data
-
-        await transport.storeTokens(access_token, refresh_token)
-
-        const payload = decodeTokenPayload(access_token)
-        if (payload) {
-          setState({
-            isLoaded: true,
-            isSignedIn: true,
-            accountId: payload.sub,
-            sessionId: payload.sid,
-            organizationId: payload.org_id ?? null,
-            organizationRole: payload.org_role ?? null,
-            accessToken: access_token,
-          })
-          scheduleRefresh(payload.exp)
-        }
-      } catch {
-        await transport.clearTokens()
-        setState({ isLoaded: true, isSignedIn: false })
-      }
-    })
-
-    try {
-      await refreshPromise
-    } finally {
-      refreshPromise = null
-    }
-  }
-
   function initialize() {
-    const state = transport.readAuthState()
-    setState(state)
-
-    if (state.isLoaded && state.isSignedIn) {
-      const payload = decodeTokenPayload(state.accessToken)
-      if (payload) {
-        const now = Date.now() / 1000
-        if (payload.exp <= now) {
-          refreshTokens().catch(() => {
-            setState({ isLoaded: true, isSignedIn: false })
-          })
-        } else {
-          scheduleRefresh(payload.exp)
-        }
-      }
-    }
+    setState(transport.readAuthState())
   }
 
   async function signOut(): Promise<void> {
-    if (refreshTimer) clearTimeout(refreshTimer)
-
     const authDomain = options.sdkConfig?.auth.domain
-    if (authDomain && currentState.isLoaded && currentState.isSignedIn) {
+    const canCallServer = currentState.isLoaded && currentState.isSignedIn && Boolean(authDomain)
+
+    if (canCallServer && authDomain && VALID_DOMAIN_PATTERN.test(authDomain)) {
       try {
-        await fetch(`https://${authDomain}/v1/auth/self/sessions/${currentState.sessionId}`, {
-          method: 'DELETE',
+        await fetch(`https://${authDomain}/v1/auth/logout`, {
+          method: 'POST',
           credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            ...transport.attachAuth({}),
-            ...(transport.attachCsrf ? transport.attachCsrf({}) : {}),
-          },
+          headers: transport.attachCsrf({ 'Content-Type': 'application/json' }),
         })
       } catch {
-        // Sign out locally even if the server call fails
+        // Sign out locally even when the server call fails.
       }
     }
 
-    await transport.clearTokens()
+    await transport.clearHandle()
     setState({ isLoaded: true, isSignedIn: false })
   }
 
-  function getToken(): string | null {
-    if (currentState.isLoaded && currentState.isSignedIn) {
-      return currentState.accessToken
-    }
-    return null
-  }
-
   function destroy() {
-    if (refreshTimer) clearTimeout(refreshTimer)
-    refreshPromise = null
+    currentState = { isLoaded: false }
   }
 
   return {
     initialize,
     getState,
-    getToken,
     signOut,
-    refreshTokens,
     destroy,
   }
 }
