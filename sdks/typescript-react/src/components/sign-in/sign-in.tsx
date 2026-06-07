@@ -1,11 +1,10 @@
-import { useAuthFetch, useConjoinClient } from '@conjoin-cloud/react-core'
+import { useConjoinClient, useSignIn } from '@conjoin-cloud/react-core'
 import * as Label from '@radix-ui/react-label'
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
-import { type ChangeEvent, type FormEvent, useCallback, useRef, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useCallback, useEffect, useState } from 'react'
 import { BusyContent } from '../internal/busy-content'
 import { OAuthButton } from '../internal/oauth-button'
-
-type SignInStep = 'identifier' | 'password' | 'mfa'
+import { Spinner } from '../internal/spinner'
 
 type SignInProps = {
   afterSignInUrl?: string
@@ -16,164 +15,119 @@ type SignInProps = {
 
 const ERROR_ID = 'conjoin-sign-in-error'
 
+const isOAuthMethod = (method: string): boolean =>
+  method !== 'email_password' && method !== 'email' && method !== 'password'
+
 export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn }: SignInProps) {
-  const { sdkConfig } = useConjoinClient()
-  const { authFetch, authDomain, isConfigured } = useAuthFetch()
-  const [step, setStep] = useState<SignInStep>('identifier')
-  const [identifier, setIdentifier] = useState('')
+  const { sdkConfig, isConfigLoaded } = useConjoinClient()
+  const { status, isSubmitting, error, verificationMethod, mfaMethod, signIn, attemptVerification, attemptMfa, reset } =
+    useSignIn()
+
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [code, setCode] = useState('')
   const [mfaCode, setMfaCode] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [flowId, setFlowId] = useState<string | null>(null)
 
-  const passwordRef = useRef<HTMLInputElement>(null)
-  const mfaRef = useRef<HTMLInputElement>(null)
-  const identifierRef = useRef<HTMLInputElement>(null)
-
-  const signInMethods = sdkConfig?.auth.sign_in_methods ?? []
-  const oauthMethods = signInMethods.filter(m => m !== 'email_password' && m !== 'email_otp')
-  const hasEmailPassword = signInMethods.includes('email_password')
+  const methods = sdkConfig?.auth.sign_in_methods ?? []
+  const oauthMethods = methods.filter(isOAuthMethod)
+  const usesPassword = methods.includes('email_password') || methods.includes('password')
+  const usesEmailCode = methods.includes('email')
+  const hasIdentifierForm = usesPassword || usesEmailCode
   const describedBy = error ? ERROR_ID : undefined
 
-  const handleIdentifierChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setIdentifier(e.target.value)
+  useEffect(() => {
+    if (status !== 'complete') return
+
+    onSignIn?.()
+    if (afterSignInUrl) {
+      window.location.assign(afterSignInUrl)
+    }
+  }, [status, onSignIn, afterSignInUrl])
+
+  const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
   }, [])
 
-  const handlePasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
+  const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value)
   }, [])
 
-  const handleMfaChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setMfaCode(e.target.value)
+  const handleCodeChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setCode(event.target.value)
+  }, [])
+
+  const handleMfaChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setMfaCode(event.target.value)
   }, [])
 
   const handleIdentifierSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault()
-      if (isSubmitting || !identifier.trim()) return
+    async (event: FormEvent) => {
+      event.preventDefault()
+      if (isSubmitting || !email.trim()) return
 
-      setIsSubmitting(true)
-      setError(null)
-
-      try {
-        const response = await authFetch('/v1/auth/signin/start', {
-          method: 'POST',
-          body: JSON.stringify({ identifier: identifier.trim() }),
-        })
-
-        if (!response.ok) {
-          const body = (await response.json().catch(() => ({}))) as { message?: string }
-          setError(body.message ?? 'Unable to sign in. Please check your email and try again.')
-          return
-        }
-
-        const body = (await response.json()) as { data: { flow_id: string } }
-        setFlowId(body.data.flow_id)
-        setStep('password')
-        requestAnimationFrame(() => passwordRef.current?.focus())
-      } catch {
-        setError('A network error occurred. Please check your connection and try again.')
-      } finally {
-        setIsSubmitting(false)
+      if (usesPassword) {
+        await signIn({ email: email.trim(), password })
+        return
       }
+
+      await signIn({ email: email.trim(), verificationOption: 'email_verification_code' })
     },
-    [authFetch, identifier, isSubmitting],
+    [isSubmitting, email, password, usesPassword, signIn],
   )
 
-  const handlePasswordSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault()
-      if (isSubmitting || !flowId || !password) return
+  const handleVerificationSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault()
+      if (isSubmitting || !code.trim()) return
 
-      setIsSubmitting(true)
-      setError(null)
-
-      try {
-        const response = await authFetch('/v1/auth/signin/complete', {
-          method: 'POST',
-          body: JSON.stringify({ flow_id: flowId, password }),
-        })
-
-        if (!response.ok) {
-          const body = (await response.json().catch(() => ({}))) as { message?: string; requires_mfa?: boolean }
-          if (body.requires_mfa) {
-            setStep('mfa')
-            requestAnimationFrame(() => mfaRef.current?.focus())
-            return
-          }
-          setError(body.message ?? 'Invalid credentials. Please try again.')
-          return
-        }
-
-        if (afterSignInUrl) {
-          window.location.href = afterSignInUrl
-        }
-        onSignIn?.()
-      } catch {
-        setError('A network error occurred. Please check your connection and try again.')
-      } finally {
-        setIsSubmitting(false)
-      }
+      await attemptVerification({ code: code.trim() })
     },
-    [authFetch, flowId, password, afterSignInUrl, onSignIn, isSubmitting],
+    [isSubmitting, code, attemptVerification],
   )
 
   const handleMfaSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault()
-      if (isSubmitting || !flowId || !mfaCode) return
+    async (event: FormEvent) => {
+      event.preventDefault()
+      if (isSubmitting || !mfaCode.trim()) return
 
-      setIsSubmitting(true)
-      setError(null)
-
-      try {
-        const response = await authFetch('/v1/auth/signin/complete', {
-          method: 'POST',
-          body: JSON.stringify({ flow_id: flowId, mfa_code: mfaCode }),
-        })
-
-        if (!response.ok) {
-          const body = (await response.json().catch(() => ({}))) as { message?: string }
-          setError(body.message ?? 'Invalid verification code. Please try again.')
-          return
-        }
-
-        if (afterSignInUrl) {
-          window.location.href = afterSignInUrl
-        }
-        onSignIn?.()
-      } catch {
-        setError('A network error occurred. Please check your connection and try again.')
-      } finally {
-        setIsSubmitting(false)
-      }
+      await attemptMfa({
+        method: mfaMethod === 'totp' ? 'totp' : 'phone_verification_code',
+        code: mfaCode.trim(),
+      })
     },
-    [authFetch, flowId, mfaCode, afterSignInUrl, onSignIn, isSubmitting],
+    [isSubmitting, mfaCode, mfaMethod, attemptMfa],
   )
 
-  const handleOAuthClick = useCallback(
+  const handleOAuthSelect = useCallback(
     (provider: string) => {
-      if (!authDomain) return
-      window.location.href = `https://${authDomain}/v1/auth/oauth/${encodeURIComponent(provider)}/start`
+      void signIn({ providerKey: provider })
     },
-    [authDomain],
+    [signIn],
   )
 
   const handleBack = useCallback(() => {
-    setStep('identifier')
-    setError(null)
     setPassword('')
+    setCode('')
     setMfaCode('')
-    requestAnimationFrame(() => identifierRef.current?.focus())
-  }, [])
+    reset()
+  }, [reset])
 
-  if (!isConfigured) {
+  if (!isConfigLoaded) {
     return (
       <div data-conjoin-card="">
-        <p data-conjoin-heading="" data-conjoin-center="">
-          Sign in is not available
-        </p>
+        <div data-conjoin-state="">
+          <Spinner size="sm" label="Loading" />
+        </div>
+      </div>
+    )
+  }
+
+  if (status === 'redirecting') {
+    return (
+      <div data-conjoin-card="">
+        <div data-conjoin-state="">
+          <Spinner size="sm" label="Redirecting to your provider" />
+        </div>
       </div>
     )
   }
@@ -184,15 +138,17 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
         Sign in
       </h2>
 
-      {oauthMethods.length > 0 ? (
+      {status === 'idle' && oauthMethods.length > 0 ? (
         <div data-conjoin-social-group="">
           {oauthMethods.map(method => (
-            <OAuthButton key={method} provider={method} onSelect={handleOAuthClick} />
+            <OAuthButton key={method} provider={method} onSelect={handleOAuthSelect} />
           ))}
         </div>
       ) : null}
 
-      {oauthMethods.length > 0 && hasEmailPassword ? <div data-conjoin-divider-text="">or</div> : null}
+      {status === 'idle' && oauthMethods.length > 0 && hasIdentifierForm ? (
+        <div data-conjoin-divider-text="">or</div>
+      ) : null}
 
       {error ? (
         <p id={ERROR_ID} data-conjoin-field-error="" role="alert">
@@ -200,20 +156,19 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
         </p>
       ) : null}
 
-      {step === 'identifier' && hasEmailPassword ? (
+      {status === 'idle' && hasIdentifierForm ? (
         <form onSubmit={handleIdentifierSubmit} noValidate>
           <div data-conjoin-field="" data-gap="wide">
-            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-identifier">
+            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-email">
               Email address
             </Label.Root>
             <input
-              ref={identifierRef}
-              id="conjoin-sign-in-identifier"
+              id="conjoin-sign-in-email"
               data-conjoin-input=""
               type="email"
               autoComplete="email"
-              value={identifier}
-              onChange={handleIdentifierChange}
+              value={email}
+              onChange={handleEmailChange}
               placeholder="you@example.com"
               required
               aria-invalid={error ? true : undefined}
@@ -222,47 +177,27 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
             />
           </div>
 
-          <button
-            type="submit"
-            data-conjoin-button=""
-            data-variant="primary"
-            data-block="true"
-            data-spacing="stacked"
-            disabled={isSubmitting}
-            aria-busy={isSubmitting}
-          >
-            <BusyContent busy={isSubmitting} label="Continue" busyLabel="Signing in" />
-          </button>
-        </form>
-      ) : null}
+          {usesPassword ? (
+            <div data-conjoin-field="" data-gap="wide">
+              <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-password">
+                Password
+              </Label.Root>
+              <input
+                id="conjoin-sign-in-password"
+                data-conjoin-input=""
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={handlePasswordChange}
+                placeholder="Enter your password"
+                required
+                aria-invalid={error ? true : undefined}
+                aria-describedby={describedBy}
+              />
+            </div>
+          ) : null}
 
-      {step === 'password' ? (
-        <form onSubmit={handlePasswordSubmit} noValidate>
-          <VisuallyHidden.Root>
-            <label htmlFor="conjoin-sign-in-email-hidden">Email</label>
-            <input id="conjoin-sign-in-email-hidden" type="email" value={identifier} readOnly autoComplete="email" />
-          </VisuallyHidden.Root>
-
-          <div data-conjoin-field="" data-gap="wide">
-            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-password">
-              Password
-            </Label.Root>
-            <input
-              ref={passwordRef}
-              id="conjoin-sign-in-password"
-              data-conjoin-input=""
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={handlePasswordChange}
-              placeholder="Enter your password"
-              required
-              aria-invalid={error ? true : undefined}
-              aria-describedby={describedBy}
-            />
-          </div>
-
-          {forgotPasswordUrl ? (
+          {usesPassword && forgotPasswordUrl ? (
             <div data-conjoin-forgot="">
               <a href={forgotPasswordUrl} data-conjoin-link="">
                 Forgot password?
@@ -279,7 +214,58 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
             disabled={isSubmitting}
             aria-busy={isSubmitting}
           >
-            <BusyContent busy={isSubmitting} label="Sign in" busyLabel="Signing in" />
+            <BusyContent busy={isSubmitting} label="Continue" busyLabel="Signing in" />
+          </button>
+        </form>
+      ) : null}
+
+      {status === 'needs_verification' && verificationMethod === 'magic_link' ? (
+        <div data-conjoin-state="">
+          <p data-conjoin-prompt="">We sent a sign-in link to {email || 'your email'}. Open it to finish signing in.</p>
+          <button type="button" data-conjoin-button="" data-variant="outline" data-block="true" onClick={handleBack}>
+            Back
+          </button>
+        </div>
+      ) : null}
+
+      {status === 'needs_verification' && verificationMethod !== 'magic_link' ? (
+        <form onSubmit={handleVerificationSubmit} noValidate>
+          <VisuallyHidden.Root>
+            <label htmlFor="conjoin-sign-in-email-hidden">Email</label>
+            <input id="conjoin-sign-in-email-hidden" type="email" value={email} readOnly autoComplete="email" />
+          </VisuallyHidden.Root>
+
+          <div data-conjoin-field="" data-gap="wide">
+            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-code">
+              Verification code
+            </Label.Root>
+            <input
+              id="conjoin-sign-in-code"
+              data-conjoin-input=""
+              data-mono="true"
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              value={code}
+              onChange={handleCodeChange}
+              placeholder="Enter the code we emailed you"
+              required
+              maxLength={12}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={describedBy}
+            />
+          </div>
+
+          <button
+            type="submit"
+            data-conjoin-button=""
+            data-variant="primary"
+            data-block="true"
+            data-spacing="stacked"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            <BusyContent busy={isSubmitting} label="Verify" busyLabel="Verifying" />
           </button>
 
           <button
@@ -295,14 +281,24 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
         </form>
       ) : null}
 
-      {step === 'mfa' ? (
+      {status === 'needs_mfa' && mfaMethod === 'passkey' ? (
+        <div data-conjoin-state="">
+          <p data-conjoin-prompt="">
+            Your account uses a passkey for verification, which this screen does not yet support.
+          </p>
+          <button type="button" data-conjoin-button="" data-variant="outline" data-block="true" onClick={handleBack}>
+            Back
+          </button>
+        </div>
+      ) : null}
+
+      {status === 'needs_mfa' && mfaMethod !== 'passkey' ? (
         <form onSubmit={handleMfaSubmit} noValidate>
           <div data-conjoin-field="" data-gap="wide">
             <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-in-mfa">
               Verification code
             </Label.Root>
             <input
-              ref={mfaRef}
               id="conjoin-sign-in-mfa"
               data-conjoin-input=""
               data-mono="true"
@@ -311,7 +307,7 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
               autoComplete="one-time-code"
               value={mfaCode}
               onChange={handleMfaChange}
-              placeholder="Enter 6-digit code"
+              placeholder="Enter your 6-digit code"
               required
               maxLength={8}
               aria-invalid={error ? true : undefined}
@@ -333,7 +329,7 @@ export function SignIn({ afterSignInUrl, forgotPasswordUrl, signUpUrl, onSignIn 
         </form>
       ) : null}
 
-      {signUpUrl ? (
+      {status === 'idle' && signUpUrl ? (
         <p data-conjoin-prompt="">
           Don't have an account?{' '}
           <a href={signUpUrl} data-conjoin-link="">

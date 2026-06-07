@@ -30,4 +30,5 @@ export type IdentityHydration = {
   isAccountLoading: boolean
   areOrganizationsLoading: boolean
   setActiveOrganization: (organizationId: string | null) => Promise<void>
+  refresh: () => Promise<void>
 }

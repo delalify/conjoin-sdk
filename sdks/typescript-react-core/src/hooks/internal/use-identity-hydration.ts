@@ -171,6 +171,16 @@ export function useIdentityHydration(deps: IdentityHydrationDeps): IdentityHydra
     [activeOrgResult.data],
   )
 
+  const refresh = useCallback(async (): Promise<void> => {
+    if (!authDomain) return
+
+    await Promise.all([
+      queryClient.fetchQuery({ queryKey: ACCOUNT_QUERY_KEY, queryFn: accountQueryFn }),
+      queryClient.fetchQuery({ queryKey: ORGANIZATIONS_QUERY_KEY, queryFn: organizationsQueryFn }),
+      queryClient.fetchQuery({ queryKey: ACTIVE_ORG_QUERY_KEY, queryFn: activeOrgQueryFn }),
+    ])
+  }, [authDomain, queryClient, accountQueryFn, organizationsQueryFn, activeOrgQueryFn])
+
   const setActiveOrganization = useCallback(
     async (organizationId: string | null): Promise<void> => {
       if (!authDomain) throw new Error('Auth domain not configured')
@@ -201,5 +211,6 @@ export function useIdentityHydration(deps: IdentityHydrationDeps): IdentityHydra
     isAccountLoading: isEnabled && accountResult.isLoading,
     areOrganizationsLoading: isEnabled && (organizationsResult.isLoading || activeOrgResult.isLoading),
     setActiveOrganization,
+    refresh,
   }
 }

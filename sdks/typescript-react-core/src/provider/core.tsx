@@ -124,6 +124,10 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
     await authManagerRef.current?.signOut()
   }, [])
 
+  const bootstrapSession = useCallback(async () => {
+    return (await authManagerRef.current?.bootstrapSession()) ?? false
+  }, [])
+
   const attachCsrf = useCallback((headers: Record<string, string>) => transport.attachCsrf(headers), [transport])
 
   const authDomain = sdkConfig?.auth.domain ?? null
@@ -142,7 +146,20 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
     [client, queryClient, sdkConfig, isConfigLoaded],
   )
 
-  const authActions = useMemo<ConjoinAuthActions>(() => ({ signOut, attachCsrf }), [signOut, attachCsrf])
+  const authActions = useMemo<ConjoinAuthActions>(
+    () => ({
+      signOut,
+      attachCsrf,
+      createPkce: transport.createPkce,
+      savePendingFlow: transport.savePendingFlow,
+      readPendingFlow: transport.readPendingFlow,
+      clearPendingFlow: transport.clearPendingFlow,
+      redirect: transport.redirect,
+      bootstrapSession,
+      refreshIdentity: identity.refresh,
+    }),
+    [signOut, attachCsrf, transport, bootstrapSession, identity.refresh],
+  )
 
   return (
     <ConjoinClientContext.Provider value={clientContextValue}>

@@ -209,7 +209,8 @@ function SecurityTab() {
 }
 
 function SessionsTab() {
-  const { session } = useSession()
+  const { isLoaded, sessions } = useSession()
+  const activeSessions = sessions ?? []
 
   return (
     <div>
@@ -217,20 +218,21 @@ function SessionsTab() {
         Active sessions
       </h3>
 
-      {session ? (
-        <div data-conjoin-session-row="">
-          <div>
-            <p data-conjoin-session-title="">Current session</p>
-            <p data-conjoin-session-meta="">
-              {session.client_info?.device_type ?? 'Unknown device'}
-              {session.client_info?.city ? ` · ${session.client_info.city}` : ''}
-            </p>
-          </div>
-          <span data-conjoin-session-status="">Active</span>
-        </div>
-      ) : (
-        <p data-conjoin-muted="">Loading session data...</p>
-      )}
+      {!isLoaded ? <p data-conjoin-muted="">Loading session data...</p> : null}
+
+      {isLoaded && activeSessions.length === 0 ? <p data-conjoin-muted="">No active sessions</p> : null}
+
+      {isLoaded
+        ? activeSessions.map(session => (
+            <div key={session.id} data-conjoin-session-row="">
+              <div>
+                <p data-conjoin-session-title="">{session.last_activity?.country_code ?? 'Unknown location'}</p>
+                <p data-conjoin-session-meta="">{session.last_activity?.ip ?? 'IP unavailable'}</p>
+              </div>
+              <span data-conjoin-session-status="">{session.status || 'active'}</span>
+            </div>
+          ))
+        : null}
     </div>
   )
 }

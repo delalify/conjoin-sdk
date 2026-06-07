@@ -156,14 +156,17 @@ export type ConjoinBranding = {
 }
 
 /**
- * Presence-only auth state derived from the readable `__conjoin_auth_cl`
- * handle cookie. The browser never holds the session token (it is httpOnly),
- * so this state carries no account, session, or organization identity. Verified
- * identity hydrates separately from the cookie-authenticated self-surface.
+ * Auth state for the current browser. A readable `__conjoin_auth_cl` handle
+ * cookie is necessary but not sufficient to be signed in: the handle also
+ * exists mid-flow, before the user authenticates. Signed-in is established only
+ * once a handshake mints a session against a completed client, so `isSignedIn`
+ * reflects a successful handshake rather than mere cookie presence. The browser
+ * never holds the session token (it is httpOnly), so this state carries no
+ * account, session, or organization identity; verified identity hydrates
+ * separately from the cookie-authenticated self-surface.
  *
- * On the web the handle is read synchronously, so `isLoaded` is always `true`.
- * The `isLoaded: false` variant remains for SSR or transports that resolve
- * presence asynchronously.
+ * `isLoaded: false` covers the window between mount and the first handshake
+ * resolving, plus SSR where no cookie is readable.
  */
 export type ConjoinAuthState =
   | { isLoaded: false }
@@ -178,10 +181,54 @@ export type ConjoinAuthState =
       referenceId: string
     }
 
+export type ClientHandle = {
+  client_id: string
+  reference_id: string
+}
+
+export type PkceMaterial = {
+  state: string
+  codeVerifier: string
+  codeChallenge: string
+}
+
+export type PendingAuthFlowKind = 'sign-in' | 'sign-up'
+
+export type FlowVerificationMethod = 'pin_code' | 'magic_link'
+
+/**
+ * The minimum a flow start must hand to its matching complete step. `state` and
+ * the PKCE pair are generated client-side and replayed on complete; `serverState`
+ * is the value the server returns from start and is the one a pin-code completion
+ * must echo. It is persisted so a magic link opened on a fresh page load (a new
+ * runtime with no in-memory state) can still complete on the same device.
+ */
+export type PendingAuthFlow = {
+  kind: PendingAuthFlowKind
+  state: string
+  codeVerifier: string
+  codeChallenge: string
+  serverState: string | null
+  verificationMethod: FlowVerificationMethod | null
+  identifier: string | null
+}
+
+/**
+ * Platform seam for everything the auth runtime needs from the host environment.
+ * The web implementation reads cookies, derives PKCE with Web Crypto, and keeps
+ * the pending flow in session storage; a native implementation supplies its own
+ * secure equivalents. Keeping these behind the transport lets the hooks stay free
+ * of platform globals so they build in the framework-agnostic entry.
+ */
 export type AuthTransport = {
-  readAuthState: () => ConjoinAuthState
+  getClientHandle: () => ClientHandle | null
   clearHandle: () => void | Promise<void>
   attachCsrf: (headers: Record<string, string>) => Record<string, string>
+  createPkce: () => Promise<PkceMaterial>
+  savePendingFlow: (flow: PendingAuthFlow) => void
+  readPendingFlow: () => PendingAuthFlow | null
+  clearPendingFlow: () => void
+  redirect: (url: string) => void
 }
 
 export type ConjoinThemeState = {
