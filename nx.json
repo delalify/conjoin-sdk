@@ -67,6 +67,9 @@
     "test": {
       "cache": true
     },
+    "test:integration": {
+      "cache": true
+    },
     "format": {
       "cache": false
     }
