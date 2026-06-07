@@ -1,40 +1,30 @@
-import type { ConjoinClient } from '@conjoin-cloud/sdk'
+import { requestHandshake, requestLogout } from '../auth-flow/auth-flow-api'
 import type { AuthTransport, ConjoinAuthState, ConjoinSdkConfig } from './types'
 
 type AuthManagerOptions = {
-  client: ConjoinClient
   transport: AuthTransport
   sdkConfig: ConjoinSdkConfig | null
   onStateChange: (state: ConjoinAuthState) => void
 }
 
-type TokenPayload = {
-  sub: string
-  sid: string
-  org_id?: string
-  org_role?: string
-  exp: number
-}
+const REFRESH_RATIO = 0.85
+const MIN_REFRESH_MS = 30_000
 
-const REFRESH_MARGIN_MS = 60_000
-
-function decodeTokenPayload(token: string): TokenPayload | null {
-  try {
-    const parts = token.split('.')
-    if (parts.length !== 3) return null
-    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))
-    return payload as TokenPayload
-  } catch {
-    return null
-  }
-}
-
+/**
+ * Handshake-driven auth manager. A readable client handle alone does not mean
+ * signed in (the handle also exists mid-flow), so signed-in is confirmed by a
+ * handshake that mints a fresh httpOnly session against a completed client. The
+ * session token is short-lived, so a successful handshake schedules the next one
+ * ahead of expiry; any failed handshake collapses to signed-out. The browser
+ * still never reads the session token. Verified identity (account, organizations,
+ * roles) hydrates separately from the self-surface.
+ */
 export function createAuthManager(options: AuthManagerOptions) {
   const { transport, onStateChange } = options
 
   let currentState: ConjoinAuthState = { isLoaded: false }
   let refreshTimer: ReturnType<typeof setTimeout> | null = null
-  let refreshPromise: Promise<void> | null = null
+  let destroyed = false
 
   function setState(next: ConjoinAuthState) {
     currentState = next
@@ -45,136 +35,101 @@ export function createAuthManager(options: AuthManagerOptions) {
     return currentState
   }
 
-  function scheduleRefresh(expiresAt: number) {
-    if (refreshTimer) clearTimeout(refreshTimer)
+  function clearRefreshTimer() {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer)
+      refreshTimer = null
+    }
+  }
 
-    const now = Date.now()
-    const refreshAt = expiresAt * 1000 - REFRESH_MARGIN_MS
-    const delay = Math.max(refreshAt - now, 0)
-
+  function scheduleRefresh(ttlSeconds: number) {
+    clearRefreshTimer()
+    const delay = Math.max(MIN_REFRESH_MS, Math.floor(ttlSeconds * 1000 * REFRESH_RATIO))
     refreshTimer = setTimeout(() => {
-      refreshTokens().catch(() => {
-        setState({ isLoaded: true, isSignedIn: false })
-      })
+      void runHandshake()
     }, delay)
   }
 
-  async function refreshTokens(): Promise<void> {
-    if (refreshPromise) return refreshPromise
-
-    refreshPromise = transport.acquireRefreshLock(async () => {
-      try {
-        const authDomain = options.sdkConfig?.auth.domain
-        if (!authDomain) return
-
-        const response = await fetch(`https://${authDomain}/v1/auth/self/sessions/refresh`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            ...transport.attachAuth({}),
-            ...(transport.attachCsrf ? transport.attachCsrf({}) : {}),
-          },
-        })
-
-        if (!response.ok) {
-          await transport.clearTokens()
-          setState({ isLoaded: true, isSignedIn: false })
-          return
-        }
-
-        const body = (await response.json()) as { data: { access_token: string; refresh_token: string } }
-        const { access_token, refresh_token } = body.data
-
-        await transport.storeTokens(access_token, refresh_token)
-
-        const payload = decodeTokenPayload(access_token)
-        if (payload) {
-          setState({
-            isLoaded: true,
-            isSignedIn: true,
-            accountId: payload.sub,
-            sessionId: payload.sid,
-            organizationId: payload.org_id ?? null,
-            organizationRole: payload.org_role ?? null,
-            accessToken: access_token,
-          })
-          scheduleRefresh(payload.exp)
-        }
-      } catch {
-        await transport.clearTokens()
-        setState({ isLoaded: true, isSignedIn: false })
-      }
-    })
-
-    try {
-      await refreshPromise
-    } finally {
-      refreshPromise = null
-    }
-  }
-
-  function initialize() {
-    const state = transport.readAuthState()
-    setState(state)
-
-    if (state.isLoaded && state.isSignedIn) {
-      const payload = decodeTokenPayload(state.accessToken)
-      if (payload) {
-        const now = Date.now() / 1000
-        if (payload.exp <= now) {
-          refreshTokens().catch(() => {
-            setState({ isLoaded: true, isSignedIn: false })
-          })
-        } else {
-          scheduleRefresh(payload.exp)
-        }
-      }
-    }
-  }
-
-  async function signOut(): Promise<void> {
-    if (refreshTimer) clearTimeout(refreshTimer)
-
-    const authDomain = options.sdkConfig?.auth.domain
-    if (authDomain && currentState.isLoaded && currentState.isSignedIn) {
-      try {
-        await fetch(`https://${authDomain}/v1/auth/self/sessions/${currentState.sessionId}`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            ...transport.attachAuth({}),
-            ...(transport.attachCsrf ? transport.attachCsrf({}) : {}),
-          },
-        })
-      } catch {
-        // Sign out locally even if the server call fails
-      }
-    }
-
-    await transport.clearTokens()
+  function applySignedOut() {
+    clearRefreshTimer()
     setState({ isLoaded: true, isSignedIn: false })
   }
 
-  function getToken(): string | null {
-    if (currentState.isLoaded && currentState.isSignedIn) {
-      return currentState.accessToken
+  async function runHandshake(): Promise<boolean> {
+    const authDomain = options.sdkConfig?.auth.domain
+    const handle = transport.getClientHandle()
+
+    if (!authDomain || !handle) {
+      if (!destroyed) applySignedOut()
+      return false
     }
-    return null
+
+    const result = await requestHandshake(authDomain, transport.attachCsrf({ 'Content-Type': 'application/json' }))
+    if (destroyed) return false
+
+    if (result.ok && result.data) {
+      setState({
+        isLoaded: true,
+        isSignedIn: true,
+        clientId: handle.client_id,
+        referenceId: handle.reference_id,
+      })
+      scheduleRefresh(result.data.access_token_ttl_seconds)
+      return true
+    }
+
+    applySignedOut()
+    return false
+  }
+
+  function initialize() {
+    const handle = transport.getClientHandle()
+    if (!handle) {
+      applySignedOut()
+      return
+    }
+
+    if (!options.sdkConfig?.auth.domain) {
+      setState({ isLoaded: false })
+      return
+    }
+
+    void runHandshake()
+  }
+
+  async function bootstrapSession(): Promise<boolean> {
+    return runHandshake()
+  }
+
+  async function signOut(): Promise<void> {
+    const authDomain = options.sdkConfig?.auth.domain
+    const wasSignedIn = currentState.isLoaded && currentState.isSignedIn
+
+    if (wasSignedIn && authDomain) {
+      try {
+        await requestLogout(authDomain, transport.attachCsrf({ 'Content-Type': 'application/json' }))
+      } catch {
+        // Sign out locally even when the server call fails.
+      }
+    }
+
+    clearRefreshTimer()
+    await transport.clearHandle()
+    transport.clearPendingFlow()
+    setState({ isLoaded: true, isSignedIn: false })
   }
 
   function destroy() {
-    if (refreshTimer) clearTimeout(refreshTimer)
-    refreshPromise = null
+    destroyed = true
+    clearRefreshTimer()
+    currentState = { isLoaded: false }
   }
 
   return {
     initialize,
     getState,
-    getToken,
+    bootstrapSession,
     signOut,
-    refreshTokens,
     destroy,
   }
 }

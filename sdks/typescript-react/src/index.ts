@@ -11,6 +11,15 @@ export type {
   ConjoinProviderProps,
   ConjoinSdkConfig,
   ConjoinSession,
+  SignInMfaParams,
+  SignInStartParams,
+  SignInStatus,
+  SignInVerificationParams,
+  SignUpStartParams,
+  SignUpStatus,
+  SignUpVerificationParams,
+  UseSignInReturn,
+  UseSignUpReturn,
 } from '@conjoin-cloud/react-core'
 export {
   ConjoinProviderCore,
@@ -25,6 +34,8 @@ export {
   useEntitlements,
   useOrg,
   useSession,
+  useSignIn,
+  useSignUp,
   useStorageUpload,
 } from '@conjoin-cloud/react-core'
 export type { ConjoinThemeState } from '@conjoin-cloud/react-core/web'

@@ -1,35 +1,44 @@
-import { useCallback, useContext } from 'react'
-import { ConjoinAuthActionsContext, ConjoinAuthStateContext } from '../provider/contexts'
+import { useCallback } from 'react'
+import { useAuthActions } from './internal/use-auth-actions'
+import { useAuthState } from './internal/use-auth-state'
+import { useIdentity } from './internal/use-identity'
+
+type HasParams = { role?: string; permission?: string }
 
 export function useAuth() {
-  const authState = useContext(ConjoinAuthStateContext)
-  const actions = useContext(ConjoinAuthActionsContext)
-  if (!authState || !actions) {
-    throw new Error('useAuth must be used within a ConjoinProvider')
-  }
+  const authState = useAuthState()
+  const identity = useIdentity()
+  const { signOut } = useAuthActions()
 
-  const { getToken, signOut } = actions
   const isSignedIn = authState.isLoaded && authState.isSignedIn
-  const organizationRole = authState.isLoaded && authState.isSignedIn ? authState.organizationRole : null
+  const activeOrganizationId = identity.activeOrganizationId
+  const activeMembership =
+    activeOrganizationId === null
+      ? null
+      : (identity.memberships.find(entry => entry.organization.id === activeOrganizationId) ?? null)
+  const activeRolesKey = activeMembership ? activeMembership.roles.join(',') : ''
 
   const has = useCallback(
-    (params: { role?: string; permission?: string }) => {
+    (params: HasParams): boolean => {
       if (!isSignedIn) return false
-      if (params.role && organizationRole !== params.role) return false
+      if (typeof params.permission === 'string') return false
+      if (typeof params.role === 'string') {
+        return activeRolesKey.length > 0 && activeRolesKey.split(',').includes(params.role)
+      }
       return true
     },
-    [isSignedIn, organizationRole],
+    [isSignedIn, activeRolesKey],
   )
 
   if (!authState.isLoaded) {
     return {
       isLoaded: false as const,
       isSignedIn: undefined,
+      clientId: undefined,
+      referenceId: undefined,
       accountId: undefined,
-      sessionId: undefined,
       organizationId: undefined,
-      organizationRole: undefined,
-      getToken,
+      organizationRoles: undefined,
       signOut,
       has,
     }
@@ -39,11 +48,11 @@ export function useAuth() {
     return {
       isLoaded: true as const,
       isSignedIn: false as const,
+      clientId: null,
+      referenceId: null,
       accountId: null,
-      sessionId: null,
       organizationId: null,
-      organizationRole: null,
-      getToken,
+      organizationRoles: [] as string[],
       signOut,
       has,
     }
@@ -52,11 +61,11 @@ export function useAuth() {
   return {
     isLoaded: true as const,
     isSignedIn: true as const,
-    accountId: authState.accountId,
-    sessionId: authState.sessionId,
-    organizationId: authState.organizationId,
-    organizationRole: authState.organizationRole,
-    getToken,
+    clientId: authState.clientId,
+    referenceId: authState.referenceId,
+    accountId: identity.account?.id ?? null,
+    organizationId: activeOrganizationId,
+    organizationRoles: activeMembership?.roles ?? [],
     signOut,
     has,
   }

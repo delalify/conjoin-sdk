@@ -1,46 +1,13 @@
-import { useCallback } from 'react'
-import { useAuthActions } from './internal/use-auth-actions'
+import type { ConjoinAccount } from '../provider/identity-types'
 import { useAuthState } from './internal/use-auth-state'
-import { useConjoinClient } from './internal/use-conjoin-client'
-import { useConjoinQuery } from './internal/use-conjoin-query'
+import { useIdentity } from './internal/use-identity'
 
-export type ConjoinAccount = {
-  id: string
-  email: string
-  first_name: string | null
-  last_name: string | null
-  avatar_url: string | null
-  created_at: string
-  updated_at: string
-}
+export type { ConjoinAccount }
 
 export function useAccount() {
-  const { sdkConfig } = useConjoinClient()
-  const { getToken } = useAuthActions()
   const authState = useAuthState()
+  const identity = useIdentity()
   const isSignedIn = authState.isLoaded && authState.isSignedIn
-  const authDomain = sdkConfig?.auth.domain
-
-  const queryFn = useCallback(async (): Promise<ConjoinAccount> => {
-    if (!authDomain) throw new Error('Auth domain not configured')
-    const token = getToken()
-    const response = await fetch(`https://${authDomain}/v1/auth/self`, {
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    })
-    if (!response.ok) throw new Error('Failed to fetch account')
-    const body = (await response.json()) as { data: ConjoinAccount }
-    return body.data
-  }, [authDomain, getToken])
-
-  const result = useConjoinQuery<ConjoinAccount>({
-    queryKey: ['conjoin', 'auth', 'account'],
-    queryFn,
-    enabled: isSignedIn && !!authDomain,
-  })
 
   if (!authState.isLoaded) {
     return { isLoaded: false as const, isSignedIn: undefined, account: undefined }
@@ -51,8 +18,8 @@ export function useAccount() {
   }
 
   return {
-    isLoaded: !result.isLoading,
+    isLoaded: !identity.isAccountLoading,
     isSignedIn: true as const,
-    account: result.data ?? null,
+    account: identity.account,
   }
 }

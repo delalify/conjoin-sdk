@@ -201,20 +201,6 @@ export const skuCatalogFixture = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 })
 
-export const skuQuotaFixture = (overrides: Record<string, unknown> = {}) => ({
-  cloud_sku_id: 'sku_123',
-  cloud_sku_quota_id: 'quota_123',
-  date_created: DATE_CREATED,
-  effective_from: DATE_CREATED,
-  entity_id: ENTITY_ID,
-  quota_type: 'monthly',
-  quota_value: 100,
-  scope_id: PROJECT_ID,
-  scope_type: 'project',
-  unit_type: 'request',
-  ...overrides,
-})
-
 export const spendControlFixture = (overrides: Record<string, unknown> = {}) => ({
   ai_circuit_breaker_limits: [],
   alert_email_enabled: true,

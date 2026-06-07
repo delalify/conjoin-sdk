@@ -1,7 +1,8 @@
 import type { ConjoinClient } from '@conjoin-cloud/sdk'
 import type { QueryClient } from '@tanstack/query-core'
 import { createContext } from 'react'
-import type { ConjoinAuthState, ConjoinSdkConfig, ConjoinThemeState } from './types'
+import type { IdentityHydration } from './identity-types'
+import type { ConjoinAuthState, ConjoinSdkConfig, ConjoinThemeState, PendingAuthFlow, PkceMaterial } from './types'
 
 export type ConjoinClientContextValue = {
   client: ConjoinClient
@@ -11,11 +12,19 @@ export type ConjoinClientContextValue = {
 }
 
 export type ConjoinAuthActions = {
-  getToken: () => string | null
   signOut: () => Promise<void>
+  attachCsrf: (headers: Record<string, string>) => Record<string, string>
+  createPkce: () => Promise<PkceMaterial>
+  savePendingFlow: (flow: PendingAuthFlow) => void
+  readPendingFlow: () => PendingAuthFlow | null
+  clearPendingFlow: () => void
+  redirect: (url: string) => void
+  bootstrapSession: () => Promise<boolean>
+  refreshIdentity: () => Promise<void>
 }
 
 export const ConjoinClientContext = createContext<ConjoinClientContextValue | null>(null)
 export const ConjoinAuthStateContext = createContext<ConjoinAuthState | null>(null)
 export const ConjoinAuthActionsContext = createContext<ConjoinAuthActions | null>(null)
+export const ConjoinIdentityContext = createContext<IdentityHydration | null>(null)
 export const ConjoinThemeContext = createContext<ConjoinThemeState | null>(null)
