@@ -2895,23 +2895,6 @@ export interface paths {
         patch: operations["updateAuthSession"];
         trace?: never;
     };
-    "/v1/auth/session/{app_id}/session/{session_id}/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Refresh a session */
-        post: operations["refreshAuthSession"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/auth/session/{app_id}/session/{session_id}/validate": {
         parameters: {
             query?: never;
@@ -5429,23 +5412,6 @@ export interface paths {
         };
         /** Read a single SKU catalog entry */
         get: operations["readSingleSkuCatalog"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/cloud/sku-quota/account": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List SKU quotas for an account */
-        get: operations["readAccountSkuQuotas"];
         put?: never;
         post?: never;
         delete?: never;
@@ -12078,19 +12044,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12178,19 +12148,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12298,19 +12272,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12486,19 +12464,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12595,19 +12577,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12702,19 +12688,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12813,19 +12803,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12921,19 +12915,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13036,19 +13034,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13145,19 +13147,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13348,19 +13354,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13456,19 +13466,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13995,19 +14009,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14102,19 +14120,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14209,19 +14231,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14309,19 +14335,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14417,19 +14447,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -18382,16 +18416,9 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required";
+                            account_id?: string;
+                            session_id?: string;
                             mfa?: {
                                 method: string;
                             };
@@ -18481,16 +18508,9 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required";
+                            account_id?: string;
+                            session_id?: string;
                             mfa?: {
                                 method: string;
                             };
@@ -18582,16 +18602,9 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required";
+                            account_id?: string;
+                            session_id?: string;
                             mfa?: {
                                 method: string;
                             };
@@ -18696,16 +18709,9 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required";
+                            account_id?: string;
+                            session_id?: string;
                             mfa?: {
                                 method: string;
                             };
@@ -18792,16 +18798,9 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required";
+                            account_id?: string;
+                            session_id?: string;
                             mfa?: {
                                 method: string;
                             };
@@ -18885,16 +18884,9 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required";
+                            account_id?: string;
+                            session_id?: string;
                             mfa?: {
                                 method: string;
                             };
@@ -19601,19 +19593,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -19712,19 +19708,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -25389,104 +25389,6 @@ export interface operations {
                     metadata?: {
                         [key: string]: string | number | boolean;
                     };
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            session_id: string;
-                            account_id: string;
-                            client_id: string;
-                            app_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            expires_at?: string | null;
-                            last_activity?: {
-                                ip?: string | null;
-                                initiated_at?: string | null;
-                                country_code?: string | null;
-                                latitude?: number | null;
-                                longitude?: number | null;
-                            };
-                            status: string;
-                            revoked_at?: string | null;
-                            revoked_reason?: string | null;
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    refreshAuthSession: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                session_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    refresh_token?: string;
                 };
             };
         };
@@ -31708,6 +31610,10 @@ export interface operations {
                     /** @example string */
                     customer_id?: string;
                     /** @example string */
+                    subscription_id?: string;
+                    /** @example string */
+                    plan_id?: string;
+                    /** @example string */
                     feature_id?: string;
                     is_active?: boolean;
                     date_created?: {
@@ -31770,6 +31676,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -31844,6 +31752,10 @@ export interface operations {
                     /** @example string */
                     customer_id: string;
                     /** @example string */
+                    subscription_id: string;
+                    /** @example string */
+                    plan_id: string;
+                    /** @example string */
                     feature_id: string;
                     /** @enum {string} */
                     value_type: "boolean" | "numeric" | "unlimited";
@@ -31876,6 +31788,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -31972,6 +31886,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -32057,6 +31973,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -44203,7 +44121,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     };
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -44471,7 +44388,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     };
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -44845,7 +44761,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     } | null;
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -45115,7 +45030,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     } | null;
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -46027,7 +45941,24 @@ export interface operations {
     };
     readCloudRoles: {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: {
+                    /** @example string */
+                    prev?: string;
+                    /** @example string */
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: string | number;
+                query?: {
+                    /** @example string */
+                    role_id?: string;
+                    /** @example string */
+                    name?: string;
+                };
+            };
             header?: {
                 /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
@@ -46292,83 +46223,6 @@ export interface operations {
                             unit_label: string;
                             meter_type: string;
                         };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    readAccountSkuQuotas: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            cloud_sku_quota_id: string;
-                            entity_id: string;
-                            cloud_sku_id: string;
-                            scope_type: string;
-                            scope_id: string;
-                            quota_type: string;
-                            quota_value: number;
-                            unit_type: string;
-                            effective_from: string;
-                            effective_to?: string | null;
-                            date_created: string;
-                            date_updated?: string | null;
-                        }[];
-                        cursor?: components["schemas"]["PaginationCursor"];
                     };
                 };
             };
@@ -47198,7 +47052,22 @@ export interface operations {
     };
     readCloudZone: {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: {
+                    /** @example string */
+                    prev?: string;
+                    /** @example string */
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: string | number;
+                query?: {
+                    /** @example string */
+                    zone_id?: string;
+                };
+            };
             header?: {
                 /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
@@ -47254,7 +47123,8 @@ export interface operations {
                             date_created: string;
                             date_updated?: string | null;
                             date_deleted?: string | null;
-                        };
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
                     };
                 };
             };
@@ -48090,7 +47960,7 @@ export interface operations {
                     search?: {
                         keyword: string;
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -48925,7 +48795,7 @@ export interface operations {
                     search?: {
                         keyword: string;
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -49998,7 +49868,7 @@ export interface operations {
                         search?: {
                             keyword: string;
                         };
-                        sort: {
+                        sort?: {
                             [key: string]: "asc" | "desc";
                         };
                         /** @default 50 */
@@ -50676,7 +50546,7 @@ export interface operations {
                     search?: {
                         keyword: string;
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -52265,7 +52135,7 @@ export interface operations {
     };
     listPhoneNumbers: {
         parameters: {
-            query: {
+            query?: {
                 filter?: {
                     [key: string]: false;
                 };
@@ -52327,7 +52197,7 @@ export interface operations {
                 search?: {
                     keyword: string;
                 };
-                sort: {
+                sort?: {
                     [key: string]: "asc" | "desc";
                 };
                 limit?: string | number;
@@ -55419,7 +55289,7 @@ export interface operations {
                         search?: {
                             keyword: string;
                         };
-                        sort: {
+                        sort?: {
                             [key: string]: "asc" | "desc";
                         };
                         /** @default 50 */
@@ -56929,7 +56799,7 @@ export interface operations {
                     search?: {
                         keyword: string;
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -58030,7 +57900,7 @@ export interface operations {
                             less_than_or_equals?: string;
                         };
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -59914,42 +59784,8 @@ export interface operations {
                 };
                 limit?: string | number;
                 query?: {
-                    /** @enum {string} */
-                    status?: "active" | "archived";
                     /** @example string */
                     reference_id?: string;
-                    date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        less_than_or_equals?: string;
-                    };
                 };
             };
             header?: {
@@ -61275,6 +61111,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61350,6 +61189,8 @@ export interface operations {
                     status?: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                     /** @example string */
                     reference_id?: string;
+                    /** @example string */
+                    conjoin_request_id?: string;
                 };
             };
             header?: {
@@ -61379,6 +61220,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61468,6 +61312,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61556,6 +61403,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61653,6 +61503,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61749,6 +61602,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -64492,6 +64348,8 @@ export interface operations {
                 query?: {
                     /** @enum {string} */
                     status?: "pending" | "success" | "failed" | "timeout" | "retrying";
+                    /** @example string */
+                    conjoin_request_id?: string;
                 };
             };
             header?: {
@@ -64605,6 +64463,8 @@ export interface operations {
                 query?: {
                     /** @enum {string} */
                     replayed?: "true" | "false";
+                    /** @example string */
+                    conjoin_request_id?: string;
                 };
             };
             header?: {
@@ -64640,6 +64500,9 @@ export interface operations {
                             failed_at: string;
                             replayed: boolean;
                             replayed_at?: string | null;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             conjoin_account_id: string;
                             conjoin_project_id: string;
                             reference_id?: string | null;
@@ -64725,6 +64588,9 @@ export interface operations {
                             failed_at: string;
                             replayed: boolean;
                             replayed_at?: string | null;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             conjoin_account_id: string;
                             conjoin_project_id: string;
                             reference_id?: string | null;
@@ -68958,6 +68824,9 @@ export interface operations {
                     prev?: string;
                     /** @example string */
                     next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
                 };
                 limit?: string | number;
             };

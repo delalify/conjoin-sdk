@@ -8,8 +8,6 @@ type CountData = NonNullable<operations['countAuthSessions']['responses']['200']
 type CountQuery = NonNullable<operations['countAuthSessions']['parameters']['query']>
 type UpdateBody = operations['updateAuthSession']['requestBody']['content']['application/json']
 type UpdateData = NonNullable<operations['updateAuthSession']['responses']['200']['content']['application/json']['data']>
-type RefreshBody = operations['refreshAuthSession']['requestBody']['content']['application/json']
-type RefreshData = NonNullable<operations['refreshAuthSession']['responses']['200']['content']['application/json']['data']>
 type ValidateBody = operations['validateAuthSession']['requestBody']['content']['application/json']
 type ValidateData = NonNullable<operations['validateAuthSession']['responses']['200']['content']['application/json']['data']>
 type RevokeBody = operations['revokeAuthSession']['requestBody']['content']['application/json']
@@ -44,9 +42,6 @@ export function createAuthSessions(client: ConjoinClient) {
 
     update: (appId: string, sessionId: string, data: UpdateBody) =>
       client.fetch<UpdateData>(`auth/session/${appId}/session/${sessionId}/update`, { method: 'PATCH', body: data }),
-
-    refresh: (appId: string, sessionId: string, data: RefreshBody) =>
-      client.fetch<RefreshData>(`auth/session/${appId}/session/${sessionId}/refresh`, { method: 'POST', body: data }),
 
     validate: (appId: string, sessionId: string, data: ValidateBody) =>
       client.fetch<ValidateData>(`auth/session/${appId}/session/${sessionId}/validate`, { method: 'POST', body: data }),
