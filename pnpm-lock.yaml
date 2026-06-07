@@ -52,11 +52,11 @@ importers:
         specifier: 3.0.1
         version: 3.0.1(ajv@8.20.0)
       hono:
-        specifier: 4.12.18
-        version: 4.12.18
+        specifier: 4.12.21
+        version: 4.12.21
       next:
         specifier: 16.2.6
-        version: 16.2.6(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 16.2.6(@babel/core@7.29.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       openapi-typescript:
         specifier: 7.13.0
         version: 7.13.0(typescript@5.9.3)
@@ -171,8 +171,8 @@ importers:
         specifier: workspace:*
         version: link:../typescript
       '@tanstack/query-core':
-        specifier: 5.90.20
-        version: 5.90.20
+        specifier: 5.100.14
+        version: 5.100.14
     devDependencies:
       '@biomejs/biome':
         specifier: 2.4.6
@@ -2870,8 +2870,8 @@ packages:
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
-  '@tanstack/query-core@5.90.20':
-    resolution: {integrity: sha512-OMD2HLpNouXEfZJWcKeVKUgQ5n+n3A2JFmBaScpNDUqSrQSjiveC7dKMe53uJUg1nDG16ttFPz2xfilz6i2uVg==}
+  '@tanstack/query-core@5.100.14':
+    resolution: {integrity: sha512-5X41dGpxgeaHISCRW2oYwcSycZeULZzAunaudXT9ov1KOTj9xwt0CH6hbwqP1/z74ZWF7rYFnDpyYH07XFcZew==}
 
   '@tybys/wasm-util@0.9.0':
     resolution: {integrity: sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==}
@@ -3962,8 +3962,8 @@ packages:
   hermes-parser@0.35.0:
     resolution: {integrity: sha512-9JLjeHxBx8T4CAsydZR49PNZUaix+WpQJwu9p2010lu+7Kwl6D/7wYFFJxoz+aXkaaClp9Zfg6W6/zVlSJORaA==}
 
-  hono@4.12.18:
-    resolution: {integrity: sha512-RWzP96k/yv0PQfyXnWjs6zot20TqfpfsNXhOnev8d1InAxubW93L11/oNUc3tQqn2G0bSdAOBpX+2uDFHV7kdQ==}
+  hono@4.12.21:
+    resolution: {integrity: sha512-uV63apnb0kyPtAUwoWgaGh9HyIFcv8lgmzPZSiTBQAFOFGIzka5EZ1dZocmGnn0XdX0+XTqJ6Tqv7selMuGLRQ==}
     engines: {node: '>=16.9.0'}
 
   hosted-git-info@7.0.2:
@@ -8550,7 +8550,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@tanstack/query-core@5.90.20': {}
+  '@tanstack/query-core@5.100.14': {}
 
   '@tybys/wasm-util@0.9.0':
     dependencies:
@@ -9793,7 +9793,7 @@ snapshots:
     dependencies:
       hermes-estree: 0.35.0
 
-  hono@4.12.18: {}
+  hono@4.12.21: {}
 
   hosted-git-info@7.0.2:
     dependencies:
@@ -10562,7 +10562,7 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next@16.2.6(@babel/core@7.29.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+  next@16.2.6(@babel/core@7.29.7)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
     dependencies:
       '@next/env': 16.2.6
       '@swc/helpers': 0.5.15
@@ -10571,7 +10571,7 @@ snapshots:
       postcss: 8.4.31
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
-      styled-jsx: 5.1.6(@babel/core@7.29.0)(react@19.2.6)
+      styled-jsx: 5.1.6(@babel/core@7.29.7)(react@19.2.6)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.2.6
       '@next/swc-darwin-x64': 16.2.6
@@ -11416,12 +11416,12 @@ snapshots:
 
   structured-headers@0.4.1: {}
 
-  styled-jsx@5.1.6(@babel/core@7.29.0)(react@19.2.6):
+  styled-jsx@5.1.6(@babel/core@7.29.7)(react@19.2.6):
     dependencies:
       client-only: 0.0.1
       react: 19.2.6
     optionalDependencies:
-      '@babel/core': 7.29.0
+      '@babel/core': 7.29.7
 
   sucrase@3.35.1:
     dependencies:
