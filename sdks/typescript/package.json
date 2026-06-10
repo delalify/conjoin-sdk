@@ -119,7 +119,7 @@
     "expo-secure-store": ">=13.0.2",
     "express": ">=4.22.2",
     "hono": ">=4.12.23",
-    "next": ">=16.2.6",
+    "next": ">=16.2.9",
     "react": ">=18.0.0"
   },
   "peerDependenciesMeta": {
