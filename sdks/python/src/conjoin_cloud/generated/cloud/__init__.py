@@ -44,10 +44,6 @@ from conjoin_cloud.generated.cloud._sku_catalog import (
     AsyncCloudSKUCatalogsResource,
     CloudSKUCatalogsResource,
 )
-from conjoin_cloud.generated.cloud._sku_quota import (
-    AsyncCloudSKUQuotasResource,
-    CloudSKUQuotasResource,
-)
 from conjoin_cloud.generated.cloud._spend_control import (
     AsyncCloudSpendControlsResource,
     CloudSpendControlsResource,
@@ -79,7 +75,6 @@ class CloudResource:
         self.publishable_keys = CloudPublishableKeysResource(client, profile_id=profile_id)
         self.roles = CloudRolesResource(client, profile_id=profile_id)
         self.sku_catalogs = CloudSKUCatalogsResource(client, profile_id=profile_id)
-        self.sku_quotas = CloudSKUQuotasResource(client, profile_id=profile_id)
         self.spend_controls = CloudSpendControlsResource(client, profile_id=profile_id)
         self.webhooks = CloudWebhooksResource(client, profile_id=profile_id)
         self.zones = CloudZonesResource(client, profile_id=profile_id)
@@ -104,7 +99,6 @@ class AsyncCloudResource:
         self.publishable_keys = AsyncCloudPublishableKeysResource(client, profile_id=profile_id)
         self.roles = AsyncCloudRolesResource(client, profile_id=profile_id)
         self.sku_catalogs = AsyncCloudSKUCatalogsResource(client, profile_id=profile_id)
-        self.sku_quotas = AsyncCloudSKUQuotasResource(client, profile_id=profile_id)
         self.spend_controls = AsyncCloudSpendControlsResource(client, profile_id=profile_id)
         self.webhooks = AsyncCloudWebhooksResource(client, profile_id=profile_id)
         self.zones = AsyncCloudZonesResource(client, profile_id=profile_id)

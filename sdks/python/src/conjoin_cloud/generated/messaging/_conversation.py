@@ -25,6 +25,7 @@ from conjoin_cloud.generated._models import (
     MessagingConversationReadManyRecipientsItem,
     MessagingConversationReadMessagesItem,
     MessagingConversationReadOneRecipientResponse,
+    MessagingConversationSendMessageRequest,
     MessagingConversationUpdateRequest,
     MessagingConversationUpdateResponse,
 )
@@ -73,10 +74,28 @@ class MessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/conversations/clone/{_encode_path_param(conversation_id)}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/clone',
             query=None,
             body=data,
             cast_to=MessagingConversationCloneResponse,
+            request_options=request_options,
+        )
+
+    def send_message(
+        self,
+        conversation_id: str,
+        data: MessagingConversationSendMessageRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'POST',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/send',
+            query=None,
+            body=data,
+            cast_to=None,
             request_options=request_options,
         )
 
@@ -89,29 +108,11 @@ class MessagingConversationsResource:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
-            'PATCH',
-            f'messaging/conversations/wipe/{_encode_path_param(conversation_id)}',
+            'DELETE',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationDeleteResponse,
-            request_options=request_options,
-        )
-
-    def archive(
-        self,
-        conversation_id: str,
-        data: MessagingConversationArchiveRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingConversationArchiveResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return self._client.request(
-            'PATCH',
-            f'messaging/conversations/archive/{_encode_path_param(conversation_id)}',
-            query=None,
-            body=data,
-            cast_to=MessagingConversationArchiveResponse,
             request_options=request_options,
         )
 
@@ -148,6 +149,24 @@ class MessagingConversationsResource:
             query=None,
             body=data,
             cast_to=Page[MessagingConversationListItem],
+            request_options=request_options,
+        )
+
+    def archive(
+        self,
+        conversation_id: str,
+        data: MessagingConversationArchiveRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> MessagingConversationArchiveResponse:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'PATCH',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/archive',
+            query=None,
+            body=data,
+            cast_to=MessagingConversationArchiveResponse,
             request_options=request_options,
         )
 
@@ -297,10 +316,28 @@ class AsyncMessagingConversationsResource:
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/conversations/clone/{_encode_path_param(conversation_id)}',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/clone',
             query=None,
             body=data,
             cast_to=MessagingConversationCloneResponse,
+            request_options=request_options,
+        )
+
+    async def send_message(
+        self,
+        conversation_id: str,
+        data: MessagingConversationSendMessageRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return await self._client.request(
+            'POST',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/send',
+            query=None,
+            body=data,
+            cast_to=None,
             request_options=request_options,
         )
 
@@ -313,29 +350,11 @@ class AsyncMessagingConversationsResource:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
-            'PATCH',
-            f'messaging/conversations/wipe/{_encode_path_param(conversation_id)}',
+            'DELETE',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}',
             query=None,
             body=None,
             cast_to=MessagingConversationDeleteResponse,
-            request_options=request_options,
-        )
-
-    async def archive(
-        self,
-        conversation_id: str,
-        data: MessagingConversationArchiveRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingConversationArchiveResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return await self._client.request(
-            'PATCH',
-            f'messaging/conversations/archive/{_encode_path_param(conversation_id)}',
-            query=None,
-            body=data,
-            cast_to=MessagingConversationArchiveResponse,
             request_options=request_options,
         )
 
@@ -372,6 +391,24 @@ class AsyncMessagingConversationsResource:
             query=None,
             body=data,
             cast_to=Page[MessagingConversationListItem],
+            request_options=request_options,
+        )
+
+    async def archive(
+        self,
+        conversation_id: str,
+        data: MessagingConversationArchiveRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> MessagingConversationArchiveResponse:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return await self._client.request(
+            'PATCH',
+            f'messaging/conversations/{_encode_path_param(conversation_id)}/archive',
+            query=None,
+            body=data,
+            cast_to=MessagingConversationArchiveResponse,
             request_options=request_options,
         )
 

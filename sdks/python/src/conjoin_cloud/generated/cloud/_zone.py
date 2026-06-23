@@ -6,12 +6,14 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 from urllib.parse import quote
 
+from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
     CloudZoneCreateRequest,
     CloudZoneCreateResponse,
     CloudZoneDeleteResponse,
-    CloudZoneReadResponse,
+    CloudZoneReadItem,
+    CloudZoneReadQuery,
     CloudZoneVerifyDnsResponse,
 )
 
@@ -49,15 +51,16 @@ class CloudZonesResource:
     def read(
         self,
         zone_id: str,
+        query: CloudZoneReadQuery | None = None,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> CloudZoneReadResponse:
+    ) -> Page[CloudZoneReadItem]:
         return self._client.request(
             'GET',
             f'cloud/cloud-zones/{_encode_path_param(zone_id)}',
-            query=None,
+            query=query,
             body=None,
-            cast_to=CloudZoneReadResponse,
+            cast_to=Page[CloudZoneReadItem],
             request_options=request_options,
         )
 
@@ -122,15 +125,16 @@ class AsyncCloudZonesResource:
     async def read(
         self,
         zone_id: str,
+        query: CloudZoneReadQuery | None = None,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> CloudZoneReadResponse:
+    ) -> Page[CloudZoneReadItem]:
         return await self._client.request(
             'GET',
             f'cloud/cloud-zones/{_encode_path_param(zone_id)}',
-            query=None,
+            query=query,
             body=None,
-            cast_to=CloudZoneReadResponse,
+            cast_to=Page[CloudZoneReadItem],
             request_options=request_options,
         )
 

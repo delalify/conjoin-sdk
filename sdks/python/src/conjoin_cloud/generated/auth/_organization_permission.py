@@ -39,6 +39,7 @@ class AuthOrganizationPermissionsResource:
 
     def create_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationPermissionCreateOrgPermissionRequest,
         *,
@@ -46,7 +47,7 @@ class AuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionCreateOrgPermissionResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/create',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationPermissionCreateOrgPermissionResponse,
@@ -55,6 +56,7 @@ class AuthOrganizationPermissionsResource:
 
     def read_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -62,7 +64,7 @@ class AuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionReadOrgPermissionResponse:
         return self._client.request(
             'GET',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionReadOrgPermissionResponse,
@@ -71,6 +73,7 @@ class AuthOrganizationPermissionsResource:
 
     def list_org_permissions(
         self,
+        app_id: str,
         organization_id: str,
         query: AuthOrganizationPermissionListOrgPermissionsQuery | None = None,
         *,
@@ -78,7 +81,7 @@ class AuthOrganizationPermissionsResource:
     ) -> Page[AuthOrganizationPermissionListOrgPermissionsItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationPermissionListOrgPermissionsItem],
@@ -87,6 +90,7 @@ class AuthOrganizationPermissionsResource:
 
     def update_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         data: AuthOrganizationPermissionUpdateOrgPermissionRequest,
@@ -95,7 +99,7 @@ class AuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionUpdateOrgPermissionResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/update',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationPermissionUpdateOrgPermissionResponse,
@@ -104,6 +108,7 @@ class AuthOrganizationPermissionsResource:
 
     def archive_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -111,7 +116,7 @@ class AuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionArchiveOrgPermissionResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/archive',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/archive',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionArchiveOrgPermissionResponse,
@@ -120,6 +125,7 @@ class AuthOrganizationPermissionsResource:
 
     def restore_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -127,7 +133,7 @@ class AuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionRestoreOrgPermissionResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/restore',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/restore',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionRestoreOrgPermissionResponse,
@@ -136,6 +142,7 @@ class AuthOrganizationPermissionsResource:
 
     def delete_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -143,7 +150,7 @@ class AuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionDeleteOrgPermissionResponse:
         return self._client.request(
             'DELETE',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/delete',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionDeleteOrgPermissionResponse,
@@ -165,6 +172,7 @@ class AsyncAuthOrganizationPermissionsResource:
 
     async def create_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationPermissionCreateOrgPermissionRequest,
         *,
@@ -172,7 +180,7 @@ class AsyncAuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionCreateOrgPermissionResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/create',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationPermissionCreateOrgPermissionResponse,
@@ -181,6 +189,7 @@ class AsyncAuthOrganizationPermissionsResource:
 
     async def read_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -188,7 +197,7 @@ class AsyncAuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionReadOrgPermissionResponse:
         return await self._client.request(
             'GET',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionReadOrgPermissionResponse,
@@ -197,6 +206,7 @@ class AsyncAuthOrganizationPermissionsResource:
 
     async def list_org_permissions(
         self,
+        app_id: str,
         organization_id: str,
         query: AuthOrganizationPermissionListOrgPermissionsQuery | None = None,
         *,
@@ -204,7 +214,7 @@ class AsyncAuthOrganizationPermissionsResource:
     ) -> Page[AuthOrganizationPermissionListOrgPermissionsItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationPermissionListOrgPermissionsItem],
@@ -213,6 +223,7 @@ class AsyncAuthOrganizationPermissionsResource:
 
     async def update_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         data: AuthOrganizationPermissionUpdateOrgPermissionRequest,
@@ -221,7 +232,7 @@ class AsyncAuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionUpdateOrgPermissionResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/update',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationPermissionUpdateOrgPermissionResponse,
@@ -230,6 +241,7 @@ class AsyncAuthOrganizationPermissionsResource:
 
     async def archive_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -237,7 +249,7 @@ class AsyncAuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionArchiveOrgPermissionResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/archive',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/archive',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionArchiveOrgPermissionResponse,
@@ -246,6 +258,7 @@ class AsyncAuthOrganizationPermissionsResource:
 
     async def restore_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -253,7 +266,7 @@ class AsyncAuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionRestoreOrgPermissionResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/restore',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/restore',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionRestoreOrgPermissionResponse,
@@ -262,6 +275,7 @@ class AsyncAuthOrganizationPermissionsResource:
 
     async def delete_org_permission(
         self,
+        app_id: str,
         organization_id: str,
         permission_id: str,
         *,
@@ -269,7 +283,7 @@ class AsyncAuthOrganizationPermissionsResource:
     ) -> AuthOrganizationPermissionDeleteOrgPermissionResponse:
         return await self._client.request(
             'DELETE',
-            f'auth/organization/permission/{_encode_path_param(organization_id)}/{_encode_path_param(permission_id)}/delete',
+            f'auth/organization/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/permission/{_encode_path_param(permission_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationPermissionDeleteOrgPermissionResponse,

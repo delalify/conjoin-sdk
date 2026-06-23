@@ -43,9 +43,9 @@ def test_generator_ir_collects_all_tagged_resource_operations() -> None:
     operations = collect_operations(spec)
     groups = collect_resource_groups(spec)
 
-    assert len(operations) == 543
-    assert sum(len(group.operations) for group in groups) == 543
-    assert len(groups) == 96
+    assert len(operations) == 587
+    assert sum(len(group.operations) for group in groups) == 587
+    assert len(groups) == 102
     assert {group.service for group in groups} == {
         "ai",
         "auth",

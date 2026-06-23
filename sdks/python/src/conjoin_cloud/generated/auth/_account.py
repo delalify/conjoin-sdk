@@ -26,6 +26,8 @@ from conjoin_cloud.generated._models import (
     AuthAccountGrantGlobalRoleResponse,
     AuthAccountGrantOrgRoleRequest,
     AuthAccountGrantOrgRoleResponse,
+    AuthAccountImportPasswordHashesRequest,
+    AuthAccountImportPasswordHashesResponse,
     AuthAccountListCredentialsItem,
     AuthAccountListCredentialsQuery,
     AuthAccountListItem,
@@ -34,6 +36,7 @@ from conjoin_cloud.generated._models import (
     AuthAccountListQuery,
     AuthAccountMergeRequest,
     AuthAccountMergeResponse,
+    AuthAccountReadCredentialResponse,
     AuthAccountReadResponse,
     AuthAccountRemoveCredentialRequest,
     AuthAccountRemoveCredentialResponse,
@@ -74,6 +77,108 @@ class AuthAccountsResource:
         self._client = client
         self._profile_id = profile_id
         self._scim_token = scim_token
+
+    def verify_credential(
+        self,
+        app_id: str,
+        account_id: str,
+        data: AuthAccountVerifyCredentialRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountVerifyCredentialResponse:
+        return self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/verify',
+            query=None,
+            body=data,
+            cast_to=AuthAccountVerifyCredentialResponse,
+            request_options=request_options,
+        )
+
+    def verify_credential_mfa_totp(
+        self,
+        app_id: str,
+        account_id: str,
+        data: AuthAccountVerifyCredentialMfaTotpRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountVerifyCredentialMfaTotpResponse:
+        return self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/verify',
+            query=None,
+            body=data,
+            cast_to=AuthAccountVerifyCredentialMfaTotpResponse,
+            request_options=request_options,
+        )
+
+    def count_credentials(
+        self,
+        app_id: str,
+        account_id: str,
+        query: AuthAccountCountCredentialsQuery | None = None,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountCountCredentialsResponse:
+        return self._client.request(
+            'GET',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/count',
+            query=query,
+            body=None,
+            cast_to=AuthAccountCountCredentialsResponse,
+            request_options=request_options,
+        )
+
+    def list_credentials(
+        self,
+        app_id: str,
+        account_id: str,
+        query: AuthAccountListCredentialsQuery | None = None,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Page[AuthAccountListCredentialsItem]:
+        return self._client.request(
+            'GET',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential',
+            query=query,
+            body=None,
+            cast_to=Page[AuthAccountListCredentialsItem],
+            request_options=request_options,
+        )
+
+    def read_credential(
+        self,
+        app_id: str,
+        account_id: str,
+        credential_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountReadCredentialResponse:
+        return self._client.request(
+            'GET',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/{_encode_path_param(credential_id)}',
+            query=None,
+            body=None,
+            cast_to=AuthAccountReadCredentialResponse,
+            request_options=request_options,
+        )
+
+    def remove_credential(
+        self,
+        app_id: str,
+        account_id: str,
+        data: AuthAccountRemoveCredentialRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountRemoveCredentialResponse:
+        return self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/remove',
+            query=None,
+            body=data,
+            cast_to=AuthAccountRemoveCredentialResponse,
+            request_options=request_options,
+        )
 
     def create(
         self,
@@ -309,91 +414,6 @@ class AuthAccountsResource:
             request_options=request_options,
         )
 
-    def verify_credential(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthAccountVerifyCredentialRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountVerifyCredentialResponse:
-        return self._client.request(
-            'POST',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/verify',
-            query=None,
-            body=data,
-            cast_to=AuthAccountVerifyCredentialResponse,
-            request_options=request_options,
-        )
-
-    def verify_credential_mfa_totp(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthAccountVerifyCredentialMfaTotpRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountVerifyCredentialMfaTotpResponse:
-        return self._client.request(
-            'POST',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/verify',
-            query=None,
-            body=data,
-            cast_to=AuthAccountVerifyCredentialMfaTotpResponse,
-            request_options=request_options,
-        )
-
-    def count_credentials(
-        self,
-        app_id: str,
-        account_id: str,
-        query: AuthAccountCountCredentialsQuery | None = None,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountCountCredentialsResponse:
-        return self._client.request(
-            'GET',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/count',
-            query=query,
-            body=None,
-            cast_to=AuthAccountCountCredentialsResponse,
-            request_options=request_options,
-        )
-
-    def list_credentials(
-        self,
-        app_id: str,
-        account_id: str,
-        query: AuthAccountListCredentialsQuery | None = None,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[AuthAccountListCredentialsItem]:
-        return self._client.request(
-            'GET',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential',
-            query=query,
-            body=None,
-            cast_to=Page[AuthAccountListCredentialsItem],
-            request_options=request_options,
-        )
-
-    def remove_credential(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthAccountRemoveCredentialRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountRemoveCredentialResponse:
-        return self._client.request(
-            'POST',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/remove',
-            query=None,
-            body=data,
-            cast_to=AuthAccountRemoveCredentialResponse,
-            request_options=request_options,
-        )
-
     def grant_global_role(
         self,
         app_id: str,
@@ -494,6 +514,22 @@ class AuthAccountsResource:
             request_options=request_options,
         )
 
+    def import_password_hashes(
+        self,
+        app_id: str,
+        data: AuthAccountImportPasswordHashesRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountImportPasswordHashesResponse:
+        return self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/import/password-hashes',
+            query=None,
+            body=data,
+            cast_to=AuthAccountImportPasswordHashesResponse,
+            request_options=request_options,
+        )
+
 
 class AsyncAuthAccountsResource:
     def __init__(
@@ -506,6 +542,108 @@ class AsyncAuthAccountsResource:
         self._client = client
         self._profile_id = profile_id
         self._scim_token = scim_token
+
+    async def verify_credential(
+        self,
+        app_id: str,
+        account_id: str,
+        data: AuthAccountVerifyCredentialRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountVerifyCredentialResponse:
+        return await self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/verify',
+            query=None,
+            body=data,
+            cast_to=AuthAccountVerifyCredentialResponse,
+            request_options=request_options,
+        )
+
+    async def verify_credential_mfa_totp(
+        self,
+        app_id: str,
+        account_id: str,
+        data: AuthAccountVerifyCredentialMfaTotpRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountVerifyCredentialMfaTotpResponse:
+        return await self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/verify',
+            query=None,
+            body=data,
+            cast_to=AuthAccountVerifyCredentialMfaTotpResponse,
+            request_options=request_options,
+        )
+
+    async def count_credentials(
+        self,
+        app_id: str,
+        account_id: str,
+        query: AuthAccountCountCredentialsQuery | None = None,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountCountCredentialsResponse:
+        return await self._client.request(
+            'GET',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/count',
+            query=query,
+            body=None,
+            cast_to=AuthAccountCountCredentialsResponse,
+            request_options=request_options,
+        )
+
+    async def list_credentials(
+        self,
+        app_id: str,
+        account_id: str,
+        query: AuthAccountListCredentialsQuery | None = None,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Page[AuthAccountListCredentialsItem]:
+        return await self._client.request(
+            'GET',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential',
+            query=query,
+            body=None,
+            cast_to=Page[AuthAccountListCredentialsItem],
+            request_options=request_options,
+        )
+
+    async def read_credential(
+        self,
+        app_id: str,
+        account_id: str,
+        credential_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountReadCredentialResponse:
+        return await self._client.request(
+            'GET',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/{_encode_path_param(credential_id)}',
+            query=None,
+            body=None,
+            cast_to=AuthAccountReadCredentialResponse,
+            request_options=request_options,
+        )
+
+    async def remove_credential(
+        self,
+        app_id: str,
+        account_id: str,
+        data: AuthAccountRemoveCredentialRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountRemoveCredentialResponse:
+        return await self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/remove',
+            query=None,
+            body=data,
+            cast_to=AuthAccountRemoveCredentialResponse,
+            request_options=request_options,
+        )
 
     async def create(
         self,
@@ -741,91 +879,6 @@ class AsyncAuthAccountsResource:
             request_options=request_options,
         )
 
-    async def verify_credential(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthAccountVerifyCredentialRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountVerifyCredentialResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/verify',
-            query=None,
-            body=data,
-            cast_to=AuthAccountVerifyCredentialResponse,
-            request_options=request_options,
-        )
-
-    async def verify_credential_mfa_totp(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthAccountVerifyCredentialMfaTotpRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountVerifyCredentialMfaTotpResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/totp/verify',
-            query=None,
-            body=data,
-            cast_to=AuthAccountVerifyCredentialMfaTotpResponse,
-            request_options=request_options,
-        )
-
-    async def count_credentials(
-        self,
-        app_id: str,
-        account_id: str,
-        query: AuthAccountCountCredentialsQuery | None = None,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountCountCredentialsResponse:
-        return await self._client.request(
-            'GET',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/count',
-            query=query,
-            body=None,
-            cast_to=AuthAccountCountCredentialsResponse,
-            request_options=request_options,
-        )
-
-    async def list_credentials(
-        self,
-        app_id: str,
-        account_id: str,
-        query: AuthAccountListCredentialsQuery | None = None,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[AuthAccountListCredentialsItem]:
-        return await self._client.request(
-            'GET',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential',
-            query=query,
-            body=None,
-            cast_to=Page[AuthAccountListCredentialsItem],
-            request_options=request_options,
-        )
-
-    async def remove_credential(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthAccountRemoveCredentialRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthAccountRemoveCredentialResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/account/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/remove',
-            query=None,
-            body=data,
-            cast_to=AuthAccountRemoveCredentialResponse,
-            request_options=request_options,
-        )
-
     async def grant_global_role(
         self,
         app_id: str,
@@ -923,6 +976,22 @@ class AsyncAuthAccountsResource:
             query=None,
             body=data,
             cast_to=AuthAccountMergeResponse,
+            request_options=request_options,
+        )
+
+    async def import_password_hashes(
+        self,
+        app_id: str,
+        data: AuthAccountImportPasswordHashesRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAccountImportPasswordHashesResponse:
+        return await self._client.request(
+            'POST',
+            f'auth/account/{_encode_path_param(app_id)}/import/password-hashes',
+            query=None,
+            body=data,
+            cast_to=AuthAccountImportPasswordHashesResponse,
             request_options=request_options,
         )
 

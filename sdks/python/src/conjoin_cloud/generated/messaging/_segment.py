@@ -7,19 +7,13 @@ from typing import TYPE_CHECKING, Any
 from urllib.parse import quote
 
 from conjoin_cloud._errors import ConjoinConfigurationError
-from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions, coerce_request_options
-from conjoin_cloud.generated._models import (
-    MessagingMessageAnalyticsCreateReportResponse,
-    MessagingMessageAnalyticsGenerateSummariesResponse,
-    MessagingMessageAnalyticsListItem,
-)
 
 if TYPE_CHECKING:
     from conjoin_cloud import AsyncConjoin, Conjoin
 
 
-class MessagingMessageAnalyticsResource:
+class MessagingSegmentsResource:
     def __init__(
         self,
         client: Conjoin,
@@ -31,59 +25,78 @@ class MessagingMessageAnalyticsResource:
         self._profile_id = profile_id
         self._scim_token = scim_token
 
-    def list(
+    def create_one(
         self,
+        data: Mapping[str, Any],
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[MessagingMessageAnalyticsListItem]:
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            'messaging/analytics/',
+            'messaging/segments/new',
             query=None,
-            body=None,
-            cast_to=Page[MessagingMessageAnalyticsListItem],
+            body=data,
+            cast_to=None,
             request_options=request_options,
         )
 
-    def generate_summaries(
+    def update_one(
         self,
-        channel_id: str,
+        segment_id: str,
+        data: Mapping[str, Any],
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingMessageAnalyticsGenerateSummariesResponse:
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'PATCH',
+            f'messaging/segments/{_encode_path_param(segment_id)}',
+            query=None,
+            body=data,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    def delete_one(
+        self,
+        segment_id: str,
+        data: Mapping[str, Any],
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'DELETE',
+            f'messaging/segments/{_encode_path_param(segment_id)}',
+            query=None,
+            body=data,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    def list_many(
+        self,
+        data: Mapping[str, Any],
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            f'messaging/analytics/channels/{_encode_path_param(channel_id)}/generate',
+            'messaging/segments/',
             query=None,
-            body=None,
-            cast_to=MessagingMessageAnalyticsGenerateSummariesResponse,
-            request_options=request_options,
-        )
-
-    def create_report(
-        self,
-        message_id: str,
-        channel_id: str,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingMessageAnalyticsCreateReportResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return self._client.request(
-            'POST',
-            f'messaging/analytics/messages/{_encode_path_param(message_id)}/channels/{_encode_path_param(channel_id)}/reports',
-            query=None,
-            body=None,
-            cast_to=MessagingMessageAnalyticsCreateReportResponse,
+            body=data,
+            cast_to=None,
             request_options=request_options,
         )
 
 
-class AsyncMessagingMessageAnalyticsResource:
+class AsyncMessagingSegmentsResource:
     def __init__(
         self,
         client: AsyncConjoin,
@@ -95,54 +108,73 @@ class AsyncMessagingMessageAnalyticsResource:
         self._profile_id = profile_id
         self._scim_token = scim_token
 
-    async def list(
+    async def create_one(
         self,
+        data: Mapping[str, Any],
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[MessagingMessageAnalyticsListItem]:
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            'messaging/analytics/',
+            'messaging/segments/new',
             query=None,
-            body=None,
-            cast_to=Page[MessagingMessageAnalyticsListItem],
+            body=data,
+            cast_to=None,
             request_options=request_options,
         )
 
-    async def generate_summaries(
+    async def update_one(
         self,
-        channel_id: str,
+        segment_id: str,
+        data: Mapping[str, Any],
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingMessageAnalyticsGenerateSummariesResponse:
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
-            'POST',
-            f'messaging/analytics/channels/{_encode_path_param(channel_id)}/generate',
+            'PATCH',
+            f'messaging/segments/{_encode_path_param(segment_id)}',
             query=None,
-            body=None,
-            cast_to=MessagingMessageAnalyticsGenerateSummariesResponse,
+            body=data,
+            cast_to=None,
             request_options=request_options,
         )
 
-    async def create_report(
+    async def delete_one(
         self,
-        message_id: str,
-        channel_id: str,
+        segment_id: str,
+        data: Mapping[str, Any],
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingMessageAnalyticsCreateReportResponse:
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return await self._client.request(
+            'DELETE',
+            f'messaging/segments/{_encode_path_param(segment_id)}',
+            query=None,
+            body=data,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    async def list_many(
+        self,
+        data: Mapping[str, Any],
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            f'messaging/analytics/messages/{_encode_path_param(message_id)}/channels/{_encode_path_param(channel_id)}/reports',
+            'messaging/segments/',
             query=None,
-            body=None,
-            cast_to=MessagingMessageAnalyticsCreateReportResponse,
+            body=data,
+            cast_to=None,
             request_options=request_options,
         )
 

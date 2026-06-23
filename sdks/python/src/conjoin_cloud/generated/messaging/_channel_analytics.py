@@ -10,25 +10,16 @@ from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions, coerce_request_options
 from conjoin_cloud.generated._models import (
-    MessagingContactAddPropertiesResponse,
-    MessagingContactCreateRequest,
-    MessagingContactCreateResponse,
-    MessagingContactDeletePropertiesResponse,
-    MessagingContactDeleteResponse,
-    MessagingContactListItem,
-    MessagingContactListRequest,
-    MessagingContactSuppressMessagesRequest,
-    MessagingContactSuppressMessagesResponse,
-    MessagingContactUpdatePropertyResponse,
-    MessagingContactUpdateRequest,
-    MessagingContactUpdateResponse,
+    MessagingChannelAnalyticsCreateReportResponse,
+    MessagingChannelAnalyticsGenerateSummariesResponse,
+    MessagingChannelAnalyticsListItem,
 )
 
 if TYPE_CHECKING:
     from conjoin_cloud import AsyncConjoin, Conjoin
 
 
-class MessagingContactsResource:
+class MessagingChannelAnalyticsResource:
     def __init__(
         self,
         client: Conjoin,
@@ -40,146 +31,144 @@ class MessagingContactsResource:
         self._profile_id = profile_id
         self._scim_token = scim_token
 
-    def create(
-        self,
-        data: MessagingContactCreateRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactCreateResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return self._client.request(
-            'POST',
-            'messaging/contacts/new',
-            query=None,
-            body=data,
-            cast_to=MessagingContactCreateResponse,
-            request_options=request_options,
-        )
-
-    def suppress_messages(
-        self,
-        contact_id: str,
-        data: MessagingContactSuppressMessagesRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactSuppressMessagesResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return self._client.request(
-            'PATCH',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/unsubscribe',
-            query=None,
-            body=data,
-            cast_to=MessagingContactSuppressMessagesResponse,
-            request_options=request_options,
-        )
-
-    def update(
-        self,
-        contact_id: str,
-        data: MessagingContactUpdateRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactUpdateResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return self._client.request(
-            'PATCH',
-            f'messaging/contacts/{_encode_path_param(contact_id)}',
-            query=None,
-            body=data,
-            cast_to=MessagingContactUpdateResponse,
-            request_options=request_options,
-        )
-
-    def delete(
-        self,
-        contact_id: str,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactDeleteResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return self._client.request(
-            'DELETE',
-            f'messaging/contacts/{_encode_path_param(contact_id)}',
-            query=None,
-            body=None,
-            cast_to=MessagingContactDeleteResponse,
-            request_options=request_options,
-        )
-
     def list(
         self,
-        data: MessagingContactListRequest,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[MessagingContactListItem]:
+    ) -> Page[MessagingChannelAnalyticsListItem]:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'POST',
-            'messaging/contacts/',
+            'messaging/analytics/',
             query=None,
-            body=data,
-            cast_to=Page[MessagingContactListItem],
+            body=None,
+            cast_to=Page[MessagingChannelAnalyticsListItem],
             request_options=request_options,
         )
 
-    def add_properties(
+    def generate_summaries(
         self,
-        contact_id: str,
+        channel_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactAddPropertiesResponse:
+    ) -> MessagingChannelAnalyticsGenerateSummariesResponse:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
-            'PUT',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/properties',
+            'POST',
+            f'messaging/analytics/channels/{_encode_path_param(channel_id)}/generate',
             query=None,
             body=None,
-            cast_to=MessagingContactAddPropertiesResponse,
+            cast_to=MessagingChannelAnalyticsGenerateSummariesResponse,
             request_options=request_options,
         )
 
-    def update_property(
+    def create_report(
         self,
-        contact_id: str,
+        message_id: str,
+        channel_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactUpdatePropertyResponse:
+    ) -> MessagingChannelAnalyticsCreateReportResponse:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'POST',
+            f'messaging/analytics/messages/{_encode_path_param(message_id)}/channels/{_encode_path_param(channel_id)}/reports',
+            query=None,
+            body=None,
+            cast_to=MessagingChannelAnalyticsCreateReportResponse,
+            request_options=request_options,
+        )
+
+    def increment_opens(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
             'PATCH',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/properties',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/opens',
             query=None,
             body=None,
-            cast_to=MessagingContactUpdatePropertyResponse,
+            cast_to=None,
             request_options=request_options,
         )
 
-    def delete_properties(
+    def increment_clicks(
         self,
-        contact_id: str,
+        analytics_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactDeletePropertiesResponse:
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return self._client.request(
-            'DELETE',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/properties',
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/clicks',
             query=None,
             body=None,
-            cast_to=MessagingContactDeletePropertiesResponse,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    def increment_deliveries(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/deliveries',
+            query=None,
+            body=None,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    def increment_subscribes(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/subscribes',
+            query=None,
+            body=None,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    def increment_unsubscribes(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return self._client.request(
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/unsubscribes',
+            query=None,
+            body=None,
+            cast_to=None,
             request_options=request_options,
         )
 
 
-class AsyncMessagingContactsResource:
+class AsyncMessagingChannelAnalyticsResource:
     def __init__(
         self,
         client: AsyncConjoin,
@@ -191,141 +180,139 @@ class AsyncMessagingContactsResource:
         self._profile_id = profile_id
         self._scim_token = scim_token
 
-    async def create(
-        self,
-        data: MessagingContactCreateRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactCreateResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return await self._client.request(
-            'POST',
-            'messaging/contacts/new',
-            query=None,
-            body=data,
-            cast_to=MessagingContactCreateResponse,
-            request_options=request_options,
-        )
-
-    async def suppress_messages(
-        self,
-        contact_id: str,
-        data: MessagingContactSuppressMessagesRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactSuppressMessagesResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return await self._client.request(
-            'PATCH',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/unsubscribe',
-            query=None,
-            body=data,
-            cast_to=MessagingContactSuppressMessagesResponse,
-            request_options=request_options,
-        )
-
-    async def update(
-        self,
-        contact_id: str,
-        data: MessagingContactUpdateRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactUpdateResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return await self._client.request(
-            'PATCH',
-            f'messaging/contacts/{_encode_path_param(contact_id)}',
-            query=None,
-            body=data,
-            cast_to=MessagingContactUpdateResponse,
-            request_options=request_options,
-        )
-
-    async def delete(
-        self,
-        contact_id: str,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactDeleteResponse:
-        profile_id = _require_messaging_profile(self._profile_id)
-        request_options = _with_messaging_profile(request_options, profile_id)
-        return await self._client.request(
-            'DELETE',
-            f'messaging/contacts/{_encode_path_param(contact_id)}',
-            query=None,
-            body=None,
-            cast_to=MessagingContactDeleteResponse,
-            request_options=request_options,
-        )
-
     async def list(
         self,
-        data: MessagingContactListRequest,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[MessagingContactListItem]:
+    ) -> Page[MessagingChannelAnalyticsListItem]:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'POST',
-            'messaging/contacts/',
+            'messaging/analytics/',
             query=None,
-            body=data,
-            cast_to=Page[MessagingContactListItem],
+            body=None,
+            cast_to=Page[MessagingChannelAnalyticsListItem],
             request_options=request_options,
         )
 
-    async def add_properties(
+    async def generate_summaries(
         self,
-        contact_id: str,
+        channel_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactAddPropertiesResponse:
+    ) -> MessagingChannelAnalyticsGenerateSummariesResponse:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
-            'PUT',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/properties',
+            'POST',
+            f'messaging/analytics/channels/{_encode_path_param(channel_id)}/generate',
             query=None,
             body=None,
-            cast_to=MessagingContactAddPropertiesResponse,
+            cast_to=MessagingChannelAnalyticsGenerateSummariesResponse,
             request_options=request_options,
         )
 
-    async def update_property(
+    async def create_report(
         self,
-        contact_id: str,
+        message_id: str,
+        channel_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactUpdatePropertyResponse:
+    ) -> MessagingChannelAnalyticsCreateReportResponse:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return await self._client.request(
+            'POST',
+            f'messaging/analytics/messages/{_encode_path_param(message_id)}/channels/{_encode_path_param(channel_id)}/reports',
+            query=None,
+            body=None,
+            cast_to=MessagingChannelAnalyticsCreateReportResponse,
+            request_options=request_options,
+        )
+
+    async def increment_opens(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
             'PATCH',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/properties',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/opens',
             query=None,
             body=None,
-            cast_to=MessagingContactUpdatePropertyResponse,
+            cast_to=None,
             request_options=request_options,
         )
 
-    async def delete_properties(
+    async def increment_clicks(
         self,
-        contact_id: str,
+        analytics_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> MessagingContactDeletePropertiesResponse:
+    ) -> Any:
         profile_id = _require_messaging_profile(self._profile_id)
         request_options = _with_messaging_profile(request_options, profile_id)
         return await self._client.request(
-            'DELETE',
-            f'messaging/contacts/{_encode_path_param(contact_id)}/properties',
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/clicks',
             query=None,
             body=None,
-            cast_to=MessagingContactDeletePropertiesResponse,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    async def increment_deliveries(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return await self._client.request(
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/deliveries',
+            query=None,
+            body=None,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    async def increment_subscribes(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return await self._client.request(
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/subscribes',
+            query=None,
+            body=None,
+            cast_to=None,
+            request_options=request_options,
+        )
+
+    async def increment_unsubscribes(
+        self,
+        analytics_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> Any:
+        profile_id = _require_messaging_profile(self._profile_id)
+        request_options = _with_messaging_profile(request_options, profile_id)
+        return await self._client.request(
+            'PATCH',
+            f'messaging/analytics/{_encode_path_param(analytics_id)}/unsubscribes',
+            query=None,
+            body=None,
+            cast_to=None,
             request_options=request_options,
         )
 

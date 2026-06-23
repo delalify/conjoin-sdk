@@ -33,6 +33,7 @@ class AuthOrganizationRolePermissionsResource:
 
     def assign_org_role_permission(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         data: AuthOrganizationRolePermissionAssignOrgRolePermissionRequest,
@@ -41,7 +42,7 @@ class AuthOrganizationRolePermissionsResource:
     ) -> AuthOrganizationRolePermissionAssignOrgRolePermissionResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/assign',
+            f'auth/organization/role/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permission/assign',
             query=None,
             body=data,
             cast_to=AuthOrganizationRolePermissionAssignOrgRolePermissionResponse,
@@ -50,6 +51,7 @@ class AuthOrganizationRolePermissionsResource:
 
     def list_org_role_permissions(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         query: AuthOrganizationRolePermissionListOrgRolePermissionsQuery | None = None,
@@ -58,7 +60,7 @@ class AuthOrganizationRolePermissionsResource:
     ) -> Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}',
+            f'auth/organization/role/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permission',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem],
@@ -80,6 +82,7 @@ class AsyncAuthOrganizationRolePermissionsResource:
 
     async def assign_org_role_permission(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         data: AuthOrganizationRolePermissionAssignOrgRolePermissionRequest,
@@ -88,7 +91,7 @@ class AsyncAuthOrganizationRolePermissionsResource:
     ) -> AuthOrganizationRolePermissionAssignOrgRolePermissionResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/assign',
+            f'auth/organization/role/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permission/assign',
             query=None,
             body=data,
             cast_to=AuthOrganizationRolePermissionAssignOrgRolePermissionResponse,
@@ -97,6 +100,7 @@ class AsyncAuthOrganizationRolePermissionsResource:
 
     async def list_org_role_permissions(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         query: AuthOrganizationRolePermissionListOrgRolePermissionsQuery | None = None,
@@ -105,7 +109,7 @@ class AsyncAuthOrganizationRolePermissionsResource:
     ) -> Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/role/permission/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}',
+            f'auth/organization/role/permission/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permission',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationRolePermissionListOrgRolePermissionsItem],

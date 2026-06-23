@@ -14,6 +14,8 @@ from conjoin_cloud.generated._models import (
     AuthFlowCompleteSigninResponse,
     AuthFlowCompleteSignupRequest,
     AuthFlowCompleteSignupResponse,
+    AuthFlowConfirmLinkSignupRequest,
+    AuthFlowConfirmLinkSignupResponse,
     AuthFlowStartPasswordResetRequest,
     AuthFlowStartPasswordResetResponse,
     AuthFlowStartSigninRequest,
@@ -69,6 +71,23 @@ class AuthFlowsResource:
             query=None,
             body=data,
             cast_to=AuthFlowCompleteSignupResponse,
+            request_options=request_options,
+        )
+
+    def confirm_link_signup(
+        self,
+        app_id: str,
+        client_id: str,
+        data: AuthFlowConfirmLinkSignupRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthFlowConfirmLinkSignupResponse:
+        return self._client.request(
+            'POST',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signup/confirm-link',
+            query=None,
+            body=data,
+            cast_to=AuthFlowConfirmLinkSignupResponse,
             request_options=request_options,
         )
 
@@ -184,6 +203,23 @@ class AsyncAuthFlowsResource:
             query=None,
             body=data,
             cast_to=AuthFlowCompleteSignupResponse,
+            request_options=request_options,
+        )
+
+    async def confirm_link_signup(
+        self,
+        app_id: str,
+        client_id: str,
+        data: AuthFlowConfirmLinkSignupRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthFlowConfirmLinkSignupResponse:
+        return await self._client.request(
+            'POST',
+            f'auth/flow/{_encode_path_param(app_id)}/{_encode_path_param(client_id)}/signup/confirm-link',
+            query=None,
+            body=data,
+            cast_to=AuthFlowConfirmLinkSignupResponse,
             request_options=request_options,
         )
 

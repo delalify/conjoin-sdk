@@ -8,8 +8,6 @@ from urllib.parse import quote
 
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
-    AuthCredentialActivateEmailMfaRequest,
-    AuthCredentialActivateEmailMfaResponse,
     AuthCredentialActivateSmsMfaRequest,
     AuthCredentialActivateSmsMfaResponse,
     AuthCredentialActivateTotpRequest,
@@ -18,8 +16,6 @@ from conjoin_cloud.generated._models import (
     AuthCredentialConsumeTotpRecoveryCodeResponse,
     AuthCredentialCreatePasswordRequest,
     AuthCredentialCreatePasswordResponse,
-    AuthCredentialEnrollEmailMfaRequest,
-    AuthCredentialEnrollEmailMfaResponse,
     AuthCredentialEnrollSmsMfaRequest,
     AuthCredentialEnrollSmsMfaResponse,
     AuthCredentialEnrollTotpRequest,
@@ -35,15 +31,13 @@ from conjoin_cloud.generated._models import (
     AuthCredentialRotatePasswordResponse,
     AuthCredentialRotateTotpRecoveryCodesRequest,
     AuthCredentialRotateTotpRecoveryCodesResponse,
-    AuthCredentialSendEmailMfaChallengeResponse,
+    AuthCredentialSendSmsMfaActivationCodeResponse,
     AuthCredentialSendSmsMfaChallengeResponse,
     AuthCredentialStartPasskeyRegistrationRequest,
     AuthCredentialStartPasskeyRegistrationResponse,
     AuthCredentialStartPasskeyenticationResponse,
     AuthCredentialUpdateApiKeyRequest,
     AuthCredentialUpdateApiKeyResponse,
-    AuthCredentialVerifyEmailMfaRequest,
-    AuthCredentialVerifyEmailMfaResponse,
     AuthCredentialVerifyPasskeyRegistrationRequest,
     AuthCredentialVerifyPasskeyRegistrationResponse,
     AuthCredentialVerifyPasskeyenticationRequest,
@@ -187,6 +181,22 @@ class AuthCredentialsResource:
             request_options=request_options,
         )
 
+    def send_sms_mfa_activation_code(
+        self,
+        app_id: str,
+        account_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthCredentialSendSmsMfaActivationCodeResponse:
+        return self._client.request(
+            'POST',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/activation-code',
+            query=None,
+            body=None,
+            cast_to=AuthCredentialSendSmsMfaActivationCodeResponse,
+            request_options=request_options,
+        )
+
     def activate_sms_mfa(
         self,
         app_id: str,
@@ -234,73 +244,6 @@ class AuthCredentialsResource:
             query=None,
             body=None,
             cast_to=AuthCredentialSendSmsMfaChallengeResponse,
-            request_options=request_options,
-        )
-
-    def enroll_email_mfa(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthCredentialEnrollEmailMfaRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialEnrollEmailMfaResponse:
-        return self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/enroll',
-            query=None,
-            body=data,
-            cast_to=AuthCredentialEnrollEmailMfaResponse,
-            request_options=request_options,
-        )
-
-    def activate_email_mfa(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthCredentialActivateEmailMfaRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialActivateEmailMfaResponse:
-        return self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/activate',
-            query=None,
-            body=data,
-            cast_to=AuthCredentialActivateEmailMfaResponse,
-            request_options=request_options,
-        )
-
-    def verify_email_mfa(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthCredentialVerifyEmailMfaRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialVerifyEmailMfaResponse:
-        return self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/verify',
-            query=None,
-            body=data,
-            cast_to=AuthCredentialVerifyEmailMfaResponse,
-            request_options=request_options,
-        )
-
-    def send_email_mfa_challenge(
-        self,
-        app_id: str,
-        account_id: str,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialSendEmailMfaChallengeResponse:
-        return self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/challenge',
-            query=None,
-            body=None,
-            cast_to=AuthCredentialSendEmailMfaChallengeResponse,
             request_options=request_options,
         )
 
@@ -588,6 +531,22 @@ class AsyncAuthCredentialsResource:
             request_options=request_options,
         )
 
+    async def send_sms_mfa_activation_code(
+        self,
+        app_id: str,
+        account_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthCredentialSendSmsMfaActivationCodeResponse:
+        return await self._client.request(
+            'POST',
+            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/sms/activation-code',
+            query=None,
+            body=None,
+            cast_to=AuthCredentialSendSmsMfaActivationCodeResponse,
+            request_options=request_options,
+        )
+
     async def activate_sms_mfa(
         self,
         app_id: str,
@@ -635,73 +594,6 @@ class AsyncAuthCredentialsResource:
             query=None,
             body=None,
             cast_to=AuthCredentialSendSmsMfaChallengeResponse,
-            request_options=request_options,
-        )
-
-    async def enroll_email_mfa(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthCredentialEnrollEmailMfaRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialEnrollEmailMfaResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/enroll',
-            query=None,
-            body=data,
-            cast_to=AuthCredentialEnrollEmailMfaResponse,
-            request_options=request_options,
-        )
-
-    async def activate_email_mfa(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthCredentialActivateEmailMfaRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialActivateEmailMfaResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/activate',
-            query=None,
-            body=data,
-            cast_to=AuthCredentialActivateEmailMfaResponse,
-            request_options=request_options,
-        )
-
-    async def verify_email_mfa(
-        self,
-        app_id: str,
-        account_id: str,
-        data: AuthCredentialVerifyEmailMfaRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialVerifyEmailMfaResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/verify',
-            query=None,
-            body=data,
-            cast_to=AuthCredentialVerifyEmailMfaResponse,
-            request_options=request_options,
-        )
-
-    async def send_email_mfa_challenge(
-        self,
-        app_id: str,
-        account_id: str,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthCredentialSendEmailMfaChallengeResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/credential/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/credential/mfa/email/challenge',
-            query=None,
-            body=None,
-            cast_to=AuthCredentialSendEmailMfaChallengeResponse,
             request_options=request_options,
         )
 

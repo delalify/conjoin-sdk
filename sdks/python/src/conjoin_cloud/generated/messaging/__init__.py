@@ -4,9 +4,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from conjoin_cloud.generated.messaging._channel_analytics import (
+    AsyncMessagingChannelAnalyticsResource,
+    MessagingChannelAnalyticsResource,
+)
 from conjoin_cloud.generated.messaging._contact import (
     AsyncMessagingContactsResource,
     MessagingContactsResource,
+)
+from conjoin_cloud.generated.messaging._contact_properties import (
+    AsyncMessagingContactPropertiesResource,
+    MessagingContactPropertiesResource,
 )
 from conjoin_cloud.generated.messaging._conversation import (
     AsyncMessagingConversationsResource,
@@ -23,10 +31,6 @@ from conjoin_cloud.generated.messaging._email_sender import (
 from conjoin_cloud.generated.messaging._email_sender_pool import (
     AsyncMessagingEmailSenderPoolsResource,
     MessagingEmailSenderPoolsResource,
-)
-from conjoin_cloud.generated.messaging._message_analytics import (
-    AsyncMessagingMessageAnalyticsResource,
-    MessagingMessageAnalyticsResource,
 )
 from conjoin_cloud.generated.messaging._multisend import (
     AsyncMessagingMultisendsResource,
@@ -60,6 +64,10 @@ from conjoin_cloud.generated.messaging._sms_sender_pool import (
     AsyncMessagingSMSSenderPoolsResource,
     MessagingSMSSenderPoolsResource,
 )
+from conjoin_cloud.generated.messaging._segment import (
+    AsyncMessagingSegmentsResource,
+    MessagingSegmentsResource,
+)
 from conjoin_cloud.generated.messaging._template import (
     AsyncMessagingTemplatesResource,
     MessagingTemplatesResource,
@@ -77,12 +85,13 @@ class MessagingResource:
     def __init__(self, client: Conjoin, *, profile_id: str | None = None) -> None:
         self._client = client
         self._profile_id = profile_id
+        self.channel_analytics = MessagingChannelAnalyticsResource(client, profile_id=profile_id)
         self.contacts = MessagingContactsResource(client, profile_id=profile_id)
+        self.contact_properties = MessagingContactPropertiesResource(client, profile_id=profile_id)
         self.conversations = MessagingConversationsResource(client, profile_id=profile_id)
         self.emails = MessagingEmailsResource(client, profile_id=profile_id)
         self.email_senders = MessagingEmailSendersResource(client, profile_id=profile_id)
         self.email_sender_pools = MessagingEmailSenderPoolsResource(client, profile_id=profile_id)
-        self.message_analytics = MessagingMessageAnalyticsResource(client, profile_id=profile_id)
         self.multisends = MessagingMultisendsResource(client, profile_id=profile_id)
         self.phone_numbers = MessagingPhoneNumbersResource(client, profile_id=profile_id)
         self.profiles = MessagingProfilesResource(client, profile_id=profile_id)
@@ -91,6 +100,7 @@ class MessagingResource:
         self.sms_campaigns = MessagingSMSCampaignsResource(client, profile_id=profile_id)
         self.sms_senders = MessagingSMSSendersResource(client, profile_id=profile_id)
         self.sms_sender_pools = MessagingSMSSenderPoolsResource(client, profile_id=profile_id)
+        self.segments = MessagingSegmentsResource(client, profile_id=profile_id)
         self.templates = MessagingTemplatesResource(client, profile_id=profile_id)
         self.verifications = MessagingVerificationsResource(client, profile_id=profile_id)
 
@@ -107,15 +117,19 @@ class AsyncMessagingResource:
     ) -> None:
         self._client = client
         self._profile_id = profile_id
+        self.channel_analytics = AsyncMessagingChannelAnalyticsResource(
+            client,
+            profile_id=profile_id,
+        )
         self.contacts = AsyncMessagingContactsResource(client, profile_id=profile_id)
+        self.contact_properties = AsyncMessagingContactPropertiesResource(
+            client,
+            profile_id=profile_id,
+        )
         self.conversations = AsyncMessagingConversationsResource(client, profile_id=profile_id)
         self.emails = AsyncMessagingEmailsResource(client, profile_id=profile_id)
         self.email_senders = AsyncMessagingEmailSendersResource(client, profile_id=profile_id)
         self.email_sender_pools = AsyncMessagingEmailSenderPoolsResource(
-            client,
-            profile_id=profile_id,
-        )
-        self.message_analytics = AsyncMessagingMessageAnalyticsResource(
             client,
             profile_id=profile_id,
         )
@@ -127,6 +141,7 @@ class AsyncMessagingResource:
         self.sms_campaigns = AsyncMessagingSMSCampaignsResource(client, profile_id=profile_id)
         self.sms_senders = AsyncMessagingSMSSendersResource(client, profile_id=profile_id)
         self.sms_sender_pools = AsyncMessagingSMSSenderPoolsResource(client, profile_id=profile_id)
+        self.segments = AsyncMessagingSegmentsResource(client, profile_id=profile_id)
         self.templates = AsyncMessagingTemplatesResource(client, profile_id=profile_id)
         self.verifications = AsyncMessagingVerificationsResource(client, profile_id=profile_id)
 

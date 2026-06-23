@@ -6,22 +6,19 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 from urllib.parse import quote
 
-from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
-    CloudRoleCreateRequest,
-    CloudRoleCreateResponse,
-    CloudRoleReadItem,
-    CloudRoleReadQuery,
-    CloudRoleUpdateRequest,
-    CloudRoleUpdateResponse,
+    AuthConnectionListFirstPartyResponse,
+    AuthConnectionReadFirstPartyResponse,
+    AuthConnectionUpdateFirstPartyRequest,
+    AuthConnectionUpdateFirstPartyResponse,
 )
 
 if TYPE_CHECKING:
     from conjoin_cloud import AsyncConjoin, Conjoin
 
 
-class CloudRolesResource:
+class AuthConnectionsResource:
     def __init__(
         self,
         client: Conjoin,
@@ -33,54 +30,56 @@ class CloudRolesResource:
         self._profile_id = profile_id
         self._scim_token = scim_token
 
-    def create(
+    def list_first_party(
         self,
-        data: CloudRoleCreateRequest,
+        app_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> CloudRoleCreateResponse:
-        return self._client.request(
-            'POST',
-            'cloud/custom-role/new',
-            query=None,
-            body=data,
-            cast_to=CloudRoleCreateResponse,
-            request_options=request_options,
-        )
-
-    def read(
-        self,
-        query: CloudRoleReadQuery | None = None,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[CloudRoleReadItem]:
+    ) -> AuthConnectionListFirstPartyResponse:
         return self._client.request(
             'GET',
-            'cloud/custom-role/many',
-            query=query,
+            f'auth/connection/{_encode_path_param(app_id)}/connection/config',
+            query=None,
             body=None,
-            cast_to=Page[CloudRoleReadItem],
+            cast_to=AuthConnectionListFirstPartyResponse,
             request_options=request_options,
         )
 
-    def update(
+    def read_first_party(
         self,
-        role_id: str,
-        data: CloudRoleUpdateRequest,
+        app_id: str,
+        identity: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> CloudRoleUpdateResponse:
+    ) -> AuthConnectionReadFirstPartyResponse:
+        return self._client.request(
+            'GET',
+            f'auth/connection/{_encode_path_param(app_id)}/connection/config/{_encode_path_param(identity)}',
+            query=None,
+            body=None,
+            cast_to=AuthConnectionReadFirstPartyResponse,
+            request_options=request_options,
+        )
+
+    def update_first_party(
+        self,
+        app_id: str,
+        identity: str,
+        data: AuthConnectionUpdateFirstPartyRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthConnectionUpdateFirstPartyResponse:
         return self._client.request(
             'PUT',
-            f'cloud/custom-role/update/{_encode_path_param(role_id)}',
+            f'auth/connection/{_encode_path_param(app_id)}/connection/config/{_encode_path_param(identity)}',
             query=None,
             body=data,
-            cast_to=CloudRoleUpdateResponse,
+            cast_to=AuthConnectionUpdateFirstPartyResponse,
             request_options=request_options,
         )
 
 
-class AsyncCloudRolesResource:
+class AsyncAuthConnectionsResource:
     def __init__(
         self,
         client: AsyncConjoin,
@@ -92,49 +91,51 @@ class AsyncCloudRolesResource:
         self._profile_id = profile_id
         self._scim_token = scim_token
 
-    async def create(
+    async def list_first_party(
         self,
-        data: CloudRoleCreateRequest,
+        app_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> CloudRoleCreateResponse:
-        return await self._client.request(
-            'POST',
-            'cloud/custom-role/new',
-            query=None,
-            body=data,
-            cast_to=CloudRoleCreateResponse,
-            request_options=request_options,
-        )
-
-    async def read(
-        self,
-        query: CloudRoleReadQuery | None = None,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> Page[CloudRoleReadItem]:
+    ) -> AuthConnectionListFirstPartyResponse:
         return await self._client.request(
             'GET',
-            'cloud/custom-role/many',
-            query=query,
+            f'auth/connection/{_encode_path_param(app_id)}/connection/config',
+            query=None,
             body=None,
-            cast_to=Page[CloudRoleReadItem],
+            cast_to=AuthConnectionListFirstPartyResponse,
             request_options=request_options,
         )
 
-    async def update(
+    async def read_first_party(
         self,
-        role_id: str,
-        data: CloudRoleUpdateRequest,
+        app_id: str,
+        identity: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> CloudRoleUpdateResponse:
+    ) -> AuthConnectionReadFirstPartyResponse:
+        return await self._client.request(
+            'GET',
+            f'auth/connection/{_encode_path_param(app_id)}/connection/config/{_encode_path_param(identity)}',
+            query=None,
+            body=None,
+            cast_to=AuthConnectionReadFirstPartyResponse,
+            request_options=request_options,
+        )
+
+    async def update_first_party(
+        self,
+        app_id: str,
+        identity: str,
+        data: AuthConnectionUpdateFirstPartyRequest,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthConnectionUpdateFirstPartyResponse:
         return await self._client.request(
             'PUT',
-            f'cloud/custom-role/update/{_encode_path_param(role_id)}',
+            f'auth/connection/{_encode_path_param(app_id)}/connection/config/{_encode_path_param(identity)}',
             query=None,
             body=data,
-            cast_to=CloudRoleUpdateResponse,
+            cast_to=AuthConnectionUpdateFirstPartyResponse,
             request_options=request_options,
         )
 

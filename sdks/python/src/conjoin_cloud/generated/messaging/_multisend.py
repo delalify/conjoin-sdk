@@ -9,7 +9,6 @@ from urllib.parse import quote
 from conjoin_cloud._errors import ConjoinConfigurationError
 from conjoin_cloud._request_options import RequestOptions, coerce_request_options
 from conjoin_cloud.generated._models import (
-    MessagingMultisendCreateRequest,
     MessagingMultisendCreateResponse,
     MessagingMultisendReadResponse,
 )
@@ -32,7 +31,7 @@ class MessagingMultisendsResource:
 
     def create(
         self,
-        data: MessagingMultisendCreateRequest,
+        data: Mapping[str, Any],
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> MessagingMultisendCreateResponse:
@@ -79,7 +78,7 @@ class AsyncMessagingMultisendsResource:
 
     async def create(
         self,
-        data: MessagingMultisendCreateRequest,
+        data: Mapping[str, Any],
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> MessagingMultisendCreateResponse:
