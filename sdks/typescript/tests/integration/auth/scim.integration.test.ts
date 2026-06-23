@@ -23,6 +23,12 @@ const scimGroupBody = {
   externalId: 'external_group_123',
   members: [{ type: 'User', value: SCIM_USER_ID }],
 }
+const scimPatchGroupBody = {
+  Operations: [{ op: 'add', path: 'members', value: [{ value: SCIM_USER_ID }] }],
+}
+const scimBulkBody = {
+  Operations: [{ bulkId: 'bulk_1', data: scimUserBody, method: 'POST', path: '/Users' }],
+}
 const serviceProviderConfigFixture = {
   bulk: { maxOperations: 1000, maxPayloadSize: 1_048_576, supported: true },
   documentationUri: 'https://docs.example.com/scim',
@@ -230,6 +236,7 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     name: 'patches SCIM group members',
     method: 'PATCH',
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Groups/{id}',
+    expectedBody: scimPatchGroupBody,
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Groups/${SCIM_GROUP_ID}`,
     expectedPathParams: { app_id: APP_ID, id: SCIM_GROUP_ID, project_id: PROJECT_ID },
     expectedHeaders: tenantScimHeaders,
@@ -239,6 +246,7 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
         PROJECT_ID,
         APP_ID,
         SCIM_GROUP_ID,
+        scimPatchGroupBody,
       ),
     assertResult: result => expect(result).toEqual(groupFixture),
   },
@@ -261,11 +269,13 @@ describeAuthSdkContractCases('Auth SCIM SDK contract integration', [
     name: 'runs SCIM bulk operations',
     method: 'POST',
     path: '/v1/auth/scim/v2/{project_id}/{app_id}/Bulk',
+    expectedBody: scimBulkBody,
     expectedPath: `/v1/auth/scim/v2/${PROJECT_ID}/${APP_ID}/Bulk`,
     expectedPathParams: { app_id: APP_ID, project_id: PROJECT_ID },
     expectedHeaders: tenantScimHeaders,
     response: scimResponse(bulkFixture),
-    run: context => createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimBulkOperations(PROJECT_ID, APP_ID),
+    run: context =>
+      createAuthSCIMs(context.client, { scimToken: SCIM_TOKEN }).scimBulkOperations(PROJECT_ID, APP_ID, scimBulkBody),
     assertResult: result => expect(result).toEqual(bulkFixture),
   },
 ])

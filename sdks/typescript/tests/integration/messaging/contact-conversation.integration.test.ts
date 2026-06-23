@@ -24,9 +24,11 @@ const contactSuppressBody = {
   channels: ['email' as const],
 }
 const contactUpdateBody = {
-  email: 'renamed@example.com',
-  name: 'Renamed Recipient',
-  preferred_channels: ['email'],
+  updates: {
+    email: 'renamed@example.com',
+    name: 'Renamed Recipient',
+    preferred_channels: ['email'],
+  },
 }
 const conversationCreateBody = {
   accepts_replies: true,
@@ -48,12 +50,16 @@ const conversationCreateBody = {
   title: 'Contract conversation',
 }
 const conversationCloneBody = {
-  title: 'Cloned conversation',
+  updates: {
+    title: 'Cloned conversation',
+  },
 }
 const conversationArchiveBody = {}
 const conversationUpdateBody = {
-  accepts_replies: false,
-  title: 'Renamed conversation',
+  updates: {
+    accepts_replies: false,
+    title: 'Renamed conversation',
+  },
 }
 
 describeMessagingSdkContractCases('Messaging contact SDK contract integration', [
@@ -145,9 +151,9 @@ describeMessagingSdkContractCases('Messaging conversation SDK contract integrati
   {
     name: 'clones a conversation',
     method: 'POST',
-    path: '/v1/messaging/conversations/clone/{conversation_id}',
+    path: '/v1/messaging/conversations/{conversation_id}/clone',
     expectedBody: conversationCloneBody,
-    expectedPath: `/v1/messaging/conversations/clone/${CONVERSATION_ID}`,
+    expectedPath: `/v1/messaging/conversations/${CONVERSATION_ID}/clone`,
     expectedPathParams: {
       conversation_id: CONVERSATION_ID,
     },
@@ -160,9 +166,9 @@ describeMessagingSdkContractCases('Messaging conversation SDK contract integrati
   },
   {
     name: 'deletes a conversation',
-    method: 'PATCH',
-    path: '/v1/messaging/conversations/wipe/{conversation_id}',
-    expectedPath: `/v1/messaging/conversations/wipe/${CONVERSATION_ID}`,
+    method: 'DELETE',
+    path: '/v1/messaging/conversations/{conversation_id}',
+    expectedPath: `/v1/messaging/conversations/${CONVERSATION_ID}`,
     expectedPathParams: {
       conversation_id: CONVERSATION_ID,
     },
@@ -174,9 +180,9 @@ describeMessagingSdkContractCases('Messaging conversation SDK contract integrati
   {
     name: 'archives a conversation',
     method: 'PATCH',
-    path: '/v1/messaging/conversations/archive/{conversation_id}',
+    path: '/v1/messaging/conversations/{conversation_id}/archive',
     expectedBody: conversationArchiveBody,
-    expectedPath: `/v1/messaging/conversations/archive/${CONVERSATION_ID}`,
+    expectedPath: `/v1/messaging/conversations/${CONVERSATION_ID}/archive`,
     expectedPathParams: {
       conversation_id: CONVERSATION_ID,
     },

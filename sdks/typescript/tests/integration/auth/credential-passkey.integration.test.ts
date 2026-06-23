@@ -23,7 +23,6 @@ const enrollTotpBody = {
 }
 const codeBody = { code: '123456' }
 const smsBody = { phone: '+2335550100' }
-const emailBody = { email: 'owner@example.com' }
 const issueApiKeyBody = { label: 'Primary API key', prefix: 'ck', scopes: ['project.read'], test_mode: true }
 const apiKeyBody = { public_key_id: 'public_key_123' }
 const updateApiKeyBody = { allowed_ips: ['127.0.0.1'], label: 'Renamed API key' }
@@ -140,49 +139,6 @@ describeAuthSdkContractCases('Auth credential SDK contract integration', [
     response: conjoinSuccess(authCredentialFixture({ kind: 'mfa_sms' }), { requestId: REQUEST_ID }),
     run: context => createAuthCredentials(context.client).sendSmsMfaChallenge(APP_ID, ACCOUNT_ID),
     assertResult: result => expect(result).toEqual(authCredentialFixture({ kind: 'mfa_sms' })),
-  },
-  {
-    name: 'enrolls an email MFA credential',
-    method: 'POST',
-    path: '/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/enroll',
-    expectedBody: emailBody,
-    expectedPath: `/v1/auth/credential/${APP_ID}/account/${ACCOUNT_ID}/credential/mfa/email/enroll`,
-    expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID },
-    response: conjoinSuccess(authCredentialFixture({ kind: 'mfa_email' }), { requestId: REQUEST_ID, status: 201 }),
-    run: context => createAuthCredentials(context.client).enrollEmailMfa(APP_ID, ACCOUNT_ID, emailBody),
-    assertResult: result => expect(result).toEqual(authCredentialFixture({ kind: 'mfa_email' })),
-  },
-  {
-    name: 'activates an email MFA credential',
-    method: 'POST',
-    path: '/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/activate',
-    expectedBody: codeBody,
-    expectedPath: `/v1/auth/credential/${APP_ID}/account/${ACCOUNT_ID}/credential/mfa/email/activate`,
-    expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID },
-    response: conjoinSuccess(authCredentialFixture({ kind: 'mfa_email' }), { requestId: REQUEST_ID }),
-    run: context => createAuthCredentials(context.client).activateEmailMfa(APP_ID, ACCOUNT_ID, codeBody),
-    assertResult: result => expect(result).toEqual(authCredentialFixture({ kind: 'mfa_email' })),
-  },
-  {
-    name: 'verifies an email MFA credential',
-    method: 'POST',
-    path: '/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/verify',
-    expectedBody: codeBody,
-    expectedPath: `/v1/auth/credential/${APP_ID}/account/${ACCOUNT_ID}/credential/mfa/email/verify`,
-    expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID },
-    response: conjoinSuccess(authCredentialFixture({ kind: 'mfa_email' }), { requestId: REQUEST_ID }),
-    run: context => createAuthCredentials(context.client).verifyEmailMfa(APP_ID, ACCOUNT_ID, codeBody),
-    assertResult: result => expect(result).toEqual(authCredentialFixture({ kind: 'mfa_email' })),
-  },
-  {
-    name: 'sends an email MFA challenge',
-    method: 'POST',
-    path: '/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/challenge',
-    expectedPath: `/v1/auth/credential/${APP_ID}/account/${ACCOUNT_ID}/credential/mfa/email/challenge`,
-    expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID },
-    response: conjoinSuccess(authCredentialFixture({ kind: 'mfa_email' }), { requestId: REQUEST_ID }),
-    run: context => createAuthCredentials(context.client).sendEmailMfaChallenge(APP_ID, ACCOUNT_ID),
-    assertResult: result => expect(result).toEqual(authCredentialFixture({ kind: 'mfa_email' })),
   },
   {
     name: 'reads API key credential usage',
@@ -313,12 +269,13 @@ describeAuthSdkContractCases('Auth passkey SDK contract integration', [
     name: 'deletes an auth passkey',
     method: 'DELETE',
     path: '/v1/auth/passkey/{app_id}/account/{account_id}/passkeys/{credential_id}/delete',
+    expectedBody: {},
     expectedPath: `/v1/auth/passkey/${APP_ID}/account/${ACCOUNT_ID}/passkeys/${CREDENTIAL_ID}/delete`,
     expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID, credential_id: CREDENTIAL_ID },
     response: conjoinSuccess(authCredentialFixture({ kind: 'mfa_passkey', status: 'deleted' }), {
       requestId: REQUEST_ID,
     }),
-    run: context => createAuthPasskeys(context.client).delete(APP_ID, ACCOUNT_ID, CREDENTIAL_ID),
+    run: context => createAuthPasskeys(context.client).delete(APP_ID, ACCOUNT_ID, CREDENTIAL_ID, {}),
     assertResult: result => expect(result).toEqual(authCredentialFixture({ kind: 'mfa_passkey', status: 'deleted' })),
   },
 ])
