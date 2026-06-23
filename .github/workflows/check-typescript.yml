@@ -43,5 +43,13 @@ jobs:
       - name: Generate affected TypeScript SDK
         run: pnpm nx affected -t generate --base="${{ inputs.base }}" --head="${{ inputs.head }}" --exclude=sdk-python --outputStyle=static
 
+      - name: Check generated SDK types match the OpenAPI specs
+        run: |
+          pnpm -C sdks/typescript generate
+          if ! git diff --exit-code -- sdks/typescript/src/generated; then
+            echo "::error::Generated SDK types drifted from the committed OpenAPI specs. Run 'pnpm -C sdks/typescript generate' and commit the result."
+            exit 1
+          fi
+
       - name: Check affected TypeScript SDK
         run: pnpm nx affected -t lint typecheck build test test:integration --base="${{ inputs.base }}" --head="${{ inputs.head }}" --exclude=sdk-python --outputStyle=static

@@ -194,7 +194,7 @@ export type PkceMaterial = {
 
 export type PendingAuthFlowKind = 'sign-in' | 'sign-up'
 
-export type FlowVerificationMethod = 'pin_code' | 'magic_link'
+export type FlowVerificationMethod = string
 
 /**
  * The minimum a flow start must hand to its matching complete step. `state` and

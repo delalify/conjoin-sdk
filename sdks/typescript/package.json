@@ -49,6 +49,11 @@
       "import": "./dist/auth/index.js",
       "require": "./dist/auth/index.cjs"
     },
+    "./auth-flow": {
+      "types": "./dist/auth-flow/index.d.ts",
+      "import": "./dist/auth-flow/index.js",
+      "require": "./dist/auth-flow/index.cjs"
+    },
     "./database": {
       "types": "./dist/database/index.d.ts",
       "import": "./dist/database/index.js",
@@ -166,7 +171,7 @@
     "test:integration:coverage": "vitest run --config vitest.integration.config.ts --coverage",
     "test:all": "pnpm test && pnpm test:integration",
     "test:all:coverage": "pnpm test:coverage && pnpm test:integration:coverage",
-    "generate": "openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts"
+    "generate": "openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts && openapi-typescript ../../spec/openapi-frontend.json -o src/generated/frontend-api-types.ts && tsx codegen/generate.ts && tsx codegen/generate-frontend-paths.ts"
   },
   "dependencies": {
     "jose": "6.2.3"

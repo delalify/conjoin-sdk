@@ -1,12 +1,16 @@
+import type { AuthFlowRequestBody } from '@conjoin-cloud/sdk/auth-flow'
 import { useCallback, useEffect, useState } from 'react'
 import {
   type FlowApiResult,
   type FlowResponseData,
   requestSignupComplete,
   requestSignupStart,
+  type SignupStartBody,
 } from '../auth-flow/auth-flow-api'
 import { useAuthActions } from './internal/use-auth-actions'
 import { useConjoinClient } from './internal/use-conjoin-client'
+
+type SignUpCompleteBody = AuthFlowRequestBody<'completeAuthSignup'>
 
 export type SignUpStatus = 'idle' | 'needs_verification' | 'redirecting' | 'complete'
 
@@ -16,7 +20,7 @@ export type SignUpStartParams = {
   email?: string
   phone?: string
   password?: string
-  providerKey?: string
+  providerKey?: SignupStartBody['provider_key']
   verificationOption?: SignUpVerificationOption
 }
 
@@ -31,7 +35,7 @@ export type UseSignUpReturn = {
   status: SignUpStatus
   isSubmitting: boolean
   error: string | null
-  verificationMethod: 'pin_code' | 'magic_link' | null
+  verificationMethod: string | null
   signUp: (params: SignUpStartParams) => Promise<void>
   attemptVerification: (params: SignUpVerificationParams) => Promise<void>
   reset: () => void
@@ -39,7 +43,7 @@ export type UseSignUpReturn = {
 
 type SignUpPhase = {
   status: SignUpStatus
-  verificationMethod: 'pin_code' | 'magic_link' | null
+  verificationMethod: string | null
 }
 
 const INITIAL_PHASE: SignUpPhase = { status: 'idle', verificationMethod: null }
@@ -48,8 +52,8 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : 'Something went wrong. Please try again.'
 }
 
-function buildStartBody(params: SignUpStartParams): Record<string, unknown> {
-  const body: Record<string, unknown> = {}
+function buildStartBody(params: SignUpStartParams): SignupStartBody {
+  const body: SignupStartBody = {}
   if (params.email) body.email = params.email
   if (params.phone) body.phone = params.phone
   if (params.password) body.password = params.password
@@ -178,12 +182,12 @@ export function useSignUp(): UseSignUpReturn {
       setError(null)
 
       try {
-        const verificationResult: Record<string, unknown> = {}
+        const verificationResult: SignUpCompleteBody['verification_result'] = {}
         if (params.code) verificationResult.pin_code = params.code
         if (params.magicLinkToken) verificationResult.magic_link_token = params.magicLinkToken
         if (params.oauthToken) verificationResult.oauth_token = params.oauthToken
 
-        const body: Record<string, unknown> = { verification_result: verificationResult }
+        const body: SignUpCompleteBody = { verification_result: verificationResult }
         if (params.password) body.password = params.password
 
         const headers = attachCsrf({

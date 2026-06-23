@@ -50,6 +50,7 @@
       "dependsOn": ["spec:validate"],
       "inputs": [
         "{workspaceRoot}/spec/openapi.json",
+        "{workspaceRoot}/spec/openapi-frontend.json",
         "{projectRoot}/codegen/**/*"
       ],
       "outputs": ["{projectRoot}/src/generated/**/*"],

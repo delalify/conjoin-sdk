@@ -1,12 +1,16 @@
+import type { AuthFlowRequestBody } from '@conjoin-cloud/sdk/auth-flow'
 import { useCallback, useEffect, useState } from 'react'
 import {
   type FlowApiResult,
   type FlowResponseData,
   requestSigninComplete,
   requestSigninStart,
+  type SigninStartBody,
 } from '../auth-flow/auth-flow-api'
 import { useAuthActions } from './internal/use-auth-actions'
 import { useConjoinClient } from './internal/use-conjoin-client'
+
+type SignInCompleteBody = AuthFlowRequestBody<'completeAuthSignin'>
 
 export type SignInStatus = 'idle' | 'needs_verification' | 'needs_mfa' | 'redirecting' | 'complete'
 
@@ -16,7 +20,7 @@ export type SignInStartParams = {
   email?: string
   phone?: string
   password?: string
-  providerKey?: string
+  providerKey?: SigninStartBody['provider_key']
   verificationOption?: SignInVerificationOption
 }
 
@@ -32,7 +36,7 @@ export type UseSignInReturn = {
   status: SignInStatus
   isSubmitting: boolean
   error: string | null
-  verificationMethod: 'pin_code' | 'magic_link' | null
+  verificationMethod: string | null
   mfaMethod: string | null
   signIn: (params: SignInStartParams) => Promise<void>
   attemptVerification: (params: SignInVerificationParams) => Promise<void>
@@ -42,7 +46,7 @@ export type UseSignInReturn = {
 
 type SignInPhase = {
   status: SignInStatus
-  verificationMethod: 'pin_code' | 'magic_link' | null
+  verificationMethod: string | null
   mfaMethod: string | null
 }
 
@@ -52,8 +56,8 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : 'Something went wrong. Please try again.'
 }
 
-function buildStartBody(params: SignInStartParams): Record<string, unknown> {
-  const body: Record<string, unknown> = {}
+function buildStartBody(params: SignInStartParams): SigninStartBody {
+  const body: SigninStartBody = {}
   if (params.email) body.email = params.email
   if (params.phone) body.phone = params.phone
   if (params.password) body.password = params.password
@@ -188,7 +192,7 @@ export function useSignIn(): UseSignInReturn {
       setError(null)
 
       try {
-        const verificationResult: Record<string, unknown> = {}
+        const verificationResult: SignInCompleteBody['verification_result'] = {}
         if (params.code) verificationResult.pin_code = params.code
         if (params.magicLinkToken) verificationResult.magic_link_token = params.magicLinkToken
         if (params.oauthToken) verificationResult.oauth_token = params.oauthToken
@@ -226,10 +230,13 @@ export function useSignIn(): UseSignInReturn {
       setError(null)
 
       try {
-        const mfa =
-          params.method === 'totp'
-            ? { method: 'totp', totp_code: params.code }
-            : { method: 'phone_verification_code', phone_code: params.code }
+        const body: SignInCompleteBody = {
+          verification_result: {},
+          mfa:
+            params.method === 'totp'
+              ? { method: 'totp', totp_code: params.code }
+              : { method: 'phone_verification_code', phone_code: params.code },
+        }
 
         const headers = attachCsrf({
           'Content-Type': 'application/json',
@@ -238,7 +245,7 @@ export function useSignIn(): UseSignInReturn {
           'x-auth-code-challenge': pending.codeChallenge,
         })
 
-        const result = await requestSigninComplete(authDomain, { headers, body: { verification_result: {}, mfa } })
+        const result = await requestSigninComplete(authDomain, { headers, body })
         await applyResult(result)
       } catch (caught) {
         setError(errorMessage(caught))

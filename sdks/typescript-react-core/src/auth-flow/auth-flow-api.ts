@@ -1,34 +1,22 @@
+import { type AuthFlowRequestBody, type AuthFlowResponseData, FRONTEND_PATHS } from '@conjoin-cloud/sdk/auth-flow'
+
 const VALID_DOMAIN_PATTERN = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
 
-const FLOW_BASE_PATH = '/v1/auth/client'
+export type FlowResponseData = AuthFlowResponseData<'startAuthSignin'>
 
-export type FlowResponseStatus = 'complete' | 'mfa_required' | 'verification_required'
+export type HandshakeResponseData = AuthFlowResponseData<'processAuthHandshake'>
 
-export type FlowResponseData = {
-  status?: FlowResponseStatus
-  account_id?: string
-  session_id?: string
-  state?: string
-  verification_method?: 'pin_code' | 'magic_link'
-  redirect_url?: string
-  mfa?: { method: string }
-}
+export type SigninStartBody = Omit<AuthFlowRequestBody<'startAuthSignin'>, 'provider_key'> & { provider_key?: string }
 
-export type HandshakeResponseData = {
-  session_id: string
-  account_id: string
-  iat: number
-  exp: number
-  access_token_ttl_seconds: number
-}
+export type SignupStartBody = Omit<AuthFlowRequestBody<'startAuthSignup'>, 'provider_key'> & { provider_key?: string }
 
 export type FlowApiResult<TData> =
   | { ok: true; status: number; data: TData | null; message: string | null }
   | { ok: false; status: number; data: null; message: string }
 
-type FlowRequest = {
+type FlowRequest<TBody> = {
   headers: Record<string, string>
-  body?: Record<string, unknown>
+  body?: TBody
 }
 
 type ResponseEnvelope<TData> = {
@@ -40,7 +28,7 @@ function buildFlowUrl(authDomain: string, path: string): string {
   if (!VALID_DOMAIN_PATTERN.test(authDomain)) {
     throw new Error(`Invalid auth domain: ${authDomain}`)
   }
-  return `https://${authDomain}${FLOW_BASE_PATH}${path}`
+  return `https://${authDomain}${path}`
 }
 
 function messageFromEnvelope(envelope: ResponseEnvelope<unknown> | null, fallback: string): string {
@@ -48,7 +36,11 @@ function messageFromEnvelope(envelope: ResponseEnvelope<unknown> | null, fallbac
   return typeof message === 'string' && message.length > 0 ? message : fallback
 }
 
-async function postFlow<TData>(authDomain: string, path: string, request: FlowRequest): Promise<FlowApiResult<TData>> {
+async function postFlow<TData>(
+  authDomain: string,
+  path: string,
+  request: { headers: Record<string, string>; body?: unknown },
+): Promise<FlowApiResult<TData>> {
   const response = await fetch(buildFlowUrl(authDomain, path), {
     method: 'POST',
     credentials: 'include',
@@ -80,49 +72,58 @@ async function postFlow<TData>(authDomain: string, path: string, request: FlowRe
   }
 }
 
-export function requestSigninStart(authDomain: string, request: FlowRequest): Promise<FlowApiResult<FlowResponseData>> {
-  return postFlow<FlowResponseData>(authDomain, '/flow/signin/start', request)
+export function requestSigninStart(
+  authDomain: string,
+  request: FlowRequest<SigninStartBody>,
+): Promise<FlowApiResult<FlowResponseData>> {
+  return postFlow<FlowResponseData>(authDomain, FRONTEND_PATHS.startAuthSignin, request)
 }
 
 export function requestSigninComplete(
   authDomain: string,
-  request: FlowRequest,
+  request: FlowRequest<AuthFlowRequestBody<'completeAuthSignin'>>,
 ): Promise<FlowApiResult<FlowResponseData>> {
-  return postFlow<FlowResponseData>(authDomain, '/flow/signin/complete', request)
+  return postFlow<FlowResponseData>(authDomain, FRONTEND_PATHS.completeAuthSignin, request)
 }
 
-export function requestSignupStart(authDomain: string, request: FlowRequest): Promise<FlowApiResult<FlowResponseData>> {
-  return postFlow<FlowResponseData>(authDomain, '/flow/signup/start', request)
+export function requestSignupStart(
+  authDomain: string,
+  request: FlowRequest<SignupStartBody>,
+): Promise<FlowApiResult<FlowResponseData>> {
+  return postFlow<FlowResponseData>(authDomain, FRONTEND_PATHS.startAuthSignup, request)
 }
 
 export function requestSignupComplete(
   authDomain: string,
-  request: FlowRequest,
+  request: FlowRequest<AuthFlowRequestBody<'completeAuthSignup'>>,
 ): Promise<FlowApiResult<FlowResponseData>> {
-  return postFlow<FlowResponseData>(authDomain, '/flow/signup/complete', request)
+  return postFlow<FlowResponseData>(authDomain, FRONTEND_PATHS.completeAuthSignup, request)
 }
 
 export function requestPasswordResetStart(
   authDomain: string,
-  request: FlowRequest,
+  request: FlowRequest<AuthFlowRequestBody<'startAuthPasswordReset'>>,
 ): Promise<FlowApiResult<FlowResponseData>> {
-  return postFlow<FlowResponseData>(authDomain, '/flow/password/reset/start', request)
+  return postFlow<FlowResponseData>(authDomain, FRONTEND_PATHS.startAuthPasswordReset, request)
 }
 
 export function requestPasswordResetComplete(
   authDomain: string,
-  request: FlowRequest,
+  request: FlowRequest<AuthFlowRequestBody<'completeAuthPasswordReset'>>,
 ): Promise<FlowApiResult<FlowResponseData>> {
-  return postFlow<FlowResponseData>(authDomain, '/flow/password/reset/complete', request)
+  return postFlow<FlowResponseData>(authDomain, FRONTEND_PATHS.completeAuthPasswordReset, request)
 }
 
 export function requestHandshake(
   authDomain: string,
   headers: Record<string, string>,
 ): Promise<FlowApiResult<HandshakeResponseData>> {
-  return postFlow<HandshakeResponseData>(authDomain, '/handshake', { headers })
+  return postFlow<HandshakeResponseData>(authDomain, FRONTEND_PATHS.processAuthHandshake, { headers })
 }
 
-export function requestLogout(authDomain: string, headers: Record<string, string>): Promise<FlowApiResult<unknown>> {
-  return postFlow<unknown>(authDomain, '/logout', { headers })
+export function requestLogout(
+  authDomain: string,
+  headers: Record<string, string>,
+): Promise<FlowApiResult<AuthFlowResponseData<'processAuthLogout'>>> {
+  return postFlow<AuthFlowResponseData<'processAuthLogout'>>(authDomain, FRONTEND_PATHS.processAuthLogout, { headers })
 }
