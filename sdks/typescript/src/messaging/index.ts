@@ -1,9 +1,9 @@
 import type { ConjoinClient } from '../core/types'
+import { createMessagingChannelAnalytics } from '../generated/modules/messaging-channel-analytics'
 import { createMessagingContacts } from '../generated/modules/messaging-contact'
 import { createMessagingConversations } from '../generated/modules/messaging-conversation'
 import { createMessagingEmails } from '../generated/modules/messaging-email'
 import { createMessagingEmailSenders } from '../generated/modules/messaging-email-sender'
-import { createMessagingMessageAnalytics } from '../generated/modules/messaging-message-analytics'
 import { createMessagingMultisends } from '../generated/modules/messaging-multisend'
 import { createMessagingPhoneNumbers } from '../generated/modules/messaging-phone-number'
 import { createMessagingProfiles } from '../generated/modules/messaging-profile'
@@ -32,7 +32,7 @@ export function createMessaging(client: ConjoinClient, config: MessagingConfig) 
     conversations: createMessagingConversations(profiled),
     templates: createMessagingTemplates(profiled),
     verifications: createMessagingVerifications(profiled),
-    analytics: createMessagingMessageAnalytics(profiled),
+    analytics: createMessagingChannelAnalytics(profiled),
     emailSenders: createMessagingEmailSenders(profiled),
     smsSenders: createMessagingSMSSenders(profiled),
     smsBrands: createMessagingSMSBrands(profiled),
