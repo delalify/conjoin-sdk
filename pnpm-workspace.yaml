@@ -4,5 +4,5 @@ packages:
 
 minimumReleaseAge: 5760
 minimumReleaseAgeExclude:
-  # Renovate security update: hono@4.12.21
-  - hono@4.12.21
+  # Renovate security update: hono@4.12.21 || 4.12.25
+  - hono@4.12.21 || 4.12.25
