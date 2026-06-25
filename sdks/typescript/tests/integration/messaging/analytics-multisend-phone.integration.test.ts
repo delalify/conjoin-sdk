@@ -14,10 +14,8 @@ import {
 } from './messaging-test-utils'
 
 const multisendCreateBody = {
-  accepts_replies: true,
-  body: 'Hello from contract tests',
-  message_channels: ['sms' as const, 'email' as const],
-  message_config: {
+  message_priority: 'all' as const,
+  messages: {
     email: {
       from: 'sender@example.com',
       subject: 'Contract email',
@@ -28,7 +26,6 @@ const multisendCreateBody = {
       from: 'CONJOIN',
     },
   },
-  message_priority: 'all' as const,
   to: [
     {
       email: 'person@example.com',

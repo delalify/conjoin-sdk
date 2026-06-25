@@ -12,6 +12,7 @@ from conjoin_cloud.generated._models import (
     CloudRoleCreateRequest,
     CloudRoleCreateResponse,
     CloudRoleReadItem,
+    CloudRoleReadQuery,
     CloudRoleUpdateRequest,
     CloudRoleUpdateResponse,
 )
@@ -49,13 +50,14 @@ class CloudRolesResource:
 
     def read(
         self,
+        query: CloudRoleReadQuery | None = None,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> Page[CloudRoleReadItem]:
         return self._client.request(
             'GET',
             'cloud/custom-role/many',
-            query=None,
+            query=query,
             body=None,
             cast_to=Page[CloudRoleReadItem],
             request_options=request_options,
@@ -107,13 +109,14 @@ class AsyncCloudRolesResource:
 
     async def read(
         self,
+        query: CloudRoleReadQuery | None = None,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> Page[CloudRoleReadItem]:
         return await self._client.request(
             'GET',
             'cloud/custom-role/many',
-            query=None,
+            query=query,
             body=None,
             cast_to=Page[CloudRoleReadItem],
             request_options=request_options,

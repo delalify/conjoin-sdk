@@ -2,9 +2,10 @@ import { cookies, headers } from 'next/headers'
 import { cache } from 'react'
 import { verifyToken } from '../server/tokens'
 import { getJwksUrl, resolveConfig } from './config'
+import { toProxyAuthObject } from './identity'
 import type { AuthObject, NextAdapterConfig } from './types'
 
-const COOKIE_ACCESS_TOKEN = '__conjoin_auth_at'
+const COOKIE_SESSION_TOKEN = '__conjoin_auth_sess'
 
 async function resolveAuth(overrides?: Partial<NextAdapterConfig>): Promise<AuthObject | null> {
   const config = resolveConfig(overrides)
@@ -16,7 +17,7 @@ async function resolveAuth(overrides?: Partial<NextAdapterConfig>): Promise<Auth
   const bearerHeader = headerStore.get('authorization')
   const bearerToken = bearerHeader?.startsWith('Bearer ') ? bearerHeader.slice(7) : null
 
-  const cookieToken = cookieStore.get(COOKIE_ACCESS_TOKEN)?.value
+  const cookieToken = cookieStore.get(COOKIE_SESSION_TOKEN)?.value
 
   const token = bearerToken ?? cookieToken
   if (!token) return null
@@ -25,10 +26,7 @@ async function resolveAuth(overrides?: Partial<NextAdapterConfig>): Promise<Auth
     const verified = await verifyToken(token, { jwksUrl })
 
     return {
-      accountId: verified.accountId,
-      sessionId: verified.sessionId,
-      organizationId: verified.organizationId,
-      organizationRole: verified.organizationRole,
+      ...toProxyAuthObject(verified),
       getToken: () => token,
     }
   } catch {

@@ -31,26 +31,31 @@ const logoutFixture = {
   status: 'redirect_required',
 }
 const stepUpRequestBody = {
-  operation_id: 'billing.payout',
+  operation_id: 'auth.totp.enroll' as const,
   session_id: SESSION_ID,
 }
 const stepUpVerifyBody = {
+  challenge_id: 'step_up_challenge_123',
   code: '123456',
-  method: 'totp',
-  operation_id: 'billing.payout',
+  method: 'totp' as const,
+  operation_id: 'auth.totp.enroll' as const,
   session_id: SESSION_ID,
-  ttl_seconds: 300,
 }
 const stepUpValidateBody = {
-  operation_id: 'billing.payout',
+  operation_id: 'auth.totp.enroll' as const,
   session_id: SESSION_ID,
   token: 'step_up_token_123',
 }
-const stepUpFixture = {
+const stepUpRequestFixture = {
   available_methods: ['totp'],
   challenge_id: 'step_up_challenge_123',
-  status: 'verified',
-  token: 'step_up_token_123',
+}
+const stepUpVerifyFixture = {
+  expires_in: 300,
+  step_up_token: 'step_up_token_123',
+}
+const stepUpValidateFixture = {
+  valid: true,
 }
 
 describeAuthSdkContractCases('Auth SLO SDK contract integration', [
@@ -97,9 +102,9 @@ describeAuthSdkContractCases('Auth step-up and trusted device SDK contract integ
     expectedBody: stepUpRequestBody,
     expectedPath: `/v1/auth/step-up/${APP_ID}/account/${ACCOUNT_ID}/step-up/request`,
     expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID },
-    response: conjoinSuccess(stepUpFixture, { requestId: REQUEST_ID }),
+    response: conjoinSuccess(stepUpRequestFixture, { requestId: REQUEST_ID }),
     run: context => createAuthStepUps(context.client).request(APP_ID, ACCOUNT_ID, stepUpRequestBody),
-    assertResult: result => expect(result).toEqual(stepUpFixture),
+    assertResult: result => expect(result).toEqual(stepUpRequestFixture),
   },
   {
     name: 'verifies step-up authentication',
@@ -108,9 +113,9 @@ describeAuthSdkContractCases('Auth step-up and trusted device SDK contract integ
     expectedBody: stepUpVerifyBody,
     expectedPath: `/v1/auth/step-up/${APP_ID}/account/${ACCOUNT_ID}/step-up/verify`,
     expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID },
-    response: conjoinSuccess(stepUpFixture, { requestId: REQUEST_ID }),
+    response: conjoinSuccess(stepUpVerifyFixture, { requestId: REQUEST_ID }),
     run: context => createAuthStepUps(context.client).verify(APP_ID, ACCOUNT_ID, stepUpVerifyBody),
-    assertResult: result => expect(result).toEqual(stepUpFixture),
+    assertResult: result => expect(result).toEqual(stepUpVerifyFixture),
   },
   {
     name: 'validates step-up authentication',
@@ -119,9 +124,9 @@ describeAuthSdkContractCases('Auth step-up and trusted device SDK contract integ
     expectedBody: stepUpValidateBody,
     expectedPath: `/v1/auth/step-up/${APP_ID}/account/${ACCOUNT_ID}/step-up/validate`,
     expectedPathParams: { account_id: ACCOUNT_ID, app_id: APP_ID },
-    response: conjoinSuccess(stepUpFixture, { requestId: REQUEST_ID }),
+    response: conjoinSuccess(stepUpValidateFixture, { requestId: REQUEST_ID }),
     run: context => createAuthStepUps(context.client).validate(APP_ID, ACCOUNT_ID, stepUpValidateBody),
-    assertResult: result => expect(result).toEqual(stepUpFixture),
+    assertResult: result => expect(result).toEqual(stepUpValidateFixture),
   },
   {
     name: 'lists trusted devices',

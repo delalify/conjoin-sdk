@@ -497,6 +497,108 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/account/{app_id}/account/{account_id}/credential/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify account credential */
+        post: operations["verifyCredential"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/account/{app_id}/account/{account_id}/credential/mfa/totp/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify MFA TOTP for account credential */
+        post: operations["verifyCredentialMfaTotp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/account/{app_id}/account/{account_id}/credential/count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Count account credentials */
+        get: operations["countCredentials"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/account/{app_id}/account/{account_id}/credential": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List account credentials */
+        get: operations["listCredentials"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/account/{app_id}/account/{account_id}/credential/{credential_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a single account credential */
+        get: operations["readCredential"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/account/{app_id}/account/{account_id}/credential/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Remove account credential */
+        post: operations["removeCredential"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/recovery/{app_id}/account/{account_id}/recovery/start": {
         parameters: {
             query?: never;
@@ -803,91 +905,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/account/{app_id}/account/{account_id}/credential/verify": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Verify account credential */
-        post: operations["verifyCredential"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/account/{app_id}/account/{account_id}/credential/mfa/totp/verify": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Verify MFA TOTP for account credential */
-        post: operations["verifyCredentialMfaTotp"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/account/{app_id}/account/{account_id}/credential/count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Count account credentials */
-        get: operations["countCredentials"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/account/{app_id}/account/{account_id}/credential": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List account credentials */
-        get: operations["listCredentials"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/account/{app_id}/account/{account_id}/credential/remove": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Remove account credential */
-        post: operations["removeCredential"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/auth/account/{app_id}/account/{account_id}/global-role/grant": {
         parameters: {
             query?: never;
@@ -1073,6 +1090,23 @@ export interface paths {
         head?: never;
         /** Update an auth app settings */
         patch: operations["updateAuthAppSettings"];
+        trace?: never;
+    };
+    "/v1/auth/app/{app_id}/signing-keys/rotate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Rotate auth app signing keys */
+        post: operations["rotateAuthAppSigningKeys"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/auth/app/{app_id}/settings/custom-attributes-schema": {
@@ -1279,6 +1313,194 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/connection/{app_id}/connection/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List first-party identity connections for an app */
+        get: operations["listFirstPartyConnections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/connection/{app_id}/connection/config/{identity}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read a first-party identity connection configuration */
+        get: operations["readFirstPartyConnection"];
+        /** Create or update a first-party identity connection configuration */
+        put: operations["updateFirstPartyConnection"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create an enterprise identity connection */
+        post: operations["createEnterpriseConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List enterprise identity connections in an organization */
+        get: operations["listEnterpriseConnections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/{connection_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read an enterprise identity connection */
+        get: operations["readEnterpriseConnection"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/{connection_id}/update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update an enterprise identity connection */
+        put: operations["updateEnterpriseConnection"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/{connection_id}/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete an enterprise identity connection */
+        delete: operations["deleteEnterpriseConnection"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/{connection_id}/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Re-enable a previously activated enterprise connection */
+        post: operations["enableEnterpriseConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/{connection_id}/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Disable an enterprise connection */
+        post: operations["disableEnterpriseConnection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/{connection_id}/provider-config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read provider-side configuration for an enterprise connection */
+        get: operations["readEnterpriseProviderConfig"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/connection/{app_id}/organization/{organization_id}/connection/enterprise/{connection_id}/metadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Import IdP metadata into a SAML connection */
+        post: operations["importEnterpriseSamlMetadata"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/credential/{app_id}/account/{account_id}/credential/password/create": {
         parameters: {
             query?: never;
@@ -1398,6 +1620,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/activation-code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send an SMS MFA activation code to a pending credential */
+        post: operations["sendSmsMfaActivationCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/sms/activate": {
         parameters: {
             query?: never;
@@ -1443,74 +1682,6 @@ export interface paths {
         put?: never;
         /** Send an SMS MFA challenge */
         post: operations["sendSmsMfaChallenge"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/enroll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Enroll an email MFA credential */
-        post: operations["enrollEmailMfaCredential"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/activate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Activate an email MFA credential */
-        post: operations["activateEmailMfaCredential"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/verify": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Verify an email MFA credential */
-        post: operations["verifyEmailMfaCredential"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/credential/{app_id}/account/{account_id}/credential/mfa/email/challenge": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Send an email MFA challenge */
-        post: operations["sendEmailMfaChallenge"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1715,6 +1886,23 @@ export interface paths {
         put?: never;
         /** Complete the signup flow */
         post: operations["completeSignup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/flow/{app_id}/{client_id}/signup/confirm-link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm and link a signup onto a matched account */
+        post: operations["confirmLinkSignup"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1938,6 +2126,74 @@ export interface paths {
         /** Discover an account by identity, email, phone, or org domain */
         post: operations["discoverAccount"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/domain/{app_id}/organization/{organization_id}/domain/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create an organization domain claim */
+        post: operations["createAuthOrganizationDomain"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/domain/{app_id}/organization/{organization_id}/domain/list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List organization domain claims */
+        get: operations["listAuthOrganizationDomains"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/domain/{app_id}/organization/{organization_id}/domain/{organization_domain_id}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify an organization domain claim */
+        post: operations["verifyAuthOrganizationDomain"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/domain/{app_id}/organization/{organization_id}/domain/{organization_domain_id}/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete an organization domain claim */
+        delete: operations["deleteAuthOrganizationDomain"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2215,7 +2471,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/permission/{organization_id}/create": {
+    "/v1/auth/organization/permission/{app_id}/organization/{organization_id}/permission/create": {
         parameters: {
             query?: never;
             header?: never;
@@ -2232,7 +2488,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/permission/{organization_id}/{permission_id}": {
+    "/v1/auth/organization/permission/{app_id}/organization/{organization_id}/permission/{permission_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2249,7 +2505,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/permission/{organization_id}": {
+    "/v1/auth/organization/permission/{app_id}/organization/{organization_id}/permission": {
         parameters: {
             query?: never;
             header?: never;
@@ -2266,7 +2522,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/permission/{organization_id}/{permission_id}/update": {
+    "/v1/auth/organization/permission/{app_id}/organization/{organization_id}/permission/{permission_id}/update": {
         parameters: {
             query?: never;
             header?: never;
@@ -2283,7 +2539,7 @@ export interface paths {
         patch: operations["updateOrgPermission"];
         trace?: never;
     };
-    "/v1/auth/organization/permission/{organization_id}/{permission_id}/archive": {
+    "/v1/auth/organization/permission/{app_id}/organization/{organization_id}/permission/{permission_id}/archive": {
         parameters: {
             query?: never;
             header?: never;
@@ -2300,7 +2556,7 @@ export interface paths {
         patch: operations["archiveOrgPermission"];
         trace?: never;
     };
-    "/v1/auth/organization/permission/{organization_id}/{permission_id}/restore": {
+    "/v1/auth/organization/permission/{app_id}/organization/{organization_id}/permission/{permission_id}/restore": {
         parameters: {
             query?: never;
             header?: never;
@@ -2317,7 +2573,7 @@ export interface paths {
         patch: operations["restoreOrgPermission"];
         trace?: never;
     };
-    "/v1/auth/organization/permission/{organization_id}/{permission_id}/delete": {
+    "/v1/auth/organization/permission/{app_id}/organization/{organization_id}/permission/{permission_id}/delete": {
         parameters: {
             query?: never;
             header?: never;
@@ -2334,7 +2590,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/role/permission/{organization_id}/{role_id}/assign": {
+    "/v1/auth/organization/role/permission/{app_id}/organization/{organization_id}/role/{role_id}/permission/assign": {
         parameters: {
             query?: never;
             header?: never;
@@ -2351,7 +2607,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/role/permission/{organization_id}/{role_id}": {
+    "/v1/auth/organization/role/permission/{app_id}/organization/{organization_id}/role/{role_id}/permission": {
         parameters: {
             query?: never;
             header?: never;
@@ -2368,7 +2624,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}/create": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role/create": {
         parameters: {
             query?: never;
             header?: never;
@@ -2385,7 +2641,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}/{role_id}": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role/{role_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2402,7 +2658,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role": {
         parameters: {
             query?: never;
             header?: never;
@@ -2419,7 +2675,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}/{role_id}/update": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role/{role_id}/update": {
         parameters: {
             query?: never;
             header?: never;
@@ -2436,7 +2692,7 @@ export interface paths {
         patch: operations["updateOrgRole"];
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}/{role_id}/archive": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role/{role_id}/archive": {
         parameters: {
             query?: never;
             header?: never;
@@ -2453,7 +2709,7 @@ export interface paths {
         patch: operations["archiveOrgRole"];
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}/{role_id}/restore": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role/{role_id}/restore": {
         parameters: {
             query?: never;
             header?: never;
@@ -2470,7 +2726,7 @@ export interface paths {
         patch: operations["restoreOrgRole"];
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}/{role_id}/delete": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role/{role_id}/delete": {
         parameters: {
             query?: never;
             header?: never;
@@ -2487,7 +2743,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/role/{organization_id}/{role_id}/permissions": {
+    "/v1/auth/organization/role/{app_id}/organization/{organization_id}/role/{role_id}/permissions": {
         parameters: {
             query?: never;
             header?: never;
@@ -2504,7 +2760,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/create": {
+    "/v1/auth/organization/{app_id}/create": {
         parameters: {
             query?: never;
             header?: never;
@@ -2521,7 +2777,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/{organization_id}": {
+    "/v1/auth/organization/{app_id}/{organization_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2538,7 +2794,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/": {
+    "/v1/auth/organization/{app_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -2555,7 +2811,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/organization/{organization_id}/update": {
+    "/v1/auth/organization/{app_id}/{organization_id}/update": {
         parameters: {
             query?: never;
             header?: never;
@@ -2572,7 +2828,7 @@ export interface paths {
         patch: operations["updateAuthOrganization"];
         trace?: never;
     };
-    "/v1/auth/organization/{organization_id}/settings/update": {
+    "/v1/auth/organization/{app_id}/{organization_id}/settings/update": {
         parameters: {
             query?: never;
             header?: never;
@@ -2589,7 +2845,7 @@ export interface paths {
         patch: operations["updateAuthOrganizationSettings"];
         trace?: never;
     };
-    "/v1/auth/organization/{organization_id}/delete": {
+    "/v1/auth/organization/{app_id}/{organization_id}/delete": {
         parameters: {
             query?: never;
             header?: never;
@@ -2652,6 +2908,23 @@ export interface paths {
         post?: never;
         /** Delete a passkey */
         delete: operations["deletePasskey"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/account/{app_id}/import/password-hashes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Import users with foreign password hashes */
+        post: operations["importPasswordHashes"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2827,6 +3100,109 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/organization/scim/{app_id}/organization/{organization_id}/scim/connection": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read SCIM directory connection configuration */
+        get: operations["readScimConnectionConfig"];
+        /** Update SCIM directory connection configuration */
+        put: operations["updateScimConnectionConfig"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/scim/{app_id}/organization/{organization_id}/scim/role-mapping/member/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sync SCIM role mappings for a single member */
+        post: operations["syncScimRolesForMember"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/scim/{app_id}/organization/{organization_id}/scim/role-mapping/group/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sync SCIM role mappings for a group */
+        post: operations["syncScimRolesForGroup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/scim/{app_id}/organization/{organization_id}/scim/reconcile/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reconcile SCIM directory users in bulk */
+        post: operations["reconcileScimUsers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/scim/{app_id}/organization/{organization_id}/scim/reconcile/groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reconcile SCIM directory groups in bulk */
+        post: operations["reconcileScimGroups"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/scim/{app_id}/organization/{organization_id}/scim/reconcile/group-members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reconcile SCIM directory group memberships in bulk */
+        post: operations["reconcileScimGroupMembers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/session/{app_id}/session/{session_id}": {
         parameters: {
             query?: never;
@@ -2893,23 +3269,6 @@ export interface paths {
         head?: never;
         /** Update a session */
         patch: operations["updateAuthSession"];
-        trace?: never;
-    };
-    "/v1/auth/session/{app_id}/session/{session_id}/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Refresh a session */
-        post: operations["refreshAuthSession"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/v1/auth/session/{app_id}/session/{session_id}/validate": {
@@ -3133,6 +3492,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/organization/portal/{app_id}/portal/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the self-serve SSO portal policy for an app */
+        get: operations["readSsoPortalSettings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update the self-serve SSO portal policy for an app */
+        patch: operations["updateSsoPortalSettings"];
+        trace?: never;
+    };
+    "/v1/auth/organization/portal/{app_id}/organization/{organization_id}/portal/ticket/mint": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mint a self-serve SSO setup portal ticket for an organization */
+        post: operations["mintSsoPortalTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/organization/portal/{app_id}/organization/{organization_id}/portal/ticket/{ticket_id}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke a self-serve SSO setup portal ticket */
+        post: operations["revokeSsoPortalTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/step-up/{app_id}/account/{account_id}/step-up/request": {
         parameters: {
             query?: never;
@@ -3235,6 +3646,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/scim/v2/{project_id}/{app_id}/Groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List SCIM groups */
+        get: operations["scimListGroups"];
+        put?: never;
+        /** Create a SCIM group */
+        post: operations["scimCreateGroup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/scim/v2/{project_id}/{app_id}/Groups/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a SCIM group */
+        get: operations["scimGetGroup"];
+        /** Replace a SCIM group */
+        put: operations["scimReplaceGroup"];
+        post?: never;
+        /** Delete a SCIM group */
+        delete: operations["scimDeleteGroup"];
+        options?: never;
+        head?: never;
+        /** Patch SCIM group members */
+        patch: operations["scimPatchGroupMembers"];
+        trace?: never;
+    };
     "/v1/auth/scim/v2/ServiceProviderConfig": {
         parameters: {
             query?: never;
@@ -3286,6 +3735,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/scim/v2/{project_id}/{app_id}/Bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Execute SCIM bulk operations */
+        post: operations["scimBulkOperations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/scim/v2/{project_id}/{app_id}/Users": {
         parameters: {
             query?: never;
@@ -3322,61 +3788,6 @@ export interface paths {
         head?: never;
         /** Patch a SCIM user */
         patch: operations["scimPatchUser"];
-        trace?: never;
-    };
-    "/v1/auth/scim/v2/{project_id}/{app_id}/Groups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List SCIM groups */
-        get: operations["scimListGroups"];
-        put?: never;
-        /** Create a SCIM group */
-        post: operations["scimCreateGroup"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/auth/scim/v2/{project_id}/{app_id}/Groups/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a SCIM group */
-        get: operations["scimGetGroup"];
-        /** Replace a SCIM group */
-        put: operations["scimReplaceGroup"];
-        post?: never;
-        /** Delete a SCIM group */
-        delete: operations["scimDeleteGroup"];
-        options?: never;
-        head?: never;
-        /** Patch SCIM group members */
-        patch: operations["scimPatchGroupMembers"];
-        trace?: never;
-    };
-    "/v1/auth/scim/v2/{project_id}/{app_id}/Bulk": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Execute SCIM bulk operations */
-        post: operations["scimBulkOperations"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/v1/billing/charge/{entity_id}": {
@@ -5437,23 +5848,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/cloud/sku-quota/account": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List SKU quotas for an account */
-        get: operations["readAccountSkuQuotas"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/cloud/spend-control/single": {
         parameters: {
             query?: never;
@@ -5626,6 +6020,142 @@ export interface paths {
         patch: operations["verifyCloudZoneDns"];
         trace?: never;
     };
+    "/v1/messaging/analytics/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fetch message analytics */
+        post: operations["listChannelAnalytics"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/analytics/channels/{channel_id}/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generate message analytics summary */
+        post: operations["generateChannelAnalyticsSummaries"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/analytics/messages/{message_id}/channels/{channel_id}/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create message analytics report */
+        post: operations["createChannelAnalyticsReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/analytics/{analytics_id}/opens": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Increment channel analytics opens */
+        patch: operations["incrementChannelAnalyticsOpens"];
+        trace?: never;
+    };
+    "/v1/messaging/analytics/{analytics_id}/clicks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Increment channel analytics clicks */
+        patch: operations["incrementChannelAnalyticsClicks"];
+        trace?: never;
+    };
+    "/v1/messaging/analytics/{analytics_id}/deliveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Increment channel analytics deliveries */
+        patch: operations["incrementChannelAnalyticsDeliveries"];
+        trace?: never;
+    };
+    "/v1/messaging/analytics/{analytics_id}/subscribes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Increment channel analytics subscribes */
+        patch: operations["incrementChannelAnalyticsSubscribes"];
+        trace?: never;
+    };
+    "/v1/messaging/analytics/{analytics_id}/unsubscribes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Increment channel analytics unsubscribes */
+        patch: operations["incrementChannelAnalyticsUnsubscribes"];
+        trace?: never;
+    };
     "/v1/messaging/contacts/new": {
         parameters: {
             query?: never;
@@ -5695,6 +6225,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/messaging/contacts/properties/new": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a contact property */
+        post: operations["createContactProperty"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/contacts/properties/{property_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fetch one contact property */
+        post: operations["fetchOneContactProperty"];
+        /** Delete a contact property */
+        delete: operations["deleteContactProperty"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/contacts/properties": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List contact properties */
+        post: operations["listContactProperties"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/contacts/properties/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Delete contact properties */
+        patch: operations["deleteManyContactProperties"];
+        trace?: never;
+    };
+    "/v1/messaging/contacts/{contact_id}/properties": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Add properties to a contact */
+        put: operations["addContactProperties"];
+        post?: never;
+        /** Delete properties from a contact */
+        delete: operations["deleteContactProperties"];
+        options?: never;
+        head?: never;
+        /** Update a contact property value */
+        patch: operations["updateContactProperty"];
+        trace?: never;
+    };
     "/v1/messaging/conversations/new": {
         parameters: {
             query?: never;
@@ -5712,7 +6330,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/messaging/conversations/clone/{conversation_id}": {
+    "/v1/messaging/conversations/{conversation_id}/clone": {
         parameters: {
             query?: never;
             header?: never;
@@ -5729,7 +6347,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/messaging/conversations/wipe/{conversation_id}": {
+    "/v1/messaging/conversations/{conversation_id}/send": {
         parameters: {
             query?: never;
             header?: never;
@@ -5738,15 +6356,34 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
+        /** Send a conversation message */
+        post: operations["sendConversationMessage"];
         delete?: never;
         options?: never;
         head?: never;
-        /** Delete a conversation */
-        patch: operations["deleteConversation"];
+        patch?: never;
         trace?: never;
     };
-    "/v1/messaging/conversations/archive/{conversation_id}": {
+    "/v1/messaging/conversations/{conversation_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List conversations */
+        post: operations["listConversations"];
+        /** Delete a conversation */
+        delete: operations["deleteConversation"];
+        options?: never;
+        head?: never;
+        /** Update a conversation */
+        patch: operations["updateConversation"];
+        trace?: never;
+    };
+    "/v1/messaging/conversations/{conversation_id}/archive": {
         parameters: {
             query?: never;
             header?: never;
@@ -5761,24 +6398,6 @@ export interface paths {
         head?: never;
         /** Archive a conversation */
         patch: operations["archiveConversation"];
-        trace?: never;
-    };
-    "/v1/messaging/conversations/{conversation_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** List conversations */
-        post: operations["listConversations"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update a conversation */
-        patch: operations["updateConversation"];
         trace?: never;
     };
     "/v1/messaging/conversations/{conversation_id}/messages/{parent_message_id}": {
@@ -6090,57 +6709,6 @@ export interface paths {
         patch: operations["transferEmailSender"];
         trace?: never;
     };
-    "/v1/messaging/analytics/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Fetch message analytics */
-        post: operations["listMessageAnalytics"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/messaging/analytics/channels/{channel_id}/generate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Generate message analytics summary */
-        post: operations["generateMessageAnalyticsSummaries"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/messaging/analytics/messages/{message_id}/channels/{channel_id}/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create message analytics report */
-        post: operations["createMessageAnalyticsReport"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/messaging/multisend/send": {
         parameters: {
             query?: never;
@@ -6409,6 +6977,58 @@ export interface paths {
         put?: never;
         /** List messaging profiles */
         post: operations["listMessagingProfiles"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/segments/new": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a segment */
+        post: operations["createOneSegment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messaging/segments/{segment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a segment */
+        delete: operations["deleteOneSegment"];
+        options?: never;
+        head?: never;
+        /** Update a segment */
+        patch: operations["updateOneSegment"];
+        trace?: never;
+    };
+    "/v1/messaging/segments/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fetch many segments */
+        post: operations["listManySegments"];
         delete?: never;
         options?: never;
         head?: never;
@@ -8697,35 +9317,17 @@ export interface operations {
                     status?: "active" | "disabled" | "archived";
                     is_enabled?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -9304,35 +9906,17 @@ export interface operations {
                     /** @enum {string} */
                     source_type?: "storage_container";
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -9833,35 +10417,17 @@ export interface operations {
                 limit?: string | number;
                 query?: {
                     queried_at?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -10301,35 +10867,17 @@ export interface operations {
                     /** @enum {string} */
                     trace_source?: "public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook";
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -10935,35 +11483,17 @@ export interface operations {
                     status?: "active" | "disabled" | "archived";
                     is_active?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -11384,35 +11914,17 @@ export interface operations {
                     /** @enum {string} */
                     direction?: "request" | "response" | "both";
                     logged_at?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -11527,35 +12039,17 @@ export interface operations {
                     /** @enum {string} */
                     trace_source?: "public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook";
                     recorded_at?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -11684,6 +12178,519 @@ export interface operations {
                                 total_requests: number;
                             }[];
                             billing_period: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    verifyCredential: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    credential_type: "password" | "api_key" | "mfa_totp" | "mfa_passkey" | "mfa_sms";
+                    /** @example string */
+                    credential_value: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            credential_id: string;
+                            account_id: string;
+                            kind: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            metadata?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    verifyCredentialMfaTotp: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            credential_id: string;
+                            account_id: string;
+                            kind: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            metadata?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    countCredentials: {
+        parameters: {
+            query?: {
+                credential_id?: string;
+                credential_type?: "password" | "api_key" | "mfa_totp" | "mfa_passkey" | "mfa_sms";
+            };
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            count: number;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listCredentials: {
+        parameters: {
+            query?: {
+                cursor?: {
+                    /** @example string */
+                    prev?: string;
+                    /** @example string */
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: string | number;
+                query?: {
+                    /** @example string */
+                    credential_id?: string;
+                    /** @enum {string} */
+                    credential_type?: "password" | "api_key" | "mfa_totp" | "mfa_passkey" | "mfa_sms";
+                };
+            };
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            credential_id: string;
+                            account_id: string;
+                            kind: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            metadata?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    readCredential: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                account_id: string;
+                credential_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            credential_id: string;
+                            account_id: string;
+                            kind: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            metadata?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    removeCredential: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    credential_id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            credential_id: string;
+                            account_id: string;
+                            kind: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            metadata?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
                         };
                     };
                 };
@@ -11893,7 +12900,7 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     token: string;
-                    credential_kinds_to_remove?: ("mfa_totp" | "mfa_sms" | "mfa_email")[];
+                    credential_kinds_to_remove?: ("mfa_totp" | "mfa_sms")[];
                 };
             };
         };
@@ -12078,19 +13085,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12178,19 +13189,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12298,19 +13313,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12486,19 +13505,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12595,19 +13618,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12702,19 +13729,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12792,6 +13823,10 @@ export interface operations {
                      */
                     email: string;
                     set_as_primary?: boolean;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -12813,19 +13848,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -12900,6 +13939,10 @@ export interface operations {
                     /** @example string */
                     phone: string;
                     set_as_primary?: boolean;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -12921,19 +13964,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13015,6 +14062,10 @@ export interface operations {
                      * @example user@example.com
                      */
                     primary_email?: string;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -13036,19 +14087,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13124,6 +14179,10 @@ export interface operations {
                     phone: string;
                     /** @example string */
                     primary_phone?: string;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -13145,19 +14204,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13348,19 +14411,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13456,19 +14523,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -13476,438 +14547,6 @@ export interface operations {
                                 [key: string]: unknown;
                             };
                             global_roles?: string[];
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    verifyCredential: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @enum {string} */
-                    credential_type: "password" | "api_key" | "mfa_totp" | "mfa_passkey" | "mfa_sms" | "mfa_email";
-                    /** @example string */
-                    credential_value: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            app_id: string;
-                            live_mode: boolean;
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    verifyCredentialMfaTotp: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    code: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            app_id: string;
-                            live_mode: boolean;
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    countCredentials: {
-        parameters: {
-            query?: {
-                credential_id?: string;
-                credential_type?: "password" | "api_key" | "mfa_totp" | "mfa_passkey" | "mfa_sms" | "mfa_email";
-            };
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            count: number;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    listCredentials: {
-        parameters: {
-            query?: {
-                cursor?: {
-                    /** @example string */
-                    prev?: string;
-                    /** @example string */
-                    next?: string;
-                };
-                sort?: {
-                    [key: string]: "asc" | "desc";
-                };
-                limit?: string | number;
-                query?: {
-                    /** @example string */
-                    credential_id?: string;
-                    /** @enum {string} */
-                    credential_type?: "password" | "api_key" | "mfa_totp" | "mfa_passkey" | "mfa_sms" | "mfa_email";
-                };
-            };
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            app_id: string;
-                            live_mode: boolean;
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        }[];
-                        cursor?: components["schemas"]["PaginationCursor"];
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    removeCredential: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    credential_id: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            app_id: string;
-                            live_mode: boolean;
                             metadata?: {
                                 [key: string]: unknown;
                             };
@@ -13995,19 +14634,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14102,19 +14745,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14209,19 +14856,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14309,19 +14960,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14417,19 +15072,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -14621,8 +15280,9 @@ export interface operations {
                             name: string;
                             description?: string | null;
                             support_email?: string | null;
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             settings?: {
                                 [key: string]: unknown;
@@ -14705,8 +15365,9 @@ export interface operations {
                             name: string;
                             description?: string | null;
                             support_email?: string | null;
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             settings?: {
                                 [key: string]: unknown;
@@ -14825,8 +15486,9 @@ export interface operations {
                             name: string;
                             description?: string | null;
                             support_email?: string | null;
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             settings?: {
                                 [key: string]: unknown;
@@ -14923,8 +15585,9 @@ export interface operations {
                             name: string;
                             description?: string | null;
                             support_email?: string | null;
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             settings?: {
                                 [key: string]: unknown;
@@ -14992,15 +15655,12 @@ export interface operations {
                     /** @default null */
                     cloud_zone_id?: string | null;
                     messaging_options?: {
-                        email: {
-                            /** @default null */
+                        email?: {
                             provider?: ("conjoin" | "custom") | null;
-                            enabled_methods: ("all_selected" | "signup_magic_link" | "login_magic_link" | "email_verification_link" | "password_reset_code" | "email_changed" | "password_changed" | "password_removed" | "account_deleted" | "new_device_login" | "organisatoin_invitation" | "organization_invitation_acceptance")[];
+                            enabled_methods?: ("new_device_login" | "organization_invitation" | "organization_welcome")[];
                         };
-                        sms: {
-                            /** @default null */
+                        sms?: {
                             provider?: ("conjoin" | "custom") | null;
-                            enabled_methods: ("all_selected" | "password_reset_code")[];
                         };
                     };
                     authentication?: {
@@ -15009,21 +15669,20 @@ export interface operations {
                         passkey_primary_enabled?: boolean;
                         /** @enum {string} */
                         signup_mode?: "public" | "restricted";
-                        allow_list: {
+                        allow_list?: {
                             is_enabled?: boolean;
                             emails?: string[];
                             domains?: string[];
                         };
-                        block_list: {
+                        block_list?: {
                             is_enabled?: boolean;
                             emails?: string[];
                             domains?: string[];
                         };
-                        mfa: {
+                        enabled_methods?: ("totp" | "passkey" | "api_key")[];
+                        mfa?: {
                             enable_totp?: boolean;
                             enable_sms?: boolean;
-                            enable_email?: boolean;
-                            generate_recovery_codes?: boolean;
                             step_up?: {
                                 is_enabled?: boolean;
                                 ttl_seconds?: number;
@@ -15034,6 +15693,18 @@ export interface operations {
                                 max_per_account?: number;
                             };
                         };
+                        identity_resolution?: {
+                            precedence?: ("connected_identity" | "email" | "phone" | "org_domain")[];
+                            org_domain?: {
+                                enabled?: boolean;
+                                require_verification?: boolean;
+                            };
+                            /** @enum {string} */
+                            sso_collision_default?: "prompt" | "auto_link" | "block";
+                            /** @enum {string} */
+                            merge_policy?: "never" | "prompt" | "auto_safe";
+                            allow_cross_organization_identity_link?: boolean;
+                        };
                     };
                     sessions?: {
                         is_multi_user_sessions_enabled?: boolean;
@@ -15043,12 +15714,10 @@ export interface operations {
                         absolute_session_lifetime_seconds?: number | null;
                         idle_timeout_seconds?: number | null;
                         access_token_ttl_seconds?: number;
-                        refresh_token_ttl_seconds?: number;
-                        csrf_protection_enabled?: boolean;
                         /** @enum {string} */
                         cookie_same_site?: "Lax" | "Strict" | "None";
                         enable_device_binding?: boolean;
-                        refresh_token_grace_period_seconds?: number;
+                        enable_native_token_issuance?: boolean;
                     };
                 };
             };
@@ -15073,8 +15742,9 @@ export interface operations {
                             name: string;
                             description?: string | null;
                             support_email?: string | null;
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             settings?: {
                                 [key: string]: unknown;
@@ -15083,6 +15753,70 @@ export interface operations {
                             date_updated: string;
                             date_deleted?: string | null;
                         };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    rotateAuthAppSigningKeys: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
                     };
                 };
             };
@@ -15178,8 +15912,9 @@ export interface operations {
                             name: string;
                             description?: string | null;
                             support_email?: string | null;
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             settings?: {
                                 [key: string]: unknown;
@@ -15253,6 +15988,13 @@ export interface operations {
                     resource_type?: string;
                     /** @example string */
                     resource_id?: string;
+                    context?: {
+                        /** @example string */
+                        ip_address?: string;
+                        custom_attributes?: {
+                            [key: string]: string | number | boolean;
+                        };
+                    };
                 };
             };
         };
@@ -15947,8 +16689,9 @@ export interface operations {
                             device_config?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16035,8 +16778,9 @@ export interface operations {
                             device_config?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16139,14 +16883,1591 @@ export interface operations {
                             device_config?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
                             date_deleted?: string | null;
                         }[];
                         cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listFirstPartyConnections: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connections: {
+                                connection_id: string;
+                                conjoin_account_id: string;
+                                conjoin_project_id: string;
+                                app_id: string;
+                                live_mode: boolean;
+                                organization_id: string | null;
+                                identity: string;
+                                /** @enum {string} */
+                                status: "pending" | "active" | "disabled";
+                                name: string | null;
+                                is_enterprise: boolean;
+                                configuration: {
+                                    [key: string]: unknown;
+                                };
+                                date_created: string;
+                                date_updated: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    readFirstPartyConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateFirstPartyConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                identity: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    status?: "active" | "disabled";
+                    name?: string | null;
+                    configuration: {
+                        is_enabled: boolean;
+                        verification_code: {
+                            is_enabled: boolean;
+                        };
+                        magic_link: {
+                            is_enabled: boolean;
+                            force_same_device: boolean;
+                        };
+                    } | {
+                        is_enabled: boolean;
+                        rules: {
+                            require_uppercase: boolean;
+                            require_lowercase: boolean;
+                            require_numbers: boolean;
+                            require_symbols: boolean;
+                            min_length: number;
+                            max_length: number;
+                        };
+                        enhanced_security: {
+                            is_enabled: boolean;
+                        };
+                    } | {
+                        is_enabled: boolean;
+                        /** @example string */
+                        client_id: string;
+                        scopes: string[];
+                        oauth2?: {
+                            /** @example string */
+                            client_secret: string;
+                            endpoints: {
+                                /**
+                                 * Format: uri
+                                 * @example https://example.com
+                                 */
+                                authorization: string;
+                                /**
+                                 * Format: uri
+                                 * @example https://example.com
+                                 */
+                                token: string;
+                                /**
+                                 * Format: uri
+                                 * @example https://example.com
+                                 */
+                                jwks_uri: string;
+                            };
+                            pkce: boolean | null;
+                        };
+                        oidc?: {
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            issuer: string;
+                        };
+                    } | {
+                        is_enabled: boolean;
+                        /** @example string */
+                        client_id: string;
+                        scopes: string[];
+                        /** @example string */
+                        client_secret: string;
+                        endpoints: {
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            authorization: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            token: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            jwks_uri: string;
+                        };
+                        pkce: boolean | null;
+                    } | {
+                        is_enabled: boolean;
+                        /** @example string */
+                        client_id: string;
+                        scopes: string[];
+                        /**
+                         * Format: uri
+                         * @example https://example.com
+                         */
+                        issuer: string;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    createEnterpriseConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @constant */
+                    protocol: "enterprise_saml";
+                    /** @example string */
+                    name?: string;
+                    configuration: {
+                        /** @example string */
+                        name: string;
+                        /** @example string */
+                        description?: string;
+                        domain_routing: {
+                            enabled: boolean;
+                            domains: string[];
+                            allow_external_domains: boolean;
+                        };
+                        jit_provisioning: {
+                            enabled: boolean;
+                            update_on_login: boolean;
+                            attribute_mappings: {
+                                /** @example string */
+                                first_name: string;
+                                /** @example string */
+                                last_name: string;
+                                /** @example string */
+                                email: string;
+                                /** @example string */
+                                picture?: string;
+                                custom_attributes: {
+                                    [key: string]: string;
+                                };
+                            };
+                        };
+                        role_mapping: {
+                            enabled: boolean;
+                            role_mappings: {
+                                [key: string]: string;
+                            };
+                            default_role: string | null;
+                            /** @example string */
+                            role_attribute: string;
+                        };
+                        session_timeout: number | null;
+                        require_reauth_for_sensitive_operations: boolean;
+                        saml_config: {
+                            /** @example string */
+                            entity_id: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            sso_url: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            slo_url?: string;
+                            /** @example string */
+                            certificate: string;
+                            /** @enum {string} */
+                            request_binding: "HTTP-POST" | "HTTP-Redirect";
+                            /** @enum {string} */
+                            response_binding: "HTTP-POST" | "HTTP-Redirect";
+                            sign_requests: boolean;
+                            require_encrypted_assertions: boolean;
+                            /** @enum {string} */
+                            name_id_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress" | "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" | "urn:oasis:names:tc:SAML:2.0:nameid-format:transient" | "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified";
+                        };
+                    };
+                } | {
+                    /** @constant */
+                    protocol: "enterprise_oidc";
+                    /** @example string */
+                    name?: string;
+                    configuration: {
+                        /** @example string */
+                        name: string;
+                        /** @example string */
+                        description?: string;
+                        domain_routing: {
+                            enabled: boolean;
+                            domains: string[];
+                            allow_external_domains: boolean;
+                        };
+                        jit_provisioning: {
+                            enabled: boolean;
+                            update_on_login: boolean;
+                            attribute_mappings: {
+                                /** @example string */
+                                first_name: string;
+                                /** @example string */
+                                last_name: string;
+                                /** @example string */
+                                email: string;
+                                /** @example string */
+                                picture?: string;
+                                custom_attributes: {
+                                    [key: string]: string;
+                                };
+                            };
+                        };
+                        role_mapping: {
+                            enabled: boolean;
+                            role_mappings: {
+                                [key: string]: string;
+                            };
+                            default_role: string | null;
+                            /** @example string */
+                            role_attribute: string;
+                        };
+                        session_timeout: number | null;
+                        require_reauth_for_sensitive_operations: boolean;
+                        oidc_config: {
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            issuer: string;
+                            /** @example string */
+                            client_id: string;
+                            /** @example string */
+                            client_secret: string;
+                            scopes: string[];
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            discovery_endpoint?: string;
+                            use_pkce: boolean;
+                            additional_parameters: {
+                                [key: string]: string;
+                            };
+                        };
+                    };
+                } | {
+                    /** @constant */
+                    protocol: "enterprise_custom";
+                    /** @example string */
+                    name?: string;
+                    configuration: {
+                        /** @example string */
+                        name: string;
+                        /** @example string */
+                        description?: string;
+                        domain_routing: {
+                            enabled: boolean;
+                            domains: string[];
+                            allow_external_domains: boolean;
+                        };
+                        jit_provisioning: {
+                            enabled: boolean;
+                            update_on_login: boolean;
+                            attribute_mappings: {
+                                /** @example string */
+                                first_name: string;
+                                /** @example string */
+                                last_name: string;
+                                /** @example string */
+                                email: string;
+                                /** @example string */
+                                picture?: string;
+                                custom_attributes: {
+                                    [key: string]: string;
+                                };
+                            };
+                        };
+                        role_mapping: {
+                            enabled: boolean;
+                            role_mappings: {
+                                [key: string]: string;
+                            };
+                            default_role: string | null;
+                            /** @example string */
+                            role_attribute: string;
+                        };
+                        session_timeout: number | null;
+                        require_reauth_for_sensitive_operations: boolean;
+                        custom_config: {
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            auth_endpoint: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            token_endpoint: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            userinfo_endpoint: string;
+                            /** @example string */
+                            client_secret?: string;
+                            /** @enum {string} */
+                            auth_method: "oauth2" | "bearer" | "basic" | "custom";
+                            custom_headers: {
+                                [key: string]: string;
+                            };
+                            custom_parameters: {
+                                [key: string]: string;
+                            };
+                            /** @enum {string} */
+                            response_format: "json" | "xml" | "form";
+                        };
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listEnterpriseConnections: {
+        parameters: {
+            query?: {
+                cursor?: {
+                    /** @example string */
+                    prev?: string;
+                    /** @example string */
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: string | number;
+                query?: {
+                    /** @enum {string} */
+                    identity?: "enterprise_saml" | "enterprise_oidc" | "enterprise_custom";
+                    /** @enum {string} */
+                    status?: "pending" | "active" | "disabled";
+                };
+            };
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connections: {
+                                connection_id: string;
+                                conjoin_account_id: string;
+                                conjoin_project_id: string;
+                                app_id: string;
+                                live_mode: boolean;
+                                organization_id: string | null;
+                                identity: string;
+                                /** @enum {string} */
+                                status: "pending" | "active" | "disabled";
+                                name: string | null;
+                                is_enterprise: boolean;
+                                configuration: {
+                                    [key: string]: unknown;
+                                };
+                                date_created: string;
+                                date_updated: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    readEnterpriseConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateEnterpriseConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @constant */
+                    protocol: "enterprise_saml";
+                    name?: string | null;
+                    configuration: {
+                        /** @example string */
+                        name: string;
+                        /** @example string */
+                        description?: string;
+                        domain_routing: {
+                            enabled: boolean;
+                            domains: string[];
+                            allow_external_domains: boolean;
+                        };
+                        jit_provisioning: {
+                            enabled: boolean;
+                            update_on_login: boolean;
+                            attribute_mappings: {
+                                /** @example string */
+                                first_name: string;
+                                /** @example string */
+                                last_name: string;
+                                /** @example string */
+                                email: string;
+                                /** @example string */
+                                picture?: string;
+                                custom_attributes: {
+                                    [key: string]: string;
+                                };
+                            };
+                        };
+                        role_mapping: {
+                            enabled: boolean;
+                            role_mappings: {
+                                [key: string]: string;
+                            };
+                            default_role: string | null;
+                            /** @example string */
+                            role_attribute: string;
+                        };
+                        session_timeout: number | null;
+                        require_reauth_for_sensitive_operations: boolean;
+                        saml_config: {
+                            /** @example string */
+                            entity_id: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            sso_url: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            slo_url?: string;
+                            /** @example string */
+                            certificate: string;
+                            /** @enum {string} */
+                            request_binding: "HTTP-POST" | "HTTP-Redirect";
+                            /** @enum {string} */
+                            response_binding: "HTTP-POST" | "HTTP-Redirect";
+                            sign_requests: boolean;
+                            require_encrypted_assertions: boolean;
+                            /** @enum {string} */
+                            name_id_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress" | "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" | "urn:oasis:names:tc:SAML:2.0:nameid-format:transient" | "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified";
+                        };
+                    };
+                } | {
+                    /** @constant */
+                    protocol: "enterprise_oidc";
+                    name?: string | null;
+                    configuration: {
+                        /** @example string */
+                        name: string;
+                        /** @example string */
+                        description?: string;
+                        domain_routing: {
+                            enabled: boolean;
+                            domains: string[];
+                            allow_external_domains: boolean;
+                        };
+                        jit_provisioning: {
+                            enabled: boolean;
+                            update_on_login: boolean;
+                            attribute_mappings: {
+                                /** @example string */
+                                first_name: string;
+                                /** @example string */
+                                last_name: string;
+                                /** @example string */
+                                email: string;
+                                /** @example string */
+                                picture?: string;
+                                custom_attributes: {
+                                    [key: string]: string;
+                                };
+                            };
+                        };
+                        role_mapping: {
+                            enabled: boolean;
+                            role_mappings: {
+                                [key: string]: string;
+                            };
+                            default_role: string | null;
+                            /** @example string */
+                            role_attribute: string;
+                        };
+                        session_timeout: number | null;
+                        require_reauth_for_sensitive_operations: boolean;
+                        oidc_config: {
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            issuer: string;
+                            /** @example string */
+                            client_id: string;
+                            /** @example string */
+                            client_secret: string;
+                            scopes: string[];
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            discovery_endpoint?: string;
+                            use_pkce: boolean;
+                            additional_parameters: {
+                                [key: string]: string;
+                            };
+                        };
+                    };
+                } | {
+                    /** @constant */
+                    protocol: "enterprise_custom";
+                    name?: string | null;
+                    configuration: {
+                        /** @example string */
+                        name: string;
+                        /** @example string */
+                        description?: string;
+                        domain_routing: {
+                            enabled: boolean;
+                            domains: string[];
+                            allow_external_domains: boolean;
+                        };
+                        jit_provisioning: {
+                            enabled: boolean;
+                            update_on_login: boolean;
+                            attribute_mappings: {
+                                /** @example string */
+                                first_name: string;
+                                /** @example string */
+                                last_name: string;
+                                /** @example string */
+                                email: string;
+                                /** @example string */
+                                picture?: string;
+                                custom_attributes: {
+                                    [key: string]: string;
+                                };
+                            };
+                        };
+                        role_mapping: {
+                            enabled: boolean;
+                            role_mappings: {
+                                [key: string]: string;
+                            };
+                            default_role: string | null;
+                            /** @example string */
+                            role_attribute: string;
+                        };
+                        session_timeout: number | null;
+                        require_reauth_for_sensitive_operations: boolean;
+                        custom_config: {
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            auth_endpoint: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            token_endpoint: string;
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            userinfo_endpoint: string;
+                            /** @example string */
+                            client_secret?: string;
+                            /** @enum {string} */
+                            auth_method: "oauth2" | "bearer" | "basic" | "custom";
+                            custom_headers: {
+                                [key: string]: string;
+                            };
+                            custom_parameters: {
+                                [key: string]: string;
+                            };
+                            /** @enum {string} */
+                            response_format: "json" | "xml" | "form";
+                        };
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    deleteEnterpriseConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @constant */
+                            deleted: true;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    enableEnterpriseConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    status: "active" | "disabled";
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    disableEnterpriseConnection: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    status: "active" | "disabled";
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    readEnterpriseProviderConfig: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @constant */
+                            protocol: "enterprise_saml";
+                            acs_url: string;
+                            sp_entity_id: string;
+                            sls_url: string;
+                            sp_metadata_xml: string;
+                        } | {
+                            /** @enum {string} */
+                            protocol: "enterprise_oidc" | "enterprise_custom";
+                            redirect_uri_guidance: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    importEnterpriseSamlMetadata: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** @constant */
+                    source: "url";
+                    /**
+                     * Format: uri
+                     * @example https://example.com
+                     */
+                    metadata_url: string;
+                } | {
+                    /** @constant */
+                    source: "manual";
+                    saml_config: {
+                        /** @example string */
+                        entity_id: string;
+                        /**
+                         * Format: uri
+                         * @example https://example.com
+                         */
+                        sso_url: string;
+                        /**
+                         * Format: uri
+                         * @example https://example.com
+                         */
+                        slo_url?: string;
+                        /** @example string */
+                        certificate: string;
+                        /** @enum {string} */
+                        request_binding: "HTTP-POST" | "HTTP-Redirect";
+                        /** @enum {string} */
+                        response_binding: "HTTP-POST" | "HTTP-Redirect";
+                        sign_requests: boolean;
+                        require_encrypted_assertions: boolean;
+                        /** @enum {string} */
+                        name_id_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress" | "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" | "urn:oasis:names:tc:SAML:2.0:nameid-format:transient" | "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified";
+                    };
+                } | {
+                    /** @constant */
+                    source: "xml";
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            connection_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string | null;
+                            identity: string;
+                            /** @enum {string} */
+                            status: "pending" | "active" | "disabled";
+                            name: string | null;
+                            is_enterprise: boolean;
+                            configuration: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                        };
                     };
                 };
             };
@@ -16230,8 +18551,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16296,6 +18618,12 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     new_password: string;
+                    /** @example string */
+                    current_password?: string;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -16320,8 +18648,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16390,6 +18719,10 @@ export interface operations {
                     issuer?: string;
                     /** @example string */
                     account_label?: string;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -16414,8 +18747,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16504,8 +18838,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16570,6 +18905,10 @@ export interface operations {
                 "application/json": {
                     recovery_code_count?: number;
                     recovery_code_length?: number;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -16594,8 +18933,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16684,8 +19024,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16750,6 +19091,10 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     phone: string;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -16774,8 +19119,93 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
+                                [key: string]: string | number | boolean;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    sendSmsMfaActivationCode: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            credential_id: string;
+                            account_id: string;
+                            kind: string;
+                            app_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            data?: {
                                 [key: string]: unknown;
+                            };
+                            /** @description Custom key-value metadata (max 50 keys) */
+                            metadata?: {
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16864,8 +19294,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -16954,8 +19385,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -17037,364 +19469,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    enrollEmailMfaCredential: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /**
-                     * Format: email
-                     * @example user@example.com
-                     */
-                    email: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            201: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            app_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            data?: {
-                                [key: string]: unknown;
-                            };
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    activateEmailMfaCredential: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    code: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            app_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            data?: {
-                                [key: string]: unknown;
-                            };
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    verifyEmailMfaCredential: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    code: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            app_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            data?: {
-                                [key: string]: unknown;
-                            };
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    sendEmailMfaChallenge: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                account_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            credential_id: string;
-                            account_id: string;
-                            kind: string;
-                            app_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            data?: {
-                                [key: string]: unknown;
-                            };
-                            metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -17476,8 +19553,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -17559,6 +19637,10 @@ export interface operations {
                         max_requests: number;
                         window_seconds: number;
                     } | null;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -17583,8 +19665,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -17659,6 +19742,10 @@ export interface operations {
                     expire_at?: string;
                     test_mode?: boolean;
                     overlap_days?: number;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -17683,8 +19770,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -17749,6 +19837,10 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     public_key_id: string;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -17773,8 +19865,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -17872,8 +19965,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -17962,8 +20056,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -18027,6 +20122,10 @@ export interface operations {
             content: {
                 "application/json": {
                     attestation_response: unknown;
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
                 };
             };
         };
@@ -18051,8 +20150,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -18134,8 +20234,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -18223,8 +20324,9 @@ export interface operations {
                             data?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -18382,21 +20484,24 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
                             mfa?: {
                                 method: string;
                             };
                             verification?: {
                                 [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
                             };
                         };
                     };
@@ -18481,21 +20586,129 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
                             mfa?: {
                                 method: string;
                             };
                             verification?: {
                                 [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    confirmLinkSignup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                client_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @constant */
+                    confirm: true;
+                    step_up?: {
+                        /** @example string */
+                        challenge_id: string;
+                        /** @enum {string} */
+                        method: "passkey" | "totp" | "password";
+                        /** @example string */
+                        code?: string;
+                        /** @example string */
+                        password?: string;
+                        assertion_response?: unknown;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
+                            mfa?: {
+                                method: string;
+                            };
+                            verification?: {
+                                [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
                             };
                         };
                     };
@@ -18567,6 +20780,9 @@ export interface operations {
                     verification_option?: "email_verification_code" | "magic_link" | "phone_verification_code" | "oauth_token";
                     /** @example string */
                     password?: string;
+                    /** @example string */
+                    trusted_device_token?: string;
+                    remember_device?: boolean;
                 };
             };
         };
@@ -18582,21 +20798,24 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
                             mfa?: {
                                 method: string;
                             };
                             verification?: {
                                 [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
                             };
                         };
                     };
@@ -18681,6 +20900,9 @@ export interface operations {
                         /** @example string */
                         credential_id?: string;
                     };
+                    /** @example string */
+                    trusted_device_token?: string;
+                    remember_device?: boolean;
                 };
             };
         };
@@ -18696,21 +20918,24 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
                             mfa?: {
                                 method: string;
                             };
                             verification?: {
                                 [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
                             };
                         };
                     };
@@ -18792,21 +21017,24 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
                             mfa?: {
                                 method: string;
                             };
                             verification?: {
                                 [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
                             };
                         };
                     };
@@ -18885,21 +21113,24 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             /** @enum {string} */
-                            status: "complete" | "mfa_required" | "verification_required";
-                            session?: {
-                                session_id: string;
-                                account_id?: string;
-                                access_token: string;
-                                refresh_token?: string;
-                                /** @constant */
-                                token_type: "Bearer";
-                                expires_in: number;
-                            };
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
                             mfa?: {
                                 method: string;
                             };
                             verification?: {
                                 [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
                             };
                         };
                     };
@@ -18991,10 +21222,17 @@ export interface operations {
                             user_agent?: string | null;
                             account_id?: string | null;
                             details?: {
-                                [key: string]: unknown;
+                                reasons: string[];
+                                detections: {
+                                    /** @enum {string} */
+                                    detection: "brute_force" | "bot_detected" | "new_device" | "impossible_travel" | "signup_abuse" | "dormant_reactivation" | "region_violation" | "anonymous_network" | "new_country" | "verification_flooding" | "concurrent_session_conflict";
+                                    triggered: boolean;
+                                    reason: string | null;
+                                }[];
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -19601,19 +21839,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -19712,19 +21954,23 @@ export interface operations {
                             live_mode: boolean;
                             reference_id?: string | null;
                             emails?: {
-                                primary?: string | null;
-                                others?: {
-                                    email: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                email: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             phones?: {
-                                primary?: string | null;
-                                others?: {
-                                    phone: string;
-                                    verified: boolean;
-                                }[];
-                            };
+                                phone: string;
+                                is_primary: boolean;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                };
+                            }[];
                             name?: string | null;
                             image_url?: string | null;
                             status: string;
@@ -19832,6 +22078,376 @@ export interface operations {
                             identity_connections?: {
                                 [key: string]: unknown;
                             }[];
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    createAuthOrganizationDomain: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    domain: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            organization_domain_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string;
+                            domain: string;
+                            verification_hostname: string;
+                            verification_token: string;
+                            verification_record_value: string;
+                            verification: {
+                                /** @enum {string} */
+                                status: "verified" | "unverified" | "pending" | "expired";
+                                verified_at: string | null;
+                                expires_at: string | null;
+                            };
+                            last_checked_at: string | null;
+                            recheck: {
+                                grace_started_at: string;
+                                failure_warned_at: string | null;
+                                reminder_sent_at: string | null;
+                            } | null;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listAuthOrganizationDomains: {
+        parameters: {
+            query?: {
+                cursor?: {
+                    /** @example string */
+                    prev?: string;
+                    /** @example string */
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: string | number;
+                query?: {
+                    /** @example string */
+                    domain?: string;
+                    /** @enum {string} */
+                    status?: "verified" | "unverified" | "pending" | "expired";
+                };
+            };
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            domains: {
+                                organization_domain_id: string;
+                                conjoin_account_id: string;
+                                conjoin_project_id: string;
+                                app_id: string;
+                                live_mode: boolean;
+                                organization_id: string;
+                                domain: string;
+                                verification_hostname: string;
+                                verification_token: string;
+                                verification_record_value: string;
+                                verification: {
+                                    /** @enum {string} */
+                                    status: "verified" | "unverified" | "pending" | "expired";
+                                    verified_at: string | null;
+                                    expires_at: string | null;
+                                };
+                                last_checked_at: string | null;
+                                recheck: {
+                                    grace_started_at: string;
+                                    failure_warned_at: string | null;
+                                    reminder_sent_at: string | null;
+                                } | null;
+                                date_created: string;
+                                date_updated: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    verifyAuthOrganizationDomain: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                organization_domain_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            organization_domain_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            app_id: string;
+                            live_mode: boolean;
+                            organization_id: string;
+                            domain: string;
+                            verification_hostname: string;
+                            verification_token: string;
+                            verification_record_value: string;
+                            verification: {
+                                /** @enum {string} */
+                                status: "verified" | "unverified" | "pending" | "expired";
+                                verified_at: string | null;
+                                expires_at: string | null;
+                            };
+                            last_checked_at: string | null;
+                            recheck: {
+                                grace_started_at: string;
+                                failure_warned_at: string | null;
+                                reminder_sent_at: string | null;
+                            } | null;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    deleteAuthOrganizationDomain: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                organization_domain_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @constant */
+                            deleted: true;
                         };
                     };
                 };
@@ -21477,6 +24093,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -21581,6 +24198,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 permission_id: string;
             };
@@ -21702,6 +24320,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -21787,6 +24406,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 permission_id: string;
             };
@@ -21886,6 +24506,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 permission_id: string;
             };
@@ -21971,6 +24592,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 permission_id: string;
             };
@@ -22056,6 +24678,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 permission_id: string;
             };
@@ -22141,6 +24764,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -22261,6 +24885,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -22343,6 +24968,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -22456,6 +25082,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -22579,6 +25206,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -22666,6 +25294,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -22768,6 +25397,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -22855,6 +25485,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -22942,6 +25573,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -23029,6 +25661,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
                 role_id: string;
             };
@@ -23094,7 +25727,9 @@ export interface operations {
                 /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
-            path?: never;
+            path: {
+                app_id: string;
+            };
             cookie?: never;
         };
         requestBody: {
@@ -23145,8 +25780,9 @@ export interface operations {
                             settings?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -23201,6 +25837,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -23232,8 +25869,9 @@ export interface operations {
                             settings?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -23295,8 +25933,6 @@ export interface operations {
                 limit?: string | number;
                 query?: {
                     /** @example string */
-                    app_id?: string;
-                    /** @example string */
                     organization_id?: string;
                     /** @example string */
                     account_id?: string;
@@ -23324,7 +25960,9 @@ export interface operations {
                 /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
-            path?: never;
+            path: {
+                app_id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -23354,8 +25992,9 @@ export interface operations {
                             settings?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -23411,6 +26050,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -23457,8 +26097,9 @@ export interface operations {
                             settings?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -23513,6 +26154,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -23522,6 +26164,7 @@ export interface operations {
                 "application/json": {
                     membership?: {
                         limit?: number;
+                        invitation_expiry_seconds?: number;
                     };
                     authentication?: {
                         block_email_subaddresses?: boolean;
@@ -23529,21 +26172,20 @@ export interface operations {
                         passkey_primary_enabled?: boolean;
                         /** @enum {string} */
                         signup_mode?: "public" | "restricted";
-                        allow_list: {
+                        allow_list?: {
                             is_enabled?: boolean;
                             emails?: string[];
                             domains?: string[];
                         };
-                        block_list: {
+                        block_list?: {
                             is_enabled?: boolean;
                             emails?: string[];
                             domains?: string[];
                         };
-                        mfa: {
+                        enabled_methods?: ("totp" | "passkey" | "api_key")[];
+                        mfa?: {
                             enable_totp?: boolean;
                             enable_sms?: boolean;
-                            enable_email?: boolean;
-                            generate_recovery_codes?: boolean;
                             step_up?: {
                                 is_enabled?: boolean;
                                 ttl_seconds?: number;
@@ -23554,6 +26196,18 @@ export interface operations {
                                 max_per_account?: number;
                             };
                         };
+                        identity_resolution?: {
+                            precedence?: ("connected_identity" | "email" | "phone" | "org_domain")[];
+                            org_domain?: {
+                                enabled?: boolean;
+                                require_verification?: boolean;
+                            };
+                            /** @enum {string} */
+                            sso_collision_default?: "prompt" | "auto_link" | "block";
+                            /** @enum {string} */
+                            merge_policy?: "never" | "prompt" | "auto_safe";
+                            allow_cross_organization_identity_link?: boolean;
+                        };
                     };
                     sessions?: {
                         is_multi_user_sessions_enabled?: boolean;
@@ -23563,18 +26217,17 @@ export interface operations {
                         absolute_session_lifetime_seconds?: number | null;
                         idle_timeout_seconds?: number | null;
                         access_token_ttl_seconds?: number;
-                        refresh_token_ttl_seconds?: number;
-                        csrf_protection_enabled?: boolean;
                         /** @enum {string} */
                         cookie_same_site?: "Lax" | "Strict" | "None";
                         enable_device_binding?: boolean;
-                        refresh_token_grace_period_seconds?: number;
+                        enable_native_token_issuance?: boolean;
                     };
                     groups?: {
                         max_per_org?: number;
                         max_members_per_group?: number;
                         max_roles_per_group?: number;
                     };
+                    unset?: ("authentication.block_email_subaddresses" | "authentication.reject_disposable_emails" | "authentication.passkey_primary_enabled" | "authentication.signup_mode" | "authentication.allow_list" | "authentication.block_list" | "authentication.enabled_methods" | "authentication.mfa.enable_totp" | "authentication.mfa.enable_sms" | "authentication.mfa.step_up.is_enabled" | "authentication.mfa.step_up.ttl_seconds" | "authentication.mfa.trusted_devices.is_enabled" | "authentication.mfa.trusted_devices.trust_duration_days" | "authentication.mfa.trusted_devices.max_per_account" | "sessions.is_multi_user_sessions_enabled" | "sessions.allow_multiple_device_sessions" | "sessions.max_concurrent_sessions_per_account_per_client" | "sessions.session_expiry_seconds" | "sessions.absolute_session_lifetime_seconds" | "sessions.idle_timeout_seconds" | "sessions.access_token_ttl_seconds" | "sessions.cookie_same_site" | "sessions.enable_device_binding")[];
                 };
             };
         };
@@ -23604,8 +26257,9 @@ export interface operations {
                             settings?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -23660,6 +26314,7 @@ export interface operations {
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
             };
             path: {
+                app_id: string;
                 organization_id: string;
             };
             cookie?: never;
@@ -23700,8 +26355,9 @@ export interface operations {
                             settings?: {
                                 [key: string]: unknown;
                             };
+                            /** @description Custom key-value metadata (max 50 keys) */
                             metadata?: {
-                                [key: string]: unknown;
+                                [key: string]: string | number | boolean;
                             };
                             date_created: string;
                             date_updated: string;
@@ -23916,7 +26572,16 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    session_id?: string;
+                    /** @example string */
+                    step_up_token?: string;
+                };
+            };
+        };
         responses: {
             /** @description Successful response */
             200: {
@@ -23937,6 +26602,138 @@ export interface operations {
                             transports?: string[];
                             aaguid?: string | null;
                             date_created: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    importPasswordHashes: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    users: {
+                        /** @example string */
+                        reference_id?: string;
+                        /**
+                         * Format: email
+                         * @example user@example.com
+                         */
+                        primary_email?: string;
+                        /** @example string */
+                        primary_phone?: string;
+                        /** @example string */
+                        name?: string;
+                        /**
+                         * Format: uri
+                         * @example https://example.com
+                         */
+                        image_url?: string;
+                        /** @description Custom key-value metadata (max 50 keys) */
+                        metadata?: {
+                            [key: string]: string | number | boolean;
+                        };
+                        /** @example string */
+                        hash: string;
+                        /** @enum {string} */
+                        format: "bcrypt" | "bcrypt-sha256" | "argon2id" | "argon2i" | "pbkdf2-sha1" | "pbkdf2-sha256" | "pbkdf2-sha512" | "scrypt" | "scrypt-firebase" | "md5" | "sha1" | "sha256" | "sha512" | "phpass" | "ssha";
+                        params?: {
+                            /** @example string */
+                            salt?: string;
+                            /** @enum {string} */
+                            salt_encoding?: "hex" | "base64" | "utf8";
+                            /** @enum {string} */
+                            hash_encoding?: "hex" | "base64" | "utf8";
+                            /** @enum {string} */
+                            salt_position?: "prefix" | "suffix";
+                            /** @enum {string} */
+                            digest?: "sha1" | "sha256" | "sha512" | "md5";
+                            iterations?: number;
+                            key_length?: number;
+                            scrypt_cost?: number;
+                            scrypt_block_size?: number;
+                            scrypt_parallelism?: number;
+                            /** @example string */
+                            signer_key?: string;
+                            /** @example string */
+                            salt_separator?: string;
+                            rounds?: number;
+                            mem_cost?: number;
+                        };
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            total: number;
+                            created: number;
+                            failed: number;
+                            results: {
+                                index: number;
+                                reference_id: string | null;
+                                /** @enum {string} */
+                                status: "created" | "conflict" | "rejected" | "failed";
+                                account_id?: string | null;
+                                code?: string;
+                                message?: string;
+                            }[];
                         };
                     };
                 };
@@ -24023,8 +26820,8 @@ export interface operations {
                         value: string | number | boolean | string[];
                     })[];
                     permission_keys: string[];
-                    /** @enum {string} */
-                    effect: "allow" | "deny";
+                    /** @constant */
+                    effect: "deny";
                     /** @default 100 */
                     priority?: number;
                     /** @default true */
@@ -24345,8 +27142,8 @@ export interface operations {
                         value: string | number | boolean | string[];
                     })[];
                     permission_keys?: string[];
-                    /** @enum {string} */
-                    effect?: "allow" | "deny";
+                    /** @constant */
+                    effect?: "deny";
                     priority?: number;
                     is_enabled?: boolean;
                 };
@@ -25049,6 +27846,665 @@ export interface operations {
             };
         };
     };
+    readScimConnectionConfig: {
+        parameters: {
+            query: {
+                provider: "oauth2" | "oidc" | "email" | "password" | "apple" | "atlassian" | "discord" | "dropbox" | "facebook" | "figma" | "github" | "gitlab" | "google" | "huggingface" | "jumpcloud" | "linear" | "linkedin" | "microsoft" | "notion" | "reddit" | "slack" | "spotify" | "tiktok" | "twitch" | "workos" | "x" | "yahoo" | "auth0" | "okta" | "onelogin" | "pingidentity" | "cyberark" | "keycloak" | "fusionauth" | "casdoor" | "gluu" | "enterprise_saml" | "enterprise_oidc" | "enterprise_custom";
+            };
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            deprovisionPolicy: "suspend" | "soft_delete";
+                            userAttributeMapping: {
+                                userNameToPrimaryEmail: boolean;
+                                givenNamePath: string;
+                                familyNamePath: string;
+                                emailsPath: string;
+                                phonesPath: string;
+                                photoPath: string;
+                            };
+                            groupAttributeMapping: {
+                                displayNamePath: string;
+                                externalIdPath: string;
+                                descriptionPath?: string;
+                                imagePath?: string;
+                            };
+                            roleMappingRules: {
+                                /** @enum {string} */
+                                matchBy: "displayName" | "externalId" | "regex";
+                                /** @example string */
+                                pattern: string;
+                                roles: string[];
+                            }[];
+                            rateLimits?: {
+                                writesPerSecond?: number;
+                                readsPerSecond?: number;
+                            };
+                            limits?: {
+                                maxGroupMembersApplyBatch?: number;
+                            };
+                            bearer_token_configured: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateScimConnectionConfig: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    bearer_token?: string;
+                    config: {
+                        /** @enum {string} */
+                        deprovisionPolicy: "suspend" | "soft_delete";
+                        userAttributeMapping: {
+                            userNameToPrimaryEmail: boolean;
+                            /** @example string */
+                            givenNamePath: string;
+                            /** @example string */
+                            familyNamePath: string;
+                            /** @example string */
+                            emailsPath: string;
+                            /** @example string */
+                            phonesPath: string;
+                            /** @example string */
+                            photoPath: string;
+                        };
+                        groupAttributeMapping: {
+                            /** @example string */
+                            displayNamePath: string;
+                            /** @example string */
+                            externalIdPath: string;
+                            /** @example string */
+                            descriptionPath?: string;
+                            /** @example string */
+                            imagePath?: string;
+                        };
+                        roleMappingRules: {
+                            /** @enum {string} */
+                            matchBy: "displayName" | "externalId" | "regex";
+                            /** @example string */
+                            pattern: string;
+                            roles: string[];
+                        }[];
+                        rateLimits?: {
+                            writesPerSecond?: number;
+                            readsPerSecond?: number;
+                        };
+                        limits?: {
+                            maxGroupMembersApplyBatch?: number;
+                        };
+                    };
+                    /** @enum {string} */
+                    provider: "oauth2" | "oidc" | "email" | "password" | "apple" | "atlassian" | "discord" | "dropbox" | "facebook" | "figma" | "github" | "gitlab" | "google" | "huggingface" | "jumpcloud" | "linear" | "linkedin" | "microsoft" | "notion" | "reddit" | "slack" | "spotify" | "tiktok" | "twitch" | "workos" | "x" | "yahoo" | "auth0" | "okta" | "onelogin" | "pingidentity" | "cyberark" | "keycloak" | "fusionauth" | "casdoor" | "gluu" | "enterprise_saml" | "enterprise_oidc" | "enterprise_custom";
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status: "ok";
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    syncScimRolesForMember: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    account_id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status: "ok";
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    syncScimRolesForGroup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    group_id: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status: "ok";
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    reconcileScimUsers: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    provider: "oauth2" | "oidc" | "email" | "password" | "apple" | "atlassian" | "discord" | "dropbox" | "facebook" | "figma" | "github" | "gitlab" | "google" | "huggingface" | "jumpcloud" | "linear" | "linkedin" | "microsoft" | "notion" | "reddit" | "slack" | "spotify" | "tiktok" | "twitch" | "workos" | "x" | "yahoo" | "auth0" | "okta" | "onelogin" | "pingidentity" | "cyberark" | "keycloak" | "fusionauth" | "casdoor" | "gluu" | "enterprise_saml" | "enterprise_oidc" | "enterprise_custom";
+                    users: {
+                        /** @example string */
+                        external_user_id: string;
+                        user: {
+                            /** @example string */
+                            externalId?: string;
+                            /** @example string */
+                            userName?: string;
+                            name?: {
+                                /** @example string */
+                                givenName?: string;
+                                /** @example string */
+                                familyName?: string;
+                            };
+                            emails?: {
+                                /**
+                                 * Format: email
+                                 * @example user@example.com
+                                 */
+                                value: string;
+                                /** @example string */
+                                type?: string;
+                                primary?: boolean;
+                            }[];
+                            phoneNumbers?: {
+                                /** @example string */
+                                value: string;
+                                /** @example string */
+                                type?: string;
+                                primary?: boolean;
+                            }[];
+                            active?: boolean;
+                            photos?: {
+                                /**
+                                 * Format: uri
+                                 * @example https://example.com
+                                 */
+                                value: string;
+                                /** @example string */
+                                type?: string;
+                                primary?: boolean;
+                            }[];
+                        };
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status: "ok";
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    reconcileScimGroups: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    groups: {
+                        /** @example string */
+                        externalId?: string;
+                        /** @example string */
+                        displayName: string;
+                        members?: {
+                            /** @example string */
+                            value: string;
+                            /** @example string */
+                            type?: string;
+                        }[];
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status: "ok";
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    reconcileScimGroupMembers: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    provider: "oauth2" | "oidc" | "email" | "password" | "apple" | "atlassian" | "discord" | "dropbox" | "facebook" | "figma" | "github" | "gitlab" | "google" | "huggingface" | "jumpcloud" | "linear" | "linkedin" | "microsoft" | "notion" | "reddit" | "slack" | "spotify" | "tiktok" | "twitch" | "workos" | "x" | "yahoo" | "auth0" | "okta" | "onelogin" | "pingidentity" | "cyberark" | "keycloak" | "fusionauth" | "casdoor" | "gluu" | "enterprise_saml" | "enterprise_oidc" | "enterprise_custom";
+                    changes: {
+                        /** @example string */
+                        external_group_id: string;
+                        added: string[];
+                        removed: string[];
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status: "ok";
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
     readAuthSession: {
         parameters: {
             query?: never;
@@ -25389,104 +28845,6 @@ export interface operations {
                     metadata?: {
                         [key: string]: string | number | boolean;
                     };
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            session_id: string;
-                            account_id: string;
-                            client_id: string;
-                            app_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            expires_at?: string | null;
-                            last_activity?: {
-                                ip?: string | null;
-                                initiated_at?: string | null;
-                                country_code?: string | null;
-                                latitude?: number | null;
-                                longitude?: number | null;
-                            };
-                            status: string;
-                            revoked_at?: string | null;
-                            revoked_reason?: string | null;
-                            metadata?: {
-                                [key: string]: unknown;
-                            };
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    refreshAuthSession: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                app_id: string;
-                session_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    refresh_token?: string;
                 };
             };
         };
@@ -26643,8 +30001,6 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     saml_request: string;
-                    /** @example string */
-                    issuer: string;
                 };
             };
         };
@@ -26661,6 +30017,319 @@ export interface operations {
                         data?: {
                             logout_url?: string | null;
                             status?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    readSsoPortalSettings: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            allowed_providers: ("enterprise_saml" | "enterprise_oidc" | "enterprise_custom")[];
+                            setup_intents: ("sso" | "directory_sync")[];
+                            require_domain_verification: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateSsoPortalSettings: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    allowed_providers?: ("enterprise_saml" | "enterprise_oidc" | "enterprise_custom")[];
+                    setup_intents?: ("sso" | "directory_sync")[];
+                    require_domain_verification?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            allowed_providers: ("enterprise_saml" | "enterprise_oidc" | "enterprise_custom")[];
+                            setup_intents: ("sso" | "directory_sync")[];
+                            require_domain_verification: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    mintSsoPortalTicket: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            ticket: {
+                                ticket_id: string;
+                                conjoin_account_id: string;
+                                conjoin_project_id: string;
+                                app_id: string;
+                                live_mode: boolean;
+                                organization_id: string;
+                                /** @enum {string} */
+                                status: "active" | "revoked";
+                                allowed_providers: ("enterprise_saml" | "enterprise_oidc" | "enterprise_custom")[];
+                                setup_intents: ("sso" | "directory_sync")[];
+                                require_domain_verification: boolean;
+                                max_opens: number;
+                                open_count: number;
+                                expires_at: string;
+                                first_opened_at: string | null;
+                                open_deadline_at: string | null;
+                                date_created: string;
+                                date_updated: string;
+                            };
+                            /**
+                             * Format: uri
+                             * @example https://example.com
+                             */
+                            portal_url: string;
+                            secret: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    revokeSsoPortalTicket: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                app_id: string;
+                organization_id: string;
+                ticket_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @constant */
+                            revoked: true;
                         };
                     };
                 };
@@ -26721,8 +30390,8 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     session_id: string;
-                    /** @example string */
-                    operation_id: string;
+                    /** @enum {string} */
+                    operation_id: "auth.password.rotate" | "auth.totp.enroll" | "auth.totp.recovery_codes.rotate" | "auth.passkey.register" | "auth.passkey.delete" | "auth.sms.enroll" | "auth.api_key.issue" | "auth.api_key.rotate" | "auth.api_key.revoke" | "auth.email.add" | "auth.email.remove" | "auth.phone.add" | "auth.phone.remove" | "auth.identity.link";
                 };
             };
         };
@@ -26737,11 +30406,9 @@ export interface operations {
                     "application/json": {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
-                            challenge_id?: string;
-                            available_methods?: string[];
-                            expires_at?: string;
-                            status?: string;
-                            token?: string;
+                            available_methods: ("passkey" | "totp" | "password")[];
+                            /** @example string */
+                            challenge_id: string;
                         };
                     };
                 };
@@ -26802,13 +30469,17 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     session_id: string;
+                    /** @enum {string} */
+                    operation_id: "auth.password.rotate" | "auth.totp.enroll" | "auth.totp.recovery_codes.rotate" | "auth.passkey.register" | "auth.passkey.delete" | "auth.sms.enroll" | "auth.api_key.issue" | "auth.api_key.rotate" | "auth.api_key.revoke" | "auth.email.add" | "auth.email.remove" | "auth.phone.add" | "auth.phone.remove" | "auth.identity.link";
                     /** @example string */
-                    operation_id: string;
+                    challenge_id: string;
+                    /** @enum {string} */
+                    method: "passkey" | "totp" | "password";
                     /** @example string */
-                    method: string;
+                    code?: string;
                     /** @example string */
-                    code: string;
-                    ttl_seconds?: number;
+                    password?: string;
+                    assertion_response?: unknown;
                 };
             };
         };
@@ -26823,11 +30494,9 @@ export interface operations {
                     "application/json": {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
-                            challenge_id?: string;
-                            available_methods?: string[];
-                            expires_at?: string;
-                            status?: string;
-                            token?: string;
+                            /** @example string */
+                            step_up_token: string;
+                            expires_in: number;
                         };
                     };
                 };
@@ -26888,8 +30557,8 @@ export interface operations {
                 "application/json": {
                     /** @example string */
                     session_id: string;
-                    /** @example string */
-                    operation_id: string;
+                    /** @enum {string} */
+                    operation_id: "auth.password.rotate" | "auth.totp.enroll" | "auth.totp.recovery_codes.rotate" | "auth.passkey.register" | "auth.passkey.delete" | "auth.sms.enroll" | "auth.api_key.issue" | "auth.api_key.rotate" | "auth.api_key.revoke" | "auth.email.add" | "auth.email.remove" | "auth.phone.add" | "auth.phone.remove" | "auth.identity.link";
                     /** @example string */
                     token: string;
                 };
@@ -26906,11 +30575,7 @@ export interface operations {
                     "application/json": {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
-                            challenge_id?: string;
-                            available_methods?: string[];
-                            expires_at?: string;
-                            status?: string;
-                            token?: string;
+                            valid: boolean;
                         };
                     };
                 };
@@ -26995,11 +30660,12 @@ export interface operations {
                             conjoin_account_id: string;
                             conjoin_project_id: string;
                             live_mode: boolean;
-                            device_fingerprint: string;
                             ip_prefix?: string | null;
+                            user_agent?: string | null;
                             label?: string | null;
                             trusted_at?: string;
                             expires_at?: string;
+                            absolute_expires_at?: string;
                             last_used_at?: string | null;
                             status: string;
                             metadata?: {
@@ -27083,11 +30749,12 @@ export interface operations {
                             conjoin_account_id: string;
                             conjoin_project_id: string;
                             live_mode: boolean;
-                            device_fingerprint: string;
                             ip_prefix?: string | null;
+                            user_agent?: string | null;
                             label?: string | null;
                             trusted_at?: string;
                             expires_at?: string;
+                            absolute_expires_at?: string;
                             last_used_at?: string | null;
                             status: string;
                             metadata?: {
@@ -27164,6 +30831,503 @@ export interface operations {
                         response?: components["schemas"]["ApiSuccessResponseMeta"];
                         data?: {
                             revoked_count: number;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    scimListGroups: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                project_id: string;
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        schemas: string[];
+                        totalResults: number;
+                        startIndex?: number;
+                        itemsPerPage?: number;
+                        Resources?: {
+                            [key: string]: unknown;
+                        }[];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    scimCreateGroup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                project_id: string;
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    externalId?: string;
+                    /** @example string */
+                    displayName: string;
+                    members?: {
+                        /** @example string */
+                        value: string;
+                        /** @example string */
+                        type?: string;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        schemas: string[];
+                        id?: string;
+                        externalId?: string | null;
+                        displayName: string;
+                        members?: {
+                            value: string;
+                            display?: string;
+                            type?: string;
+                        }[];
+                        meta?: {
+                            resourceType?: string;
+                            created?: string;
+                            lastModified?: string;
+                            location?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    scimGetGroup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                project_id: string;
+                app_id: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        schemas: string[];
+                        id?: string;
+                        externalId?: string | null;
+                        displayName: string;
+                        members?: {
+                            value: string;
+                            display?: string;
+                            type?: string;
+                        }[];
+                        meta?: {
+                            resourceType?: string;
+                            created?: string;
+                            lastModified?: string;
+                            location?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    scimReplaceGroup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                project_id: string;
+                app_id: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    externalId?: string;
+                    /** @example string */
+                    displayName: string;
+                    members?: {
+                        /** @example string */
+                        value: string;
+                        /** @example string */
+                        type?: string;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        schemas: string[];
+                        id?: string;
+                        externalId?: string | null;
+                        displayName: string;
+                        members?: {
+                            value: string;
+                            display?: string;
+                            type?: string;
+                        }[];
+                        meta?: {
+                            resourceType?: string;
+                            created?: string;
+                            lastModified?: string;
+                            location?: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    scimDeleteGroup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                project_id: string;
+                app_id: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    scimPatchGroupMembers: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                project_id: string;
+                app_id: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    schemas?: string[];
+                    Operations: {
+                        /** @example string */
+                        op: string;
+                        /** @example string */
+                        path?: string;
+                        value?: unknown;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        schemas: string[];
+                        id?: string;
+                        externalId?: string | null;
+                        displayName: string;
+                        members?: {
+                            value: string;
+                            display?: string;
+                            type?: string;
+                        }[];
+                        meta?: {
+                            resourceType?: string;
+                            created?: string;
+                            lastModified?: string;
+                            location?: string;
                         };
                     };
                 };
@@ -27382,6 +31546,92 @@ export interface operations {
                         schemas: string[];
                         totalResults?: number;
                         Resources?: {
+                            [key: string]: unknown;
+                        }[];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    scimBulkOperations: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path: {
+                project_id: string;
+                app_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    schemas?: string[];
+                    failOnErrors?: number;
+                    Operations: {
+                        /** @example string */
+                        method: string;
+                        /** @example string */
+                        path?: string;
+                        /** @example string */
+                        bulkId?: string;
+                        /** @example string */
+                        version?: string;
+                        data?: unknown;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        schemas: string[];
+                        Operations?: {
                             [key: string]: unknown;
                         }[];
                     };
@@ -28025,558 +32275,6 @@ export interface operations {
             };
         };
     };
-    scimListGroups: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                project_id: string;
-                app_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schemas: string[];
-                        totalResults: number;
-                        startIndex?: number;
-                        itemsPerPage?: number;
-                        Resources?: {
-                            [key: string]: unknown;
-                        }[];
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    scimCreateGroup: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                project_id: string;
-                app_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    externalId?: string;
-                    /** @example string */
-                    displayName: string;
-                    members?: {
-                        /** @example string */
-                        value: string;
-                        /** @example string */
-                        type?: string;
-                    }[];
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            201: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schemas: string[];
-                        id?: string;
-                        externalId?: string | null;
-                        displayName: string;
-                        members?: {
-                            value: string;
-                            display?: string;
-                            type?: string;
-                        }[];
-                        meta?: {
-                            resourceType?: string;
-                            created?: string;
-                            lastModified?: string;
-                            location?: string;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    scimGetGroup: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                project_id: string;
-                app_id: string;
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schemas: string[];
-                        id?: string;
-                        externalId?: string | null;
-                        displayName: string;
-                        members?: {
-                            value: string;
-                            display?: string;
-                            type?: string;
-                        }[];
-                        meta?: {
-                            resourceType?: string;
-                            created?: string;
-                            lastModified?: string;
-                            location?: string;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    scimReplaceGroup: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                project_id: string;
-                app_id: string;
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    externalId?: string;
-                    /** @example string */
-                    displayName: string;
-                    members?: {
-                        /** @example string */
-                        value: string;
-                        /** @example string */
-                        type?: string;
-                    }[];
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schemas: string[];
-                        id?: string;
-                        externalId?: string | null;
-                        displayName: string;
-                        members?: {
-                            value: string;
-                            display?: string;
-                            type?: string;
-                        }[];
-                        meta?: {
-                            resourceType?: string;
-                            created?: string;
-                            lastModified?: string;
-                            location?: string;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    scimDeleteGroup: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                project_id: string;
-                app_id: string;
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            204: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    scimPatchGroupMembers: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                project_id: string;
-                app_id: string;
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schemas: string[];
-                        id?: string;
-                        externalId?: string | null;
-                        displayName: string;
-                        members?: {
-                            value: string;
-                            display?: string;
-                            type?: string;
-                        }[];
-                        meta?: {
-                            resourceType?: string;
-                            created?: string;
-                            lastModified?: string;
-                            location?: string;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    scimBulkOperations: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path: {
-                project_id: string;
-                app_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schemas: string[];
-                        Operations?: {
-                            [key: string]: unknown;
-                        }[];
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
     listCharges: {
         parameters: {
             query?: {
@@ -28595,99 +32293,45 @@ export interface operations {
                     payment_type?: "unknown" | "payment_method" | "payment_intent" | "subscription" | "invoice";
                     include?: ("transaction_id" | "transaction_type" | "payment_type" | "status" | "amount" | "currency" | "date_created" | "date_updated" | "date_deleted")[];
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -28920,67 +32564,31 @@ export interface operations {
                     /** @enum {string} */
                     reason_code?: "promotion" | "loyalty" | "referral" | "winback" | "seasonal" | "employee" | "partner" | "compensation" | "other";
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -29418,35 +33026,17 @@ export interface operations {
                     /** @enum {string} */
                     reason?: "duplicate_charge" | "product_unsatisfactory" | "order_change" | "service_disruption" | "billing_error" | "goodwill" | "subscription_proration" | "other";
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -29842,35 +33432,17 @@ export interface operations {
                     label?: string;
                     is_active?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -30165,99 +33737,45 @@ export interface operations {
                     /** @example string */
                     customer_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -30983,35 +34501,17 @@ export interface operations {
                     coupon_id?: string;
                     is_active?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -31331,67 +34831,31 @@ export interface operations {
                     };
                     is_active?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -31708,38 +35172,24 @@ export interface operations {
                     /** @example string */
                     customer_id?: string;
                     /** @example string */
+                    subscription_id?: string;
+                    /** @example string */
+                    plan_id?: string;
+                    /** @example string */
                     feature_id?: string;
                     is_active?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -31770,6 +35220,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -31844,6 +35296,10 @@ export interface operations {
                     /** @example string */
                     customer_id: string;
                     /** @example string */
+                    subscription_id: string;
+                    /** @example string */
+                    plan_id: string;
+                    /** @example string */
                     feature_id: string;
                     /** @enum {string} */
                     value_type: "boolean" | "numeric" | "unlimited";
@@ -31876,6 +35332,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -31972,6 +35430,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -32057,6 +35517,8 @@ export interface operations {
                             conjoin_project_id: string;
                             entity_id: string;
                             customer_id: string;
+                            subscription_id: string;
+                            plan_id: string;
                             feature_id: string;
                             /** @enum {string} */
                             value_type: "boolean" | "numeric" | "unlimited";
@@ -34605,99 +38067,45 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -35002,99 +38410,45 @@ export interface operations {
                     is_active?: boolean;
                     is_default?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -35616,67 +38970,31 @@ export interface operations {
                     };
                     auto_activate?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -36860,35 +40178,17 @@ export interface operations {
                     /** @example string */
                     batch_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -37722,99 +41022,45 @@ export interface operations {
                     type?: "recurring" | "one_time";
                     is_active?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -38545,99 +41791,45 @@ export interface operations {
                     };
                     is_active?: boolean;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -39133,99 +42325,45 @@ export interface operations {
                     charge_id?: string;
                     include?: ("receipt_id" | "charge_id" | "entity_id" | "status" | "pdf_storage_reference" | "amount" | "currency" | "customer_id" | "date_created" | "date_updated" | "date_deleted")[];
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -39586,99 +42724,45 @@ export interface operations {
                     };
                     include?: ("refund_id" | "charge_id" | "status" | "fulfilment_type" | "amount" | "currency")[];
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_updated?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                     date_deleted?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     } | null;
                 };
@@ -42002,35 +45086,17 @@ export interface operations {
                     /** @enum {string} */
                     tax_type?: "vat" | "gst" | "hst" | "qst" | "pst" | "gst_hst" | "qst_pst" | "gh:nhil" | "gh:getfl" | "gh:chrl" | "sales_tax" | "other";
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -44203,7 +47269,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     };
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -44471,7 +47536,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     };
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -44845,7 +47909,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     } | null;
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -45115,7 +48178,6 @@ export interface operations {
                         reduced_motion_behavior?: "respect" | "disable" | "ignore";
                     } | null;
                     accessibility?: {
-                        minimum_contrast_ratio?: number | null;
                         focus_ring_style?: string | null;
                         focus_ring_color?: string | null;
                         focus_ring_offset?: string | null;
@@ -46027,7 +49089,24 @@ export interface operations {
     };
     readCloudRoles: {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: {
+                    /** @example string */
+                    prev?: string;
+                    /** @example string */
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: string | number;
+                query?: {
+                    /** @example string */
+                    role_id?: string;
+                    /** @example string */
+                    name?: string;
+                };
+            };
             header?: {
                 /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
@@ -46292,83 +49371,6 @@ export interface operations {
                             unit_label: string;
                             meter_type: string;
                         };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    readAccountSkuQuotas: {
-        parameters: {
-            query?: never;
-            header?: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            cloud_sku_quota_id: string;
-                            entity_id: string;
-                            cloud_sku_id: string;
-                            scope_type: string;
-                            scope_id: string;
-                            quota_type: string;
-                            quota_value: number;
-                            unit_type: string;
-                            effective_from: string;
-                            effective_to?: string | null;
-                            date_created: string;
-                            date_updated?: string | null;
-                        }[];
-                        cursor?: components["schemas"]["PaginationCursor"];
                     };
                 };
             };
@@ -46682,7 +49684,7 @@ export interface operations {
                      * @example https://example.com
                      */
                     url: string;
-                    events: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-byok-config-created" | "ai-byok-config-updated" | "ai-byok-config-deleted" | "ai-byok-config-tested" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-verification-email_code_requested" | "auth-verification-email_link_requested" | "auth-verification-sms_code_requested" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-credential-verified" | "auth-credential-removed" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-email_enrolled" | "auth-mfa-email_activated" | "auth-mfa-email_verified" | "auth-mfa-email_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-subscription_schedule-created" | "billing-subscription_schedule-canceled" | "billing-subscription_schedule-released" | "billing-subscription_schedule-phase_applied" | "billing-subscription_schedule-completed" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-price_bundle_activation-tier_transitioned" | "billing-price_bundle_activation-tier_failed" | "billing-price_bundle_activation-failed" | "billing-price_bundle_activation-fallback_activated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "cloud-spend_controls-threshold_reached" | "cloud-spend_controls-limit_blocked" | "cloud-spend_controls-updated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-incoming_sent" | "messaging-sms-outgoing_accepted" | "messaging-sms-outgoing_delayed" | "messaging-sms-outgoing_sent" | "messaging-sms-outgoing_failed" | "messaging-sms-outgoing_delivered" | "messaging-sms-outgoing_complained" | "messaging-sms-outgoing_rejected" | "messaging-sms-outgoing_updated" | "messaging-sms-outgoing_replied" | "messaging-sms-outgoing_expired" | "messaging-email-unknown" | "messaging-email-incoming_sent" | "messaging-email-outgoing_accepted" | "messaging-email-outgoing_delayed" | "messaging-email-outgoing_sent" | "messaging-email-outgoing_failed" | "messaging-email-outgoing_delivered" | "messaging-email-outgoing_complained" | "messaging-email-outgoing_rejected" | "messaging-email-outgoing_updated" | "messaging-email-outgoing_replied" | "messaging-email-outgoing_opened" | "messaging-email-outgoing_clicked" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-otp-sent" | "messaging-otp-failed" | "messaging-otp-delivered" | "messaging-otp-updated" | "messaging-sender-domain_created" | "messaging-sender-domain_updated" | "messaging-sender-domain_deleted" | "messaging-sender-domain_verified" | "messaging-sender-phone_number_purchased" | "messaging-sender-phone_number_released" | "messaging-sender-alpha_numeric_id_reserved" | "messaging-sender-alpha_numeric_id_released" | "messaging-sender-alpha_numeric_id_approved" | "messaging-sender-alpha_numeric_id_rejected" | "messaging-sender-blocked" | "messaging-participant-created" | "messaging-participant-conversation_attached" | "messaging-participant-conversation_detached" | "messaging-participant-deleted" | "messaging-participant-sms_unsubscribed" | "messaging-participant-email_unsubscribed" | "messaging-phone-number-provision-not-requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
+                    events: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-byok-config-created" | "ai-byok-config-updated" | "ai-byok-config-deleted" | "ai-byok-config-tested" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-verification-email_code_requested" | "auth-verification-email_link_requested" | "auth-verification-sms_code_requested" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-credential-verified" | "auth-credential-removed" | "auth-credential-passkey_clone_suspected" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-certificate-expired" | "auth-organization-domain_verification_failed" | "auth-organization-domain_verification_reminder" | "auth-organization-domain_verification_demoted" | "auth-organization-domain_verification_recovered" | "auth-connection-created" | "auth-connection-configured" | "auth-connection-activated" | "auth-connection-disabled" | "auth-connection-test_failed" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-subscription_schedule-created" | "billing-subscription_schedule-canceled" | "billing-subscription_schedule-released" | "billing-subscription_schedule-phase_applied" | "billing-subscription_schedule-completed" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-price_bundle_activation-tier_transitioned" | "billing-price_bundle_activation-tier_failed" | "billing-price_bundle_activation-failed" | "billing-price_bundle_activation-fallback_activated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "cloud-spend_controls-threshold_reached" | "cloud-spend_controls-limit_blocked" | "cloud-spend_controls-updated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-inbound_received" | "messaging-sms-outbound_accepted" | "messaging-sms-outbound_delayed" | "messaging-sms-outbound_sent" | "messaging-sms-outbound_failed" | "messaging-sms-outbound_delivered" | "messaging-sms-outbound_complained" | "messaging-sms-outbound_rejected" | "messaging-sms-outbound_replied" | "messaging-sms-outbound_expired" | "messaging-email-unknown" | "messaging-email-inbound_received" | "messaging-email-outbound_accepted" | "messaging-email-outbound_delayed" | "messaging-email-outbound_sent" | "messaging-email-outbound_failed" | "messaging-email-outbound_delivered" | "messaging-email-outbound_bounced" | "messaging-email-outbound_complained" | "messaging-email-outbound_rejected" | "messaging-email-outbound_updated" | "messaging-email-outbound_replied" | "messaging-email-outbound_opened" | "messaging-email-outbound_clicked" | "messaging-email-recipient_subscribed" | "messaging-email-recipient_unsubscribed" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-verification-sent" | "messaging-verification-failed" | "messaging-verification-delivered" | "messaging-verification-expired" | "messaging-verification-verified" | "messaging-email-sender-created" | "messaging-email-sender-deleted" | "messaging-email-sender-verified" | "messaging-sms-sender-reserved" | "messaging-sms-sender-released" | "messaging-sms-sender-approved" | "messaging-sms-sender-rejected" | "messaging-sms-sender-blocked" | "messaging-sms-brand-registered" | "messaging-sms-brand-suspended" | "messaging-sms-brand-deletion_failed" | "messaging-sms-brand-deletion_pending" | "messaging-sms-brand-deleted" | "messaging-sms-brand-under_review" | "messaging-sms-brand-registration_failed" | "messaging-sms-brand-registration_pending" | "messaging-sms-brand-unverified" | "messaging-sms-brand-vetted" | "messaging-sms-brand-vetting_failed" | "messaging-sms-campaign-approved" | "messaging-sms-campaign-suspended" | "messaging-sms-campaign-failed" | "messaging-sms-campaign-pending" | "messaging-sms-campaign-deleted" | "messaging-sms-campaign-in_review" | "messaging-sms-campaign-rejected" | "messaging-sms-campaign-submitted" | "messaging-phone-number-provision_not_requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
                     is_active?: boolean;
                 };
             };
@@ -46934,7 +49936,7 @@ export interface operations {
                      * @example https://example.com
                      */
                     url?: string;
-                    events?: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-byok-config-created" | "ai-byok-config-updated" | "ai-byok-config-deleted" | "ai-byok-config-tested" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-verification-email_code_requested" | "auth-verification-email_link_requested" | "auth-verification-sms_code_requested" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-credential-verified" | "auth-credential-removed" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-email_enrolled" | "auth-mfa-email_activated" | "auth-mfa-email_verified" | "auth-mfa-email_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-subscription_schedule-created" | "billing-subscription_schedule-canceled" | "billing-subscription_schedule-released" | "billing-subscription_schedule-phase_applied" | "billing-subscription_schedule-completed" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-price_bundle_activation-tier_transitioned" | "billing-price_bundle_activation-tier_failed" | "billing-price_bundle_activation-failed" | "billing-price_bundle_activation-fallback_activated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "cloud-spend_controls-threshold_reached" | "cloud-spend_controls-limit_blocked" | "cloud-spend_controls-updated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-incoming_sent" | "messaging-sms-outgoing_accepted" | "messaging-sms-outgoing_delayed" | "messaging-sms-outgoing_sent" | "messaging-sms-outgoing_failed" | "messaging-sms-outgoing_delivered" | "messaging-sms-outgoing_complained" | "messaging-sms-outgoing_rejected" | "messaging-sms-outgoing_updated" | "messaging-sms-outgoing_replied" | "messaging-sms-outgoing_expired" | "messaging-email-unknown" | "messaging-email-incoming_sent" | "messaging-email-outgoing_accepted" | "messaging-email-outgoing_delayed" | "messaging-email-outgoing_sent" | "messaging-email-outgoing_failed" | "messaging-email-outgoing_delivered" | "messaging-email-outgoing_complained" | "messaging-email-outgoing_rejected" | "messaging-email-outgoing_updated" | "messaging-email-outgoing_replied" | "messaging-email-outgoing_opened" | "messaging-email-outgoing_clicked" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-otp-sent" | "messaging-otp-failed" | "messaging-otp-delivered" | "messaging-otp-updated" | "messaging-sender-domain_created" | "messaging-sender-domain_updated" | "messaging-sender-domain_deleted" | "messaging-sender-domain_verified" | "messaging-sender-phone_number_purchased" | "messaging-sender-phone_number_released" | "messaging-sender-alpha_numeric_id_reserved" | "messaging-sender-alpha_numeric_id_released" | "messaging-sender-alpha_numeric_id_approved" | "messaging-sender-alpha_numeric_id_rejected" | "messaging-sender-blocked" | "messaging-participant-created" | "messaging-participant-conversation_attached" | "messaging-participant-conversation_detached" | "messaging-participant-deleted" | "messaging-participant-sms_unsubscribed" | "messaging-participant-email_unsubscribed" | "messaging-phone-number-provision-not-requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
+                    events?: ("cloud-all-events" | "ai-inference-completed" | "ai-inference-failed" | "ai-policy-triggered" | "ai-policy-rule-created" | "ai-policy-rule-updated" | "ai-policy-rule-deleted" | "ai-context-index-created" | "ai-context-index-synced" | "ai-context-index-deleted" | "ai-context-query-completed" | "ai-byok-config-created" | "ai-byok-config-updated" | "ai-byok-config-deleted" | "ai-byok-config-tested" | "ai-budget-threshold-reached" | "auth-account-created" | "auth-account-updated" | "auth-account-soft_deleted" | "auth-account-hard_deleted" | "auth-account-status_changed" | "auth-verification-email_code_requested" | "auth-verification-email_link_requested" | "auth-verification-sms_code_requested" | "auth-session-created" | "auth-session-refreshed" | "auth-session-revoked" | "auth-credential-password_created" | "auth-credential-password_changed" | "auth-credential-password_reset_started" | "auth-credential-password_reset_completed" | "auth-credential-verified" | "auth-credential-removed" | "auth-credential-passkey_clone_suspected" | "auth-mfa-totp_enrolled" | "auth-mfa-totp_activated" | "auth-mfa-totp_verified" | "auth-mfa-sms_enrolled" | "auth-mfa-sms_activated" | "auth-mfa-sms_verified" | "auth-mfa-sms_challenge_sent" | "auth-mfa-passkey_registered" | "auth-mfa-passkey_deleted" | "auth-mfa-recovery_codes_rotated" | "auth-mfa-recovery_code_consumed" | "auth-step_up-verification_requested" | "auth-step_up-verification_completed" | "auth-account-recovery_started" | "auth-account-recovery_completed" | "auth-account-mfa_admin_reset" | "auth-account-deprovisioned" | "auth-account-suspended" | "auth-organization-member_added" | "auth-organization-member_removed" | "auth-organization-member_role_changed" | "auth-organization-invitation_created" | "auth-organization-invitation_accepted" | "auth-organization-invitation_revoked" | "auth-organization-group_created" | "auth-organization-group_updated" | "auth-organization-group_deleted" | "auth-organization-group_member_added" | "auth-organization-group_member_removed" | "auth-organization-deleted" | "auth-identity-linked" | "auth-identity-unlinked" | "auth-sso-login_completed" | "auth-api_key-expiring_soon" | "auth-certificate-expiring_soon" | "auth-certificate-expired" | "auth-organization-domain_verification_failed" | "auth-organization-domain_verification_reminder" | "auth-organization-domain_verification_demoted" | "auth-organization-domain_verification_recovered" | "auth-connection-created" | "auth-connection-configured" | "auth-connection-activated" | "auth-connection-disabled" | "auth-connection-test_failed" | "auth-guard-threat_detected" | "auth-guard-account_blocked" | "auth-guard-challenge_triggered" | "billing-entity-updated" | "billing-customer-created" | "billing-customer-updated" | "billing-customer-archived" | "billing-customer-unarchived" | "billing-product-created" | "billing-product-updated" | "billing-product-deleted" | "billing-price-created" | "billing-price-updated" | "billing-price-deleted" | "billing-subscription-created" | "billing-subscription-updated" | "billing-subscription-deleted" | "billing-subscription-canceled" | "billing-subscription-trial_will_end" | "billing-subscription-usage_recorded" | "billing-subscription-renewal_reminder" | "billing-subscription_schedule-created" | "billing-subscription_schedule-canceled" | "billing-subscription_schedule-released" | "billing-subscription_schedule-phase_applied" | "billing-subscription_schedule-completed" | "billing-payment_intent-created" | "billing-payment_intent-cancelled" | "billing-payment_intent-failed" | "billing-payment_intent-succeeded" | "billing-payment_intent-processing" | "billing-payment_intent-requires_action" | "billing-payment_method-created" | "billing-payment_method-updated" | "billing-payment_method-deleted" | "billing-payment_method-attached" | "billing-payment_method-detached" | "billing-payment_method-network_updated" | "billing-charge-succeeded" | "billing-charge-failed" | "billing-charge-pending" | "billing-charge-refunded" | "billing-charge-disputed" | "billing-charge-dispute_updated" | "billing-charge-dispute_closed" | "billing-refund-created" | "billing-refund-processing" | "billing-refund-updated" | "billing-refund-succeeded" | "billing-refund-failed" | "billing-tax-reported" | "billing-tax-updated" | "billing-invoice-created" | "billing-invoice-updated" | "billing-invoice-deleted" | "billing-invoice-finalized" | "billing-invoice-paid" | "billing-invoice-payment_failed" | "billing-invoice-open" | "billing-invoice-voided" | "billing-invoice-uncollectible" | "billing-invoice-sent" | "billing-entitlement_feature-created" | "billing-entitlement_feature-updated" | "billing-entitlement_feature-archived" | "billing-price_bundle-created" | "billing-price_bundle-updated" | "billing-price_bundle-archived" | "billing-price_bundle-restored" | "billing-price_bundle_activation-activated" | "billing-price_bundle_activation-deactivated" | "billing-price_bundle_activation-tier_transitioned" | "billing-price_bundle_activation-tier_failed" | "billing-price_bundle_activation-failed" | "billing-price_bundle_activation-fallback_activated" | "billing-entitlement_override-created" | "billing-entitlement_override-updated" | "billing-entitlement_override-deleted" | "billing-coupon-created" | "billing-coupon-updated" | "billing-coupon-deleted" | "billing-discount-created" | "billing-discount-deleted" | "billing-discount-applied" | "billing-discount-expired" | "billing-credit_note-created" | "billing-credit_note-applied" | "billing-credit_note-voided" | "billing-receipt-generated" | "billing-credit_wallet-created" | "billing-credit_wallet-updated" | "billing-credit_wallet-granted" | "billing-credit_wallet-deducted" | "billing-credit_wallet-topup_initiated" | "cloud-spend_controls-threshold_reached" | "cloud-spend_controls-limit_blocked" | "cloud-spend_controls-updated" | "messaging-message-unknown" | "messaging-sms-unknown" | "messaging-sms-inbound_received" | "messaging-sms-outbound_accepted" | "messaging-sms-outbound_delayed" | "messaging-sms-outbound_sent" | "messaging-sms-outbound_failed" | "messaging-sms-outbound_delivered" | "messaging-sms-outbound_complained" | "messaging-sms-outbound_rejected" | "messaging-sms-outbound_replied" | "messaging-sms-outbound_expired" | "messaging-email-unknown" | "messaging-email-inbound_received" | "messaging-email-outbound_accepted" | "messaging-email-outbound_delayed" | "messaging-email-outbound_sent" | "messaging-email-outbound_failed" | "messaging-email-outbound_delivered" | "messaging-email-outbound_bounced" | "messaging-email-outbound_complained" | "messaging-email-outbound_rejected" | "messaging-email-outbound_updated" | "messaging-email-outbound_replied" | "messaging-email-outbound_opened" | "messaging-email-outbound_clicked" | "messaging-email-recipient_subscribed" | "messaging-email-recipient_unsubscribed" | "messaging-conversation-created" | "messaging-conversation-updated" | "messaging-conversation-deleted" | "messaging-verification-sent" | "messaging-verification-failed" | "messaging-verification-delivered" | "messaging-verification-expired" | "messaging-verification-verified" | "messaging-email-sender-created" | "messaging-email-sender-deleted" | "messaging-email-sender-verified" | "messaging-sms-sender-reserved" | "messaging-sms-sender-released" | "messaging-sms-sender-approved" | "messaging-sms-sender-rejected" | "messaging-sms-sender-blocked" | "messaging-sms-brand-registered" | "messaging-sms-brand-suspended" | "messaging-sms-brand-deletion_failed" | "messaging-sms-brand-deletion_pending" | "messaging-sms-brand-deleted" | "messaging-sms-brand-under_review" | "messaging-sms-brand-registration_failed" | "messaging-sms-brand-registration_pending" | "messaging-sms-brand-unverified" | "messaging-sms-brand-vetted" | "messaging-sms-brand-vetting_failed" | "messaging-sms-campaign-approved" | "messaging-sms-campaign-suspended" | "messaging-sms-campaign-failed" | "messaging-sms-campaign-pending" | "messaging-sms-campaign-deleted" | "messaging-sms-campaign-in_review" | "messaging-sms-campaign-rejected" | "messaging-sms-campaign-submitted" | "messaging-phone-number-provision_not_requested" | "messaging-phone-number-provisioned" | "messaging-phone-number-provisioned_for_sms" | "messaging-phone-number-provisioned_for_voice" | "messaging-phone-number-provision_in_progress" | "messaging-phone-number-provision_pending" | "messaging-phone-number-provisioned_for_campaign" | "messaging-phone-number-provision_failed" | "messaging-phone-number-sms_provision_failed" | "messaging-phone-number-provision_unknown" | "messaging-phone-number-toll_free_not_allowed" | "messaging-phone-number-unlinked_for_sms" | "messaging-phone-number-unlinked_for_voice" | "messaging-phone-number-released" | "messaging-phone-number-unlinked_for_campaign" | "messaging-phone-number-campaign_acceptance_pending" | "messaging-phone-number-campaign_expired" | "messaging-phone-number-campaign_mno_rejected" | "messaging-phone-number-campaign_mno_suspended" | "messaging-phone-number-campaign_not_found" | "messaging-phone-number-campaign_provision_failed" | "messaging-phone-number-campaign_under_review" | "messaging-phone-number-10dlc_limit_exceeded" | "messaging-phone-number-invalid_net_number_id" | "messaging-phone-number-provider_internal_error" | "messaging-phone-number-mno_sharing_error" | "messaging-phone-number-provider_service_unavailable" | "messaging-phone-number-provider_partner_service_unavailable" | "messaging-phone-number-provision_status_unknown" | "messaging-phone-number-insufficient_balance" | "messaging-phone-number-error_code_unknown" | "relay-queue-created" | "relay-queue-updated" | "relay-queue-deleted" | "relay-queue-task_enqueued" | "relay-queue-task_completed" | "relay-queue-task_failed" | "relay-queue-task_dead_lettered" | "relay-queue-dead_letter_replayed" | "relay-event_channel-created" | "relay-event_channel-updated" | "relay-event_channel-deleted" | "relay-event_subscription-created" | "relay-event_subscription-updated" | "relay-event_subscription-deleted" | "relay-event-published" | "relay-event-delivery_failed" | "relay-broadcast_channel-created" | "relay-broadcast_channel-updated" | "relay-broadcast_channel-deleted" | "relay-scheduler-created" | "relay-scheduler-updated" | "relay-scheduler-paused" | "relay-scheduler-resumed" | "relay-scheduler-cancelled" | "relay-scheduler-fired" | "relay-scheduler-execution_failed" | "relay-memorystore_cluster-created" | "relay-memorystore_cluster-updated" | "relay-memorystore_cluster-suspended" | "relay-memorystore_cluster-deleted" | "relay-pipeline-created" | "relay-pipeline-updated" | "relay-pipeline-deleted" | "relay-pipeline-run_triggered" | "relay-pipeline-run_completed" | "relay-pipeline-run_failed" | "relay-pipeline-run_cancelled" | "relay-pipeline-gate_approved" | "relay-pipeline-gate_rejected" | "relay-search_index-created" | "relay-search_index-deleted" | "relay-search_document-indexed" | "relay-search_document-removed" | "storage-container-created" | "storage-container-updated" | "storage-container-archived" | "storage-container-restored" | "storage-container-deletion-requested" | "storage-container-deleted" | "storage-container-class-changed" | "storage-object-created" | "storage-object-updated" | "storage-object-renamed" | "storage-object-archived" | "storage-object-restored" | "storage-object-deleted" | "storage-object-version-restored" | "storage-object-acl-granted" | "storage-object-acl-revoked" | "storage-object-visibility-changed")[];
                     is_active?: boolean;
                 };
             };
@@ -47097,14 +50099,11 @@ export interface operations {
                         type: string;
                         /** @example string */
                         value: string;
-                        ttl?: number;
-                        mx_priority?: number;
-                        /** @example string */
-                        dkim_selector?: string;
-                        /** @example string */
-                        name?: string;
-                        /** @example string */
-                        mail_policy?: string;
+                        ttl?: number | null;
+                        mx_priority?: number | null;
+                        dkim_selector?: string | null;
+                        name?: string | null;
+                        mail_policy?: string | null;
                     }[];
                 };
             };
@@ -47198,7 +50197,22 @@ export interface operations {
     };
     readCloudZone: {
         parameters: {
-            query?: never;
+            query?: {
+                cursor?: {
+                    /** @example string */
+                    prev?: string;
+                    /** @example string */
+                    next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
+                };
+                limit?: string | number;
+                query?: {
+                    /** @example string */
+                    zone_id?: string;
+                };
+            };
             header?: {
                 /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
                 "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
@@ -47254,7 +50268,8 @@ export interface operations {
                             date_created: string;
                             date_updated?: string | null;
                             date_deleted?: string | null;
-                        };
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
                     };
                 };
             };
@@ -47496,6 +50511,671 @@ export interface operations {
             };
         };
     };
+    listChannelAnalytics: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            analytics_id: string;
+                            conversation_id: string | null;
+                            message_request_id: string;
+                            /** @enum {string} */
+                            channel_id: "sms" | "email" | "mms" | "rcs" | "ussd" | "verification" | "multisend" | "voice" | "live-chat" | "push-notifications" | "whatsapp-business" | "instagram-business" | "apple-business";
+                            total_message_count: number;
+                            clicks: {
+                                unique_clicks: number;
+                                total_clicks: number;
+                            };
+                            opens: {
+                                unique_opens: number;
+                                total_opens: number;
+                            };
+                            deliveries: {
+                                total_deliveries: number;
+                            };
+                            complaints: {
+                                total_complaints: number;
+                            };
+                            rejections: {
+                                total_rejections: number;
+                            };
+                            bounces: {
+                                total_bounces: number;
+                            };
+                            failures: {
+                                total_failures: number;
+                            };
+                            subscribes: {
+                                total_subscribes: number;
+                            };
+                            unsubscribes: {
+                                total_unsubscribes: number;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    generateChannelAnalyticsSummaries: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                channel_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            analytics_id: string;
+                            conversation_id: string | null;
+                            message_request_id: string;
+                            /** @enum {string} */
+                            channel_id: "sms" | "email" | "mms" | "rcs" | "ussd" | "verification" | "multisend" | "voice" | "live-chat" | "push-notifications" | "whatsapp-business" | "instagram-business" | "apple-business";
+                            total_message_count: number;
+                            clicks: {
+                                unique_clicks: number;
+                                total_clicks: number;
+                            };
+                            opens: {
+                                unique_opens: number;
+                                total_opens: number;
+                            };
+                            deliveries: {
+                                total_deliveries: number;
+                            };
+                            complaints: {
+                                total_complaints: number;
+                            };
+                            rejections: {
+                                total_rejections: number;
+                            };
+                            bounces: {
+                                total_bounces: number;
+                            };
+                            failures: {
+                                total_failures: number;
+                            };
+                            subscribes: {
+                                total_subscribes: number;
+                            };
+                            unsubscribes: {
+                                total_unsubscribes: number;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    createChannelAnalyticsReport: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                message_id: string;
+                channel_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            analytics_id: string;
+                            conversation_id: string | null;
+                            message_request_id: string;
+                            /** @enum {string} */
+                            channel_id: "sms" | "email" | "mms" | "rcs" | "ussd" | "verification" | "multisend" | "voice" | "live-chat" | "push-notifications" | "whatsapp-business" | "instagram-business" | "apple-business";
+                            total_message_count: number;
+                            clicks: {
+                                unique_clicks: number;
+                                total_clicks: number;
+                            };
+                            opens: {
+                                unique_opens: number;
+                                total_opens: number;
+                            };
+                            deliveries: {
+                                total_deliveries: number;
+                            };
+                            complaints: {
+                                total_complaints: number;
+                            };
+                            rejections: {
+                                total_rejections: number;
+                            };
+                            bounces: {
+                                total_bounces: number;
+                            };
+                            failures: {
+                                total_failures: number;
+                            };
+                            subscribes: {
+                                total_subscribes: number;
+                            };
+                            unsubscribes: {
+                                total_unsubscribes: number;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    incrementChannelAnalyticsOpens: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                analytics_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: boolean;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    incrementChannelAnalyticsClicks: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                analytics_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: boolean;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    incrementChannelAnalyticsDeliveries: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                analytics_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: boolean;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    incrementChannelAnalyticsSubscribes: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                analytics_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: boolean;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    incrementChannelAnalyticsUnsubscribes: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                analytics_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: boolean;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
     createContact: {
         parameters: {
             query?: never;
@@ -47545,7 +51225,7 @@ export interface operations {
                          */
                         ends_at: string;
                     };
-                    /** @description Custom key-value metadata (max 50 keys) */
+                    /** @default {} */
                     properties?: {
                         [key: string]: string | number | boolean;
                     };
@@ -47812,16 +51492,18 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /** @example string */
-                    name?: string;
-                    /**
-                     * Format: email
-                     * @example user@example.com
-                     */
-                    email?: string;
-                    /** @description Phone number in E.164 format */
-                    phone_number?: string;
-                    preferred_channels?: string[];
+                    updates: {
+                        /** @example string */
+                        name?: string;
+                        /**
+                         * Format: email
+                         * @example user@example.com
+                         */
+                        email?: string;
+                        /** @description Phone number in E.164 format */
+                        phone_number?: string;
+                        preferred_channels?: string[];
+                    };
                 };
             };
         };
@@ -48023,74 +51705,38 @@ export interface operations {
                             less_than_or_equals?: string;
                         };
                         date_created?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_deleted?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                     };
                     search?: {
                         keyword: string;
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -48127,6 +51773,663 @@ export interface operations {
                             date_deleted?: string | null;
                         }[];
                         cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    createContactProperty: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    key: string;
+                } & Omit<{
+                    /** @constant */
+                    type: "string";
+                    /** @example string */
+                    default_value: string;
+                } | {
+                    /** @constant */
+                    type: "number";
+                    default_value: number;
+                } | {
+                    /** @constant */
+                    type: "boolean";
+                    default_value: boolean;
+                }, "type">;
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            property_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            key: string;
+                            type: string;
+                            default_value: string | number | boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    fetchOneContactProperty: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                property_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            property_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            key: string;
+                            type: string;
+                            default_value: string | number | boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    deleteContactProperty: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                property_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            property_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            key: string;
+                            type: string;
+                            default_value: string | number | boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listContactProperties: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            property_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            key: string;
+                            type: string;
+                            default_value: string | number | boolean;
+                            date_created: string;
+                            date_updated: string;
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    deleteManyContactProperties: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            property_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            key: string;
+                            type: string;
+                            default_value: string | number | boolean;
+                            date_created: string;
+                            date_updated: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    addContactProperties: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                contact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            contact_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id?: string | null;
+                            name?: string | null;
+                            email?: string | null;
+                            phone_number?: unknown | null;
+                            preferred_channels?: string[];
+                            properties?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    deleteContactProperties: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                contact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            contact_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id?: string | null;
+                            name?: string | null;
+                            email?: string | null;
+                            phone_number?: unknown | null;
+                            preferred_channels?: string[];
+                            properties?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateContactProperty: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                contact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            contact_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id?: string | null;
+                            name?: string | null;
+                            email?: string | null;
+                            phone_number?: unknown | null;
+                            preferred_channels?: string[];
+                            properties?: {
+                                [key: string]: unknown;
+                            };
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
                     };
                 };
             };
@@ -48251,7 +52554,7 @@ export interface operations {
                              */
                             ends_at: string;
                         };
-                        /** @description Custom key-value metadata (max 50 keys) */
+                        /** @default {} */
                         properties?: {
                             [key: string]: string | number | boolean;
                         };
@@ -48357,11 +52660,13 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": {
-                    /** @example string */
-                    title?: string;
-                    /** @example string */
-                    description?: string;
-                    accepts_replies?: boolean;
+                    updates: {
+                        /** @example string */
+                        title?: string;
+                        /** @example string */
+                        description?: string;
+                        accepts_replies?: boolean;
+                    };
                 };
             };
         };
@@ -48400,6 +52705,369 @@ export interface operations {
                             date_updated: string;
                             date_deleted?: string | null;
                         };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    sendConversationMessage: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    params: {
+                        /** @example string */
+                        conversation_id: string;
+                    };
+                    body: {
+                        /**
+                         * @default all
+                         * @enum {string}
+                         */
+                        message_priority?: "all" | "order";
+                        messages: {
+                            sms?: {
+                                /** @example string */
+                                reference_id?: string;
+                                /** @example string */
+                                template_id?: string;
+                                /** @example string */
+                                sender_pool_id?: string;
+                                from?: string;
+                                default_placeholders?: {
+                                    [key: string]: string | number;
+                                };
+                                /** @example string */
+                                body?: string;
+                                /** @description Phone number in E.164 format */
+                                reply_to?: string;
+                            };
+                            email?: {
+                                /** @example string */
+                                reference_id?: string;
+                                /** @example string */
+                                template_id?: string;
+                                /** @example string */
+                                sender_pool_id?: string;
+                                /**
+                                 * Format: email
+                                 * @example user@example.com
+                                 */
+                                from?: string;
+                                default_placeholders?: {
+                                    [key: string]: string | number;
+                                };
+                                /** @example string */
+                                subject: string;
+                                /** @example string */
+                                html?: string;
+                                /** @example string */
+                                text?: string;
+                                cc?: string[];
+                                bcc?: string[];
+                                attachments?: {
+                                    /** @example string */
+                                    content_id?: string;
+                                    /** @example string */
+                                    file_name: string;
+                                    /** @enum {string} */
+                                    mime_type: "text/plain" | "text/csv" | "text/html" | "text/markdown" | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" | "application/json" | "image/svg+xml" | "application/x-ndjson" | "application/pdf" | "application/msword" | "application/vnd.openxmlformats-officedocument.wordprocessingml.document" | "application/rtf" | "application/vnd.ms-excel" | "application/vnd.ms-powerpoint" | "application/vnd.openxmlformats-officedocument.presentationml.presentation" | "text/html" | "image/jpeg" | "image/jpeg" | "image/png" | "image/gif" | "image/bmp" | "image/tiff" | "image/tiff" | "audio/mpeg" | "video/mp4" | "video/mpeg" | "video/mpeg" | "audio/wav" | "video/quicktime" | "video/3gpp" | "audio/amr" | "application/zip" | "text/calendar" | "text/vcard";
+                                    /** @example string */
+                                    content: string;
+                                }[];
+                                /**
+                                 * Format: email
+                                 * @example user@example.com
+                                 */
+                                reply_to?: string;
+                                accepts_replies?: boolean;
+                            };
+                        };
+                        /** @default [] */
+                        message_retry_statuses?: ("failed" | "complained" | "cancelled" | "rejected" | "unknown" | "failed" | "complained" | "cancelled" | "rejected" | "unknown")[];
+                        to?: {
+                            /** @example string */
+                            reference_id?: string;
+                            /** @description Phone number in E.164 format */
+                            phone_number?: string;
+                            /**
+                             * Format: email
+                             * @example user@example.com
+                             */
+                            email?: string;
+                            placeholders?: {
+                                [key: string]: string | number;
+                            };
+                            /** @example string */
+                            timezone?: string;
+                        }[];
+                        default_placeholders?: {
+                            [key: string]: string | number;
+                        };
+                        /** @example string */
+                        body?: string;
+                        /**
+                         * Format: date-time
+                         * @example 2024-01-15T09:30:00Z
+                         */
+                        send_at?: string;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: unknown;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listConversations: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    cursor?: {
+                        /** @example string */
+                        prev?: string;
+                        /** @example string */
+                        next?: string;
+                    };
+                    filter?: {
+                        [key: string]: false;
+                    };
+                    /** @default {} */
+                    query?: {
+                        conversation_id?: string | {
+                            /** @example string */
+                            not_equals?: string;
+                            has_length?: number;
+                            /** @example string */
+                            contains?: string;
+                            has_any?: string[];
+                            has_none?: string[];
+                            /** @example string */
+                            greater_than?: string;
+                            /** @example string */
+                            less_than?: string;
+                            /** @example string */
+                            greater_than_or_equals?: string;
+                            /** @example string */
+                            less_than_or_equals?: string;
+                        };
+                        title?: string | {
+                            /** @example string */
+                            not_equals?: string;
+                            has_length?: number;
+                            /** @example string */
+                            contains?: string;
+                            has_any?: string[];
+                            has_none?: string[];
+                            /** @example string */
+                            greater_than?: string;
+                            /** @example string */
+                            less_than?: string;
+                            /** @example string */
+                            greater_than_or_equals?: string;
+                            /** @example string */
+                            less_than_or_equals?: string;
+                        };
+                        accepts_replies?: boolean;
+                        date_created?: {
+                            /** @example string */
+                            equals?: string;
+                            /** @example string */
+                            not_equals?: string;
+                            /** @example string */
+                            greater_than?: string;
+                            /** @example string */
+                            less_than?: string;
+                            /** @example string */
+                            greater_than_or_equals?: string;
+                            /** @example string */
+                            less_than_or_equals?: string;
+                        };
+                        date_deleted?: {
+                            /** @example string */
+                            equals?: string;
+                            /** @example string */
+                            not_equals?: string;
+                            /** @example string */
+                            greater_than?: string;
+                            /** @example string */
+                            less_than?: string;
+                            /** @example string */
+                            greater_than_or_equals?: string;
+                            /** @example string */
+                            less_than_or_equals?: string;
+                        };
+                        date_archived?: {
+                            /** @example string */
+                            equals?: string;
+                            /** @example string */
+                            not_equals?: string;
+                            /** @example string */
+                            greater_than?: string;
+                            /** @example string */
+                            less_than?: string;
+                            /** @example string */
+                            greater_than_or_equals?: string;
+                            /** @example string */
+                            less_than_or_equals?: string;
+                        };
+                    };
+                    search?: {
+                        keyword: string;
+                    };
+                    sort?: {
+                        [key: string]: "asc" | "desc";
+                    };
+                    /** @default 50 */
+                    limit?: string | number;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            conversation_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id?: string | null;
+                            title: string;
+                            description?: string;
+                            message_channels: {
+                                [key: string]: unknown;
+                            };
+                            senders?: {
+                                [key: string]: unknown;
+                            } | null;
+                            accepts_replies: boolean;
+                            total_recipients: number;
+                            placeholders?: {
+                                [key: string]: unknown;
+                            } | null;
+                            date_archived?: string | null;
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        }[];
+                        cursor?: components["schemas"]["PaginationCursor"];
                     };
                 };
             };
@@ -48532,6 +53200,109 @@ export interface operations {
             };
         };
     };
+    updateConversation: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                conversation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    updates: {
+                        /** @example string */
+                        title?: string;
+                        /** @example string */
+                        description?: string;
+                        accepts_replies?: boolean;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            conversation_id: string;
+                            profile_id: string;
+                            conjoin_account_id: string;
+                            conjoin_project_id: string;
+                            live_mode: boolean;
+                            reference_id?: string | null;
+                            title: string;
+                            description?: string;
+                            message_channels: {
+                                [key: string]: unknown;
+                            };
+                            senders?: {
+                                [key: string]: unknown;
+                            } | null;
+                            accepts_replies: boolean;
+                            total_recipients: number;
+                            placeholders?: {
+                                [key: string]: unknown;
+                            } | null;
+                            date_archived?: string | null;
+                            date_created: string;
+                            date_updated: string;
+                            date_deleted?: string | null;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
     archiveConversation: {
         parameters: {
             query?: never;
@@ -48587,217 +53358,38 @@ export interface operations {
                         };
                         accepts_replies?: boolean;
                         date_created?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_deleted?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_archived?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than_or_equals?: string;
-                        };
-                    };
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            conversation_id: string;
-                            profile_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id?: string | null;
-                            title: string;
-                            description?: string;
-                            message_channels: {
-                                [key: string]: unknown;
-                            };
-                            senders?: {
-                                [key: string]: unknown;
-                            } | null;
-                            accepts_replies: boolean;
-                            total_recipients: number;
-                            placeholders?: {
-                                [key: string]: unknown;
-                            } | null;
-                            date_archived?: string | null;
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    listConversations: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-                /** @description Messaging profile identifier */
-                "Messaging-Profile-ID": string;
-            };
-            path: {
-                conversation_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    cursor?: {
-                        /** @example string */
-                        prev?: string;
-                        /** @example string */
-                        next?: string;
-                    };
-                    filter?: {
-                        [key: string]: false;
-                    };
-                    /** @default {} */
-                    query?: {
-                        conversation_id?: string | {
                             /** @example string */
                             not_equals?: string;
-                            has_length?: number;
-                            /** @example string */
-                            contains?: string;
-                            has_any?: string[];
-                            has_none?: string[];
                             /** @example string */
                             greater_than?: string;
                             /** @example string */
@@ -48807,231 +53399,7 @@ export interface operations {
                             /** @example string */
                             less_than_or_equals?: string;
                         };
-                        title?: string | {
-                            /** @example string */
-                            not_equals?: string;
-                            has_length?: number;
-                            /** @example string */
-                            contains?: string;
-                            has_any?: string[];
-                            has_none?: string[];
-                            /** @example string */
-                            greater_than?: string;
-                            /** @example string */
-                            less_than?: string;
-                            /** @example string */
-                            greater_than_or_equals?: string;
-                            /** @example string */
-                            less_than_or_equals?: string;
-                        };
-                        accepts_replies?: boolean;
-                        date_created?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than_or_equals?: string;
-                        };
-                        date_deleted?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than_or_equals?: string;
-                        };
-                        date_archived?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
-                            less_than_or_equals?: string;
-                        };
                     };
-                    search?: {
-                        keyword: string;
-                    };
-                    sort: {
-                        [key: string]: "asc" | "desc";
-                    };
-                    /** @default 50 */
-                    limit?: string | number;
-                };
-            };
-        };
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            conversation_id: string;
-                            profile_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            reference_id?: string | null;
-                            title: string;
-                            description?: string;
-                            message_channels: {
-                                [key: string]: unknown;
-                            };
-                            senders?: {
-                                [key: string]: unknown;
-                            } | null;
-                            accepts_replies: boolean;
-                            total_recipients: number;
-                            placeholders?: {
-                                [key: string]: unknown;
-                            } | null;
-                            date_archived?: string | null;
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        }[];
-                        cursor?: components["schemas"]["PaginationCursor"];
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    updateConversation: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-                /** @description Messaging profile identifier */
-                "Messaging-Profile-ID": string;
-            };
-            path: {
-                conversation_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @example string */
-                    title?: string;
-                    /** @example string */
-                    description?: string;
-                    accepts_replies?: boolean;
                 };
             };
         };
@@ -49238,7 +53606,7 @@ export interface operations {
                             reference_id?: string | null;
                             contact_id: string;
                             conversation_id: string;
-                            conversation_recipient_id: string;
+                            recipient_id: string;
                             date_archived?: string | null;
                             date_created: string;
                             date_updated: string;
@@ -49319,7 +53687,7 @@ export interface operations {
                             reference_id?: string | null;
                             contact_id: string;
                             conversation_id: string;
-                            conversation_recipient_id: string;
+                            recipient_id: string;
                             date_archived?: string | null;
                             date_created: string;
                             date_updated: string;
@@ -49399,7 +53767,7 @@ export interface operations {
                             reference_id?: string | null;
                             contact_id: string;
                             conversation_id: string;
-                            conversation_recipient_id: string;
+                            recipient_id: string;
                             date_archived?: string | null;
                             date_created: string;
                             date_updated: string;
@@ -49480,7 +53848,7 @@ export interface operations {
                             reference_id?: string | null;
                             contact_id: string;
                             conversation_id: string;
-                            conversation_recipient_id: string;
+                            recipient_id: string;
                             date_archived?: string | null;
                             date_created: string;
                             date_updated: string;
@@ -49560,7 +53928,7 @@ export interface operations {
                             reference_id?: string | null;
                             contact_id: string;
                             conversation_id: string;
-                            conversation_recipient_id: string;
+                            recipient_id: string;
                             date_archived?: string | null;
                             date_created: string;
                             date_updated: string;
@@ -49683,7 +54051,6 @@ export interface operations {
                     send_at?: string;
                     create_conversation?: boolean;
                     accepts_replies?: boolean;
-                    upload_attachments?: boolean;
                 };
             };
         };
@@ -49914,35 +54281,17 @@ export interface operations {
                                 less_than_or_equals?: string;
                             });
                             send_at?: {
-                                /**
-                                 * Format: date-time
-                                 * @example 2024-01-15T09:30:00Z
-                                 */
+                                /** @example string */
                                 equals?: string;
-                                /**
-                                 * Format: date-time
-                                 * @example 2024-01-15T09:30:00Z
-                                 */
+                                /** @example string */
                                 not_equals?: string;
-                                /**
-                                 * Format: date-time
-                                 * @example 2024-01-15T09:30:00Z
-                                 */
+                                /** @example string */
                                 greater_than?: string;
-                                /**
-                                 * Format: date-time
-                                 * @example 2024-01-15T09:30:00Z
-                                 */
+                                /** @example string */
                                 less_than?: string;
-                                /**
-                                 * Format: date-time
-                                 * @example 2024-01-15T09:30:00Z
-                                 */
+                                /** @example string */
                                 greater_than_or_equals?: string;
-                                /**
-                                 * Format: date-time
-                                 * @example 2024-01-15T09:30:00Z
-                                 */
+                                /** @example string */
                                 less_than_or_equals?: string;
                             };
                             email?: string | {
@@ -49977,28 +54326,28 @@ export interface operations {
                                  */
                                 less_than_or_equals?: string;
                             };
-                            status?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected") | {
+                            status?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed") | {
                                 /** @enum {string} */
-                                not_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                not_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed";
                                 has_length?: number;
                                 /** @example string */
                                 contains?: string;
-                                has_any?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected")[];
-                                has_none?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected")[];
+                                has_any?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed")[];
+                                has_none?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed")[];
                                 /** @enum {string} */
-                                greater_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                greater_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed";
                                 /** @enum {string} */
-                                less_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                less_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed";
                                 /** @enum {string} */
-                                greater_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                greater_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed";
                                 /** @enum {string} */
-                                less_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                less_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed";
                             };
                         };
                         search?: {
                             keyword: string;
                         };
-                        sort: {
+                        sort?: {
                             [key: string]: "asc" | "desc";
                         };
                         /** @default 50 */
@@ -50562,6 +54911,15 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
@@ -50676,7 +55034,7 @@ export interface operations {
                     search?: {
                         keyword: string;
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -50712,6 +55070,15 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
@@ -50812,6 +55179,15 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
@@ -50912,6 +55288,15 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
@@ -51005,6 +55390,8 @@ export interface operations {
                             redirect_url: string;
                         };
                     };
+                    /** @default false */
+                    create_zone?: boolean;
                 } | {
                     /** @constant */
                     sender_type: "email_address";
@@ -51051,6 +55438,15 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
@@ -51151,6 +55547,15 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
@@ -51251,6 +55656,15 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
@@ -51343,276 +55757,18 @@ export interface operations {
                             dns_records?: {
                                 [key: string]: unknown;
                             }[];
+                            message_quotas: {
+                                messages_per_second: number;
+                            };
+                            queue_details?: {
+                                queue_id: string;
+                                name: string;
+                                rate_limit_per_minute: number;
+                                max_concurrent_deliveries: number;
+                            } | null;
                             submitted_at: string;
                             provisioned_at?: string | null;
                             status: string;
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    listMessageAnalytics: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-                /** @description Messaging profile identifier */
-                "Messaging-Profile-ID": string;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            message_analytics_id: string;
-                            profile_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            events: {
-                                [key: string]: {
-                                    recipient_events: {
-                                        [key: string]: {
-                                            link_label?: string | null;
-                                            link_href?: string | null;
-                                            timestamp: string;
-                                        };
-                                    };
-                                    total_count: number;
-                                };
-                            };
-                            total_message_count: number;
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        }[];
-                        cursor?: components["schemas"]["PaginationCursor"];
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    generateMessageAnalyticsSummaries: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-                /** @description Messaging profile identifier */
-                "Messaging-Profile-ID": string;
-            };
-            path: {
-                channel_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            201: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            message_analytics_id: string;
-                            profile_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            events: {
-                                [key: string]: {
-                                    recipient_events: {
-                                        [key: string]: {
-                                            link_label?: string | null;
-                                            link_href?: string | null;
-                                            timestamp: string;
-                                        };
-                                    };
-                                    total_count: number;
-                                };
-                            };
-                            total_message_count: number;
-                            date_created: string;
-                            date_updated: string;
-                            date_deleted?: string | null;
-                        };
-                    };
-                };
-            };
-            /** @description Validation error or bad request */
-            400: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Unauthorized - missing or invalid API key */
-            401: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
-                    };
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
-                    };
-                };
-            };
-        };
-    };
-    createMessageAnalyticsReport: {
-        parameters: {
-            query?: never;
-            header: {
-                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
-                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
-                /** @description Messaging profile identifier */
-                "Messaging-Profile-ID": string;
-            };
-            path: {
-                message_id: string;
-                channel_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful response */
-            200: {
-                headers: {
-                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        response?: components["schemas"]["ApiSuccessResponseMeta"];
-                        data?: {
-                            message_analytics_id: string;
-                            profile_id: string;
-                            conjoin_account_id: string;
-                            conjoin_project_id: string;
-                            live_mode: boolean;
-                            events: {
-                                [key: string]: {
-                                    recipient_events: {
-                                        [key: string]: {
-                                            link_label?: string | null;
-                                            link_href?: string | null;
-                                            timestamp: string;
-                                        };
-                                    };
-                                    total_count: number;
-                                };
-                            };
-                            total_message_count: number;
                             date_created: string;
                             date_updated: string;
                             date_deleted?: string | null;
@@ -51678,9 +55834,8 @@ export interface operations {
                      * @enum {string}
                      */
                     message_priority?: "all" | "order";
-                    message_channels?: ("sms" | "email")[];
-                    message_config: {
-                        sms: {
+                    messages: {
+                        sms?: {
                             /** @example string */
                             reference_id?: string;
                             /** @example string */
@@ -51688,13 +55843,15 @@ export interface operations {
                             /** @example string */
                             sender_pool_id?: string;
                             from?: string;
+                            default_placeholders?: {
+                                [key: string]: string | number;
+                            };
                             /** @example string */
                             body?: string;
                             /** @description Phone number in E.164 format */
                             reply_to?: string;
-                            create_conversation?: boolean;
                         };
-                        email: {
+                        email?: {
                             /** @example string */
                             reference_id?: string;
                             /** @example string */
@@ -51706,6 +55863,9 @@ export interface operations {
                              * @example user@example.com
                              */
                             from?: string;
+                            default_placeholders?: {
+                                [key: string]: string | number;
+                            };
                             /** @example string */
                             subject: string;
                             /** @example string */
@@ -51730,7 +55890,6 @@ export interface operations {
                              */
                             reply_to?: string;
                             accepts_replies?: boolean;
-                            upload_attachments?: boolean;
                         };
                     };
                     /** @default [] */
@@ -51756,13 +55915,13 @@ export interface operations {
                     };
                     /** @example string */
                     body?: string;
-                    create_conversation?: boolean;
-                    accepts_replies?: boolean;
                     /**
                      * Format: date-time
                      * @example 2024-01-15T09:30:00Z
                      */
                     send_at?: string;
+                } & {
+                    create_conversation?: boolean;
                 };
             };
         };
@@ -52265,7 +56424,7 @@ export interface operations {
     };
     listPhoneNumbers: {
         parameters: {
-            query: {
+            query?: {
                 filter?: {
                     [key: string]: false;
                 };
@@ -52303,14 +56462,6 @@ export interface operations {
                     };
                     /** @description Phone number in E.164 format */
                     phone_number?: string;
-                    channels?: {
-                        is_empty?: boolean;
-                        contains?: ("sms" | "verification")[];
-                        length_less_than?: number;
-                        length_less_than_or_equals?: number;
-                        length_greater_than?: number;
-                        length_greater_than_or_equals?: number;
-                    };
                     region_code?: string | {
                         not_equals?: string;
                         has_length?: number;
@@ -52327,7 +56478,7 @@ export interface operations {
                 search?: {
                     keyword: string;
                 };
-                sort: {
+                sort?: {
                     [key: string]: "asc" | "desc";
                 };
                 limit?: string | number;
@@ -53357,7 +57508,7 @@ export interface operations {
                 "application/json": {
                     email_config: {
                         suppression?: {
-                            statuses?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "partially_failed" | "partially_complained" | "partially_rejected")[];
+                            statuses?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "bounced" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "delayed")[];
                         };
                         tracking?: {
                             opens?: {
@@ -53780,6 +57931,286 @@ export interface operations {
                             date_deleted?: string | null;
                         }[];
                         cursor?: components["schemas"]["PaginationCursor"];
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    createOneSegment: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": unknown;
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: unknown;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    deleteOneSegment: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": unknown;
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: unknown;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    updateOneSegment: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": unknown;
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: unknown;
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    listManySegments: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+                /** @description Messaging profile identifier */
+                "Messaging-Profile-ID": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": unknown;
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            201: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: unknown;
                     };
                 };
             };
@@ -54360,99 +58791,45 @@ export interface operations {
                     };
                     query: {
                         date_created: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_updated: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_deleted: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                     };
@@ -54958,99 +59335,45 @@ export interface operations {
                     };
                     query: {
                         date_created: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_updated: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_deleted: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                     };
@@ -55381,7 +59704,7 @@ export interface operations {
                                 /** @example string */
                                 less_than_or_equals?: string;
                             });
-                            msisdn?: string | {
+                            phone_number?: string | {
                                 /** @description Phone number in E.164 format */
                                 not_equals?: string;
                                 has_length?: number;
@@ -55398,28 +59721,28 @@ export interface operations {
                                 /** @description Phone number in E.164 format */
                                 less_than_or_equals?: string;
                             };
-                            status?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected") | {
+                            status?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed") | {
                                 /** @enum {string} */
-                                not_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                not_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed";
                                 has_length?: number;
                                 /** @example string */
                                 contains?: string;
-                                has_any?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected")[];
-                                has_none?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected")[];
+                                has_any?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed")[];
+                                has_none?: ("invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed")[];
                                 /** @enum {string} */
-                                greater_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                greater_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed";
                                 /** @enum {string} */
-                                less_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                less_than?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed";
                                 /** @enum {string} */
-                                greater_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                greater_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed";
                                 /** @enum {string} */
-                                less_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed" | "partially_failed" | "partially_complained" | "partially_rejected";
+                                less_than_or_equals?: "invalid_recipient" | "insufficient_balance" | "invalid_auth" | "invalid_message_body" | "rate_limits_reached" | "unknown" | "accepted" | "sent" | "processing" | "in_transit" | "delivered" | "received" | "complained" | "failed" | "rejected" | "queued" | "delayed" | "scheduled" | "cancelled" | "expired" | "destination_unsupported" | "unreachable" | "carrier_rejected" | "carrier_unreachable" | "carrier_error" | "brand_rate_limits_reached" | "brand_message_cap_reached" | "numeric_sender_not_provisioned" | "numeric_sender_not_verified" | "sender_preregistration_required" | "routing_failed";
                             };
                         };
                         search?: {
                             keyword: string;
                         };
-                        sort: {
+                        sort?: {
                             [key: string]: "asc" | "desc";
                         };
                         /** @default 50 */
@@ -56798,138 +61121,66 @@ export interface operations {
                             length_greater_than_or_equals?: number;
                         };
                         date_created?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_updated?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_deleted?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         } | null;
                         date_archived?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         } | null;
                     };
                     search?: {
                         keyword: string;
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -57207,131 +61458,59 @@ export interface operations {
                             length_greater_than_or_equals?: number;
                         };
                         date_created?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_updated?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                         date_deleted?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         } | null;
                         date_archived?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         } | null;
                     };
@@ -57998,39 +62177,21 @@ export interface operations {
                             less_than_or_equals?: string;
                         };
                         date_created?: {
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             not_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             greater_than_or_equals?: string;
-                            /**
-                             * Format: date-time
-                             * @example 2024-01-15T09:30:00Z
-                             */
+                            /** @example string */
                             less_than_or_equals?: string;
                         };
                     };
-                    sort: {
+                    sort?: {
                         [key: string]: "asc" | "desc";
                     };
                     /** @default 50 */
@@ -58908,35 +63069,17 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -59412,35 +63555,17 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -59914,42 +64039,8 @@ export interface operations {
                 };
                 limit?: string | number;
                 query?: {
-                    /** @enum {string} */
-                    status?: "active" | "archived";
                     /** @example string */
                     reference_id?: string;
-                    date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
-                        less_than_or_equals?: string;
-                    };
                 };
             };
             header?: {
@@ -60229,35 +64320,17 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -60921,35 +64994,17 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -61275,6 +65330,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61350,6 +65408,8 @@ export interface operations {
                     status?: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                     /** @example string */
                     reference_id?: string;
+                    /** @example string */
+                    conjoin_request_id?: string;
                 };
             };
             header?: {
@@ -61379,6 +65439,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61468,6 +65531,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61556,6 +65622,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61653,6 +65722,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -61749,6 +65821,9 @@ export interface operations {
                             conjoin_project_id: string;
                             reference_id?: string | null;
                             live_mode: boolean;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             /** @enum {string} */
                             status: "pending" | "running" | "completed" | "failed" | "paused" | "cancelled";
                             payload?: {
@@ -62039,35 +66114,17 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -62970,35 +67027,17 @@ export interface operations {
                     /** @example string */
                     conjoin_request_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -63110,35 +67149,17 @@ export interface operations {
                     /** @example string */
                     conjoin_request_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -63718,35 +67739,17 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -64492,6 +68495,8 @@ export interface operations {
                 query?: {
                     /** @enum {string} */
                     status?: "pending" | "success" | "failed" | "timeout" | "retrying";
+                    /** @example string */
+                    conjoin_request_id?: string;
                 };
             };
             header?: {
@@ -64605,6 +68610,8 @@ export interface operations {
                 query?: {
                     /** @enum {string} */
                     replayed?: "true" | "false";
+                    /** @example string */
+                    conjoin_request_id?: string;
                 };
             };
             header?: {
@@ -64640,6 +68647,9 @@ export interface operations {
                             failed_at: string;
                             replayed: boolean;
                             replayed_at?: string | null;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             conjoin_account_id: string;
                             conjoin_project_id: string;
                             reference_id?: string | null;
@@ -64725,6 +68735,9 @@ export interface operations {
                             failed_at: string;
                             replayed: boolean;
                             replayed_at?: string | null;
+                            /** @example string */
+                            conjoin_request_id: string;
+                            trace_source?: ("public_api" | "sdk" | "service_rpc" | "outbox" | "service_event" | "relay_worker" | "schedule" | "system_job" | "provider_webhook") | null;
                             conjoin_account_id: string;
                             conjoin_project_id: string;
                             reference_id?: string | null;
@@ -64915,35 +68928,17 @@ export interface operations {
                     /** @example string */
                     reference_id?: string;
                     date_created?: {
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         not_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         greater_than_or_equals?: string;
-                        /**
-                         * Format: date-time
-                         * @example 2024-01-15T09:30:00Z
-                         */
+                        /** @example string */
                         less_than_or_equals?: string;
                     };
                 };
@@ -68958,6 +72953,9 @@ export interface operations {
                     prev?: string;
                     /** @example string */
                     next?: string;
+                };
+                sort?: {
+                    [key: string]: "asc" | "desc";
                 };
                 limit?: string | number;
             };

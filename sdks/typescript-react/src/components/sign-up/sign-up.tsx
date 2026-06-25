@@ -1,8 +1,10 @@
-import { useAuthFetch, useConjoinClient } from '@conjoin-cloud/react-core'
+import { useConjoinClient, useSignUp } from '@conjoin-cloud/react-core'
 import * as Label from '@radix-ui/react-label'
-import { type ChangeEvent, type FormEvent, useCallback, useState } from 'react'
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
+import { type ChangeEvent, type FormEvent, useCallback, useEffect, useState } from 'react'
 import { BusyContent } from '../internal/busy-content'
 import { OAuthButton } from '../internal/oauth-button'
+import { Spinner } from '../internal/spinner'
 
 type SignUpProps = {
   afterSignUpUrl?: string
@@ -10,101 +12,108 @@ type SignUpProps = {
   onSignUp?: () => void
 }
 
+const ERROR_ID = 'conjoin-sign-up-error'
+
+const isOAuthMethod = (method: string): boolean =>
+  method !== 'email_password' && method !== 'email' && method !== 'password'
+
 export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
-  const { sdkConfig } = useConjoinClient()
-  const { authFetch, authDomain, isConfigured } = useAuthFetch()
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const { sdkConfig, isConfigLoaded } = useConjoinClient()
+  const { status, isSubmitting, error, verificationMethod, signUp, attemptVerification, reset } = useSignUp()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [code, setCode] = useState('')
 
+  const methods = sdkConfig?.auth.sign_in_methods ?? []
+  const oauthMethods = methods.filter(isOAuthMethod)
+  const usesPassword = methods.includes('email_password') || methods.includes('password')
   const signUpEnabled = sdkConfig?.auth.sign_up_enabled !== false
-  const oauthMethods = (sdkConfig?.auth.sign_in_methods ?? []).filter(m => m !== 'email_password' && m !== 'email_otp')
+  const describedBy = error ? ERROR_ID : undefined
 
-  const handleFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setFirstName(e.target.value)
+  useEffect(() => {
+    if (status !== 'complete') return
+
+    onSignUp?.()
+    if (afterSignUpUrl) {
+      window.location.assign(afterSignUpUrl)
+    }
+  }, [status, onSignUp, afterSignUpUrl])
+
+  const handleEmailChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
   }, [])
 
-  const handleLastNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setLastName(e.target.value)
+  const handlePasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value)
   }, [])
 
-  const handleEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
+  const handleCodeChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setCode(event.target.value)
   }, [])
 
-  const handlePasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
-  }, [])
+  const handleDetailsSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault()
+      if (isSubmitting || !email.trim()) return
 
-  const handleSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault()
-      if (isSubmitting) return
-
-      setIsSubmitting(true)
-      setError(null)
-      setFieldErrors({})
-
-      try {
-        const response = await authFetch('/v1/auth/signup', {
-          method: 'POST',
-          body: JSON.stringify({
-            email: email.trim(),
-            password,
-            first_name: firstName.trim() || undefined,
-            last_name: lastName.trim() || undefined,
-          }),
-        })
-
-        if (!response.ok) {
-          const body = (await response.json().catch(() => ({}))) as {
-            message?: string
-            errors?: Array<{ path: string; message: string }>
-          }
-
-          if (body.errors?.length) {
-            const mapped: Record<string, string> = {}
-            for (const err of body.errors) {
-              mapped[err.path] = err.message
-            }
-            setFieldErrors(mapped)
-          }
-
-          setError(body.message ?? 'Unable to create account. Please try again.')
-          return
-        }
-
-        if (afterSignUpUrl) {
-          window.location.href = afterSignUpUrl
-        }
-        onSignUp?.()
-      } catch {
-        setError('A network error occurred. Please check your connection and try again.')
-      } finally {
-        setIsSubmitting(false)
-      }
+      await signUp({
+        email: email.trim(),
+        password: usesPassword ? password : undefined,
+        verificationOption: 'email_verification_code',
+      })
     },
-    [authFetch, email, password, firstName, lastName, afterSignUpUrl, onSignUp, isSubmitting],
+    [isSubmitting, email, password, usesPassword, signUp],
   )
 
-  const handleOAuthClick = useCallback(
+  const handleVerificationSubmit = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault()
+      if (isSubmitting || !code.trim()) return
+
+      await attemptVerification({ code: code.trim(), password: usesPassword ? password : undefined })
+    },
+    [isSubmitting, code, password, usesPassword, attemptVerification],
+  )
+
+  const handleOAuthSelect = useCallback(
     (provider: string) => {
-      if (!authDomain) return
-      window.location.href = `https://${authDomain}/v1/auth/oauth/${encodeURIComponent(provider)}/start`
+      void signUp({ providerKey: provider })
     },
-    [authDomain],
+    [signUp],
   )
 
-  if (!isConfigured || !signUpEnabled) {
+  const handleBack = useCallback(() => {
+    setCode('')
+    reset()
+  }, [reset])
+
+  if (!isConfigLoaded) {
+    return (
+      <div data-conjoin-card="">
+        <div data-conjoin-state="">
+          <Spinner size="sm" label="Loading" />
+        </div>
+      </div>
+    )
+  }
+
+  if (!signUpEnabled) {
     return (
       <div data-conjoin-card="">
         <p data-conjoin-heading="" data-conjoin-center="">
           Sign up is not available
         </p>
+      </div>
+    )
+  }
+
+  if (status === 'redirecting') {
+    return (
+      <div data-conjoin-card="">
+        <div data-conjoin-state="">
+          <Spinner size="sm" label="Redirecting to your provider" />
+        </div>
       </div>
     )
   }
@@ -115,130 +124,141 @@ export function SignUp({ afterSignUpUrl, signInUrl, onSignUp }: SignUpProps) {
         Create your account
       </h2>
 
-      {oauthMethods.length > 0 ? (
+      {status === 'idle' && oauthMethods.length > 0 ? (
         <div data-conjoin-social-group="">
           {oauthMethods.map(method => (
-            <OAuthButton key={method} provider={method} onSelect={handleOAuthClick} />
+            <OAuthButton key={method} provider={method} onSelect={handleOAuthSelect} />
           ))}
           <div data-conjoin-divider-text="">or</div>
         </div>
       ) : null}
 
-      {error && !Object.keys(fieldErrors).length ? (
-        <p data-conjoin-field-error="" role="alert">
+      {error ? (
+        <p id={ERROR_ID} data-conjoin-field-error="" role="alert">
           {error}
         </p>
       ) : null}
 
-      <form onSubmit={handleSubmit} noValidate>
-        <div data-conjoin-field-row="">
-          <div>
-            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-first-name">
-              First name
+      {status === 'idle' ? (
+        <form onSubmit={handleDetailsSubmit} noValidate>
+          <div data-conjoin-field="">
+            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-email">
+              Email address
             </Label.Root>
             <input
-              id="conjoin-sign-up-first-name"
+              id="conjoin-sign-up-email"
               data-conjoin-input=""
-              type="text"
-              autoComplete="given-name"
-              value={firstName}
-              onChange={handleFirstNameChange}
-              maxLength={100}
-              aria-invalid={fieldErrors.first_name ? true : undefined}
-              aria-describedby={fieldErrors.first_name ? 'conjoin-err-first-name' : undefined}
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={handleEmailChange}
+              placeholder="you@example.com"
+              required
+              maxLength={320}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={describedBy}
             />
-            {fieldErrors.first_name ? (
-              <p id="conjoin-err-first-name" data-conjoin-field-error="">
-                {fieldErrors.first_name}
-              </p>
-            ) : null}
           </div>
-          <div>
-            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-last-name">
-              Last name
+
+          {usesPassword ? (
+            <div data-conjoin-field="">
+              <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-password">
+                Password
+              </Label.Root>
+              <input
+                id="conjoin-sign-up-password"
+                data-conjoin-input=""
+                type="password"
+                autoComplete="new-password"
+                value={password}
+                onChange={handlePasswordChange}
+                placeholder="Create a password"
+                required
+                aria-invalid={error ? true : undefined}
+                aria-describedby={describedBy}
+              />
+            </div>
+          ) : null}
+
+          <button
+            type="submit"
+            data-conjoin-button=""
+            data-variant="primary"
+            data-block="true"
+            data-spacing="stacked"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            <BusyContent busy={isSubmitting} label="Create account" busyLabel="Creating account" />
+          </button>
+        </form>
+      ) : null}
+
+      {status === 'needs_verification' && verificationMethod === 'magic_link' ? (
+        <div data-conjoin-state="">
+          <p data-conjoin-prompt="">
+            We sent a confirmation link to {email || 'your email'}. Open it to finish setting up your account.
+          </p>
+          <button type="button" data-conjoin-button="" data-variant="outline" data-block="true" onClick={handleBack}>
+            Back
+          </button>
+        </div>
+      ) : null}
+
+      {status === 'needs_verification' && verificationMethod !== 'magic_link' ? (
+        <form onSubmit={handleVerificationSubmit} noValidate>
+          <VisuallyHidden.Root>
+            <label htmlFor="conjoin-sign-up-email-hidden">Email</label>
+            <input id="conjoin-sign-up-email-hidden" type="email" value={email} readOnly autoComplete="email" />
+          </VisuallyHidden.Root>
+
+          <div data-conjoin-field="" data-gap="wide">
+            <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-code">
+              Verification code
             </Label.Root>
             <input
-              id="conjoin-sign-up-last-name"
+              id="conjoin-sign-up-code"
               data-conjoin-input=""
+              data-mono="true"
               type="text"
-              autoComplete="family-name"
-              value={lastName}
-              onChange={handleLastNameChange}
-              maxLength={100}
-              aria-invalid={fieldErrors.last_name ? true : undefined}
-              aria-describedby={fieldErrors.last_name ? 'conjoin-err-last-name' : undefined}
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              value={code}
+              onChange={handleCodeChange}
+              placeholder="Enter the code we emailed you"
+              required
+              maxLength={12}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={describedBy}
             />
-            {fieldErrors.last_name ? (
-              <p id="conjoin-err-last-name" data-conjoin-field-error="">
-                {fieldErrors.last_name}
-              </p>
-            ) : null}
           </div>
-        </div>
 
-        <div data-conjoin-field="">
-          <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-email">
-            Email address
-          </Label.Root>
-          <input
-            id="conjoin-sign-up-email"
-            data-conjoin-input=""
-            data-error={fieldErrors.email ? 'true' : undefined}
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={handleEmailChange}
-            placeholder="you@example.com"
-            required
-            maxLength={320}
-            aria-invalid={fieldErrors.email ? true : undefined}
-            aria-describedby={fieldErrors.email ? 'conjoin-err-email' : undefined}
-          />
-          {fieldErrors.email ? (
-            <p id="conjoin-err-email" data-conjoin-field-error="">
-              {fieldErrors.email}
-            </p>
-          ) : null}
-        </div>
+          <button
+            type="submit"
+            data-conjoin-button=""
+            data-variant="primary"
+            data-block="true"
+            data-spacing="stacked"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            <BusyContent busy={isSubmitting} label="Verify" busyLabel="Verifying" />
+          </button>
 
-        <div data-conjoin-field="">
-          <Label.Root data-conjoin-label="" htmlFor="conjoin-sign-up-password">
-            Password
-          </Label.Root>
-          <input
-            id="conjoin-sign-up-password"
-            data-conjoin-input=""
-            data-error={fieldErrors.password ? 'true' : undefined}
-            type="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={handlePasswordChange}
-            placeholder="Create a password"
-            required
-            aria-invalid={fieldErrors.password ? true : undefined}
-            aria-describedby={fieldErrors.password ? 'conjoin-err-password' : undefined}
-          />
-          {fieldErrors.password ? (
-            <p id="conjoin-err-password" data-conjoin-field-error="">
-              {fieldErrors.password}
-            </p>
-          ) : null}
-        </div>
+          <button
+            type="button"
+            data-conjoin-button=""
+            data-variant="outline"
+            data-block="true"
+            data-spacing="stacked"
+            onClick={handleBack}
+          >
+            Back
+          </button>
+        </form>
+      ) : null}
 
-        <button
-          type="submit"
-          data-conjoin-button=""
-          data-variant="primary"
-          data-block="true"
-          data-spacing="stacked"
-          disabled={isSubmitting}
-          aria-busy={isSubmitting}
-        >
-          <BusyContent busy={isSubmitting} label="Create account" busyLabel="Creating account" />
-        </button>
-      </form>
-
-      {signInUrl ? (
+      {status === 'idle' && signInUrl ? (
         <p data-conjoin-prompt="">
           Already have an account?{' '}
           <a href={signInUrl} data-conjoin-link="">

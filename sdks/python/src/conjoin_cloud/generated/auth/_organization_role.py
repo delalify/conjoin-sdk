@@ -39,6 +39,7 @@ class AuthOrganizationRolesResource:
 
     def create_org_role(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationRoleCreateOrgRoleRequest,
         *,
@@ -46,7 +47,7 @@ class AuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleCreateOrgRoleResponse:
         return self._client.request(
             'POST',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/create',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationRoleCreateOrgRoleResponse,
@@ -55,6 +56,7 @@ class AuthOrganizationRolesResource:
 
     def read_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -62,7 +64,7 @@ class AuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleReadOrgRoleResponse:
         return self._client.request(
             'GET',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleReadOrgRoleResponse,
@@ -71,6 +73,7 @@ class AuthOrganizationRolesResource:
 
     def list_org_roles(
         self,
+        app_id: str,
         organization_id: str,
         query: AuthOrganizationRoleListOrgRolesQuery | None = None,
         *,
@@ -78,7 +81,7 @@ class AuthOrganizationRolesResource:
     ) -> Page[AuthOrganizationRoleListOrgRolesItem]:
         return self._client.request(
             'GET',
-            f'auth/organization/role/{_encode_path_param(organization_id)}',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationRoleListOrgRolesItem],
@@ -87,6 +90,7 @@ class AuthOrganizationRolesResource:
 
     def update_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         data: AuthOrganizationRoleUpdateOrgRoleRequest,
@@ -95,7 +99,7 @@ class AuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleUpdateOrgRoleResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/update',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationRoleUpdateOrgRoleResponse,
@@ -104,6 +108,7 @@ class AuthOrganizationRolesResource:
 
     def archive_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -111,7 +116,7 @@ class AuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleArchiveOrgRoleResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/archive',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/archive',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleArchiveOrgRoleResponse,
@@ -120,6 +125,7 @@ class AuthOrganizationRolesResource:
 
     def restore_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -127,7 +133,7 @@ class AuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleRestoreOrgRoleResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/restore',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/restore',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleRestoreOrgRoleResponse,
@@ -136,6 +142,7 @@ class AuthOrganizationRolesResource:
 
     def delete_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -143,7 +150,7 @@ class AuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleDeleteOrgRoleResponse:
         return self._client.request(
             'DELETE',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/delete',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleDeleteOrgRoleResponse,
@@ -152,6 +159,7 @@ class AuthOrganizationRolesResource:
 
     def read_org_role_permissions(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -159,7 +167,7 @@ class AuthOrganizationRolesResource:
     ) -> Page[Any]:
         return self._client.request(
             'GET',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/permissions',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permissions',
             query=None,
             body=None,
             cast_to=Page[Any],
@@ -181,6 +189,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def create_org_role(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationRoleCreateOrgRoleRequest,
         *,
@@ -188,7 +197,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleCreateOrgRoleResponse:
         return await self._client.request(
             'POST',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/create',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationRoleCreateOrgRoleResponse,
@@ -197,6 +206,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def read_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -204,7 +214,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleReadOrgRoleResponse:
         return await self._client.request(
             'GET',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleReadOrgRoleResponse,
@@ -213,6 +223,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def list_org_roles(
         self,
+        app_id: str,
         organization_id: str,
         query: AuthOrganizationRoleListOrgRolesQuery | None = None,
         *,
@@ -220,7 +231,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> Page[AuthOrganizationRoleListOrgRolesItem]:
         return await self._client.request(
             'GET',
-            f'auth/organization/role/{_encode_path_param(organization_id)}',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationRoleListOrgRolesItem],
@@ -229,6 +240,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def update_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         data: AuthOrganizationRoleUpdateOrgRoleRequest,
@@ -237,7 +249,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleUpdateOrgRoleResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/update',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationRoleUpdateOrgRoleResponse,
@@ -246,6 +258,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def archive_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -253,7 +266,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleArchiveOrgRoleResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/archive',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/archive',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleArchiveOrgRoleResponse,
@@ -262,6 +275,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def restore_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -269,7 +283,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleRestoreOrgRoleResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/restore',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/restore',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleRestoreOrgRoleResponse,
@@ -278,6 +292,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def delete_org_role(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -285,7 +300,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> AuthOrganizationRoleDeleteOrgRoleResponse:
         return await self._client.request(
             'DELETE',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/delete',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/delete',
             query=None,
             body=None,
             cast_to=AuthOrganizationRoleDeleteOrgRoleResponse,
@@ -294,6 +309,7 @@ class AsyncAuthOrganizationRolesResource:
 
     async def read_org_role_permissions(
         self,
+        app_id: str,
         organization_id: str,
         role_id: str,
         *,
@@ -301,7 +317,7 @@ class AsyncAuthOrganizationRolesResource:
     ) -> Page[Any]:
         return await self._client.request(
             'GET',
-            f'auth/organization/role/{_encode_path_param(organization_id)}/{_encode_path_param(role_id)}/permissions',
+            f'auth/organization/role/{_encode_path_param(app_id)}/organization/{_encode_path_param(organization_id)}/role/{_encode_path_param(role_id)}/permissions',
             query=None,
             body=None,
             cast_to=Page[Any],

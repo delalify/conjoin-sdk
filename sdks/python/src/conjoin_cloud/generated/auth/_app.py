@@ -14,6 +14,7 @@ from conjoin_cloud.generated._models import (
     AuthAppListItem,
     AuthAppListQuery,
     AuthAppReadResponse,
+    AuthAppRotateSigningKeysResponse,
     AuthAppUpdateCustomAttributesRequest,
     AuthAppUpdateCustomAttributesResponse,
     AuthAppUpdateRequest,
@@ -112,6 +113,21 @@ class AuthAppsResource:
             query=None,
             body=data,
             cast_to=AuthAppUpdateSettingsResponse,
+            request_options=request_options,
+        )
+
+    def rotate_signing_keys(
+        self,
+        app_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAppRotateSigningKeysResponse:
+        return self._client.request(
+            'POST',
+            f'auth/app/{_encode_path_param(app_id)}/signing-keys/rotate',
+            query=None,
+            body=None,
+            cast_to=AuthAppRotateSigningKeysResponse,
             request_options=request_options,
         )
 
@@ -218,6 +234,21 @@ class AsyncAuthAppsResource:
             query=None,
             body=data,
             cast_to=AuthAppUpdateSettingsResponse,
+            request_options=request_options,
+        )
+
+    async def rotate_signing_keys(
+        self,
+        app_id: str,
+        *,
+        request_options: RequestOptions | Mapping[str, Any] | None = None,
+    ) -> AuthAppRotateSigningKeysResponse:
+        return await self._client.request(
+            'POST',
+            f'auth/app/{_encode_path_param(app_id)}/signing-keys/rotate',
+            query=None,
+            body=None,
+            cast_to=AuthAppRotateSigningKeysResponse,
             request_options=request_options,
         )
 

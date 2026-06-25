@@ -19,7 +19,7 @@
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm tsc --noEmit && pnpm tsc -p tsconfig.web.json",
+        "command": "pnpm tsc --noEmit && pnpm tsc -p tsconfig.node.json",
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["^build"],

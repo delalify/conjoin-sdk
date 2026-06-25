@@ -7,7 +7,9 @@
       "options": {
         "commands": [
           "pnpm openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts",
-          "pnpm tsx codegen/generate.ts"
+          "pnpm openapi-typescript ../../spec/openapi-frontend.json -o src/generated/frontend-api-types.ts",
+          "pnpm tsx codegen/generate.ts",
+          "pnpm tsx codegen/generate-frontend-paths.ts"
         ],
         "parallel": false,
         "cwd": "{projectRoot}"

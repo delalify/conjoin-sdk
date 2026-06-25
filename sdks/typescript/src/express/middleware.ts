@@ -4,7 +4,7 @@ import { verifyToken } from '../server/tokens'
 import './types'
 import type { ConjoinExpressOptions } from './types'
 
-const DEFAULT_COOKIE_NAME = '__conjoin_auth_at'
+const DEFAULT_COOKIE_NAME = '__conjoin_auth_sess'
 const MIDDLEWARE_SENTINEL = '__conjoin_middleware_applied'
 
 export function conjoinMiddleware(options: ConjoinExpressOptions): RequestHandler {

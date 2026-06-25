@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     'core/index': 'src/core/index.ts',
     'auth/index': 'src/auth/index.ts',
+    'auth-flow/index': 'src/auth-flow/index.ts',
     'database/index': 'src/database/index.ts',
     'storage/index': 'src/storage/index.ts',
     'messaging/index': 'src/messaging/index.ts',

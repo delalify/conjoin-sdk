@@ -1,40 +1,72 @@
-import type { ConjoinClient } from '@conjoin-cloud/sdk'
-import type { AuthTransport, ConjoinAuthState, ConjoinSdkConfig } from './types'
+import {
+  requestHandshake,
+  requestLogout,
+  requestNativeLogout,
+  requestNativeRefresh,
+  requestNativeTokenMint,
+} from '../auth-flow/auth-flow-api'
+import type {
+  AuthTransport,
+  ClientHandle,
+  ConjoinAuthState,
+  ConjoinSdkConfig,
+  NativeAuthSession,
+  NativeAuthTransport,
+} from './types'
 
 type AuthManagerOptions = {
-  client: ConjoinClient
   transport: AuthTransport
   sdkConfig: ConjoinSdkConfig | null
   onStateChange: (state: ConjoinAuthState) => void
 }
 
-type TokenPayload = {
-  sub: string
-  sid: string
-  org_id?: string
-  org_role?: string
-  exp: number
+const REFRESH_RATIO = 0.85
+const MIN_REFRESH_MS = 30_000
+
+type NativeCapableTransport = AuthTransport & NativeAuthTransport
+
+function isNativeTransport(transport: AuthTransport): transport is NativeCapableTransport {
+  return (
+    typeof transport.readTokens === 'function' &&
+    typeof transport.storeTokens === 'function' &&
+    typeof transport.clearTokens === 'function' &&
+    typeof transport.readSession === 'function' &&
+    typeof transport.acquireRefreshLock === 'function' &&
+    typeof transport.subscribe === 'function'
+  )
 }
 
-const REFRESH_MARGIN_MS = 60_000
-
-function decodeTokenPayload(token: string): TokenPayload | null {
-  try {
-    const parts = token.split('.')
-    if (parts.length !== 3) return null
-    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))
-    return payload as TokenPayload
-  } catch {
-    return null
+function nativeSignedInState(session: NativeAuthSession): ConjoinAuthState {
+  return {
+    isLoaded: true,
+    isSignedIn: true,
+    clientId: null,
+    referenceId: null,
+    accountId: session.accountId,
+    sessionId: session.sessionId,
+    organizationId: session.organizationId,
+    organizationRoles: session.organizationRoles,
   }
 }
 
+/**
+ * Auth manager for both runtimes. On the web a readable client handle alone does
+ * not mean signed in (the handle also exists mid-flow), so signed-in is confirmed
+ * by a handshake that mints a fresh httpOnly session against a completed client.
+ * On native there are no cookies: the session is the bearer-token pair in secure
+ * storage, identity is decoded from the access-token JWT, and refresh rotates the
+ * tokens through the native refresh endpoint. Either way the manager schedules the
+ * next refresh ahead of expiry and collapses any failure to signed-out.
+ */
 export function createAuthManager(options: AuthManagerOptions) {
   const { transport, onStateChange } = options
+  const native = isNativeTransport(transport) ? transport : null
 
   let currentState: ConjoinAuthState = { isLoaded: false }
   let refreshTimer: ReturnType<typeof setTimeout> | null = null
-  let refreshPromise: Promise<void> | null = null
+  let unsubscribeNative: (() => void) | null = null
+  let isBusy = false
+  let destroyed = false
 
   function setState(next: ConjoinAuthState) {
     currentState = next
@@ -45,136 +77,277 @@ export function createAuthManager(options: AuthManagerOptions) {
     return currentState
   }
 
-  function scheduleRefresh(expiresAt: number) {
-    if (refreshTimer) clearTimeout(refreshTimer)
-
-    const now = Date.now()
-    const refreshAt = expiresAt * 1000 - REFRESH_MARGIN_MS
-    const delay = Math.max(refreshAt - now, 0)
-
-    refreshTimer = setTimeout(() => {
-      refreshTokens().catch(() => {
-        setState({ isLoaded: true, isSignedIn: false })
-      })
-    }, delay)
-  }
-
-  async function refreshTokens(): Promise<void> {
-    if (refreshPromise) return refreshPromise
-
-    refreshPromise = transport.acquireRefreshLock(async () => {
-      try {
-        const authDomain = options.sdkConfig?.auth.domain
-        if (!authDomain) return
-
-        const response = await fetch(`https://${authDomain}/v1/auth/self/sessions/refresh`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            ...transport.attachAuth({}),
-            ...(transport.attachCsrf ? transport.attachCsrf({}) : {}),
-          },
-        })
-
-        if (!response.ok) {
-          await transport.clearTokens()
-          setState({ isLoaded: true, isSignedIn: false })
-          return
-        }
-
-        const body = (await response.json()) as { data: { access_token: string; refresh_token: string } }
-        const { access_token, refresh_token } = body.data
-
-        await transport.storeTokens(access_token, refresh_token)
-
-        const payload = decodeTokenPayload(access_token)
-        if (payload) {
-          setState({
-            isLoaded: true,
-            isSignedIn: true,
-            accountId: payload.sub,
-            sessionId: payload.sid,
-            organizationId: payload.org_id ?? null,
-            organizationRole: payload.org_role ?? null,
-            accessToken: access_token,
-          })
-          scheduleRefresh(payload.exp)
-        }
-      } catch {
-        await transport.clearTokens()
-        setState({ isLoaded: true, isSignedIn: false })
-      }
-    })
-
-    try {
-      await refreshPromise
-    } finally {
-      refreshPromise = null
+  function clearRefreshTimer() {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer)
+      refreshTimer = null
     }
   }
 
-  function initialize() {
-    const state = transport.readAuthState()
-    setState(state)
-
-    if (state.isLoaded && state.isSignedIn) {
-      const payload = decodeTokenPayload(state.accessToken)
-      if (payload) {
-        const now = Date.now() / 1000
-        if (payload.exp <= now) {
-          refreshTokens().catch(() => {
-            setState({ isLoaded: true, isSignedIn: false })
-          })
-        } else {
-          scheduleRefresh(payload.exp)
-        }
-      }
-    }
+  function scheduleRefresh(ttlSeconds: number, run: () => void) {
+    clearRefreshTimer()
+    const delay = Math.max(MIN_REFRESH_MS, Math.floor(ttlSeconds * 1000 * REFRESH_RATIO))
+    refreshTimer = setTimeout(run, delay)
   }
 
-  async function signOut(): Promise<void> {
-    if (refreshTimer) clearTimeout(refreshTimer)
-
-    const authDomain = options.sdkConfig?.auth.domain
-    if (authDomain && currentState.isLoaded && currentState.isSignedIn) {
-      try {
-        await fetch(`https://${authDomain}/v1/auth/self/sessions/${currentState.sessionId}`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            ...transport.attachAuth({}),
-            ...(transport.attachCsrf ? transport.attachCsrf({}) : {}),
-          },
-        })
-      } catch {
-        // Sign out locally even if the server call fails
-      }
-    }
-
-    await transport.clearTokens()
+  function applySignedOut() {
+    clearRefreshTimer()
     setState({ isLoaded: true, isSignedIn: false })
   }
 
-  function getToken(): string | null {
-    if (currentState.isLoaded && currentState.isSignedIn) {
-      return currentState.accessToken
+  async function runHandshake(): Promise<boolean> {
+    const authDomain = options.sdkConfig?.auth.domain
+    const handle = transport.getClientHandle()
+
+    if (!authDomain || !handle) {
+      if (!destroyed) applySignedOut()
+      return false
     }
-    return null
+
+    const result = await requestHandshake(authDomain, transport.attachCsrf({ 'Content-Type': 'application/json' }))
+    if (destroyed) return false
+
+    if (result.ok && result.data) {
+      setState({
+        isLoaded: true,
+        isSignedIn: true,
+        clientId: handle.client_id,
+        referenceId: handle.reference_id,
+        accountId: null,
+        sessionId: null,
+        organizationId: null,
+        organizationRoles: [],
+      })
+      scheduleRefresh(result.data.access_token_ttl_seconds, () => {
+        void runHandshake()
+      })
+      return true
+    }
+
+    applySignedOut()
+    return false
+  }
+
+  function reconcileNative(transportRef: NativeCapableTransport) {
+    if (destroyed || isBusy) return
+
+    const tokens = transportRef.readTokens()
+    if (!tokens) {
+      const handle = transportRef.getClientHandle()
+      const pending = transportRef.readPendingFlow()
+      if (handle && pending) {
+        void runNativeMint(transportRef, handle, pending.codeVerifier)
+        return
+      }
+      applySignedOut()
+      return
+    }
+
+    const session = transportRef.readSession()
+    if (!session) {
+      void runNativeRefresh(transportRef)
+      return
+    }
+
+    const ttlSeconds = (session.expiresAtMs - Date.now()) / 1000
+    if (ttlSeconds * 1000 <= MIN_REFRESH_MS) {
+      void runNativeRefresh(transportRef)
+      return
+    }
+
+    setState(nativeSignedInState(session))
+    scheduleRefresh(ttlSeconds, () => {
+      void runNativeRefresh(transportRef)
+    })
+  }
+
+  async function runNativeMint(
+    transportRef: NativeCapableTransport,
+    handle: ClientHandle,
+    codeVerifier: string,
+  ): Promise<boolean> {
+    return transportRef.acquireRefreshLock(async () => {
+      if (destroyed) return false
+      if (transportRef.readTokens()) return true
+
+      const authDomain = options.sdkConfig?.auth.domain
+      if (!authDomain) {
+        if (!destroyed) applySignedOut()
+        return false
+      }
+
+      isBusy = true
+      try {
+        const result = await requestNativeTokenMint(authDomain, handle, codeVerifier)
+        if (destroyed) return false
+
+        if (result.ok && result.data) {
+          await transportRef.storeTokens({
+            accessToken: result.data.access_token,
+            refreshToken: result.data.refresh_token,
+          })
+          await transportRef.setClientHandle(handle)
+          transportRef.clearPendingFlow()
+          applyNativeTokenResult(transportRef, result.data)
+          return true
+        }
+
+        transportRef.clearPendingFlow()
+        await transportRef.clearTokens()
+        applySignedOut()
+        return false
+      } finally {
+        isBusy = false
+      }
+    })
+  }
+
+  function applyNativeTokenResult(
+    transportRef: NativeCapableTransport,
+    data: { access_token: string; expires_in: number; session_id: string; account_id: string },
+  ) {
+    const session = transportRef.readSession()
+    if (session) {
+      setState(nativeSignedInState(session))
+    } else {
+      setState({
+        isLoaded: true,
+        isSignedIn: true,
+        clientId: null,
+        referenceId: null,
+        accountId: data.account_id,
+        sessionId: data.session_id,
+        organizationId: null,
+        organizationRoles: [],
+      })
+    }
+    scheduleRefresh(data.expires_in, () => {
+      void runNativeRefresh(transportRef)
+    })
+  }
+
+  async function runNativeRefresh(transportRef: NativeCapableTransport): Promise<boolean> {
+    return transportRef.acquireRefreshLock(async () => {
+      if (destroyed) return false
+
+      const tokens = transportRef.readTokens()
+      const authDomain = options.sdkConfig?.auth.domain
+      if (!tokens || !authDomain) {
+        await transportRef.clearTokens()
+        if (!destroyed) applySignedOut()
+        return false
+      }
+
+      isBusy = true
+      try {
+        const result = await requestNativeRefresh(authDomain, tokens.refreshToken)
+        if (destroyed) return false
+
+        if (result.ok && result.data) {
+          await transportRef.storeTokens({
+            accessToken: result.data.access_token,
+            refreshToken: result.data.refresh_token,
+          })
+          applyNativeTokenResult(transportRef, result.data)
+          return true
+        }
+
+        await transportRef.clearTokens()
+        applySignedOut()
+        return false
+      } finally {
+        isBusy = false
+      }
+    })
+  }
+
+  function initialize() {
+    if (native) {
+      unsubscribeNative = native.subscribe(() => reconcileNative(native))
+      reconcileNative(native)
+      return
+    }
+
+    const handle = transport.getClientHandle()
+    if (!handle) {
+      applySignedOut()
+      return
+    }
+
+    if (!options.sdkConfig?.auth.domain) {
+      setState({ isLoaded: false })
+      return
+    }
+
+    void runHandshake()
+  }
+
+  async function bootstrapSession(): Promise<boolean> {
+    if (native) {
+      if (native.readTokens()) {
+        return runNativeRefresh(native)
+      }
+      // Only the sign-in/up hooks call this, and only once the flow reports
+      // complete, so the pending flow's handle is a safe mint signal here even
+      // though reconcile (which fires on any change) trusts only the set handle.
+      const pending = native.readPendingFlow()
+      const handle = native.getClientHandle() ?? pending?.clientHandle ?? null
+      if (handle && pending) {
+        return runNativeMint(native, handle, pending.codeVerifier)
+      }
+      return false
+    }
+    return runHandshake()
+  }
+
+  async function signOut(): Promise<void> {
+    const authDomain = options.sdkConfig?.auth.domain
+    const wasSignedIn = currentState.isLoaded && currentState.isSignedIn
+
+    if (native) {
+      clearRefreshTimer()
+      const handle = native.getClientHandle()
+      if (wasSignedIn && authDomain && handle) {
+        try {
+          await requestNativeLogout(authDomain, handle)
+        } catch {
+          // Sign out locally even when the server call fails.
+        }
+      }
+      await native.clearTokens()
+      setState({ isLoaded: true, isSignedIn: false })
+      return
+    }
+
+    if (wasSignedIn && authDomain) {
+      try {
+        await requestLogout(authDomain, transport.attachCsrf({ 'Content-Type': 'application/json' }))
+      } catch {
+        // Sign out locally even when the server call fails.
+      }
+    }
+
+    clearRefreshTimer()
+    await transport.clearHandle()
+    transport.clearPendingFlow()
+    setState({ isLoaded: true, isSignedIn: false })
   }
 
   function destroy() {
-    if (refreshTimer) clearTimeout(refreshTimer)
-    refreshPromise = null
+    destroyed = true
+    clearRefreshTimer()
+    if (unsubscribeNative) {
+      unsubscribeNative()
+      unsubscribeNative = null
+    }
+    currentState = { isLoaded: false }
   }
 
   return {
     initialize,
     getState,
-    getToken,
+    bootstrapSession,
     signOut,
-    refreshTokens,
     destroy,
   }
 }

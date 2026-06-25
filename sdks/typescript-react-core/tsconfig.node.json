@@ -2,15 +2,17 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
-    "rootDir": "src",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "rootDir": ".",
+    "lib": ["ES2022"],
     "types": ["node"]
   },
-  "include": [
+  "include": ["src", "tsup.config.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
     "src/web",
     "src/provider/web-provider.tsx",
     "src/transport/web.ts",
     "src/theme/dark-mode.ts"
-  ],
-  "exclude": ["node_modules", "dist"]
+  ]
 }

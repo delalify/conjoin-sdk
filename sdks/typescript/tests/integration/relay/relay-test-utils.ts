@@ -148,6 +148,7 @@ export const relayPipelineDefinitionFixture = (overrides: Record<string, unknown
 export const relayPipelineRunFixture = (overrides: Record<string, unknown> = {}) => ({
   conjoin_account_id: CONJOIN_ACCOUNT_ID,
   conjoin_project_id: CONJOIN_PROJECT_ID,
+  conjoin_request_id: REQUEST_ID,
   date_created: DATE_CREATED,
   date_updated: DATE_UPDATED,
   live_mode: false,
@@ -233,6 +234,7 @@ export const relaySchedulerDeadLetterFixture = (overrides: Record<string, unknow
   attempts: 3,
   conjoin_account_id: CONJOIN_ACCOUNT_ID,
   conjoin_project_id: CONJOIN_PROJECT_ID,
+  conjoin_request_id: REQUEST_ID,
   date_created: DATE_CREATED,
   dlq_entry_id: DLQ_ENTRY_ID,
   execution_id: EXECUTION_ID,

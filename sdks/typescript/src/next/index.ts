@@ -13,5 +13,5 @@ export {
 export { auth } from './auth'
 export { resolveConfig } from './config'
 export { currentAccount } from './current-account'
-export { conjoinProxy, createRouteMatcher } from './proxy'
-export type { AuthObject, NextAdapterConfig } from './types'
+export { type ConjoinProxyHandler, conjoinProxy, createRouteMatcher } from './proxy'
+export type { AuthObject, HasParams, NextAdapterConfig, ProxyAuthObject } from './types'

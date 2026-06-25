@@ -13,7 +13,7 @@ function validateAuthDomain(domain: string): string {
 
 export function useAuthFetch() {
   const { sdkConfig } = useConjoinClient()
-  const { getToken } = useAuthActions()
+  const { attachCsrf, attachBearer, requestCredentials } = useAuthActions()
 
   const authDomain = sdkConfig?.auth.domain ?? null
 
@@ -23,21 +23,19 @@ export function useAuthFetch() {
         throw new Error('Auth domain is not configured')
       }
       const validDomain = validateAuthDomain(authDomain)
-      const token = getToken()
 
-      const headers: Record<string, string> = {
+      const baseHeaders: Record<string, string> = {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(options.headers as Record<string, string>),
       }
 
       return fetch(`https://${validDomain}${path}`, {
         ...options,
-        credentials: 'include',
-        headers,
+        credentials: requestCredentials,
+        headers: attachCsrf(attachBearer(baseHeaders)),
       })
     },
-    [authDomain, getToken],
+    [authDomain, attachCsrf, attachBearer, requestCredentials],
   )
 
   return { authFetch, authDomain, isConfigured: !!authDomain }

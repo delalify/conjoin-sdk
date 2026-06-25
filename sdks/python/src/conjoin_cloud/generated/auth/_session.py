@@ -28,8 +28,6 @@ from conjoin_cloud.generated._models import (
     AuthSessionListItem,
     AuthSessionListQuery,
     AuthSessionReadResponse,
-    AuthSessionRefreshRequest,
-    AuthSessionRefreshResponse,
     AuthSessionRevokeAllForAccountRequest,
     AuthSessionRevokeAllForAccountResponse,
     AuthSessionRevokeRequest,
@@ -117,23 +115,6 @@ class AuthSessionsResource:
             query=None,
             body=data,
             cast_to=AuthSessionUpdateResponse,
-            request_options=request_options,
-        )
-
-    def refresh(
-        self,
-        app_id: str,
-        session_id: str,
-        data: AuthSessionRefreshRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthSessionRefreshResponse:
-        return self._client.request(
-            'POST',
-            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/refresh',
-            query=None,
-            body=data,
-            cast_to=AuthSessionRefreshResponse,
             request_options=request_options,
         )
 
@@ -370,23 +351,6 @@ class AsyncAuthSessionsResource:
             query=None,
             body=data,
             cast_to=AuthSessionUpdateResponse,
-            request_options=request_options,
-        )
-
-    async def refresh(
-        self,
-        app_id: str,
-        session_id: str,
-        data: AuthSessionRefreshRequest,
-        *,
-        request_options: RequestOptions | Mapping[str, Any] | None = None,
-    ) -> AuthSessionRefreshResponse:
-        return await self._client.request(
-            'POST',
-            f'auth/session/{_encode_path_param(app_id)}/session/{_encode_path_param(session_id)}/refresh',
-            query=None,
-            body=data,
-            cast_to=AuthSessionRefreshResponse,
             request_options=request_options,
         )
 

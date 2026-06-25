@@ -5,6 +5,7 @@ import {
   ENTITY_ID,
   FEATURE_ID,
   FEATURE_KEY,
+  PLAN_ID,
   SCHEDULE_ID,
   SUBSCRIPTION_ID,
 } from './billing-test-utils'
@@ -45,8 +46,10 @@ export const billingEntitlementOverrideFixture = (overrides: Record<string, unkn
   is_active: true,
   live_mode: false,
   override_id: 'override_123',
+  plan_id: PLAN_ID,
   reason: 'contract test',
   soft_limit: false,
+  subscription_id: SUBSCRIPTION_ID,
   value_type: 'numeric',
   ...overrides,
 })

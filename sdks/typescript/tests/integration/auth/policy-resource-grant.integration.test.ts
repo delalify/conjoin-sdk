@@ -15,8 +15,8 @@ import {
 
 const createPolicyBody = {
   conditions: [{ type: 'time_based' as const }],
-  effect: 'allow' as const,
-  name: 'Allow project reads',
+  effect: 'deny' as const,
+  name: 'Deny project reads',
   permission_keys: ['project.read'],
 }
 const updatePolicyBody = { is_enabled: false, name: 'Paused project reads' }

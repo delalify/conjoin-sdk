@@ -188,7 +188,7 @@ export const messagingConversationRecipientFixture = (overrides: Record<string, 
   ...baseMessagingFixture(),
   contact_id: CONTACT_ID,
   conversation_id: CONVERSATION_ID,
-  conversation_recipient_id: RECIPIENT_ID,
+  recipient_id: RECIPIENT_ID,
   ...overrides,
 })
 
@@ -228,6 +228,7 @@ export const messagingSummaryFixture = (overrides: Record<string, unknown> = {})
 export const messagingEmailSenderFixture = (overrides: Record<string, unknown> = {}) => ({
   ...baseMessagingFixture(),
   capability: 'email_messages',
+  message_quotas: { messages_per_second: 1 },
   sender: 'sender@example.com',
   sender_id: EMAIL_SENDER_ID,
   sender_type: 'email_address',
@@ -247,18 +248,20 @@ export const messagingEmailSenderPoolFixture = (overrides: Record<string, unknow
 
 export const messagingAnalyticsFixture = (overrides: Record<string, unknown> = {}) => ({
   ...baseMessagingFixture(),
-  events: {
-    delivered: {
-      recipient_events: {
-        recipient_123: {
-          timestamp: DATE_CREATED,
-        },
-      },
-      total_count: 1,
-    },
-  },
-  message_analytics_id: MESSAGE_ANALYTICS_ID,
+  analytics_id: MESSAGE_ANALYTICS_ID,
+  bounces: { total_bounces: 0 },
+  channel_id: 'email',
+  clicks: { total_clicks: 0, unique_clicks: 0 },
+  complaints: { total_complaints: 0 },
+  conversation_id: CONVERSATION_ID,
+  deliveries: { total_deliveries: 1 },
+  failures: { total_failures: 0 },
+  message_request_id: MESSAGE_ID,
+  opens: { total_opens: 0, unique_opens: 0 },
+  rejections: { total_rejections: 0 },
+  subscribes: { total_subscribes: 0 },
   total_message_count: 1,
+  unsubscribes: { total_unsubscribes: 0 },
   ...overrides,
 })
 

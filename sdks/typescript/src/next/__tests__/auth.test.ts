@@ -54,7 +54,7 @@ describe('auth', () => {
 
   it('reads token from cookie and verifies', async () => {
     const cookieGet = vi.fn().mockImplementation((name: string) => {
-      if (name === '__conjoin_auth_at') return { value: 'jwt-from-cookie' }
+      if (name === '__conjoin_auth_sess') return { value: 'jwt-from-cookie' }
       return undefined
     })
     mockCookies.mockResolvedValue({ get: cookieGet } as never)
@@ -63,8 +63,11 @@ describe('auth', () => {
       payload: { sub: 'acc_123', sid: 'ses_456' },
       accountId: 'acc_123',
       sessionId: 'ses_456',
+      clientId: 'client_123',
+      appId: 'app_123',
+      liveMode: false,
       organizationId: null,
-      organizationRole: null,
+      organizationRoles: [],
     })
 
     const result = await auth()
@@ -89,8 +92,11 @@ describe('auth', () => {
       payload: { sub: 'acc_456' },
       accountId: 'acc_456',
       sessionId: 'ses_789',
+      clientId: 'client_456',
+      appId: 'app_456',
+      liveMode: true,
       organizationId: 'org_100',
-      organizationRole: 'member',
+      organizationRoles: ['member'],
     })
 
     const result = await auth()
@@ -98,6 +104,11 @@ describe('auth', () => {
     expect(result).not.toBeNull()
     expect(result?.accountId).toBe('acc_456')
     expect(result?.organizationId).toBe('org_100')
+    expect(result?.organizationRoles).toEqual(['member'])
+    expect(result?.has({ role: 'member' })).toBe(true)
+    expect(result?.has({ role: 'admin' })).toBe(false)
+    expect(result?.has({ permission: 'billing:write' })).toBe(false)
+    expect(result?.liveMode).toBe(true)
     expect(result?.getToken()).toBe('jwt-from-header')
   })
 
@@ -109,7 +120,7 @@ describe('auth', () => {
     mockHeaders.mockResolvedValue({ get: headerGet } as never)
 
     const cookieGet = vi.fn().mockImplementation((name: string) => {
-      if (name === '__conjoin_auth_at') return { value: 'cookie-token' }
+      if (name === '__conjoin_auth_sess') return { value: 'cookie-token' }
       return undefined
     })
     mockCookies.mockResolvedValue({ get: cookieGet } as never)
@@ -118,8 +129,11 @@ describe('auth', () => {
       payload: { sub: 'acc_123' },
       accountId: 'acc_123',
       sessionId: 'ses_456',
+      clientId: 'client_123',
+      appId: 'app_123',
+      liveMode: false,
       organizationId: null,
-      organizationRole: null,
+      organizationRoles: [],
     })
 
     await auth()
@@ -135,7 +149,7 @@ describe('auth', () => {
 
   it('returns null when token verification fails', async () => {
     const cookieGet = vi.fn().mockImplementation((name: string) => {
-      if (name === '__conjoin_auth_at') return { value: 'bad-token' }
+      if (name === '__conjoin_auth_sess') return { value: 'bad-token' }
       return undefined
     })
     mockCookies.mockResolvedValue({ get: cookieGet } as never)
@@ -283,7 +297,7 @@ describe('currentAccount', () => {
 
   it('fetches account when authenticated', async () => {
     const cookieGet = vi.fn().mockImplementation((name: string) => {
-      if (name === '__conjoin_auth_at') return { value: 'valid-token' }
+      if (name === '__conjoin_auth_sess') return { value: 'valid-token' }
       return undefined
     })
     mockCookies.mockResolvedValue({ get: cookieGet } as never)
@@ -292,8 +306,11 @@ describe('currentAccount', () => {
       payload: { sub: 'acc_123' },
       accountId: 'acc_123',
       sessionId: 'ses_456',
+      clientId: 'client_123',
+      appId: 'app_123',
+      liveMode: false,
       organizationId: null,
-      organizationRole: null,
+      organizationRoles: [],
     })
 
     const mockAccount = {
@@ -327,7 +344,7 @@ describe('currentAccount', () => {
 
   it('creates client with secretKey from config', async () => {
     const cookieGet = vi.fn().mockImplementation((name: string) => {
-      if (name === '__conjoin_auth_at') return { value: 'valid-token' }
+      if (name === '__conjoin_auth_sess') return { value: 'valid-token' }
       return undefined
     })
     mockCookies.mockResolvedValue({ get: cookieGet } as never)
@@ -336,8 +353,11 @@ describe('currentAccount', () => {
       payload: { sub: 'acc_123' },
       accountId: 'acc_123',
       sessionId: 'ses_456',
+      clientId: 'client_123',
+      appId: 'app_123',
+      liveMode: false,
       organizationId: null,
-      organizationRole: null,
+      organizationRoles: [],
     })
 
     const mockFetch = vi.fn().mockResolvedValue({ id: 'acc_123' })
@@ -367,7 +387,7 @@ describe('currentAccount', () => {
     mockHeaders.mockResolvedValue({ get: headerGet } as never)
 
     const cookieGet = vi.fn().mockImplementation((name: string) => {
-      if (name === '__conjoin_auth_at') return { value: 'valid-token' }
+      if (name === '__conjoin_auth_sess') return { value: 'valid-token' }
       return undefined
     })
     mockCookies.mockResolvedValue({ get: cookieGet } as never)
@@ -376,8 +396,11 @@ describe('currentAccount', () => {
       payload: { sub: 'acc_123' },
       accountId: 'acc_123',
       sessionId: 'ses_456',
+      clientId: 'client_123',
+      appId: 'app_123',
+      liveMode: false,
       organizationId: null,
-      organizationRole: null,
+      organizationRoles: [],
     })
 
     const mockFetch = vi.fn().mockResolvedValue({ id: 'acc_123' })

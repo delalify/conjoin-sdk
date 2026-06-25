@@ -1,6 +1,7 @@
 import { createConjoinClient } from '@conjoin-cloud/sdk'
 import { QueryClient } from '@tanstack/query-core'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useIdentityHydration } from '../hooks/internal/use-identity-hydration'
 import { type AuthManager, createAuthManager } from './auth-manager'
 import { fetchSdkConfig } from './config-fetcher'
 import {
@@ -8,21 +9,38 @@ import {
   ConjoinAuthActionsContext,
   ConjoinAuthStateContext,
   ConjoinClientContext,
+  ConjoinIdentityContext,
 } from './contexts'
-import type { AuthTransport, ConjoinAuthState, ConjoinProviderProps, ConjoinSdkConfig } from './types'
+import type {
+  AuthRequestCredentials,
+  AuthTransport,
+  ConjoinAuthState,
+  ConjoinProviderProps,
+  ConjoinSdkConfig,
+} from './types'
 
 type ConjoinProviderCoreProps = ConjoinProviderProps & {
   transport: AuthTransport
 }
 
-// The auth manager emits a fresh state object on every token refresh, but the
-// rotating accessToken never reaches React (getToken reads the manager's live
-// value). Collapsing updates onto an identity signature keeps refresh ticks
-// from re-rendering every auth consumer on the refresh timer.
+/**
+ * The manager emits a fresh state object on every session re-read. Collapsing
+ * updates onto an identity signature keeps unrelated re-renders from cascading to
+ * every auth consumer when the underlying identity is unchanged. The signature
+ * covers the web client handle and the native JWT identity so a change in either
+ * runtime still propagates.
+ */
 function authStateSignature(state: ConjoinAuthState): string {
   if (!state.isLoaded) return 'loading'
   if (!state.isSignedIn) return 'signed-out'
-  return [state.accountId, state.sessionId, state.organizationId, state.organizationRole].join('|')
+  return [
+    state.clientId,
+    state.referenceId,
+    state.accountId,
+    state.sessionId,
+    state.organizationId,
+    state.organizationRoles.join(','),
+  ].join('|')
 }
 
 function mergePartialConfig(partial: Partial<ConjoinSdkConfig>, fallbackBaseUrl: string): ConjoinSdkConfig {
@@ -102,7 +120,6 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
 
   useEffect(() => {
     const manager = createAuthManager({
-      client,
       transport,
       sdkConfig,
       onStateChange: handleAuthStateChange,
@@ -115,27 +132,69 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
       manager.destroy()
       authManagerRef.current = null
     }
-  }, [client, transport, sdkConfig, handleAuthStateChange])
-
-  const getToken = useCallback(() => {
-    return authManagerRef.current?.getToken() ?? null
-  }, [])
+  }, [transport, sdkConfig, handleAuthStateChange])
 
   const signOut = useCallback(async () => {
     await authManagerRef.current?.signOut()
   }, [])
+
+  const bootstrapSession = useCallback(async () => {
+    return (await authManagerRef.current?.bootstrapSession()) ?? false
+  }, [])
+
+  const attachCsrf = useCallback((headers: Record<string, string>) => transport.attachCsrf(headers), [transport])
+
+  const isNative = typeof transport.attachBearer === 'function'
+
+  const attachBearer = useCallback(
+    (headers: Record<string, string>) => (transport.attachBearer ? transport.attachBearer(headers) : headers),
+    [transport],
+  )
+
+  const requestCredentials: AuthRequestCredentials = isNative ? 'omit' : 'include'
+
+  const authDomain = sdkConfig?.auth.domain ?? null
+  const isSignedIn = authState.isLoaded && authState.isSignedIn
+  const presenceKey = authStateSignature(authState)
+
+  const identity = useIdentityHydration({
+    authDomain,
+    isSignedIn,
+    presenceKey,
+    attachCsrf,
+    attachBearer,
+    requestCredentials,
+  })
 
   const clientContextValue = useMemo(
     () => ({ client, queryClient, sdkConfig, isConfigLoaded }),
     [client, queryClient, sdkConfig, isConfigLoaded],
   )
 
-  const authActions = useMemo<ConjoinAuthActions>(() => ({ getToken, signOut }), [getToken, signOut])
+  const authActions = useMemo<ConjoinAuthActions>(
+    () => ({
+      signOut,
+      isNative,
+      attachCsrf,
+      attachBearer,
+      requestCredentials,
+      createPkce: transport.createPkce,
+      savePendingFlow: transport.savePendingFlow,
+      readPendingFlow: transport.readPendingFlow,
+      clearPendingFlow: transport.clearPendingFlow,
+      redirect: transport.redirect,
+      bootstrapSession,
+      refreshIdentity: identity.refresh,
+    }),
+    [signOut, isNative, attachCsrf, attachBearer, requestCredentials, transport, bootstrapSession, identity.refresh],
+  )
 
   return (
     <ConjoinClientContext.Provider value={clientContextValue}>
       <ConjoinAuthActionsContext.Provider value={authActions}>
-        <ConjoinAuthStateContext.Provider value={authState}>{children}</ConjoinAuthStateContext.Provider>
+        <ConjoinAuthStateContext.Provider value={authState}>
+          <ConjoinIdentityContext.Provider value={identity}>{children}</ConjoinIdentityContext.Provider>
+        </ConjoinAuthStateContext.Provider>
       </ConjoinAuthActionsContext.Provider>
     </ConjoinClientContext.Provider>
   )

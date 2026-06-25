@@ -13,7 +13,6 @@ import {
 
 const BULK_SESSION_ID = 'auth_session_456'
 const countFixture = { count: 2 }
-const refreshBody = { refresh_token: 'refresh_token_123' }
 const revokeBody = { exclude_current_session: true }
 const bulkRevokeBody = {
   revoke_reason: 'security_review',
@@ -139,20 +138,6 @@ describeAuthSdkContractCases('Auth session SDK contract integration', [
     response: conjoinSuccess(authSessionFixture({ metadata: updateBody.metadata }), { requestId: REQUEST_ID }),
     run: context => createAuthSessions(context.client).update(APP_ID, SESSION_ID, updateBody),
     assertResult: result => expect(result).toEqual(authSessionFixture({ metadata: updateBody.metadata })),
-  },
-  {
-    name: 'refreshes an auth session',
-    method: 'POST',
-    path: '/v1/auth/session/{app_id}/session/{session_id}/refresh',
-    expectedBody: refreshBody,
-    expectedPath: `/v1/auth/session/${APP_ID}/session/${SESSION_ID}/refresh`,
-    expectedPathParams: {
-      app_id: APP_ID,
-      session_id: SESSION_ID,
-    },
-    response: conjoinSuccess(authSessionFixture(), { requestId: REQUEST_ID }),
-    run: context => createAuthSessions(context.client).refresh(APP_ID, SESSION_ID, refreshBody),
-    assertResult: result => expect(result).toEqual(authSessionFixture()),
   },
   {
     name: 'validates an auth session',

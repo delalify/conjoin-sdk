@@ -28,6 +28,14 @@ from conjoin_cloud.generated.auth._client import (
     AsyncAuthClientsResource,
     AuthClientsResource,
 )
+from conjoin_cloud.generated.auth._connection import (
+    AsyncAuthConnectionsResource,
+    AuthConnectionsResource,
+)
+from conjoin_cloud.generated.auth._connection_enterprise import (
+    AsyncAuthConnectionEnterprisesResource,
+    AuthConnectionEnterprisesResource,
+)
 from conjoin_cloud.generated.auth._credential import (
     AsyncAuthCredentialsResource,
     AuthCredentialsResource,
@@ -51,6 +59,10 @@ from conjoin_cloud.generated.auth._identity import (
 from conjoin_cloud.generated.auth._organization import (
     AsyncAuthOrganizationsResource,
     AuthOrganizationsResource,
+)
+from conjoin_cloud.generated.auth._organization_domain import (
+    AsyncAuthOrganizationDomainsResource,
+    AuthOrganizationDomainsResource,
 )
 from conjoin_cloud.generated.auth._organization_group import (
     AsyncAuthOrganizationGroupsResource,
@@ -96,9 +108,17 @@ from conjoin_cloud.generated.auth._scim import (
     AsyncAuthSCIMsResource,
     AuthSCIMsResource,
 )
+from conjoin_cloud.generated.auth._scim_management import (
+    AsyncAuthSCIMManagementsResource,
+    AuthSCIMManagementsResource,
+)
 from conjoin_cloud.generated.auth._slo import (
     AsyncAuthSLOsResource,
     AuthSLOsResource,
+)
+from conjoin_cloud.generated.auth._sso_portal import (
+    AsyncAuthSSOPortalsResource,
+    AuthSSOPortalsResource,
 )
 from conjoin_cloud.generated.auth._session import (
     AsyncAuthSessionsResource,
@@ -127,12 +147,18 @@ class AuthResource:
         self.authorizations = AuthAuthorizationsResource(client, profile_id=profile_id)
         self.certificates = AuthCertificatesResource(client, profile_id=profile_id)
         self.clients = AuthClientsResource(client, profile_id=profile_id)
+        self.connections = AuthConnectionsResource(client, profile_id=profile_id)
+        self.connection_enterprises = AuthConnectionEnterprisesResource(
+            client,
+            profile_id=profile_id,
+        )
         self.credentials = AuthCredentialsResource(client, profile_id=profile_id)
         self.deprovisionings = AuthDeprovisioningsResource(client, profile_id=profile_id)
         self.flows = AuthFlowsResource(client, profile_id=profile_id)
         self.guards = AuthGuardsResource(client, profile_id=profile_id)
         self.identities = AuthIdentitiesResource(client, profile_id=profile_id)
         self.organizations = AuthOrganizationsResource(client, profile_id=profile_id)
+        self.organization_domains = AuthOrganizationDomainsResource(client, profile_id=profile_id)
         self.organization_groups = AuthOrganizationGroupsResource(client, profile_id=profile_id)
         self.organization_invitations = AuthOrganizationInvitationsResource(
             client,
@@ -156,7 +182,9 @@ class AuthResource:
         self.resource_grants = AuthResourceGrantsResource(client, profile_id=profile_id)
         self.role_assignment_logs = AuthRoleAssignmentLogsResource(client, profile_id=profile_id)
         self.scim = AuthSCIMsResource(client, profile_id=profile_id)
+        self.scim_managements = AuthSCIMManagementsResource(client, profile_id=profile_id)
         self.slo = AuthSLOsResource(client, profile_id=profile_id)
+        self.sso_portals = AuthSSOPortalsResource(client, profile_id=profile_id)
         self.sessions = AuthSessionsResource(client, profile_id=profile_id)
         self.step_ups = AuthStepUpsResource(client, profile_id=profile_id)
         self.trusted_devices = AuthTrustedDevicesResource(client, profile_id=profile_id)
@@ -177,12 +205,21 @@ class AsyncAuthResource:
         self.authorizations = AsyncAuthAuthorizationsResource(client, profile_id=profile_id)
         self.certificates = AsyncAuthCertificatesResource(client, profile_id=profile_id)
         self.clients = AsyncAuthClientsResource(client, profile_id=profile_id)
+        self.connections = AsyncAuthConnectionsResource(client, profile_id=profile_id)
+        self.connection_enterprises = AsyncAuthConnectionEnterprisesResource(
+            client,
+            profile_id=profile_id,
+        )
         self.credentials = AsyncAuthCredentialsResource(client, profile_id=profile_id)
         self.deprovisionings = AsyncAuthDeprovisioningsResource(client, profile_id=profile_id)
         self.flows = AsyncAuthFlowsResource(client, profile_id=profile_id)
         self.guards = AsyncAuthGuardsResource(client, profile_id=profile_id)
         self.identities = AsyncAuthIdentitiesResource(client, profile_id=profile_id)
         self.organizations = AsyncAuthOrganizationsResource(client, profile_id=profile_id)
+        self.organization_domains = AsyncAuthOrganizationDomainsResource(
+            client,
+            profile_id=profile_id,
+        )
         self.organization_groups = AsyncAuthOrganizationGroupsResource(
             client,
             profile_id=profile_id,
@@ -212,7 +249,9 @@ class AsyncAuthResource:
             profile_id=profile_id,
         )
         self.scim = AsyncAuthSCIMsResource(client, profile_id=profile_id)
+        self.scim_managements = AsyncAuthSCIMManagementsResource(client, profile_id=profile_id)
         self.slo = AsyncAuthSLOsResource(client, profile_id=profile_id)
+        self.sso_portals = AsyncAuthSSOPortalsResource(client, profile_id=profile_id)
         self.sessions = AsyncAuthSessionsResource(client, profile_id=profile_id)
         self.step_ups = AsyncAuthStepUpsResource(client, profile_id=profile_id)
         self.trusted_devices = AsyncAuthTrustedDevicesResource(client, profile_id=profile_id)

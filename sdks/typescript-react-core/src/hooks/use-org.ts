@@ -1,66 +1,47 @@
-import { useCallback } from 'react'
-import { useAuthActions } from './internal/use-auth-actions'
+import type { ConjoinMembership, ConjoinOrganization } from '../provider/identity-types'
 import { useAuthState } from './internal/use-auth-state'
-import { useConjoinClient } from './internal/use-conjoin-client'
-import { useConjoinQuery } from './internal/use-conjoin-query'
+import { useIdentity } from './internal/use-identity'
 
-export type ConjoinOrganization = {
-  id: string
-  name: string
-  slug: string
-  logo_url: string | null
-  created_at: string
-}
-
-export type ConjoinMembership = {
-  id: string
-  organization_id: string
-  account_id: string
-  role: string
-  created_at: string
-}
-
-type OrgData = {
-  organization: ConjoinOrganization
-  membership: ConjoinMembership
-}
+export type { ConjoinMembership, ConjoinOrganization }
 
 export function useOrg() {
-  const { sdkConfig } = useConjoinClient()
-  const { getToken } = useAuthActions()
   const authState = useAuthState()
+  const identity = useIdentity()
   const isSignedIn = authState.isLoaded && authState.isSignedIn
-  const orgId = isSignedIn ? authState.organizationId : null
-  const authDomain = sdkConfig?.auth.domain
-
-  const queryFn = useCallback(async (): Promise<OrgData> => {
-    if (!authDomain || !orgId) throw new Error('Organization context not available')
-    const token = getToken()
-    const response = await fetch(`https://${authDomain}/v1/auth/self/organization`, {
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    })
-    if (!response.ok) throw new Error('Failed to fetch organization')
-    const body = (await response.json()) as { data: OrgData }
-    return body.data
-  }, [authDomain, orgId, getToken])
-
-  const result = useConjoinQuery<OrgData>({
-    queryKey: ['conjoin', 'auth', 'organization', orgId],
-    queryFn,
-    enabled: isSignedIn && !!orgId && !!authDomain,
-  })
 
   if (!authState.isLoaded) {
-    return { isLoaded: false as const, organization: undefined, membership: undefined }
+    return {
+      isLoaded: false as const,
+      isSignedIn: undefined,
+      organization: undefined,
+      memberships: undefined,
+      membership: undefined,
+      setActive: identity.setActiveOrganization,
+    }
   }
 
+  if (!isSignedIn) {
+    return {
+      isLoaded: true as const,
+      isSignedIn: false as const,
+      organization: null,
+      memberships: [] as ConjoinMembership[],
+      membership: null,
+      setActive: identity.setActiveOrganization,
+    }
+  }
+
+  const activeMembership =
+    identity.activeOrganizationId === null
+      ? null
+      : (identity.memberships.find(entry => entry.organization.id === identity.activeOrganizationId) ?? null)
+
   return {
-    isLoaded: !result.isLoading,
-    organization: result.data?.organization ?? null,
-    membership: result.data?.membership ?? null,
+    isLoaded: !identity.areOrganizationsLoading,
+    isSignedIn: true as const,
+    organization: activeMembership?.organization ?? null,
+    memberships: identity.memberships,
+    membership: activeMembership,
+    setActive: identity.setActiveOrganization,
   }
 }

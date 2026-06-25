@@ -9,6 +9,7 @@ from urllib.parse import quote
 from conjoin_cloud._models import Page
 from conjoin_cloud._request_options import RequestOptions
 from conjoin_cloud.generated._models import (
+    AuthPasskeyDeleteRequest,
     AuthPasskeyDeleteResponse,
     AuthPasskeyListItem,
     AuthPasskeyReadResponse,
@@ -68,6 +69,7 @@ class AuthPasskeysResource:
         app_id: str,
         account_id: str,
         credential_id: str,
+        data: AuthPasskeyDeleteRequest,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> AuthPasskeyDeleteResponse:
@@ -75,7 +77,7 @@ class AuthPasskeysResource:
             'DELETE',
             f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys/{_encode_path_param(credential_id)}/delete',
             query=None,
-            body=None,
+            body=data,
             cast_to=AuthPasskeyDeleteResponse,
             request_options=request_options,
         )
@@ -131,6 +133,7 @@ class AsyncAuthPasskeysResource:
         app_id: str,
         account_id: str,
         credential_id: str,
+        data: AuthPasskeyDeleteRequest,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> AuthPasskeyDeleteResponse:
@@ -138,7 +141,7 @@ class AsyncAuthPasskeysResource:
             'DELETE',
             f'auth/passkey/{_encode_path_param(app_id)}/account/{_encode_path_param(account_id)}/passkeys/{_encode_path_param(credential_id)}/delete',
             query=None,
-            body=None,
+            body=data,
             cast_to=AuthPasskeyDeleteResponse,
             request_options=request_options,
         )

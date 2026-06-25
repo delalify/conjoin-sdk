@@ -40,13 +40,14 @@ class AuthOrganizationsResource:
 
     def create(
         self,
+        app_id: str,
         data: AuthOrganizationCreateRequest,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> AuthOrganizationCreateResponse:
         return self._client.request(
             'POST',
-            'auth/organization/create',
+            f'auth/organization/{_encode_path_param(app_id)}/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationCreateResponse,
@@ -55,13 +56,14 @@ class AuthOrganizationsResource:
 
     def read(
         self,
+        app_id: str,
         organization_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> AuthOrganizationReadResponse:
         return self._client.request(
             'GET',
-            f'auth/organization/{_encode_path_param(organization_id)}',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationReadResponse,
@@ -70,13 +72,14 @@ class AuthOrganizationsResource:
 
     def list(
         self,
+        app_id: str,
         query: AuthOrganizationListQuery | None = None,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> Page[AuthOrganizationListItem]:
         return self._client.request(
             'GET',
-            'auth/organization/',
+            f'auth/organization/{_encode_path_param(app_id)}',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationListItem],
@@ -85,6 +88,7 @@ class AuthOrganizationsResource:
 
     def update(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationUpdateRequest,
         *,
@@ -92,7 +96,7 @@ class AuthOrganizationsResource:
     ) -> AuthOrganizationUpdateResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/{_encode_path_param(organization_id)}/update',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateResponse,
@@ -101,6 +105,7 @@ class AuthOrganizationsResource:
 
     def update_settings(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationUpdateSettingsRequest,
         *,
@@ -108,7 +113,7 @@ class AuthOrganizationsResource:
     ) -> AuthOrganizationUpdateSettingsResponse:
         return self._client.request(
             'PATCH',
-            f'auth/organization/{_encode_path_param(organization_id)}/settings/update',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}/settings/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateSettingsResponse,
@@ -117,6 +122,7 @@ class AuthOrganizationsResource:
 
     def delete(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationDeleteRequest,
         *,
@@ -124,7 +130,7 @@ class AuthOrganizationsResource:
     ) -> AuthOrganizationDeleteResponse:
         return self._client.request(
             'DELETE',
-            f'auth/organization/{_encode_path_param(organization_id)}/delete',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}/delete',
             query=None,
             body=data,
             cast_to=AuthOrganizationDeleteResponse,
@@ -146,13 +152,14 @@ class AsyncAuthOrganizationsResource:
 
     async def create(
         self,
+        app_id: str,
         data: AuthOrganizationCreateRequest,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> AuthOrganizationCreateResponse:
         return await self._client.request(
             'POST',
-            'auth/organization/create',
+            f'auth/organization/{_encode_path_param(app_id)}/create',
             query=None,
             body=data,
             cast_to=AuthOrganizationCreateResponse,
@@ -161,13 +168,14 @@ class AsyncAuthOrganizationsResource:
 
     async def read(
         self,
+        app_id: str,
         organization_id: str,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> AuthOrganizationReadResponse:
         return await self._client.request(
             'GET',
-            f'auth/organization/{_encode_path_param(organization_id)}',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}',
             query=None,
             body=None,
             cast_to=AuthOrganizationReadResponse,
@@ -176,13 +184,14 @@ class AsyncAuthOrganizationsResource:
 
     async def list(
         self,
+        app_id: str,
         query: AuthOrganizationListQuery | None = None,
         *,
         request_options: RequestOptions | Mapping[str, Any] | None = None,
     ) -> Page[AuthOrganizationListItem]:
         return await self._client.request(
             'GET',
-            'auth/organization/',
+            f'auth/organization/{_encode_path_param(app_id)}',
             query=query,
             body=None,
             cast_to=Page[AuthOrganizationListItem],
@@ -191,6 +200,7 @@ class AsyncAuthOrganizationsResource:
 
     async def update(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationUpdateRequest,
         *,
@@ -198,7 +208,7 @@ class AsyncAuthOrganizationsResource:
     ) -> AuthOrganizationUpdateResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/{_encode_path_param(organization_id)}/update',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateResponse,
@@ -207,6 +217,7 @@ class AsyncAuthOrganizationsResource:
 
     async def update_settings(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationUpdateSettingsRequest,
         *,
@@ -214,7 +225,7 @@ class AsyncAuthOrganizationsResource:
     ) -> AuthOrganizationUpdateSettingsResponse:
         return await self._client.request(
             'PATCH',
-            f'auth/organization/{_encode_path_param(organization_id)}/settings/update',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}/settings/update',
             query=None,
             body=data,
             cast_to=AuthOrganizationUpdateSettingsResponse,
@@ -223,6 +234,7 @@ class AsyncAuthOrganizationsResource:
 
     async def delete(
         self,
+        app_id: str,
         organization_id: str,
         data: AuthOrganizationDeleteRequest,
         *,
@@ -230,7 +242,7 @@ class AsyncAuthOrganizationsResource:
     ) -> AuthOrganizationDeleteResponse:
         return await self._client.request(
             'DELETE',
-            f'auth/organization/{_encode_path_param(organization_id)}/delete',
+            f'auth/organization/{_encode_path_param(app_id)}/{_encode_path_param(organization_id)}/delete',
             query=None,
             body=data,
             cast_to=AuthOrganizationDeleteResponse,

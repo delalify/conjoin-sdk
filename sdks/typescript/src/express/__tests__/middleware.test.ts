@@ -15,11 +15,14 @@ const JWKS_URL = 'https://auth.conjoin.cloud/.well-known/jwks.json'
 const VALID_REQUEST_ID = 'cnj_req_0198f0f7-5d0b-7b4a-8d5a-cf5693f0b2c1'
 
 const mockVerifiedToken: VerifiedToken = {
-  payload: { sub: 'acc_123', sid: 'ses_456' },
+  payload: { sub: 'acc_123', session_id: 'ses_456' },
   accountId: 'acc_123',
   sessionId: 'ses_456',
+  clientId: 'client_123',
+  appId: 'app_123',
+  liveMode: true,
   organizationId: 'org_789',
-  organizationRole: 'admin',
+  organizationRoles: ['admin'],
 }
 
 function createMockReq(overrides: Record<string, unknown> = {}) {
@@ -72,7 +75,7 @@ describe('conjoinMiddleware', () => {
     const middleware = conjoinMiddleware({ jwksUrl: JWKS_URL })
 
     const req = createMockReq({
-      cookies: { __conjoin_auth_at: 'cookie-token' },
+      cookies: { __conjoin_auth_sess: 'cookie-token' },
     })
     const res = createMockRes()
     const next = vi.fn()
@@ -89,7 +92,7 @@ describe('conjoinMiddleware', () => {
 
     const req = createMockReq({
       headers: { authorization: 'Bearer bearer-token' },
-      cookies: { __conjoin_auth_at: 'cookie-token' },
+      cookies: { __conjoin_auth_sess: 'cookie-token' },
     })
     const res = createMockRes()
     const next = vi.fn()

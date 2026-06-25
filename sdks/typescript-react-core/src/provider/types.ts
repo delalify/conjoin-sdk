@@ -155,6 +155,25 @@ export type ConjoinBranding = {
   }
 }
 
+/**
+ * Auth state shared by the browser (cookie) and native (bearer) runtimes.
+ *
+ * On the web a readable `__conjoin_auth_cl` handle cookie is necessary but not
+ * sufficient to be signed in (the handle also exists mid-flow), so `isSignedIn`
+ * reflects a successful handshake against a completed client. The browser never
+ * holds the session token, so its signed-in state carries only the client
+ * handle; verified account and organization identity hydrate separately from
+ * the cookie-authenticated self-surface, leaving the native identity fields
+ * null.
+ *
+ * On native there are no cookies (RFC 8252): the runtime holds bearer tokens in
+ * OS secure storage and the signed-in identity is decoded from the access-token
+ * JWT, so `accountId`, `sessionId`, and the organization claims are populated
+ * while the web-only handle fields stay null.
+ *
+ * `isLoaded: false` covers the window between mount and the first session
+ * resolution, plus SSR where no cookie is readable.
+ */
 export type ConjoinAuthState =
   | { isLoaded: false }
   | {
@@ -164,25 +183,118 @@ export type ConjoinAuthState =
   | {
       isLoaded: true
       isSignedIn: true
-      accountId: string
-      sessionId: string
+      clientId: string | null
+      referenceId: string | null
+      accountId: string | null
+      sessionId: string | null
       organizationId: string | null
-      organizationRole: string | null
-      accessToken: string
+      organizationRoles: string[]
     }
 
-export type AuthTransport = {
-  readAuthState: () => ConjoinAuthState
-  storeTokens: (accessToken: string, refreshToken: string) => void | Promise<void>
-  clearTokens: () => void | Promise<void>
-  attachAuth: (headers: Record<string, string>) => Record<string, string>
-  attachCsrf?: (headers: Record<string, string>) => Record<string, string>
-  acquireRefreshLock: <T>(fn: () => Promise<T>) => Promise<T>
+export type ClientHandle = {
+  client_id: string
+  reference_id: string
 }
 
-export type AuthManagerState = ConjoinAuthState & {
-  isRefreshing: boolean
+export type PkceMaterial = {
+  state: string
+  codeVerifier: string
+  codeChallenge: string
 }
+
+export type PendingAuthFlowKind = 'sign-in' | 'sign-up'
+
+export type FlowVerificationMethod = string
+
+/**
+ * The minimum a flow start must hand to its matching complete step. `state` and
+ * the PKCE pair are generated client-side and replayed on complete; `serverState`
+ * is the value the server returns from start and is the one a pin-code completion
+ * must echo. It is persisted so a magic link opened on a fresh page load (a new
+ * runtime with no in-memory state) can still complete on the same device.
+ */
+export type PendingAuthFlow = {
+  kind: PendingAuthFlowKind
+  state: string
+  codeVerifier: string
+  codeChallenge: string
+  serverState: string | null
+  verificationMethod: FlowVerificationMethod | null
+  identifier: string | null
+  /**
+   * The completed client identity for a native flow, returned in the start
+   * response body (web receives it as a cookie instead, so this stays unset
+   * there). It is held until the flow completes, then redeemed for bearer tokens
+   * at the native token mint. Optional so the web pending-flow shape is unchanged.
+   */
+  clientHandle?: ClientHandle | null
+}
+
+export type AuthTokens = {
+  accessToken: string
+  refreshToken: string
+}
+
+/**
+ * Whether auth-domain requests send credentials. The web runtime authenticates
+ * the self-surface with the httpOnly session cookie, so it sends `include`;
+ * native holds no cookies (RFC 8252) and authenticates with a bearer header, so
+ * it sends `omit` to keep any platform cookie store out of the request.
+ */
+export type AuthRequestCredentials = 'include' | 'omit'
+
+/**
+ * Signed-in identity decoded from a native access-token JWT. `expiresAtMs` is
+ * the token expiry in epoch milliseconds; the manager schedules the next refresh
+ * against it so a stored session resumes ahead of expiry on cold start.
+ */
+export type NativeAuthSession = {
+  accountId: string
+  sessionId: string
+  organizationId: string | null
+  organizationRoles: string[]
+  expiresAtMs: number
+}
+
+/**
+ * Bearer-token methods a native runtime adds to the transport. They are absent
+ * on the web transport (which authenticates with cookies), so the manager treats
+ * their presence as the signal to run the native session lifecycle instead of the
+ * cookie handshake. Tokens live only in OS secure storage behind this seam;
+ * `readTokens` and `readSession` return synchronous in-memory mirrors hydrated
+ * from that store, and `subscribe` lets the manager react to changes that
+ * originate outside its own calls (store hydration, a deep-link mint, a remote
+ * sign-out).
+ */
+export type NativeAuthTransport = {
+  readTokens: () => AuthTokens | null
+  storeTokens: (tokens: AuthTokens) => void | Promise<void>
+  clearTokens: () => void | Promise<void>
+  readSession: () => NativeAuthSession | null
+  attachBearer: (headers: Record<string, string>) => Record<string, string>
+  setClientHandle: (handle: ClientHandle) => void | Promise<void>
+  acquireRefreshLock: <T>(fn: () => Promise<T>) => Promise<T>
+  subscribe: (listener: () => void) => () => void
+}
+
+/**
+ * Platform seam for everything the auth runtime needs from the host environment.
+ * The web implementation reads cookies, derives PKCE with Web Crypto, and keeps
+ * the pending flow in session storage; a native implementation supplies its own
+ * secure equivalents and the bearer-token methods in `NativeAuthTransport`.
+ * Keeping these behind the transport lets the hooks stay free of platform globals
+ * so they build in the framework-agnostic entry.
+ */
+export type AuthTransport = {
+  getClientHandle: () => ClientHandle | null
+  clearHandle: () => void | Promise<void>
+  attachCsrf: (headers: Record<string, string>) => Record<string, string>
+  createPkce: () => Promise<PkceMaterial>
+  savePendingFlow: (flow: PendingAuthFlow) => void
+  readPendingFlow: () => PendingAuthFlow | null
+  clearPendingFlow: () => void
+  redirect: (url: string) => void
+} & Partial<NativeAuthTransport>
 
 export type ConjoinThemeState = {
   mode: 'light' | 'dark'

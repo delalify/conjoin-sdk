@@ -561,13 +561,13 @@ class AuthAccountAddEmailResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -581,13 +581,13 @@ class AuthAccountAddPhoneResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -609,13 +609,13 @@ class AuthAccountCreateResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -629,13 +629,13 @@ class AuthAccountDeleteResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -649,13 +649,13 @@ class AuthAccountExportResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -669,13 +669,13 @@ class AuthAccountGrantGlobalRoleResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -689,15 +689,22 @@ class AuthAccountGrantOrgRoleResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
+
+
+class AuthAccountImportPasswordHashesResponse(ConjoinModel):
+    created: float
+    failed: float
+    results: Sequence[dict[str, Any]]
+    total: float
 
 
 class AuthAccountListCredentialsItem(ConjoinModel):
@@ -723,13 +730,13 @@ class AuthAccountListItem(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -757,6 +764,20 @@ class AuthAccountMergeResponse(ConjoinModel):
     target_account_id: str
 
 
+class AuthAccountReadCredentialResponse(ConjoinModel):
+    account_id: str
+    app_id: str
+    conjoin_account_id: str
+    conjoin_project_id: str
+    credential_id: str
+    date_created: str
+    date_deleted: str | None = None
+    date_updated: str
+    kind: str
+    live_mode: bool
+    metadata: dict[str, Any] | None = None
+
+
 class AuthAccountReadResponse(ConjoinModel):
     account_id: str
     app_id: str
@@ -766,13 +787,13 @@ class AuthAccountReadResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -825,13 +846,13 @@ class AuthAccountRemoveEmailResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -845,13 +866,13 @@ class AuthAccountRemovePhoneResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -865,13 +886,13 @@ class AuthAccountRevokeGlobalRoleResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -885,13 +906,13 @@ class AuthAccountRevokeOrgRoleResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -905,13 +926,13 @@ class AuthAccountSetCustomAttributesResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -925,13 +946,13 @@ class AuthAccountUpdateMetadataResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -945,13 +966,13 @@ class AuthAccountUpdateResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -965,13 +986,13 @@ class AuthAccountUpdateStatusResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -1053,6 +1074,10 @@ class AuthAppReadResponse(ConjoinModel):
     settings: dict[str, Any] | None = None
     slug: str
     support_email: str | None = None
+
+
+class AuthAppRotateSigningKeysResponse(ConjoinModel):
+    response: Any | None = None
 
 
 class AuthAppUpdateCustomAttributesResponse(ConjoinModel):
@@ -1227,19 +1252,144 @@ class AuthClientReadResponse(ConjoinModel):
     verification_option: str | None = None
 
 
-class AuthCredentialActivateEmailMfaResponse(ConjoinModel):
-    account_id: str
+class AuthConnectionEnterpriseCreateEnterpriseConnectionResponse(ConjoinModel):
     app_id: str
+    configuration: dict[str, Any]
     conjoin_account_id: str
     conjoin_project_id: str
-    credential_id: str
-    data: dict[str, Any] | None = None
+    connection_id: str
     date_created: str
-    date_deleted: str | None = None
     date_updated: str
-    kind: str
+    identity: str
+    is_enterprise: bool
     live_mode: bool
-    metadata: dict[str, Any] | None = None
+    name: str | None
+    organization_id: str | None
+    status: str
+
+
+class AuthConnectionEnterpriseDeleteEnterpriseConnectionResponse(ConjoinModel):
+    deleted: Any
+
+
+class AuthConnectionEnterpriseDisableEnterpriseConnectionResponse(ConjoinModel):
+    app_id: str
+    configuration: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    connection_id: str
+    date_created: str
+    date_updated: str
+    identity: str
+    is_enterprise: bool
+    live_mode: bool
+    name: str | None
+    organization_id: str | None
+    status: str
+
+
+class AuthConnectionEnterpriseEnableEnterpriseConnectionResponse(ConjoinModel):
+    app_id: str
+    configuration: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    connection_id: str
+    date_created: str
+    date_updated: str
+    identity: str
+    is_enterprise: bool
+    live_mode: bool
+    name: str | None
+    organization_id: str | None
+    status: str
+
+
+class AuthConnectionEnterpriseImportEnterpriseSamlMetadataResponse(ConjoinModel):
+    app_id: str
+    configuration: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    connection_id: str
+    date_created: str
+    date_updated: str
+    identity: str
+    is_enterprise: bool
+    live_mode: bool
+    name: str | None
+    organization_id: str | None
+    status: str
+
+
+class AuthConnectionEnterpriseListEnterpriseConnectionsResponse(ConjoinModel):
+    connections: Sequence[dict[str, Any]]
+
+
+class AuthConnectionEnterpriseReadEnterpriseConnectionResponse(ConjoinModel):
+    app_id: str
+    configuration: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    connection_id: str
+    date_created: str
+    date_updated: str
+    identity: str
+    is_enterprise: bool
+    live_mode: bool
+    name: str | None
+    organization_id: str | None
+    status: str
+
+
+class AuthConnectionEnterpriseUpdateEnterpriseConnectionResponse(ConjoinModel):
+    app_id: str
+    configuration: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    connection_id: str
+    date_created: str
+    date_updated: str
+    identity: str
+    is_enterprise: bool
+    live_mode: bool
+    name: str | None
+    organization_id: str | None
+    status: str
+
+
+class AuthConnectionListFirstPartyResponse(ConjoinModel):
+    connections: Sequence[dict[str, Any]]
+
+
+class AuthConnectionReadFirstPartyResponse(ConjoinModel):
+    app_id: str
+    configuration: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    connection_id: str
+    date_created: str
+    date_updated: str
+    identity: str
+    is_enterprise: bool
+    live_mode: bool
+    name: str | None
+    organization_id: str | None
+    status: str
+
+
+class AuthConnectionUpdateFirstPartyResponse(ConjoinModel):
+    app_id: str
+    configuration: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    connection_id: str
+    date_created: str
+    date_updated: str
+    identity: str
+    is_enterprise: bool
+    live_mode: bool
+    name: str | None
+    organization_id: str | None
+    status: str
 
 
 class AuthCredentialActivateSmsMfaResponse(ConjoinModel):
@@ -1288,21 +1438,6 @@ class AuthCredentialConsumeTotpRecoveryCodeResponse(ConjoinModel):
 
 
 class AuthCredentialCreatePasswordResponse(ConjoinModel):
-    account_id: str
-    app_id: str
-    conjoin_account_id: str
-    conjoin_project_id: str
-    credential_id: str
-    data: dict[str, Any] | None = None
-    date_created: str
-    date_deleted: str | None = None
-    date_updated: str
-    kind: str
-    live_mode: bool
-    metadata: dict[str, Any] | None = None
-
-
-class AuthCredentialEnrollEmailMfaResponse(ConjoinModel):
     account_id: str
     app_id: str
     conjoin_account_id: str
@@ -1437,7 +1572,7 @@ class AuthCredentialRotateTotpRecoveryCodesResponse(ConjoinModel):
     metadata: dict[str, Any] | None = None
 
 
-class AuthCredentialSendEmailMfaChallengeResponse(ConjoinModel):
+class AuthCredentialSendSmsMfaActivationCodeResponse(ConjoinModel):
     account_id: str
     app_id: str
     conjoin_account_id: str
@@ -1512,21 +1647,6 @@ class AuthCredentialUpdateApiKeyResponse(ConjoinModel):
     metadata: dict[str, Any] | None = None
 
 
-class AuthCredentialVerifyEmailMfaResponse(ConjoinModel):
-    account_id: str
-    app_id: str
-    conjoin_account_id: str
-    conjoin_project_id: str
-    credential_id: str
-    data: dict[str, Any] | None = None
-    date_created: str
-    date_deleted: str | None = None
-    date_updated: str
-    kind: str
-    live_mode: bool
-    metadata: dict[str, Any] | None = None
-
-
 class AuthCredentialVerifyPasskeyRegistrationResponse(ConjoinModel):
     account_id: str
     app_id: str
@@ -1577,45 +1697,94 @@ class AuthDeprovisioningDeprovisionAccountResponse(ConjoinModel):
 
 
 class AuthFlowCompletePasswordResetResponse(ConjoinModel):
+    account_id: str | None = None
     mfa: dict[str, Any] | None = None
-    session: dict[str, Any] | None = None
-    status: str
+    redirect_url: str | None = None
+    session_id: str | None = None
+    state: str | None = None
+    status: str | None = None
+    step_up: dict[str, Any] | None = None
+    trusted_device_token: str | None = None
     verification: dict[str, Any] | None = None
+    verification_method: str | None = None
 
 
 class AuthFlowCompleteSigninResponse(ConjoinModel):
+    account_id: str | None = None
     mfa: dict[str, Any] | None = None
-    session: dict[str, Any] | None = None
-    status: str
+    redirect_url: str | None = None
+    session_id: str | None = None
+    state: str | None = None
+    status: str | None = None
+    step_up: dict[str, Any] | None = None
+    trusted_device_token: str | None = None
     verification: dict[str, Any] | None = None
+    verification_method: str | None = None
 
 
 class AuthFlowCompleteSignupResponse(ConjoinModel):
+    account_id: str | None = None
     mfa: dict[str, Any] | None = None
-    session: dict[str, Any] | None = None
-    status: str
+    redirect_url: str | None = None
+    session_id: str | None = None
+    state: str | None = None
+    status: str | None = None
+    step_up: dict[str, Any] | None = None
+    trusted_device_token: str | None = None
     verification: dict[str, Any] | None = None
+    verification_method: str | None = None
+
+
+class AuthFlowConfirmLinkSignupResponse(ConjoinModel):
+    account_id: str | None = None
+    mfa: dict[str, Any] | None = None
+    redirect_url: str | None = None
+    session_id: str | None = None
+    state: str | None = None
+    status: str | None = None
+    step_up: dict[str, Any] | None = None
+    trusted_device_token: str | None = None
+    verification: dict[str, Any] | None = None
+    verification_method: str | None = None
 
 
 class AuthFlowStartPasswordResetResponse(ConjoinModel):
+    account_id: str | None = None
     mfa: dict[str, Any] | None = None
-    session: dict[str, Any] | None = None
-    status: str
+    redirect_url: str | None = None
+    session_id: str | None = None
+    state: str | None = None
+    status: str | None = None
+    step_up: dict[str, Any] | None = None
+    trusted_device_token: str | None = None
     verification: dict[str, Any] | None = None
+    verification_method: str | None = None
 
 
 class AuthFlowStartSigninResponse(ConjoinModel):
+    account_id: str | None = None
     mfa: dict[str, Any] | None = None
-    session: dict[str, Any] | None = None
-    status: str
+    redirect_url: str | None = None
+    session_id: str | None = None
+    state: str | None = None
+    status: str | None = None
+    step_up: dict[str, Any] | None = None
+    trusted_device_token: str | None = None
     verification: dict[str, Any] | None = None
+    verification_method: str | None = None
 
 
 class AuthFlowStartSignupResponse(ConjoinModel):
+    account_id: str | None = None
     mfa: dict[str, Any] | None = None
-    session: dict[str, Any] | None = None
-    status: str
+    redirect_url: str | None = None
+    session_id: str | None = None
+    state: str | None = None
+    status: str | None = None
+    step_up: dict[str, Any] | None = None
+    trusted_device_token: str | None = None
     verification: dict[str, Any] | None = None
+    verification_method: str | None = None
 
 
 class AuthGuardAddAnonymousIpsResponse(ConjoinModel):
@@ -1677,13 +1846,13 @@ class AuthIdentityLinkResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -1697,13 +1866,13 @@ class AuthIdentityUnlinkResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    emails: dict[str, Any] | None = None
+    emails: Sequence[dict[str, Any]] | None = None
     global_roles: Sequence[str] | None = None
     image_url: str | None = None
     live_mode: bool
     metadata: dict[str, Any] | None = None
     name: str | None = None
-    phones: dict[str, Any] | None = None
+    phones: Sequence[dict[str, Any]] | None = None
     reference_id: str | None = None
     status: str
 
@@ -1746,6 +1915,50 @@ class AuthOrganizationDeleteResponse(ConjoinModel):
     settings: dict[str, Any] | None = None
     slug: str
     total_members: float | None = None
+
+
+class AuthOrganizationDomainCreateResponse(ConjoinModel):
+    app_id: str
+    conjoin_account_id: str
+    conjoin_project_id: str
+    date_created: str
+    date_updated: str
+    domain: str
+    last_checked_at: str | None
+    live_mode: bool
+    organization_domain_id: str
+    organization_id: str
+    recheck: dict[str, Any] | None
+    verification: dict[str, Any]
+    verification_hostname: str
+    verification_record_value: str
+    verification_token: str
+
+
+class AuthOrganizationDomainDeleteResponse(ConjoinModel):
+    deleted: Any
+
+
+class AuthOrganizationDomainListResponse(ConjoinModel):
+    domains: Sequence[dict[str, Any]]
+
+
+class AuthOrganizationDomainVerifyResponse(ConjoinModel):
+    app_id: str
+    conjoin_account_id: str
+    conjoin_project_id: str
+    date_created: str
+    date_updated: str
+    domain: str
+    last_checked_at: str | None
+    live_mode: bool
+    organization_domain_id: str
+    organization_id: str
+    recheck: dict[str, Any] | None
+    verification: dict[str, Any]
+    verification_hostname: str
+    verification_record_value: str
+    verification_token: str
 
 
 class AuthOrganizationGroupAddGroupMemberResponse(ConjoinModel):
@@ -2673,6 +2886,40 @@ class AuthRoleAssignmentLogListItem(ConjoinModel):
     role_key: str
 
 
+class AuthSCIMManagementReadScimConnectionConfigResponse(ConjoinModel):
+    bearer_token_configured: bool
+    deprovision_policy: str = Field(..., alias='deprovisionPolicy')
+    group_attribute_mapping: dict[str, Any] = Field(..., alias='groupAttributeMapping')
+    limits: dict[str, Any] | None = None
+    rate_limits: dict[str, Any] | None = Field(None, alias='rateLimits')
+    role_mapping_rules: Sequence[dict[str, Any]] = Field(..., alias='roleMappingRules')
+    user_attribute_mapping: dict[str, Any] = Field(..., alias='userAttributeMapping')
+
+
+class AuthSCIMManagementReconcileScimGroupMembersResponse(ConjoinModel):
+    status: str
+
+
+class AuthSCIMManagementReconcileScimGroupsResponse(ConjoinModel):
+    status: str
+
+
+class AuthSCIMManagementReconcileScimUsersResponse(ConjoinModel):
+    status: str
+
+
+class AuthSCIMManagementSyncScimRolesForGroupResponse(ConjoinModel):
+    status: str
+
+
+class AuthSCIMManagementSyncScimRolesForMemberResponse(ConjoinModel):
+    status: str
+
+
+class AuthSCIMManagementUpdateScimConnectionConfigResponse(ConjoinModel):
+    status: str
+
+
 class AuthSCIMScimBulkOperationsResponse(ConjoinModel):
     operations: Sequence[dict[str, Any]] | None = Field(None, alias='Operations')
     schemas: Sequence[str]
@@ -2824,6 +3071,28 @@ class AuthSLOSamlSpLogoutResponse(ConjoinModel):
     status: str | None = None
 
 
+class AuthSSOPortalMintSsoPortalTicketResponse(ConjoinModel):
+    portal_url: str
+    secret: str
+    ticket: dict[str, Any]
+
+
+class AuthSSOPortalReadSsoPortalSettingsResponse(ConjoinModel):
+    allowed_providers: Sequence[str]
+    require_domain_verification: bool
+    setup_intents: Sequence[str]
+
+
+class AuthSSOPortalRevokeSsoPortalTicketResponse(ConjoinModel):
+    revoked: Any
+
+
+class AuthSSOPortalUpdateSsoPortalSettingsResponse(ConjoinModel):
+    allowed_providers: Sequence[str]
+    require_domain_verification: bool
+    setup_intents: Sequence[str]
+
+
 class AuthSessionBulkRevokeAccountResponse(ConjoinModel):
     account_id: str
     app_id: str
@@ -2954,25 +3223,6 @@ class AuthSessionReadResponse(ConjoinModel):
     status: str
 
 
-class AuthSessionRefreshResponse(ConjoinModel):
-    account_id: str
-    app_id: str
-    client_id: str
-    conjoin_account_id: str
-    conjoin_project_id: str
-    date_created: str
-    date_deleted: str | None = None
-    date_updated: str
-    expires_at: str | None = None
-    last_activity: dict[str, Any] | None = None
-    live_mode: bool
-    metadata: dict[str, Any] | None = None
-    revoked_at: str | None = None
-    revoked_reason: str | None = None
-    session_id: str
-    status: str
-
-
 class AuthSessionRevokeAllForAccountResponse(ConjoinModel):
     account_id: str
     app_id: str
@@ -3038,30 +3288,21 @@ class AuthSessionValidateResponse(ConjoinModel):
 
 
 class AuthStepUpRequestResponse(ConjoinModel):
-    available_methods: Sequence[str] | None = None
-    challenge_id: str | None = None
-    expires_at: str | None = None
-    status: str | None = None
-    token: str | None = None
+    available_methods: Sequence[str]
+    challenge_id: str
 
 
 class AuthStepUpValidateResponse(ConjoinModel):
-    available_methods: Sequence[str] | None = None
-    challenge_id: str | None = None
-    expires_at: str | None = None
-    status: str | None = None
-    token: str | None = None
+    valid: bool
 
 
 class AuthStepUpVerifyResponse(ConjoinModel):
-    available_methods: Sequence[str] | None = None
-    challenge_id: str | None = None
-    expires_at: str | None = None
-    status: str | None = None
-    token: str | None = None
+    expires_in: int
+    step_up_token: str
 
 
 class AuthTrustedDeviceListItem(ConjoinModel):
+    absolute_expires_at: str | None = None
     account_id: str
     app_id: str
     conjoin_account_id: str
@@ -3069,7 +3310,6 @@ class AuthTrustedDeviceListItem(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    device_fingerprint: str
     expires_at: str | None = None
     ip_prefix: str | None = None
     label: str | None = None
@@ -3079,6 +3319,7 @@ class AuthTrustedDeviceListItem(ConjoinModel):
     status: str
     trusted_at: str | None = None
     trusted_device_id: str
+    user_agent: str | None = None
 
 
 class AuthTrustedDeviceRevokeAllResponse(ConjoinModel):
@@ -3086,6 +3327,7 @@ class AuthTrustedDeviceRevokeAllResponse(ConjoinModel):
 
 
 class AuthTrustedDeviceRevokeResponse(ConjoinModel):
+    absolute_expires_at: str | None = None
     account_id: str
     app_id: str
     conjoin_account_id: str
@@ -3093,7 +3335,6 @@ class AuthTrustedDeviceRevokeResponse(ConjoinModel):
     date_created: str
     date_deleted: str | None = None
     date_updated: str
-    device_fingerprint: str
     expires_at: str | None = None
     ip_prefix: str | None = None
     label: str | None = None
@@ -3103,6 +3344,7 @@ class AuthTrustedDeviceRevokeResponse(ConjoinModel):
     status: str
     trusted_at: str | None = None
     trusted_device_id: str
+    user_agent: str | None = None
 
 
 class BillingChargeListItem(ConjoinModel):
@@ -3601,8 +3843,10 @@ class BillingEntitlementOverrideCreateResponse(ConjoinModel):
     is_active: bool
     live_mode: bool
     override_id: str
+    plan_id: str
     reason: str | None = None
     soft_limit: bool | None = None
+    subscription_id: str
     value_type: str
 
 
@@ -3621,8 +3865,10 @@ class BillingEntitlementOverrideDeleteResponse(ConjoinModel):
     is_active: bool
     live_mode: bool
     override_id: str
+    plan_id: str
     reason: str | None = None
     soft_limit: bool | None = None
+    subscription_id: str
     value_type: str
 
 
@@ -3641,8 +3887,10 @@ class BillingEntitlementOverrideListItem(ConjoinModel):
     is_active: bool
     live_mode: bool
     override_id: str
+    plan_id: str
     reason: str | None = None
     soft_limit: bool | None = None
+    subscription_id: str
     value_type: str
 
 
@@ -3661,8 +3909,10 @@ class BillingEntitlementOverrideUpdateResponse(ConjoinModel):
     is_active: bool
     live_mode: bool
     override_id: str
+    plan_id: str
     reason: str | None = None
     soft_limit: bool | None = None
+    subscription_id: str
     value_type: str
 
 
@@ -5639,21 +5889,6 @@ class CloudSKUCatalogReadSkuCatalogItem(ConjoinModel):
     unit_label: str
 
 
-class CloudSKUQuotaReadAccountSkuQuotasItem(ConjoinModel):
-    cloud_sku_id: str
-    cloud_sku_quota_id: str
-    date_created: str
-    date_updated: str | None = None
-    effective_from: str
-    effective_to: str | None = None
-    entity_id: str
-    quota_type: str
-    quota_value: float
-    scope_id: str
-    scope_type: str
-    unit_type: str
-
-
 class CloudSpendControlReadResponse(ConjoinModel):
     ai_circuit_breaker_limits: Sequence[dict[str, Any]]
     alert_email_enabled: bool
@@ -5796,7 +6031,7 @@ class CloudZoneDeleteResponse(ConjoinModel):
     zone_id: str
 
 
-class CloudZoneReadResponse(ConjoinModel):
+class CloudZoneReadItem(ConjoinModel):
     cloud_account_id: str
     date_created: str
     date_deleted: str | None = None
@@ -5832,7 +6067,113 @@ class CloudZoneVerifyDnsResponse(ConjoinModel):
     zone_id: str
 
 
+class MessagingChannelAnalyticsCreateReportResponse(ConjoinModel):
+    analytics_id: str
+    bounces: dict[str, Any]
+    channel_id: str
+    clicks: dict[str, Any]
+    complaints: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    conversation_id: str | None
+    date_created: str
+    date_deleted: str | None = None
+    date_updated: str
+    deliveries: dict[str, Any]
+    failures: dict[str, Any]
+    live_mode: bool
+    message_request_id: str
+    opens: dict[str, Any]
+    profile_id: str
+    rejections: dict[str, Any]
+    subscribes: dict[str, Any]
+    total_message_count: float
+    unsubscribes: dict[str, Any]
+
+
+class MessagingChannelAnalyticsGenerateSummariesResponse(ConjoinModel):
+    analytics_id: str
+    bounces: dict[str, Any]
+    channel_id: str
+    clicks: dict[str, Any]
+    complaints: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    conversation_id: str | None
+    date_created: str
+    date_deleted: str | None = None
+    date_updated: str
+    deliveries: dict[str, Any]
+    failures: dict[str, Any]
+    live_mode: bool
+    message_request_id: str
+    opens: dict[str, Any]
+    profile_id: str
+    rejections: dict[str, Any]
+    subscribes: dict[str, Any]
+    total_message_count: float
+    unsubscribes: dict[str, Any]
+
+
+class MessagingChannelAnalyticsListItem(ConjoinModel):
+    analytics_id: str
+    bounces: dict[str, Any]
+    channel_id: str
+    clicks: dict[str, Any]
+    complaints: dict[str, Any]
+    conjoin_account_id: str
+    conjoin_project_id: str
+    conversation_id: str | None
+    date_created: str
+    date_deleted: str | None = None
+    date_updated: str
+    deliveries: dict[str, Any]
+    failures: dict[str, Any]
+    live_mode: bool
+    message_request_id: str
+    opens: dict[str, Any]
+    profile_id: str
+    rejections: dict[str, Any]
+    subscribes: dict[str, Any]
+    total_message_count: float
+    unsubscribes: dict[str, Any]
+
+
+class MessagingContactAddPropertiesResponse(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    contact_id: str
+    date_created: str
+    date_deleted: str | None = None
+    date_updated: str
+    email: str | None = None
+    live_mode: bool
+    name: str | None = None
+    phone_number: Any | None = None
+    preferred_channels: Sequence[str] | None = None
+    profile_id: str
+    properties: dict[str, Any] | None = None
+    reference_id: str | None = None
+
+
 class MessagingContactCreateResponse(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    contact_id: str
+    date_created: str
+    date_deleted: str | None = None
+    date_updated: str
+    email: str | None = None
+    live_mode: bool
+    name: str | None = None
+    phone_number: Any | None = None
+    preferred_channels: Sequence[str] | None = None
+    profile_id: str
+    properties: dict[str, Any] | None = None
+    reference_id: str | None = None
+
+
+class MessagingContactDeletePropertiesResponse(ConjoinModel):
     conjoin_account_id: str
     conjoin_project_id: str
     contact_id: str
@@ -5883,7 +6224,89 @@ class MessagingContactListItem(ConjoinModel):
     reference_id: str | None = None
 
 
+class MessagingContactPropertiesCreateContactPropertyResponse(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    date_created: str
+    date_updated: str
+    default_value: Any
+    key: str
+    live_mode: bool
+    profile_id: str
+    property_id: str
+    type: str
+
+
+class MessagingContactPropertiesDeleteContactPropertyResponse(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    date_created: str
+    date_updated: str
+    default_value: Any
+    key: str
+    live_mode: bool
+    profile_id: str
+    property_id: str
+    type: str
+
+
+class MessagingContactPropertiesDeleteManyResponse(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    date_created: str
+    date_updated: str
+    default_value: Any
+    key: str
+    live_mode: bool
+    profile_id: str
+    property_id: str
+    type: str
+
+
+class MessagingContactPropertiesFetchOneContactPropertyResponse(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    date_created: str
+    date_updated: str
+    default_value: Any
+    key: str
+    live_mode: bool
+    profile_id: str
+    property_id: str
+    type: str
+
+
+class MessagingContactPropertiesListItem(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    date_created: str
+    date_updated: str
+    default_value: Any
+    key: str
+    live_mode: bool
+    profile_id: str
+    property_id: str
+    type: str
+
+
 class MessagingContactSuppressMessagesResponse(ConjoinModel):
+    conjoin_account_id: str
+    conjoin_project_id: str
+    contact_id: str
+    date_created: str
+    date_deleted: str | None = None
+    date_updated: str
+    email: str | None = None
+    live_mode: bool
+    name: str | None = None
+    phone_number: Any | None = None
+    preferred_channels: Sequence[str] | None = None
+    profile_id: str
+    properties: dict[str, Any] | None = None
+    reference_id: str | None = None
+
+
+class MessagingContactUpdatePropertyResponse(ConjoinModel):
     conjoin_account_id: str
     conjoin_project_id: str
     contact_id: str
@@ -5922,13 +6345,13 @@ class MessagingConversationAddManyRecipientsItem(ConjoinModel):
     conjoin_project_id: str
     contact_id: str
     conversation_id: str
-    conversation_recipient_id: str
     date_archived: str | None = None
     date_created: str
     date_deleted: str | None = None
     date_updated: str
     live_mode: bool
     profile_id: str
+    recipient_id: str
     reference_id: str | None = None
 
 
@@ -5937,13 +6360,13 @@ class MessagingConversationAddOneRecipientResponse(ConjoinModel):
     conjoin_project_id: str
     contact_id: str
     conversation_id: str
-    conversation_recipient_id: str
     date_archived: str | None = None
     date_created: str
     date_deleted: str | None = None
     date_updated: str
     live_mode: bool
     profile_id: str
+    recipient_id: str
     reference_id: str | None = None
 
 
@@ -6012,13 +6435,13 @@ class MessagingConversationDeleteRecipientsResponse(ConjoinModel):
     conjoin_project_id: str
     contact_id: str
     conversation_id: str
-    conversation_recipient_id: str
     date_archived: str | None = None
     date_created: str
     date_deleted: str | None = None
     date_updated: str
     live_mode: bool
     profile_id: str
+    recipient_id: str
     reference_id: str | None = None
 
 
@@ -6067,13 +6490,13 @@ class MessagingConversationReadManyRecipientsItem(ConjoinModel):
     conjoin_project_id: str
     contact_id: str
     conversation_id: str
-    conversation_recipient_id: str
     date_archived: str | None = None
     date_created: str
     date_deleted: str | None = None
     date_updated: str
     live_mode: bool
     profile_id: str
+    recipient_id: str
     reference_id: str | None = None
 
 
@@ -6102,13 +6525,13 @@ class MessagingConversationReadOneRecipientResponse(ConjoinModel):
     conjoin_project_id: str
     contact_id: str
     conversation_id: str
-    conversation_recipient_id: str
     date_archived: str | None = None
     date_created: str
     date_deleted: str | None = None
     date_updated: str
     live_mode: bool
     profile_id: str
+    recipient_id: str
     reference_id: str | None = None
 
 
@@ -6205,8 +6628,10 @@ class MessagingEmailSenderCreateResponse(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6227,8 +6652,10 @@ class MessagingEmailSenderDeleteResponse(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6249,8 +6676,10 @@ class MessagingEmailSenderDisableResponse(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6271,8 +6700,10 @@ class MessagingEmailSenderEnableResponse(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6293,8 +6724,10 @@ class MessagingEmailSenderListManyItem(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6315,8 +6748,10 @@ class MessagingEmailSenderListOneResponse(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6397,8 +6832,10 @@ class MessagingEmailSenderTransferResponse(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6419,8 +6856,10 @@ class MessagingEmailSenderVerifyResponse(ConjoinModel):
     is_default_sender: bool | None = None
     is_test_sender: bool | None = None
     live_mode: bool
+    message_quotas: dict[str, Any]
     profile_id: str
     provisioned_at: str | None = None
+    queue_details: dict[str, Any] | None = None
     reference_id: str | None = None
     sender: str
     sender_id: str
@@ -6428,45 +6867,6 @@ class MessagingEmailSenderVerifyResponse(ConjoinModel):
     status: str
     submitted_at: str
     tracking_details: dict[str, Any] | None = None
-
-
-class MessagingMessageAnalyticsCreateReportResponse(ConjoinModel):
-    conjoin_account_id: str
-    conjoin_project_id: str
-    date_created: str
-    date_deleted: str | None = None
-    date_updated: str
-    events: dict[str, dict[str, Any]]
-    live_mode: bool
-    message_analytics_id: str
-    profile_id: str
-    total_message_count: float
-
-
-class MessagingMessageAnalyticsGenerateSummariesResponse(ConjoinModel):
-    conjoin_account_id: str
-    conjoin_project_id: str
-    date_created: str
-    date_deleted: str | None = None
-    date_updated: str
-    events: dict[str, dict[str, Any]]
-    live_mode: bool
-    message_analytics_id: str
-    profile_id: str
-    total_message_count: float
-
-
-class MessagingMessageAnalyticsListItem(ConjoinModel):
-    conjoin_account_id: str
-    conjoin_project_id: str
-    date_created: str
-    date_deleted: str | None = None
-    date_updated: str
-    events: dict[str, dict[str, Any]]
-    live_mode: bool
-    message_analytics_id: str
-    profile_id: str
-    total_message_count: float
 
 
 class MessagingMultisendCreateResponse(ConjoinModel):
@@ -7909,6 +8309,7 @@ class RelayPipelinesApprovePipelineGateResponse(ConjoinModel):
     completed_at: str | None = None
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     date_updated: str
     error: dict[str, Any] | None = None
@@ -7920,12 +8321,14 @@ class RelayPipelinesApprovePipelineGateResponse(ConjoinModel):
     started_at: str | None = None
     status: str
     steps: Sequence[dict[str, Any]] | None = None
+    trace_source: str | None = None
 
 
 class RelayPipelinesCancelPipelineRunResponse(ConjoinModel):
     completed_at: str | None = None
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     date_updated: str
     error: dict[str, Any] | None = None
@@ -7937,6 +8340,7 @@ class RelayPipelinesCancelPipelineRunResponse(ConjoinModel):
     started_at: str | None = None
     status: str
     steps: Sequence[dict[str, Any]] | None = None
+    trace_source: str | None = None
 
 
 class RelayPipelinesCreatePipelineDefinitionResponse(ConjoinModel):
@@ -7997,6 +8401,7 @@ class RelayPipelinesReadPipelineRunResponse(ConjoinModel):
     completed_at: str | None = None
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     date_updated: str
     error: dict[str, Any] | None = None
@@ -8008,12 +8413,14 @@ class RelayPipelinesReadPipelineRunResponse(ConjoinModel):
     started_at: str | None = None
     status: str
     steps: Sequence[dict[str, Any]] | None = None
+    trace_source: str | None = None
 
 
 class RelayPipelinesReadPipelineRunsItem(ConjoinModel):
     completed_at: str | None = None
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     date_updated: str
     error: dict[str, Any] | None = None
@@ -8025,12 +8432,14 @@ class RelayPipelinesReadPipelineRunsItem(ConjoinModel):
     started_at: str | None = None
     status: str
     steps: Sequence[dict[str, Any]] | None = None
+    trace_source: str | None = None
 
 
 class RelayPipelinesRejectPipelineGateResponse(ConjoinModel):
     completed_at: str | None = None
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     date_updated: str
     error: dict[str, Any] | None = None
@@ -8042,12 +8451,14 @@ class RelayPipelinesRejectPipelineGateResponse(ConjoinModel):
     started_at: str | None = None
     status: str
     steps: Sequence[dict[str, Any]] | None = None
+    trace_source: str | None = None
 
 
 class RelayPipelinesTriggerPipelineRunResponse(ConjoinModel):
     completed_at: str | None = None
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     date_updated: str
     error: dict[str, Any] | None = None
@@ -8059,6 +8470,7 @@ class RelayPipelinesTriggerPipelineRunResponse(ConjoinModel):
     started_at: str | None = None
     status: str
     steps: Sequence[dict[str, Any]] | None = None
+    trace_source: str | None = None
 
 
 class RelayPipelinesUpdatePipelineDefinitionResponse(ConjoinModel):
@@ -8503,6 +8915,7 @@ class RelaySchedulerReadDeadLetterEntriesItem(ConjoinModel):
     attempts: float
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     dlq_entry_id: str
     execution_id: str
@@ -8515,6 +8928,7 @@ class RelaySchedulerReadDeadLetterEntriesItem(ConjoinModel):
     replayed_at: str | None = None
     schedule_id: str
     target_url: str
+    trace_source: str | None = None
 
 
 class RelaySchedulerReadDefinitionsItem(ConjoinModel):
@@ -8576,6 +8990,7 @@ class RelaySchedulerReplayDeadLetterEntryResponse(ConjoinModel):
     attempts: float
     conjoin_account_id: str
     conjoin_project_id: str
+    conjoin_request_id: str
     date_created: str
     dlq_entry_id: str
     execution_id: str
@@ -8588,6 +9003,7 @@ class RelaySchedulerReplayDeadLetterEntryResponse(ConjoinModel):
     replayed_at: str | None = None
     schedule_id: str
     target_url: str
+    trace_source: str | None = None
 
 
 class RelaySchedulerResumeResponse(ConjoinModel):
@@ -9594,14 +10010,18 @@ class _AuthAccountAddEmailRequestRequired(TypedDict):
     email: str
 
 class AuthAccountAddEmailRequest(_AuthAccountAddEmailRequestRequired, total=False):
+    session_id: str
     set_as_primary: bool
+    step_up_token: str
 
 
 class _AuthAccountAddPhoneRequestRequired(TypedDict):
     phone: str
 
 class AuthAccountAddPhoneRequest(_AuthAccountAddPhoneRequestRequired, total=False):
+    session_id: str
     set_as_primary: bool
+    step_up_token: str
 
 
 class AuthAccountCountCredentialsQuery(TypedDict, total=False):
@@ -9637,6 +10057,10 @@ class AuthAccountGrantGlobalRoleRequest(TypedDict):
 
 class AuthAccountGrantOrgRoleRequest(TypedDict):
     role_key: str
+
+
+class AuthAccountImportPasswordHashesRequest(TypedDict):
+    users: Sequence[dict[str, Any]]
 
 
 class AuthAccountListCredentialsQuery(TypedDict, total=False):
@@ -9690,6 +10114,8 @@ class _AuthAccountRemoveEmailRequestRequired(TypedDict):
 
 class AuthAccountRemoveEmailRequest(_AuthAccountRemoveEmailRequestRequired, total=False):
     primary_email: str
+    session_id: str
+    step_up_token: str
 
 
 class _AuthAccountRemovePhoneRequestRequired(TypedDict):
@@ -9697,6 +10123,8 @@ class _AuthAccountRemovePhoneRequestRequired(TypedDict):
 
 class AuthAccountRemovePhoneRequest(_AuthAccountRemovePhoneRequestRequired, total=False):
     primary_phone: str
+    session_id: str
+    step_up_token: str
 
 
 class AuthAccountRevokeGlobalRoleRequest(TypedDict):
@@ -9779,6 +10207,7 @@ class AuthAuthorizationAuthorizeActionRequest(
     _AuthAuthorizationAuthorizeActionRequestRequired,
     total=False,
 ):
+    context: dict[str, Any]
     resource_id: str
     resource_type: str
 
@@ -9804,8 +10233,30 @@ class AuthClientListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthCredentialActivateEmailMfaRequest(TypedDict):
-    code: str
+class AuthConnectionEnterpriseDisableEnterpriseConnectionRequest(TypedDict):
+    status: str
+
+
+class AuthConnectionEnterpriseEnableEnterpriseConnectionRequest(TypedDict):
+    status: str
+
+
+class AuthConnectionEnterpriseListEnterpriseConnectionsQuery(TypedDict, total=False):
+    cursor: dict[str, Any]
+    sort: dict[str, str]
+    limit: Any
+    query: dict[str, Any]
+
+
+class _AuthConnectionUpdateFirstPartyRequestRequired(TypedDict):
+    configuration: dict[str, Any]
+
+class AuthConnectionUpdateFirstPartyRequest(
+    _AuthConnectionUpdateFirstPartyRequestRequired,
+    total=False,
+):
+    name: str | None
+    status: str
 
 
 class AuthCredentialActivateSmsMfaRequest(TypedDict):
@@ -9824,12 +10275,12 @@ class AuthCredentialCreatePasswordRequest(TypedDict):
     password: str
 
 
-class AuthCredentialEnrollEmailMfaRequest(TypedDict):
-    email: str
-
-
-class AuthCredentialEnrollSmsMfaRequest(TypedDict):
+class _AuthCredentialEnrollSmsMfaRequestRequired(TypedDict):
     phone: str
+
+class AuthCredentialEnrollSmsMfaRequest(_AuthCredentialEnrollSmsMfaRequestRequired, total=False):
+    session_id: str
+    step_up_token: str
 
 
 class AuthCredentialEnrollTotpRequest(TypedDict, total=False):
@@ -9837,6 +10288,8 @@ class AuthCredentialEnrollTotpRequest(TypedDict, total=False):
     issuer: str
     recovery_code_count: int
     recovery_code_length: int
+    session_id: str
+    step_up_token: str
 
 
 class AuthCredentialIssueApiKeyRequest(TypedDict, total=False):
@@ -9847,12 +10300,18 @@ class AuthCredentialIssueApiKeyRequest(TypedDict, total=False):
     prefix: str
     rate_limit: dict[str, Any] | None
     scopes: Sequence[str]
+    session_id: str
+    step_up_token: str
     test_mode: bool
     token_metadata: dict[str, Any] | None
 
 
-class AuthCredentialRevokeApiKeyRequest(TypedDict):
+class _AuthCredentialRevokeApiKeyRequestRequired(TypedDict):
     public_key_id: str
+
+class AuthCredentialRevokeApiKeyRequest(_AuthCredentialRevokeApiKeyRequestRequired, total=False):
+    session_id: str
+    step_up_token: str
 
 
 class _AuthCredentialRotateApiKeyRequestRequired(TypedDict):
@@ -9863,16 +10322,28 @@ class AuthCredentialRotateApiKeyRequest(_AuthCredentialRotateApiKeyRequestRequir
     overlap_days: int
     prefix: str
     scopes: Sequence[str]
+    session_id: str
+    step_up_token: str
     test_mode: bool
 
 
-class AuthCredentialRotatePasswordRequest(TypedDict):
+class _AuthCredentialRotatePasswordRequestRequired(TypedDict):
     new_password: str
+
+class AuthCredentialRotatePasswordRequest(
+    _AuthCredentialRotatePasswordRequestRequired,
+    total=False,
+):
+    current_password: str
+    session_id: str
+    step_up_token: str
 
 
 class AuthCredentialRotateTotpRecoveryCodesRequest(TypedDict, total=False):
     recovery_code_count: int
     recovery_code_length: int
+    session_id: str
+    step_up_token: str
 
 
 class AuthCredentialStartPasskeyRegistrationRequest(TypedDict):
@@ -9887,12 +10358,15 @@ class AuthCredentialUpdateApiKeyRequest(TypedDict, total=False):
     token_metadata: dict[str, Any] | None
 
 
-class AuthCredentialVerifyEmailMfaRequest(TypedDict):
-    code: str
-
-
-class AuthCredentialVerifyPasskeyRegistrationRequest(TypedDict):
+class _AuthCredentialVerifyPasskeyRegistrationRequestRequired(TypedDict):
     attestation_response: Any
+
+class AuthCredentialVerifyPasskeyRegistrationRequest(
+    _AuthCredentialVerifyPasskeyRegistrationRequestRequired,
+    total=False,
+):
+    session_id: str
+    step_up_token: str
 
 
 class AuthCredentialVerifyPasskeyenticationRequest(TypedDict):
@@ -9913,6 +10387,8 @@ class _AuthFlowCompleteSigninRequestRequired(TypedDict):
 
 class AuthFlowCompleteSigninRequest(_AuthFlowCompleteSigninRequestRequired, total=False):
     mfa: dict[str, Any]
+    remember_device: bool
+    trusted_device_token: str
 
 
 class _AuthFlowCompleteSignupRequestRequired(TypedDict):
@@ -9920,6 +10396,13 @@ class _AuthFlowCompleteSignupRequestRequired(TypedDict):
 
 class AuthFlowCompleteSignupRequest(_AuthFlowCompleteSignupRequestRequired, total=False):
     password: str
+
+
+class _AuthFlowConfirmLinkSignupRequestRequired(TypedDict):
+    confirm: Any
+
+class AuthFlowConfirmLinkSignupRequest(_AuthFlowConfirmLinkSignupRequestRequired, total=False):
+    step_up: dict[str, Any]
 
 
 class _AuthFlowStartPasswordResetRequestRequired(TypedDict):
@@ -9934,6 +10417,8 @@ class AuthFlowStartSigninRequest(TypedDict, total=False):
     password: str
     phone: str
     provider_key: str
+    remember_device: bool
+    trusted_device_token: str
     verification_option: str
 
 
@@ -10010,6 +10495,17 @@ class AuthOrganizationCreateRequest(_AuthOrganizationCreateRequestRequired, tota
 class AuthOrganizationDeleteRequest(TypedDict, total=False):
     force: bool
     permanent: bool
+
+
+class AuthOrganizationDomainCreateRequest(TypedDict):
+    domain: str
+
+
+class AuthOrganizationDomainListQuery(TypedDict, total=False):
+    cursor: dict[str, Any]
+    sort: dict[str, str]
+    limit: Any
+    query: dict[str, Any]
 
 
 class AuthOrganizationGroupAddGroupMemberRequest(TypedDict):
@@ -10203,11 +10699,17 @@ class AuthOrganizationUpdateSettingsRequest(TypedDict, total=False):
     groups: dict[str, Any]
     membership: dict[str, Any]
     sessions: dict[str, Any]
+    unset: Sequence[str]
+
+
+class AuthPasskeyDeleteRequest(TypedDict, total=False):
+    session_id: str
+    step_up_token: str
 
 
 class _AuthPolicyCreateRequestRequired(TypedDict):
     conditions: Sequence[dict[str, Any]]
-    effect: str
+    effect: Any
     name: str
     permission_keys: Sequence[str]
 
@@ -10227,7 +10729,7 @@ class AuthPolicyListQuery(TypedDict, total=False):
 class AuthPolicyUpdateRequest(TypedDict, total=False):
     conditions: Sequence[dict[str, Any]]
     description: str | None
-    effect: str
+    effect: Any
     is_enabled: bool
     name: str
     permission_keys: Sequence[str]
@@ -10271,6 +10773,51 @@ class AuthRoleAssignmentLogListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
+class AuthSCIMManagementReadScimConnectionConfigQuery(TypedDict):
+    provider: str
+
+
+class AuthSCIMManagementReconcileScimGroupMembersRequest(TypedDict):
+    changes: Sequence[dict[str, Any]]
+    provider: str
+
+
+class AuthSCIMManagementReconcileScimGroupsRequest(TypedDict):
+    groups: Sequence[dict[str, Any]]
+
+
+class AuthSCIMManagementReconcileScimUsersRequest(TypedDict):
+    provider: str
+    users: Sequence[dict[str, Any]]
+
+
+class AuthSCIMManagementSyncScimRolesForGroupRequest(TypedDict):
+    group_id: str
+
+
+class AuthSCIMManagementSyncScimRolesForMemberRequest(TypedDict):
+    account_id: str
+
+
+class _AuthSCIMManagementUpdateScimConnectionConfigRequestRequired(TypedDict):
+    config: dict[str, Any]
+    provider: str
+
+class AuthSCIMManagementUpdateScimConnectionConfigRequest(
+    _AuthSCIMManagementUpdateScimConnectionConfigRequestRequired,
+    total=False,
+):
+    bearer_token: str
+
+
+class _AuthSCIMScimBulkOperationsRequestRequired(TypedDict):
+    operations: Sequence[dict[str, Any]]
+
+class AuthSCIMScimBulkOperationsRequest(_AuthSCIMScimBulkOperationsRequestRequired, total=False):
+    fail_on_errors: int
+    schemas: Sequence[str]
+
+
 class _AuthSCIMScimCreateGroupRequestRequired(TypedDict):
     display_name: str
 
@@ -10287,6 +10834,16 @@ class AuthSCIMScimCreateUserRequest(TypedDict, total=False):
     phone_numbers: Sequence[dict[str, Any]]
     photos: Sequence[dict[str, Any]]
     user_name: str
+
+
+class _AuthSCIMScimPatchGroupMembersRequestRequired(TypedDict):
+    operations: Sequence[dict[str, Any]]
+
+class AuthSCIMScimPatchGroupMembersRequest(
+    _AuthSCIMScimPatchGroupMembersRequestRequired,
+    total=False,
+):
+    schemas: Sequence[str]
 
 
 class _AuthSCIMScimReplaceGroupRequestRequired(TypedDict):
@@ -10316,7 +10873,6 @@ class AuthSLOOidcLogoutRequest(_AuthSLOOidcLogoutRequestRequired, total=False):
 
 
 class AuthSLOSamlIdpLogoutRequest(TypedDict):
-    issuer: str
     saml_request: str
 
 
@@ -10327,6 +10883,12 @@ class _AuthSLOSamlSpLogoutRequestRequired(TypedDict):
 
 class AuthSLOSamlSpLogoutRequest(_AuthSLOSamlSpLogoutRequestRequired, total=False):
     session_index: str
+
+
+class AuthSSOPortalUpdateSsoPortalSettingsRequest(TypedDict, total=False):
+    allowed_providers: Sequence[str]
+    require_domain_verification: bool
+    setup_intents: Sequence[str]
 
 
 class _AuthSessionBulkRevokeAccountRequestRequired(TypedDict):
@@ -10413,10 +10975,6 @@ class AuthSessionListQuery(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class AuthSessionRefreshRequest(TypedDict, total=False):
-    refresh_token: str
-
-
 class AuthSessionRevokeAllForAccountRequest(TypedDict, total=False):
     exclude_current_session: bool
 
@@ -10449,13 +11007,15 @@ class AuthStepUpValidateRequest(TypedDict):
 
 
 class _AuthStepUpVerifyRequestRequired(TypedDict):
-    code: str
+    challenge_id: str
     method: str
     operation_id: str
     session_id: str
 
 class AuthStepUpVerifyRequest(_AuthStepUpVerifyRequestRequired, total=False):
-    ttl_seconds: int
+    assertion_response: Any
+    code: str
+    password: str
 
 
 class AuthTrustedDeviceListQuery(TypedDict, total=False):
@@ -10635,6 +11195,8 @@ class BillingEntitlementFeatureUpdateRequest(TypedDict, total=False):
 class _BillingEntitlementOverrideCreateRequestRequired(TypedDict):
     customer_id: str
     feature_id: str
+    plan_id: str
+    subscription_id: str
     value_type: str
 
 class BillingEntitlementOverrideCreateRequest(
@@ -11301,6 +11863,13 @@ class CloudRoleCreateRequest(_CloudRoleCreateRequestRequired, total=False):
     description: str
 
 
+class CloudRoleReadQuery(TypedDict, total=False):
+    cursor: dict[str, Any]
+    sort: dict[str, str]
+    limit: Any
+    query: dict[str, Any]
+
+
 class CloudRoleUpdateRequest(TypedDict, total=False):
     description: str
     permissions: Sequence[str]
@@ -11348,6 +11917,13 @@ class CloudZoneCreateRequest(_CloudZoneCreateRequestRequired, total=False):
     dns_records: Sequence[dict[str, Any]]
 
 
+class CloudZoneReadQuery(TypedDict, total=False):
+    cursor: dict[str, Any]
+    sort: dict[str, str]
+    limit: Any
+    query: dict[str, Any]
+
+
 class MessagingContactCreateRequest(TypedDict, total=False):
     email: str
     first_name: str
@@ -11359,36 +11935,29 @@ class MessagingContactCreateRequest(TypedDict, total=False):
     reference_id: str
 
 
-class _MessagingContactListRequestRequired(TypedDict):
-    sort: dict[str, str]
-
-class MessagingContactListRequest(_MessagingContactListRequestRequired, total=False):
+class MessagingContactListRequest(TypedDict, total=False):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
+    sort: dict[str, str]
 
 
 class MessagingContactSuppressMessagesRequest(TypedDict):
     channels: Sequence[str]
 
 
-class MessagingContactUpdateRequest(TypedDict, total=False):
-    email: str
-    name: str
-    phone_number: str
-    preferred_channels: Sequence[str]
+class MessagingContactUpdateRequest(TypedDict):
+    updates: dict[str, Any]
 
 
 class MessagingConversationArchiveRequest(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class MessagingConversationCloneRequest(TypedDict, total=False):
-    accepts_replies: bool
-    description: str
-    title: str
+class MessagingConversationCloneRequest(TypedDict):
+    updates: dict[str, Any]
 
 
 class _MessagingConversationCreateRequestRequired(TypedDict):
@@ -11404,21 +11973,22 @@ class MessagingConversationCreateRequest(_MessagingConversationCreateRequestRequ
     reference_id: str
 
 
-class _MessagingConversationListRequestRequired(TypedDict):
-    sort: dict[str, str]
-
-class MessagingConversationListRequest(_MessagingConversationListRequestRequired, total=False):
+class MessagingConversationListRequest(TypedDict, total=False):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
+    sort: dict[str, str]
 
 
-class MessagingConversationUpdateRequest(TypedDict, total=False):
-    accepts_replies: bool
-    description: str
-    title: str
+class MessagingConversationSendMessageRequest(TypedDict):
+    body: dict[str, Any]
+    params: dict[str, Any]
+
+
+class MessagingConversationUpdateRequest(TypedDict):
+    updates: dict[str, Any]
 
 
 class MessagingEmailGetSummaryRequest(TypedDict):
@@ -11448,7 +12018,6 @@ class MessagingEmailSendRequest(_MessagingEmailSendRequestRequired, total=False)
     template_id: str
     text: str
     to: Sequence[Any]
-    upload_attachments: bool
 
 
 class MessagingEmailSenderDeleteRequest(TypedDict):
@@ -11463,18 +12032,13 @@ class MessagingEmailSenderEnableRequest(TypedDict):
     params: dict[str, Any]
 
 
-class _MessagingEmailSenderListManyRequestRequired(TypedDict):
-    sort: dict[str, str]
-
-class MessagingEmailSenderListManyRequest(
-    _MessagingEmailSenderListManyRequestRequired,
-    total=False,
-):
+class MessagingEmailSenderListManyRequest(TypedDict, total=False):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
+    sort: dict[str, str]
 
 
 class MessagingEmailSenderListOneRequest(TypedDict):
@@ -11497,34 +12061,17 @@ class MessagingEmailSenderPoolCreateRequest(
     description: str
 
 
-class _MessagingMultisendCreateRequestRequired(TypedDict):
-    message_config: dict[str, Any]
-
-class MessagingMultisendCreateRequest(_MessagingMultisendCreateRequestRequired, total=False):
-    accepts_replies: bool
-    body: str
-    create_conversation: bool
-    default_placeholders: dict[str, Any]
-    message_channels: Sequence[str]
-    message_priority: str
-    message_retry_statuses: Sequence[str]
-    send_at: str
-    to: Sequence[dict[str, Any]]
-
-
 class MessagingPhoneNumberListAvailableQuery(TypedDict, total=False):
     query: dict[str, Any]
     limit: Any
 
 
-class _MessagingPhoneNumberListQueryRequired(TypedDict):
-    sort: dict[str, str]
-
-class MessagingPhoneNumberListQuery(_MessagingPhoneNumberListQueryRequired, total=False):
+class MessagingPhoneNumberListQuery(TypedDict, total=False):
     filter: dict[str, Any]
     cursor: dict[str, Any]
     query: dict[str, Any]
     search: dict[str, Any]
+    sort: dict[str, str]
     limit: Any
 
 
@@ -11709,18 +12256,13 @@ class MessagingTemplateDeleteMessagesRequest(TypedDict, total=False):
     query: dict[str, Any]
 
 
-class _MessagingTemplateListMessageRequestRequired(TypedDict):
-    sort: dict[str, str]
-
-class MessagingTemplateListMessageRequest(
-    _MessagingTemplateListMessageRequestRequired,
-    total=False,
-):
+class MessagingTemplateListMessageRequest(TypedDict, total=False):
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
     query: dict[str, Any]
     search: dict[str, Any]
+    sort: dict[str, str]
 
 
 class MessagingTemplateUpdateMessageRequest(TypedDict, total=False):
@@ -11743,7 +12285,6 @@ class MessagingVerificationCheckRequest(TypedDict):
 
 class _MessagingVerificationListMessagesRequestRequired(TypedDict):
     query: dict[str, Any]
-    sort: dict[str, str]
 
 class MessagingVerificationListMessagesRequest(
     _MessagingVerificationListMessagesRequestRequired,
@@ -11752,6 +12293,7 @@ class MessagingVerificationListMessagesRequest(
     cursor: dict[str, Any]
     filter: dict[str, Any]
     limit: Any
+    sort: dict[str, str]
 
 
 class MessagingVerificationResendRequest(TypedDict):
@@ -12321,6 +12863,7 @@ class StorageObjectListQuery(TypedDict, total=False):
 
 class StorageObjectListVersionsQuery(TypedDict, total=False):
     cursor: dict[str, Any]
+    sort: dict[str, str]
     limit: Any
 
 

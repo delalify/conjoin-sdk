@@ -265,7 +265,7 @@ export async function GET() {
 }
 ```
 
-Protect middleware routes with `conjoinProxy`:
+Protect middleware routes with `conjoinProxy`. The handler is async because the proxy verifies the session token against your JWKS before exposing the identity:
 
 ```ts
 import { conjoinProxy, createRouteMatcher } from '@conjoin-cloud/sdk/next'
@@ -280,7 +280,7 @@ export default conjoinProxy((auth, req) => {
 })
 ```
 
-The proxy reads a client-state cookie at the edge for routing decisions. Use `auth()` inside Server Components and Route Handlers when you need JWT verification.
+The proxy verifies the `__conjoin_auth_sess` cookie against your tenant JWKS and passes a verified identity (`accountId`, `organizationId`, `organizationRoles`, `has({ role })`) to the handler, or `null` when the token is missing or invalid. The token itself stays on the server: call `auth()` inside Server Components and Route Handlers when you need `getToken()`.
 
 ## Express
 
