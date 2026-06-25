@@ -18421,6 +18421,9 @@
                       },
                       "enable_device_binding": {
                         "type": "boolean"
+                      },
+                      "enable_native_token_issuance": {
+                        "type": "boolean"
                       }
                     }
                   }
@@ -46081,6 +46084,9 @@
                         ]
                       },
                       "enable_device_binding": {
+                        "type": "boolean"
+                      },
+                      "enable_native_token_issuance": {
                         "type": "boolean"
                       }
                     }

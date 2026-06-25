@@ -1,8 +1,16 @@
 import { type AuthFlowRequestBody, type AuthFlowResponseData, FRONTEND_PATHS } from '@conjoin-cloud/sdk/auth-flow'
+import type { ClientHandle } from '../provider/types'
 
 const VALID_DOMAIN_PATTERN = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
 
+const CLIENT_HANDLE_HEADER = 'x-conjoin-client-handle'
+const CODE_VERIFIER_HEADER = 'x-auth-code-verifier'
+
 export type FlowResponseData = AuthFlowResponseData<'startAuthSignin'>
+
+export type NativeTokenResponseData = AuthFlowResponseData<'processNativeTokenMint'>
+
+export type NativeLogoutResponseData = AuthFlowResponseData<'processNativeLogout'>
 
 export type HandshakeResponseData = AuthFlowResponseData<'processAuthHandshake'>
 
@@ -126,4 +134,45 @@ export function requestLogout(
   headers: Record<string, string>,
 ): Promise<FlowApiResult<AuthFlowResponseData<'processAuthLogout'>>> {
   return postFlow<AuthFlowResponseData<'processAuthLogout'>>(authDomain, FRONTEND_PATHS.processAuthLogout, { headers })
+}
+
+function encodeClientHandleHeader(handle: ClientHandle): string {
+  return encodeURIComponent(JSON.stringify({ client_id: handle.client_id, reference_id: handle.reference_id }))
+}
+
+export function requestNativeTokenMint(
+  authDomain: string,
+  handle: ClientHandle,
+  codeVerifier: string,
+): Promise<FlowApiResult<NativeTokenResponseData>> {
+  return postFlow<NativeTokenResponseData>(authDomain, FRONTEND_PATHS.processNativeTokenMint, {
+    headers: {
+      'Content-Type': 'application/json',
+      [CLIENT_HANDLE_HEADER]: encodeClientHandleHeader(handle),
+      [CODE_VERIFIER_HEADER]: codeVerifier,
+    },
+  })
+}
+
+export function requestNativeRefresh(
+  authDomain: string,
+  refreshToken: string,
+): Promise<FlowApiResult<NativeTokenResponseData>> {
+  const body: AuthFlowRequestBody<'refreshNativeSession'> = { refresh_token: refreshToken }
+  return postFlow<NativeTokenResponseData>(authDomain, FRONTEND_PATHS.refreshNativeSession, {
+    headers: { 'Content-Type': 'application/json' },
+    body,
+  })
+}
+
+export function requestNativeLogout(
+  authDomain: string,
+  handle: ClientHandle,
+): Promise<FlowApiResult<NativeLogoutResponseData>> {
+  return postFlow<NativeLogoutResponseData>(authDomain, FRONTEND_PATHS.processNativeLogout, {
+    headers: {
+      'Content-Type': 'application/json',
+      [CLIENT_HANDLE_HEADER]: encodeClientHandleHeader(handle),
+    },
+  })
 }

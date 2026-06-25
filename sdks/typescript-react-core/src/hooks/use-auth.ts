@@ -11,12 +11,17 @@ export function useAuth() {
   const { signOut } = useAuthActions()
 
   const isSignedIn = authState.isLoaded && authState.isSignedIn
-  const activeOrganizationId = identity.activeOrganizationId
+  const nativeAccountId = authState.isLoaded && authState.isSignedIn ? authState.accountId : null
+  const nativeOrganizationId = authState.isLoaded && authState.isSignedIn ? authState.organizationId : null
+  const nativeOrganizationRoles = authState.isLoaded && authState.isSignedIn ? authState.organizationRoles : []
+
+  const activeOrganizationId = identity.activeOrganizationId ?? nativeOrganizationId
   const activeMembership =
     activeOrganizationId === null
       ? null
       : (identity.memberships.find(entry => entry.organization.id === activeOrganizationId) ?? null)
-  const activeRolesKey = activeMembership ? activeMembership.roles.join(',') : ''
+  const activeRoles = activeMembership ? activeMembership.roles : nativeOrganizationRoles
+  const activeRolesKey = activeRoles.join(',')
 
   const has = useCallback(
     (params: HasParams): boolean => {
@@ -63,9 +68,9 @@ export function useAuth() {
     isSignedIn: true as const,
     clientId: authState.clientId,
     referenceId: authState.referenceId,
-    accountId: identity.account?.id ?? null,
+    accountId: identity.account?.id ?? nativeAccountId,
     organizationId: activeOrganizationId,
-    organizationRoles: activeMembership?.roles ?? [],
+    organizationRoles: activeRoles,
     signOut,
     has,
   }

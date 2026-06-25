@@ -156,17 +156,23 @@ export type ConjoinBranding = {
 }
 
 /**
- * Auth state for the current browser. A readable `__conjoin_auth_cl` handle
- * cookie is necessary but not sufficient to be signed in: the handle also
- * exists mid-flow, before the user authenticates. Signed-in is established only
- * once a handshake mints a session against a completed client, so `isSignedIn`
- * reflects a successful handshake rather than mere cookie presence. The browser
- * never holds the session token (it is httpOnly), so this state carries no
- * account, session, or organization identity; verified identity hydrates
- * separately from the cookie-authenticated self-surface.
+ * Auth state shared by the browser (cookie) and native (bearer) runtimes.
  *
- * `isLoaded: false` covers the window between mount and the first handshake
- * resolving, plus SSR where no cookie is readable.
+ * On the web a readable `__conjoin_auth_cl` handle cookie is necessary but not
+ * sufficient to be signed in (the handle also exists mid-flow), so `isSignedIn`
+ * reflects a successful handshake against a completed client. The browser never
+ * holds the session token, so its signed-in state carries only the client
+ * handle; verified account and organization identity hydrate separately from
+ * the cookie-authenticated self-surface, leaving the native identity fields
+ * null.
+ *
+ * On native there are no cookies (RFC 8252): the runtime holds bearer tokens in
+ * OS secure storage and the signed-in identity is decoded from the access-token
+ * JWT, so `accountId`, `sessionId`, and the organization claims are populated
+ * while the web-only handle fields stay null.
+ *
+ * `isLoaded: false` covers the window between mount and the first session
+ * resolution, plus SSR where no cookie is readable.
  */
 export type ConjoinAuthState =
   | { isLoaded: false }
@@ -177,8 +183,12 @@ export type ConjoinAuthState =
   | {
       isLoaded: true
       isSignedIn: true
-      clientId: string
-      referenceId: string
+      clientId: string | null
+      referenceId: string | null
+      accountId: string | null
+      sessionId: string | null
+      organizationId: string | null
+      organizationRoles: string[]
     }
 
 export type ClientHandle = {
@@ -213,12 +223,51 @@ export type PendingAuthFlow = {
   identifier: string | null
 }
 
+export type AuthTokens = {
+  accessToken: string
+  refreshToken: string
+}
+
+/**
+ * Signed-in identity decoded from a native access-token JWT. `expiresAtMs` is
+ * the token expiry in epoch milliseconds; the manager schedules the next refresh
+ * against it so a stored session resumes ahead of expiry on cold start.
+ */
+export type NativeAuthSession = {
+  accountId: string
+  sessionId: string
+  organizationId: string | null
+  organizationRoles: string[]
+  expiresAtMs: number
+}
+
+/**
+ * Bearer-token methods a native runtime adds to the transport. They are absent
+ * on the web transport (which authenticates with cookies), so the manager treats
+ * their presence as the signal to run the native session lifecycle instead of the
+ * cookie handshake. Tokens live only in OS secure storage behind this seam;
+ * `readTokens` and `readSession` return synchronous in-memory mirrors hydrated
+ * from that store, and `subscribe` lets the manager react to changes that
+ * originate outside its own calls (store hydration, a deep-link mint, a remote
+ * sign-out).
+ */
+export type NativeAuthTransport = {
+  readTokens: () => AuthTokens | null
+  storeTokens: (tokens: AuthTokens) => void | Promise<void>
+  clearTokens: () => void | Promise<void>
+  readSession: () => NativeAuthSession | null
+  attachBearer: (headers: Record<string, string>) => Record<string, string>
+  acquireRefreshLock: <T>(fn: () => Promise<T>) => Promise<T>
+  subscribe: (listener: () => void) => () => void
+}
+
 /**
  * Platform seam for everything the auth runtime needs from the host environment.
  * The web implementation reads cookies, derives PKCE with Web Crypto, and keeps
  * the pending flow in session storage; a native implementation supplies its own
- * secure equivalents. Keeping these behind the transport lets the hooks stay free
- * of platform globals so they build in the framework-agnostic entry.
+ * secure equivalents and the bearer-token methods in `NativeAuthTransport`.
+ * Keeping these behind the transport lets the hooks stay free of platform globals
+ * so they build in the framework-agnostic entry.
  */
 export type AuthTransport = {
   getClientHandle: () => ClientHandle | null
@@ -229,7 +278,7 @@ export type AuthTransport = {
   readPendingFlow: () => PendingAuthFlow | null
   clearPendingFlow: () => void
   redirect: (url: string) => void
-}
+} & Partial<NativeAuthTransport>
 
 export type ConjoinThemeState = {
   mode: 'light' | 'dark'

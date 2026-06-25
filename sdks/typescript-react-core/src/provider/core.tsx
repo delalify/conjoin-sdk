@@ -18,15 +18,23 @@ type ConjoinProviderCoreProps = ConjoinProviderProps & {
 }
 
 /**
- * Presence is derived from the readable client handle, so the manager emits a
- * fresh state object whenever the handle is re-read. Collapsing updates onto a
- * presence signature keeps unrelated re-renders from cascading to every auth
- * consumer when the handle value is unchanged.
+ * The manager emits a fresh state object on every session re-read. Collapsing
+ * updates onto an identity signature keeps unrelated re-renders from cascading to
+ * every auth consumer when the underlying identity is unchanged. The signature
+ * covers the web client handle and the native JWT identity so a change in either
+ * runtime still propagates.
  */
 function authStateSignature(state: ConjoinAuthState): string {
   if (!state.isLoaded) return 'loading'
   if (!state.isSignedIn) return 'signed-out'
-  return `${state.clientId}|${state.referenceId}`
+  return [
+    state.clientId,
+    state.referenceId,
+    state.accountId,
+    state.sessionId,
+    state.organizationId,
+    state.organizationRoles.join(','),
+  ].join('|')
 }
 
 function mergePartialConfig(partial: Partial<ConjoinSdkConfig>, fallbackBaseUrl: string): ConjoinSdkConfig {

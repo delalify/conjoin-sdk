@@ -1,5 +1,4 @@
-import type React from 'react'
-import { useMemo } from 'react'
+import { type CSSProperties, useMemo } from 'react'
 import { useSystemTheme } from '../theme/dark-mode'
 import { resolveThemeVariables } from '../theme/resolve'
 import { createWebTransport } from '../transport/web'
@@ -32,7 +31,7 @@ export function ConjoinProvider({ publishableKey, children, config, appearance }
     for (const [key, value] of Object.entries(cssVariables)) {
       vars[key] = value
     }
-    return vars as React.CSSProperties
+    return vars as CSSProperties
   }, [cssVariables])
 
   return (

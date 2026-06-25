@@ -31,6 +31,7 @@ export {
 export { useStorageUpload } from './hooks/use-storage-upload'
 export { ConjoinProviderCore } from './provider/core'
 export type {
+  AuthTokens,
   AuthTransport,
   ClientHandle,
   ColorPalette,
@@ -39,6 +40,8 @@ export type {
   ConjoinProviderProps,
   ConjoinSdkConfig,
   FlowVerificationMethod,
+  NativeAuthSession,
+  NativeAuthTransport,
   PendingAuthFlow,
   PendingAuthFlowKind,
   PkceMaterial,

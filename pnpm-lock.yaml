@@ -91,9 +91,15 @@ importers:
       '@types/react':
         specifier: 19.2.14
         version: 19.2.14
+      expo-crypto:
+        specifier: 56.0.4
+        version: 56.0.4(expo@55.0.6)
       expo-secure-store:
         specifier: 55.0.13
         version: 55.0.13(expo@55.0.6)
+      expo-web-browser:
+        specifier: 56.0.5
+        version: 56.0.5(expo@55.0.6)(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))
       react:
         specifier: 19.2.6
         version: 19.2.6
@@ -3708,6 +3714,11 @@ packages:
       expo: '*'
       react-native: '*'
 
+  expo-crypto@56.0.4:
+    resolution: {integrity: sha512-fRNEhoXRXgAWBpe3/hq5X+KXTit3OZqdiAGts1YvNEUHQb+H5591mpPac0Yw+sZg9pXcrjRnzo5AxvZaENpc7g==}
+    peerDependencies:
+      expo: '*'
+
   expo-file-system@55.0.22:
     resolution: {integrity: sha512-T5Rfv3vqcFyhVrl/tEEeglc/J8LJbcZQgC3TMT5jxzIgUgWmIgJEgncGYqB/YNXFgUTL2LiuCvqrU51Dzp83NQ==}
     peerDependencies:
@@ -3745,6 +3756,12 @@ packages:
   expo-server@55.0.11:
     resolution: {integrity: sha512-AxRdHqcv0H1g4s923vu+5n1Nrhne23bjXbP+Vl7+Lwfpe7MG9PuU1IS95IJK6a+7BVV1mRN6QlZvs8Yv7EEXNQ==}
     engines: {node: '>=20.16.0'}
+
+  expo-web-browser@56.0.5:
+    resolution: {integrity: sha512-kaN+wcR5lHwPCH1IgrU1XyPUQvBRzdF1TMp65uAF9iUCyipqYnmrvV87eqAmrdkFFopWVgU7FcxPu1UZw+gvUQ==}
+    peerDependencies:
+      expo: '*'
+      react-native: '*'
 
   expo@55.0.6:
     resolution: {integrity: sha512-gaF8bh5beWmrptz3d4Gr138CiPoLJtzjNbqNSOQ8kdQm3wMW8lJGT1dsY5NPJTZ7MNJBTN+pcRwshr4BMK4OiA==}
@@ -9495,6 +9512,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  expo-crypto@56.0.4(expo@55.0.6):
+    dependencies:
+      expo: 55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3)
+
   expo-file-system@55.0.22(expo@55.0.6)(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6)):
     dependencies:
       expo: 55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3)
@@ -9533,6 +9554,11 @@ snapshots:
       expo: 55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3)
 
   expo-server@55.0.11: {}
+
+  expo-web-browser@56.0.5(expo@55.0.6)(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6)):
+    dependencies:
+      expo: 55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3)
+      react-native: 0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6)
 
   expo@55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3):
     dependencies:

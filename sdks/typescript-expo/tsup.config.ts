@@ -12,7 +12,9 @@ export default defineConfig({
   outDir: 'dist',
   external: [
     'react',
+    'expo-crypto',
     'expo-secure-store',
+    'expo-web-browser',
     '@conjoin-cloud/sdk',
     '@conjoin-cloud/react-core',
   ],

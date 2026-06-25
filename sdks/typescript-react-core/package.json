@@ -79,7 +79,7 @@
   "scripts": {
     "build": "tsup",
     "lint": "biome check src/",
-    "typecheck": "tsc --noEmit && tsc -p tsconfig.web.json",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.node.json",
     "test": "vitest run --passWithNoTests"
   }
 }

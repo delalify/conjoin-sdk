@@ -48,11 +48,19 @@
     "CHANGELOG.md"
   ],
   "peerDependencies": {
+    "expo-crypto": ">=12.0.0",
     "expo-secure-store": ">=13.0.2",
+    "expo-web-browser": ">=12.0.0",
     "react": ">=18.0.0"
   },
   "peerDependenciesMeta": {
+    "expo-crypto": {
+      "optional": true
+    },
     "expo-secure-store": {
+      "optional": true
+    },
+    "expo-web-browser": {
       "optional": true
     }
   },
@@ -64,7 +72,9 @@
     "@biomejs/biome": "2.4.6",
     "@types/node": "25.9.1",
     "@types/react": "19.2.14",
+    "expo-crypto": "56.0.4",
     "expo-secure-store": "55.0.13",
+    "expo-web-browser": "56.0.5",
     "react": "19.2.6",
     "tsup": "8.5.1",
     "typescript": "5.9.3",

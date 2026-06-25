@@ -6316,6 +6316,1711 @@
           }
         ]
       }
+    },
+    "/v1/auth/client/native/signup/start": {
+      "post": {
+        "operationId": "startNativeSignup",
+        "summary": "Start the native signup flow",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "complete",
+                            "mfa_required",
+                            "verification_required",
+                            "confirmation_required"
+                          ]
+                        },
+                        "account_id": {
+                          "type": "string"
+                        },
+                        "session_id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "example": "string"
+                        },
+                        "verification_method": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "mfa": {
+                          "type": "object",
+                          "properties": {
+                            "method": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "method"
+                          ]
+                        },
+                        "verification": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "trusted_device_token": {
+                          "type": "string"
+                        },
+                        "step_up": {
+                          "type": "object",
+                          "properties": {
+                            "available_methods": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "passkey",
+                                  "totp",
+                                  "password"
+                                ]
+                              }
+                            },
+                            "challenge_id": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 4096,
+                              "example": "string"
+                            }
+                          },
+                          "required": [
+                            "available_methods",
+                            "challenge_id"
+                          ]
+                        },
+                        "client_handle": {
+                          "type": "object",
+                          "properties": {
+                            "client_id": {
+                              "type": "string"
+                            },
+                            "reference_id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "client_id",
+                            "reference_id"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 254,
+                    "minLength": 1,
+                    "example": "user@example.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "string"
+                  },
+                  "provider_key": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "apple",
+                          "atlassian",
+                          "discord",
+                          "dropbox",
+                          "facebook",
+                          "figma",
+                          "github",
+                          "gitlab",
+                          "google",
+                          "huggingface",
+                          "jumpcloud",
+                          "linear",
+                          "linkedin",
+                          "microsoft",
+                          "notion",
+                          "reddit",
+                          "slack",
+                          "spotify",
+                          "tiktok",
+                          "twitch",
+                          "workos",
+                          "x",
+                          "yahoo"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "auth0",
+                          "okta",
+                          "onelogin",
+                          "pingidentity",
+                          "cyberark",
+                          "keycloak",
+                          "fusionauth",
+                          "casdoor",
+                          "gluu"
+                        ]
+                      }
+                    ]
+                  },
+                  "verification_option": {
+                    "type": "string",
+                    "enum": [
+                      "email_verification_code",
+                      "magic_link",
+                      "phone_verification_code",
+                      "oauth_token"
+                    ]
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 256,
+                    "example": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/client/native/signup/complete": {
+      "post": {
+        "operationId": "completeNativeSignup",
+        "summary": "Complete the native signup flow",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "complete",
+                            "mfa_required",
+                            "verification_required",
+                            "confirmation_required"
+                          ]
+                        },
+                        "account_id": {
+                          "type": "string"
+                        },
+                        "session_id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "example": "string"
+                        },
+                        "verification_method": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "mfa": {
+                          "type": "object",
+                          "properties": {
+                            "method": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "method"
+                          ]
+                        },
+                        "verification": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "trusted_device_token": {
+                          "type": "string"
+                        },
+                        "step_up": {
+                          "type": "object",
+                          "properties": {
+                            "available_methods": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "passkey",
+                                  "totp",
+                                  "password"
+                                ]
+                              }
+                            },
+                            "challenge_id": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 4096,
+                              "example": "string"
+                            }
+                          },
+                          "required": [
+                            "available_methods",
+                            "challenge_id"
+                          ]
+                        },
+                        "client_handle": {
+                          "type": "object",
+                          "properties": {
+                            "client_id": {
+                              "type": "string"
+                            },
+                            "reference_id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "client_id",
+                            "reference_id"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "verification_result": {
+                    "type": "object",
+                    "properties": {
+                      "pin_code": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 8,
+                        "example": "string"
+                      },
+                      "magic_link_token": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096,
+                        "example": "string"
+                      },
+                      "oauth_token": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096,
+                        "example": "string"
+                      }
+                    }
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 256,
+                    "example": "string"
+                  }
+                },
+                "required": [
+                  "verification_result"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/client/native/signup/confirm-link": {
+      "post": {
+        "operationId": "confirmLinkNativeSignup",
+        "summary": "Confirm and link a native signup onto a matched account",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "complete",
+                            "mfa_required",
+                            "verification_required",
+                            "confirmation_required"
+                          ]
+                        },
+                        "account_id": {
+                          "type": "string"
+                        },
+                        "session_id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "example": "string"
+                        },
+                        "verification_method": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "mfa": {
+                          "type": "object",
+                          "properties": {
+                            "method": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "method"
+                          ]
+                        },
+                        "verification": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "trusted_device_token": {
+                          "type": "string"
+                        },
+                        "step_up": {
+                          "type": "object",
+                          "properties": {
+                            "available_methods": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "passkey",
+                                  "totp",
+                                  "password"
+                                ]
+                              }
+                            },
+                            "challenge_id": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 4096,
+                              "example": "string"
+                            }
+                          },
+                          "required": [
+                            "available_methods",
+                            "challenge_id"
+                          ]
+                        },
+                        "client_handle": {
+                          "type": "object",
+                          "properties": {
+                            "client_id": {
+                              "type": "string"
+                            },
+                            "reference_id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "client_id",
+                            "reference_id"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "confirm": {
+                    "const": true
+                  },
+                  "step_up": {
+                    "type": "object",
+                    "properties": {
+                      "challenge_id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096,
+                        "example": "string"
+                      },
+                      "method": {
+                        "type": "string",
+                        "enum": [
+                          "passkey",
+                          "totp",
+                          "password"
+                        ]
+                      },
+                      "code": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 8,
+                        "example": "string"
+                      },
+                      "password": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256,
+                        "example": "string"
+                      },
+                      "assertion_response": {}
+                    },
+                    "required": [
+                      "challenge_id",
+                      "method"
+                    ]
+                  }
+                },
+                "required": [
+                  "confirm"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/client/native/signin/start": {
+      "post": {
+        "operationId": "startNativeSignin",
+        "summary": "Start the native signin flow",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "complete",
+                            "mfa_required",
+                            "verification_required",
+                            "confirmation_required"
+                          ]
+                        },
+                        "account_id": {
+                          "type": "string"
+                        },
+                        "session_id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "example": "string"
+                        },
+                        "verification_method": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "mfa": {
+                          "type": "object",
+                          "properties": {
+                            "method": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "method"
+                          ]
+                        },
+                        "verification": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "trusted_device_token": {
+                          "type": "string"
+                        },
+                        "step_up": {
+                          "type": "object",
+                          "properties": {
+                            "available_methods": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "passkey",
+                                  "totp",
+                                  "password"
+                                ]
+                              }
+                            },
+                            "challenge_id": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 4096,
+                              "example": "string"
+                            }
+                          },
+                          "required": [
+                            "available_methods",
+                            "challenge_id"
+                          ]
+                        },
+                        "client_handle": {
+                          "type": "object",
+                          "properties": {
+                            "client_id": {
+                              "type": "string"
+                            },
+                            "reference_id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "client_id",
+                            "reference_id"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 254,
+                    "minLength": 1,
+                    "example": "user@example.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "minLength": 1,
+                    "example": "string"
+                  },
+                  "provider_key": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "apple",
+                          "atlassian",
+                          "discord",
+                          "dropbox",
+                          "facebook",
+                          "figma",
+                          "github",
+                          "gitlab",
+                          "google",
+                          "huggingface",
+                          "jumpcloud",
+                          "linear",
+                          "linkedin",
+                          "microsoft",
+                          "notion",
+                          "reddit",
+                          "slack",
+                          "spotify",
+                          "tiktok",
+                          "twitch",
+                          "workos",
+                          "x",
+                          "yahoo"
+                        ]
+                      },
+                      {
+                        "type": "string",
+                        "enum": [
+                          "auth0",
+                          "okta",
+                          "onelogin",
+                          "pingidentity",
+                          "cyberark",
+                          "keycloak",
+                          "fusionauth",
+                          "casdoor",
+                          "gluu"
+                        ]
+                      }
+                    ]
+                  },
+                  "verification_option": {
+                    "type": "string",
+                    "enum": [
+                      "email_verification_code",
+                      "magic_link",
+                      "phone_verification_code",
+                      "oauth_token"
+                    ]
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "example": "string"
+                  },
+                  "trusted_device_token": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "example": "string"
+                  },
+                  "remember_device": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/client/native/signin/complete": {
+      "post": {
+        "operationId": "completeNativeSignin",
+        "summary": "Complete the native signin flow",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "complete",
+                            "mfa_required",
+                            "verification_required",
+                            "confirmation_required"
+                          ]
+                        },
+                        "account_id": {
+                          "type": "string"
+                        },
+                        "session_id": {
+                          "type": "string"
+                        },
+                        "state": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "example": "string"
+                        },
+                        "verification_method": {
+                          "type": "string"
+                        },
+                        "redirect_url": {
+                          "type": "string"
+                        },
+                        "mfa": {
+                          "type": "object",
+                          "properties": {
+                            "method": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "method"
+                          ]
+                        },
+                        "verification": {
+                          "type": "object",
+                          "additionalProperties": {}
+                        },
+                        "trusted_device_token": {
+                          "type": "string"
+                        },
+                        "step_up": {
+                          "type": "object",
+                          "properties": {
+                            "available_methods": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "passkey",
+                                  "totp",
+                                  "password"
+                                ]
+                              }
+                            },
+                            "challenge_id": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 4096,
+                              "example": "string"
+                            }
+                          },
+                          "required": [
+                            "available_methods",
+                            "challenge_id"
+                          ]
+                        },
+                        "client_handle": {
+                          "type": "object",
+                          "properties": {
+                            "client_id": {
+                              "type": "string"
+                            },
+                            "reference_id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "client_id",
+                            "reference_id"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "verification_result": {
+                    "type": "object",
+                    "properties": {
+                      "pin_code": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 8,
+                        "example": "string"
+                      },
+                      "magic_link_token": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096,
+                        "example": "string"
+                      },
+                      "oauth_token": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096,
+                        "example": "string"
+                      }
+                    }
+                  },
+                  "mfa": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "method": {
+                            "const": "totp"
+                          },
+                          "totp_code": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 8,
+                            "example": "string"
+                          }
+                        },
+                        "required": [
+                          "method",
+                          "totp_code"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "method": {
+                            "const": "phone_verification_code"
+                          },
+                          "phone_code": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 10,
+                            "example": "string"
+                          }
+                        },
+                        "required": [
+                          "method",
+                          "phone_code"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "method": {
+                            "const": "passkey"
+                          },
+                          "assertion_response": {},
+                          "credential_id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 500,
+                            "example": "string"
+                          }
+                        },
+                        "required": [
+                          "method",
+                          "assertion_response"
+                        ]
+                      }
+                    ]
+                  },
+                  "trusted_device_token": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "example": "string"
+                  },
+                  "remember_device": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "verification_result"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/client/native/token": {
+      "post": {
+        "operationId": "processNativeTokenMint",
+        "summary": "Exchange a completed native client handle and PKCE verifier for bearer tokens",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "access_token": {
+                          "type": "string"
+                        },
+                        "token_type": {
+                          "const": "Bearer"
+                        },
+                        "expires_in": {
+                          "type": "number"
+                        },
+                        "refresh_token": {
+                          "type": "string"
+                        },
+                        "session_id": {
+                          "type": "string"
+                        },
+                        "account_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "access_token",
+                        "token_type",
+                        "expires_in",
+                        "refresh_token",
+                        "session_id",
+                        "account_id"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ]
+      }
+    },
+    "/v1/auth/client/native/refresh": {
+      "post": {
+        "operationId": "refreshNativeSession",
+        "summary": "Exchange a native refresh token for a new bearer token pair",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "access_token": {
+                          "type": "string"
+                        },
+                        "token_type": {
+                          "const": "Bearer"
+                        },
+                        "expires_in": {
+                          "type": "number"
+                        },
+                        "refresh_token": {
+                          "type": "string"
+                        },
+                        "session_id": {
+                          "type": "string"
+                        },
+                        "account_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "access_token",
+                        "token_type",
+                        "expires_in",
+                        "refresh_token",
+                        "session_id",
+                        "account_id"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refresh_token": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4096,
+                    "example": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/client/native/logout": {
+      "post": {
+        "operationId": "processNativeLogout",
+        "summary": "Revoke the native session and its refresh-token family",
+        "tags": [
+          "Auth - Native"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiSuccessResponseMeta"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "success"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or bad request",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiClientErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "Conjoin-Request-Id": {
+                "$ref": "#/components/headers/ConjoinRequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "$ref": "#/components/schemas/ApiServerErrorResponseMeta"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ConjoinRequestId"
+          }
+        ]
+      }
     }
   },
   "components": {

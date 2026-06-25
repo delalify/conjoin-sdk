@@ -361,6 +361,142 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/client/native/signup/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start the native signup flow */
+        post: operations["startNativeSignup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/client/native/signup/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete the native signup flow */
+        post: operations["completeNativeSignup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/client/native/signup/confirm-link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm and link a native signup onto a matched account */
+        post: operations["confirmLinkNativeSignup"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/client/native/signin/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start the native signin flow */
+        post: operations["startNativeSignin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/client/native/signin/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Complete the native signin flow */
+        post: operations["completeNativeSignin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/client/native/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Exchange a completed native client handle and PKCE verifier for bearer tokens */
+        post: operations["processNativeTokenMint"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/client/native/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Exchange a native refresh token for a new bearer token pair */
+        post: operations["refreshNativeSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/client/native/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke the native session and its refresh-token family */
+        post: operations["processNativeLogout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2671,6 +2807,763 @@ export interface operations {
                                 n?: string;
                                 e?: string;
                             }[];
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    startNativeSignup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: email
+                     * @example user@example.com
+                     */
+                    email?: string;
+                    /** @example string */
+                    phone?: string;
+                    provider_key?: ("apple" | "atlassian" | "discord" | "dropbox" | "facebook" | "figma" | "github" | "gitlab" | "google" | "huggingface" | "jumpcloud" | "linear" | "linkedin" | "microsoft" | "notion" | "reddit" | "slack" | "spotify" | "tiktok" | "twitch" | "workos" | "x" | "yahoo") | ("auth0" | "okta" | "onelogin" | "pingidentity" | "cyberark" | "keycloak" | "fusionauth" | "casdoor" | "gluu");
+                    /** @enum {string} */
+                    verification_option?: "email_verification_code" | "magic_link" | "phone_verification_code" | "oauth_token";
+                    /** @example string */
+                    password?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
+                            mfa?: {
+                                method: string;
+                            };
+                            verification?: {
+                                [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
+                            };
+                            client_handle?: {
+                                client_id: string;
+                                reference_id: string;
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    completeNativeSignup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    verification_result: {
+                        /** @example string */
+                        pin_code?: string;
+                        /** @example string */
+                        magic_link_token?: string;
+                        /** @example string */
+                        oauth_token?: string;
+                    };
+                    /** @example string */
+                    password?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
+                            mfa?: {
+                                method: string;
+                            };
+                            verification?: {
+                                [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
+                            };
+                            client_handle?: {
+                                client_id: string;
+                                reference_id: string;
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    confirmLinkNativeSignup: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @constant */
+                    confirm: true;
+                    step_up?: {
+                        /** @example string */
+                        challenge_id: string;
+                        /** @enum {string} */
+                        method: "passkey" | "totp" | "password";
+                        /** @example string */
+                        code?: string;
+                        /** @example string */
+                        password?: string;
+                        assertion_response?: unknown;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
+                            mfa?: {
+                                method: string;
+                            };
+                            verification?: {
+                                [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
+                            };
+                            client_handle?: {
+                                client_id: string;
+                                reference_id: string;
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    startNativeSignin: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: email
+                     * @example user@example.com
+                     */
+                    email?: string;
+                    /** @example string */
+                    phone?: string;
+                    provider_key?: ("apple" | "atlassian" | "discord" | "dropbox" | "facebook" | "figma" | "github" | "gitlab" | "google" | "huggingface" | "jumpcloud" | "linear" | "linkedin" | "microsoft" | "notion" | "reddit" | "slack" | "spotify" | "tiktok" | "twitch" | "workos" | "x" | "yahoo") | ("auth0" | "okta" | "onelogin" | "pingidentity" | "cyberark" | "keycloak" | "fusionauth" | "casdoor" | "gluu");
+                    /** @enum {string} */
+                    verification_option?: "email_verification_code" | "magic_link" | "phone_verification_code" | "oauth_token";
+                    /** @example string */
+                    password?: string;
+                    /** @example string */
+                    trusted_device_token?: string;
+                    remember_device?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
+                            mfa?: {
+                                method: string;
+                            };
+                            verification?: {
+                                [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
+                            };
+                            client_handle?: {
+                                client_id: string;
+                                reference_id: string;
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    completeNativeSignin: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    verification_result: {
+                        /** @example string */
+                        pin_code?: string;
+                        /** @example string */
+                        magic_link_token?: string;
+                        /** @example string */
+                        oauth_token?: string;
+                    };
+                    mfa?: {
+                        /** @constant */
+                        method: "totp";
+                        /** @example string */
+                        totp_code: string;
+                    } | {
+                        /** @constant */
+                        method: "phone_verification_code";
+                        /** @example string */
+                        phone_code: string;
+                    } | {
+                        /** @constant */
+                        method: "passkey";
+                        assertion_response: unknown;
+                        /** @example string */
+                        credential_id?: string;
+                    };
+                    /** @example string */
+                    trusted_device_token?: string;
+                    remember_device?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            /** @enum {string} */
+                            status?: "complete" | "mfa_required" | "verification_required" | "confirmation_required";
+                            account_id?: string;
+                            session_id?: string;
+                            /** @example string */
+                            state?: string;
+                            verification_method?: string;
+                            redirect_url?: string;
+                            mfa?: {
+                                method: string;
+                            };
+                            verification?: {
+                                [key: string]: unknown;
+                            };
+                            trusted_device_token?: string;
+                            step_up?: {
+                                available_methods: ("passkey" | "totp" | "password")[];
+                                /** @example string */
+                                challenge_id: string;
+                            };
+                            client_handle?: {
+                                client_id: string;
+                                reference_id: string;
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    processNativeTokenMint: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            access_token: string;
+                            /** @constant */
+                            token_type: "Bearer";
+                            expires_in: number;
+                            refresh_token: string;
+                            session_id: string;
+                            account_id: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    refreshNativeSession: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @example string */
+                    refresh_token?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            access_token: string;
+                            /** @constant */
+                            token_type: "Bearer";
+                            expires_in: number;
+                            refresh_token: string;
+                            session_id: string;
+                            account_id: string;
+                        };
+                    };
+                };
+            };
+            /** @description Validation error or bad request */
+            400: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Unauthorized - missing or invalid API key */
+            401: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiClientErrorResponseMeta"];
+                    };
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiServerErrorResponseMeta"];
+                    };
+                };
+            };
+        };
+    };
+    processNativeLogout: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional customer-visible root operation identifier. Invalid, malformed, or missing values are replaced; the response header contains the effective Conjoin request ID. */
+                "Conjoin-Request-Id"?: components["parameters"]["ConjoinRequestId"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    "Conjoin-Request-Id": components["headers"]["ConjoinRequestId"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        response?: components["schemas"]["ApiSuccessResponseMeta"];
+                        data?: {
+                            success: boolean;
                         };
                     };
                 };

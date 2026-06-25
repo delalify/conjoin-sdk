@@ -15717,6 +15717,7 @@ export interface operations {
                         /** @enum {string} */
                         cookie_same_site?: "Lax" | "Strict" | "None";
                         enable_device_binding?: boolean;
+                        enable_native_token_issuance?: boolean;
                     };
                 };
             };
@@ -26219,6 +26220,7 @@ export interface operations {
                         /** @enum {string} */
                         cookie_same_site?: "Lax" | "Strict" | "None";
                         enable_device_binding?: boolean;
+                        enable_native_token_issuance?: boolean;
                     };
                     groups?: {
                         max_per_org?: number;
