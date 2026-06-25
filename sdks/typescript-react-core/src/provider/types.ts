@@ -221,12 +221,27 @@ export type PendingAuthFlow = {
   serverState: string | null
   verificationMethod: FlowVerificationMethod | null
   identifier: string | null
+  /**
+   * The completed client identity for a native flow, returned in the start
+   * response body (web receives it as a cookie instead, so this stays unset
+   * there). It is held until the flow completes, then redeemed for bearer tokens
+   * at the native token mint. Optional so the web pending-flow shape is unchanged.
+   */
+  clientHandle?: ClientHandle | null
 }
 
 export type AuthTokens = {
   accessToken: string
   refreshToken: string
 }
+
+/**
+ * Whether auth-domain requests send credentials. The web runtime authenticates
+ * the self-surface with the httpOnly session cookie, so it sends `include`;
+ * native holds no cookies (RFC 8252) and authenticates with a bearer header, so
+ * it sends `omit` to keep any platform cookie store out of the request.
+ */
+export type AuthRequestCredentials = 'include' | 'omit'
 
 /**
  * Signed-in identity decoded from a native access-token JWT. `expiresAtMs` is
@@ -257,6 +272,7 @@ export type NativeAuthTransport = {
   clearTokens: () => void | Promise<void>
   readSession: () => NativeAuthSession | null
   attachBearer: (headers: Record<string, string>) => Record<string, string>
+  setClientHandle: (handle: ClientHandle) => void | Promise<void>
   acquireRefreshLock: <T>(fn: () => Promise<T>) => Promise<T>
   subscribe: (listener: () => void) => () => void
 }

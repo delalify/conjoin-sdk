@@ -168,6 +168,7 @@ export function createAuthManager(options: AuthManagerOptions) {
   ): Promise<boolean> {
     return transportRef.acquireRefreshLock(async () => {
       if (destroyed) return false
+      if (transportRef.readTokens()) return true
 
       const authDomain = options.sdkConfig?.auth.domain
       if (!authDomain) {
@@ -185,6 +186,7 @@ export function createAuthManager(options: AuthManagerOptions) {
             accessToken: result.data.access_token,
             refreshToken: result.data.refresh_token,
           })
+          await transportRef.setClientHandle(handle)
           transportRef.clearPendingFlow()
           applyNativeTokenResult(transportRef, result.data)
           return true
@@ -282,7 +284,18 @@ export function createAuthManager(options: AuthManagerOptions) {
 
   async function bootstrapSession(): Promise<boolean> {
     if (native) {
-      return runNativeRefresh(native)
+      if (native.readTokens()) {
+        return runNativeRefresh(native)
+      }
+      // Only the sign-in/up hooks call this, and only once the flow reports
+      // complete, so the pending flow's handle is a safe mint signal here even
+      // though reconcile (which fires on any change) trusts only the set handle.
+      const pending = native.readPendingFlow()
+      const handle = native.getClientHandle() ?? pending?.clientHandle ?? null
+      if (handle && pending) {
+        return runNativeMint(native, handle, pending.codeVerifier)
+      }
+      return false
     }
     return runHandshake()
   }

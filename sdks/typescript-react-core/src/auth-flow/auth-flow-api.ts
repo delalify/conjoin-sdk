@@ -1,12 +1,22 @@
 import { type AuthFlowRequestBody, type AuthFlowResponseData, FRONTEND_PATHS } from '@conjoin-cloud/sdk/auth-flow'
-import type { ClientHandle } from '../provider/types'
+import type { AuthRequestCredentials, ClientHandle } from '../provider/types'
 
 const VALID_DOMAIN_PATTERN = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
 
 const CLIENT_HANDLE_HEADER = 'x-conjoin-client-handle'
 const CODE_VERIFIER_HEADER = 'x-auth-code-verifier'
+const CODE_CHALLENGE_HEADER = 'x-auth-code-challenge'
+const STATE_HEADER = 'x-auth-state'
 
 export type FlowResponseData = AuthFlowResponseData<'startAuthSignin'>
+
+/**
+ * Native flow responses carry the completed client handle in the body (the web
+ * flow receives it as a cookie), so the native variants widen `FlowResponseData`
+ * with `client_handle`. Structurally a superset, a native result is still a valid
+ * `FlowApiResult<FlowResponseData>` for the shared sign-in/sign-up state machine.
+ */
+export type NativeFlowResponseData = AuthFlowResponseData<'startNativeSignin'>
 
 export type NativeTokenResponseData = AuthFlowResponseData<'processNativeTokenMint'>
 
@@ -48,10 +58,11 @@ async function postFlow<TData>(
   authDomain: string,
   path: string,
   request: { headers: Record<string, string>; body?: unknown },
+  credentials: AuthRequestCredentials = 'include',
 ): Promise<FlowApiResult<TData>> {
   const response = await fetch(buildFlowUrl(authDomain, path), {
     method: 'POST',
-    credentials: 'include',
+    credentials,
     headers: request.headers,
     body: request.body ? JSON.stringify(request.body) : undefined,
   })
@@ -138,6 +149,74 @@ export function requestLogout(
 
 function encodeClientHandleHeader(handle: ClientHandle): string {
   return encodeURIComponent(JSON.stringify({ client_id: handle.client_id, reference_id: handle.reference_id }))
+}
+
+export type NativeFlowContext = { state: string; codeChallenge: string }
+
+export type NativeCompleteContext = NativeFlowContext & { handle: ClientHandle }
+
+function nativeStartHeaders(context: NativeFlowContext): Record<string, string> {
+  return {
+    'Content-Type': 'application/json',
+    [STATE_HEADER]: context.state,
+    [CODE_CHALLENGE_HEADER]: context.codeChallenge,
+  }
+}
+
+function nativeCompleteHeaders(context: NativeCompleteContext): Record<string, string> {
+  return { ...nativeStartHeaders(context), [CLIENT_HANDLE_HEADER]: encodeClientHandleHeader(context.handle) }
+}
+
+export function requestNativeSigninStart(
+  authDomain: string,
+  body: SigninStartBody,
+  context: NativeFlowContext,
+): Promise<FlowApiResult<NativeFlowResponseData>> {
+  return postFlow<NativeFlowResponseData>(
+    authDomain,
+    FRONTEND_PATHS.startNativeSignin,
+    { headers: nativeStartHeaders(context), body },
+    'omit',
+  )
+}
+
+export function requestNativeSigninComplete(
+  authDomain: string,
+  body: AuthFlowRequestBody<'completeNativeSignin'>,
+  context: NativeCompleteContext,
+): Promise<FlowApiResult<NativeFlowResponseData>> {
+  return postFlow<NativeFlowResponseData>(
+    authDomain,
+    FRONTEND_PATHS.completeNativeSignin,
+    { headers: nativeCompleteHeaders(context), body },
+    'omit',
+  )
+}
+
+export function requestNativeSignupStart(
+  authDomain: string,
+  body: SignupStartBody,
+  context: NativeFlowContext,
+): Promise<FlowApiResult<NativeFlowResponseData>> {
+  return postFlow<NativeFlowResponseData>(
+    authDomain,
+    FRONTEND_PATHS.startNativeSignup,
+    { headers: nativeStartHeaders(context), body },
+    'omit',
+  )
+}
+
+export function requestNativeSignupComplete(
+  authDomain: string,
+  body: AuthFlowRequestBody<'completeNativeSignup'>,
+  context: NativeCompleteContext,
+): Promise<FlowApiResult<NativeFlowResponseData>> {
+  return postFlow<NativeFlowResponseData>(
+    authDomain,
+    FRONTEND_PATHS.completeNativeSignup,
+    { headers: nativeCompleteHeaders(context), body },
+    'omit',
+  )
 }
 
 export function requestNativeTokenMint(

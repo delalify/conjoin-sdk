@@ -3,10 +3,14 @@ import { useCallback, useEffect, useState } from 'react'
 import {
   type FlowApiResult,
   type FlowResponseData,
+  type NativeFlowResponseData,
+  requestNativeSignupComplete,
+  requestNativeSignupStart,
   requestSignupComplete,
   requestSignupStart,
   type SignupStartBody,
 } from '../auth-flow/auth-flow-api'
+import type { PendingAuthFlow } from '../provider/types'
 import { useAuthActions } from './internal/use-auth-actions'
 import { useConjoinClient } from './internal/use-conjoin-client'
 
@@ -65,6 +69,7 @@ function buildStartBody(params: SignUpStartParams): SignupStartBody {
 export function useSignUp(): UseSignUpReturn {
   const { sdkConfig } = useConjoinClient()
   const {
+    isNative,
     createPkce,
     savePendingFlow,
     readPendingFlow,
@@ -76,6 +81,16 @@ export function useSignUp(): UseSignUpReturn {
   } = useAuthActions()
 
   const authDomain = sdkConfig?.auth.domain ?? null
+
+  const captureNativeHandle = useCallback(
+    (basis: PendingAuthFlow, result: FlowApiResult<NativeFlowResponseData>) => {
+      if (!result.ok) return
+      const handle = result.data?.client_handle
+      if (!handle) return
+      savePendingFlow({ ...basis, clientHandle: { client_id: handle.client_id, reference_id: handle.reference_id } })
+    },
+    [savePendingFlow],
+  )
 
   const [phase, setPhase] = useState<SignUpPhase>(INITIAL_PHASE)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -104,7 +119,7 @@ export function useSignUp(): UseSignUpReturn {
       }
 
       if (data.status === 'complete') {
-        clearPendingFlow()
+        if (!isNative) clearPendingFlow()
         const established = await bootstrapSession()
         if (!established) {
           setError('Your account was created but we could not start your session. Please sign in.')
@@ -127,7 +142,7 @@ export function useSignUp(): UseSignUpReturn {
 
       setError('Unexpected response from the authentication server.')
     },
-    [redirect, bootstrapSession, refreshIdentity, clearPendingFlow, readPendingFlow, savePendingFlow],
+    [isNative, redirect, bootstrapSession, refreshIdentity, clearPendingFlow, readPendingFlow, savePendingFlow],
   )
 
   const signUp = useCallback(
@@ -142,7 +157,7 @@ export function useSignUp(): UseSignUpReturn {
 
       try {
         const pkce = await createPkce()
-        savePendingFlow({
+        const pending: PendingAuthFlow = {
           kind: 'sign-up',
           state: pkce.state,
           codeVerifier: pkce.codeVerifier,
@@ -150,24 +165,34 @@ export function useSignUp(): UseSignUpReturn {
           serverState: null,
           verificationMethod: null,
           identifier: params.email ?? params.phone ?? null,
-        })
+        }
+        savePendingFlow(pending)
 
-        const headers = attachCsrf({
-          'Content-Type': 'application/json',
-          'x-auth-state': pkce.state,
-          'x-auth-code-verifier': pkce.codeVerifier,
-          'x-auth-code-challenge': pkce.codeChallenge,
-        })
+        if (isNative) {
+          const result = await requestNativeSignupStart(authDomain, buildStartBody(params), {
+            state: pkce.state,
+            codeChallenge: pkce.codeChallenge,
+          })
+          captureNativeHandle(pending, result)
+          await applyResult(result)
+        } else {
+          const headers = attachCsrf({
+            'Content-Type': 'application/json',
+            'x-auth-state': pkce.state,
+            'x-auth-code-verifier': pkce.codeVerifier,
+            'x-auth-code-challenge': pkce.codeChallenge,
+          })
 
-        const result = await requestSignupStart(authDomain, { headers, body: buildStartBody(params) })
-        await applyResult(result)
+          const result = await requestSignupStart(authDomain, { headers, body: buildStartBody(params) })
+          await applyResult(result)
+        }
       } catch (caught) {
         setError(errorMessage(caught))
       } finally {
         setIsSubmitting(false)
       }
     },
-    [authDomain, createPkce, savePendingFlow, attachCsrf, applyResult],
+    [authDomain, isNative, createPkce, savePendingFlow, captureNativeHandle, attachCsrf, applyResult],
   )
 
   const attemptVerification = useCallback(
@@ -187,25 +212,43 @@ export function useSignUp(): UseSignUpReturn {
         if (params.magicLinkToken) verificationResult.magic_link_token = params.magicLinkToken
         if (params.oauthToken) verificationResult.oauth_token = params.oauthToken
 
-        const body: SignUpCompleteBody = { verification_result: verificationResult }
-        if (params.password) body.password = params.password
+        if (isNative) {
+          const handle = pending.clientHandle
+          if (!handle) {
+            setError('Your verification session has expired. Please start again.')
+            return
+          }
+          const body: AuthFlowRequestBody<'completeNativeSignup'> = { verification_result: verificationResult }
+          if (params.password) body.password = params.password
 
-        const headers = attachCsrf({
-          'Content-Type': 'application/json',
-          'x-auth-state': pending.serverState ?? pending.state,
-          'x-auth-code-verifier': pending.codeVerifier,
-          'x-auth-code-challenge': pending.codeChallenge,
-        })
+          const result = await requestNativeSignupComplete(authDomain, body, {
+            state: pending.serverState ?? pending.state,
+            codeChallenge: pending.codeChallenge,
+            handle,
+          })
+          captureNativeHandle(pending, result)
+          await applyResult(result)
+        } else {
+          const body: SignUpCompleteBody = { verification_result: verificationResult }
+          if (params.password) body.password = params.password
 
-        const result = await requestSignupComplete(authDomain, { headers, body })
-        await applyResult(result)
+          const headers = attachCsrf({
+            'Content-Type': 'application/json',
+            'x-auth-state': pending.serverState ?? pending.state,
+            'x-auth-code-verifier': pending.codeVerifier,
+            'x-auth-code-challenge': pending.codeChallenge,
+          })
+
+          const result = await requestSignupComplete(authDomain, { headers, body })
+          await applyResult(result)
+        }
       } catch (caught) {
         setError(errorMessage(caught))
       } finally {
         setIsSubmitting(false)
       }
     },
-    [authDomain, readPendingFlow, attachCsrf, applyResult],
+    [authDomain, isNative, readPendingFlow, captureNativeHandle, attachCsrf, applyResult],
   )
 
   const reset = useCallback(() => {

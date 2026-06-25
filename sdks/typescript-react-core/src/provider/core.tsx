@@ -11,7 +11,13 @@ import {
   ConjoinClientContext,
   ConjoinIdentityContext,
 } from './contexts'
-import type { AuthTransport, ConjoinAuthState, ConjoinProviderProps, ConjoinSdkConfig } from './types'
+import type {
+  AuthRequestCredentials,
+  AuthTransport,
+  ConjoinAuthState,
+  ConjoinProviderProps,
+  ConjoinSdkConfig,
+} from './types'
 
 type ConjoinProviderCoreProps = ConjoinProviderProps & {
   transport: AuthTransport
@@ -138,6 +144,15 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
 
   const attachCsrf = useCallback((headers: Record<string, string>) => transport.attachCsrf(headers), [transport])
 
+  const isNative = typeof transport.attachBearer === 'function'
+
+  const attachBearer = useCallback(
+    (headers: Record<string, string>) => (transport.attachBearer ? transport.attachBearer(headers) : headers),
+    [transport],
+  )
+
+  const requestCredentials: AuthRequestCredentials = isNative ? 'omit' : 'include'
+
   const authDomain = sdkConfig?.auth.domain ?? null
   const isSignedIn = authState.isLoaded && authState.isSignedIn
   const presenceKey = authStateSignature(authState)
@@ -147,6 +162,8 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
     isSignedIn,
     presenceKey,
     attachCsrf,
+    attachBearer,
+    requestCredentials,
   })
 
   const clientContextValue = useMemo(
@@ -157,7 +174,10 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
   const authActions = useMemo<ConjoinAuthActions>(
     () => ({
       signOut,
+      isNative,
       attachCsrf,
+      attachBearer,
+      requestCredentials,
       createPkce: transport.createPkce,
       savePendingFlow: transport.savePendingFlow,
       readPendingFlow: transport.readPendingFlow,
@@ -166,7 +186,7 @@ export function ConjoinProviderCore({ publishableKey, children, config, transpor
       bootstrapSession,
       refreshIdentity: identity.refresh,
     }),
-    [signOut, attachCsrf, transport, bootstrapSession, identity.refresh],
+    [signOut, isNative, attachCsrf, attachBearer, requestCredentials, transport, bootstrapSession, identity.refresh],
   )
 
   return (

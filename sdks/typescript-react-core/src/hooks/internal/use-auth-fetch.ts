@@ -13,7 +13,7 @@ function validateAuthDomain(domain: string): string {
 
 export function useAuthFetch() {
   const { sdkConfig } = useConjoinClient()
-  const { attachCsrf } = useAuthActions()
+  const { attachCsrf, attachBearer, requestCredentials } = useAuthActions()
 
   const authDomain = sdkConfig?.auth.domain ?? null
 
@@ -31,11 +31,11 @@ export function useAuthFetch() {
 
       return fetch(`https://${validDomain}${path}`, {
         ...options,
-        credentials: 'include',
-        headers: attachCsrf(baseHeaders),
+        credentials: requestCredentials,
+        headers: attachCsrf(attachBearer(baseHeaders)),
       })
     },
-    [authDomain, attachCsrf],
+    [authDomain, attachCsrf, attachBearer, requestCredentials],
   )
 
   return { authFetch, authDomain, isConfigured: !!authDomain }

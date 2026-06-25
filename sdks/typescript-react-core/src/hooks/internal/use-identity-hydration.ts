@@ -5,7 +5,7 @@ import type {
   ConjoinOrganization,
   IdentityHydration,
 } from '../../provider/identity-types'
-import type { AuthTransport } from '../../provider/types'
+import type { AuthRequestCredentials, AuthTransport } from '../../provider/types'
 import { useConjoinClient } from './use-conjoin-client'
 import { useConjoinQuery } from './use-conjoin-query'
 
@@ -50,6 +50,13 @@ type IdentityHydrationDeps = {
    */
   presenceKey: string
   attachCsrf: AuthTransport['attachCsrf']
+  /**
+   * Adds the native bearer header on React Native and is the identity function on
+   * the web (which authenticates the self-surface with the session cookie). Paired
+   * with `requestCredentials` it lets one query path serve both runtimes.
+   */
+  attachBearer: (headers: Record<string, string>) => Record<string, string>
+  requestCredentials: AuthRequestCredentials
 }
 
 function buildAuthUrl(authDomain: string, path: string): string {
@@ -59,12 +66,12 @@ function buildAuthUrl(authDomain: string, path: string): string {
   return `https://${authDomain}${path}`
 }
 
-async function fetchCookieJson<TData>(url: string): Promise<TData> {
-  const response = await fetch(url, {
-    method: 'GET',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-  })
+async function fetchSelfJson<TData>(
+  url: string,
+  credentials: AuthRequestCredentials,
+  headers: Record<string, string>,
+): Promise<TData> {
+  const response = await fetch(url, { method: 'GET', credentials, headers })
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`)
   }
@@ -116,7 +123,7 @@ function normalizeMemberships(groups: RawMembershipGroup[]): ConjoinMembership[]
 
 export function useIdentityHydration(deps: IdentityHydrationDeps): IdentityHydration {
   const { queryClient } = useConjoinClient()
-  const { authDomain, isSignedIn, presenceKey, attachCsrf } = deps
+  const { authDomain, isSignedIn, presenceKey, attachCsrf, attachBearer, requestCredentials } = deps
   const isEnabled = isSignedIn && Boolean(authDomain)
 
   const previousPresenceRef = useRef<string>(presenceKey)
@@ -130,18 +137,30 @@ export function useIdentityHydration(deps: IdentityHydrationDeps): IdentityHydra
 
   const accountQueryFn = useCallback(async (): Promise<ConjoinAccount> => {
     if (!authDomain) throw new Error('Auth domain not configured')
-    return fetchCookieJson<ConjoinAccount>(buildAuthUrl(authDomain, '/v1/auth/self'))
-  }, [authDomain])
+    return fetchSelfJson<ConjoinAccount>(
+      buildAuthUrl(authDomain, '/v1/auth/self'),
+      requestCredentials,
+      attachBearer({ 'Content-Type': 'application/json' }),
+    )
+  }, [authDomain, requestCredentials, attachBearer])
 
   const organizationsQueryFn = useCallback(async (): Promise<RawMembershipGroup[]> => {
     if (!authDomain) throw new Error('Auth domain not configured')
-    return fetchCookieJson<RawMembershipGroup[]>(buildAuthUrl(authDomain, '/v1/auth/self/organizations'))
-  }, [authDomain])
+    return fetchSelfJson<RawMembershipGroup[]>(
+      buildAuthUrl(authDomain, '/v1/auth/self/organizations'),
+      requestCredentials,
+      attachBearer({ 'Content-Type': 'application/json' }),
+    )
+  }, [authDomain, requestCredentials, attachBearer])
 
   const activeOrgQueryFn = useCallback(async (): Promise<RawActiveOrganization> => {
     if (!authDomain) throw new Error('Auth domain not configured')
-    return fetchCookieJson<RawActiveOrganization>(buildAuthUrl(authDomain, '/v1/auth/self/active-organization'))
-  }, [authDomain])
+    return fetchSelfJson<RawActiveOrganization>(
+      buildAuthUrl(authDomain, '/v1/auth/self/active-organization'),
+      requestCredentials,
+      attachBearer({ 'Content-Type': 'application/json' }),
+    )
+  }, [authDomain, requestCredentials, attachBearer])
 
   const accountResult = useConjoinQuery<ConjoinAccount>({
     queryKey: ACCOUNT_QUERY_KEY,
@@ -187,8 +206,8 @@ export function useIdentityHydration(deps: IdentityHydrationDeps): IdentityHydra
 
       const response = await fetch(buildAuthUrl(authDomain, '/v1/auth/self/active-organization'), {
         method: 'PUT',
-        credentials: 'include',
-        headers: attachCsrf({ 'Content-Type': 'application/json' }),
+        credentials: requestCredentials,
+        headers: attachCsrf(attachBearer({ 'Content-Type': 'application/json' })),
         body: JSON.stringify({ organization_id: organizationId }),
       })
 
@@ -201,7 +220,7 @@ export function useIdentityHydration(deps: IdentityHydrationDeps): IdentityHydra
         queryClient.fetchQuery({ queryKey: ORGANIZATIONS_QUERY_KEY, queryFn: organizationsQueryFn }),
       ])
     },
-    [authDomain, attachCsrf, queryClient, activeOrgQueryFn, organizationsQueryFn],
+    [authDomain, attachCsrf, attachBearer, requestCredentials, queryClient, activeOrgQueryFn, organizationsQueryFn],
   )
 
   return {

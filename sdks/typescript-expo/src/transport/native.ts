@@ -54,6 +54,14 @@ async function loadCrypto() {
   }
 }
 
+async function loadLinking() {
+  try {
+    return await import('expo-linking')
+  } catch {
+    return null
+  }
+}
+
 function bytesToBase64Url(bytes: Uint8Array): string {
   let output = ''
   for (let index = 0; index < bytes.length; index += 3) {
@@ -138,6 +146,17 @@ function isNullableString(value: unknown): value is string | null {
   return value === null || typeof value === 'string'
 }
 
+function toClientHandle(value: unknown): ClientHandle | null {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return null
+  }
+  const candidate = value as Record<string, unknown>
+  if (!isNonEmptyString(candidate.client_id) || !isNonEmptyString(candidate.reference_id)) {
+    return null
+  }
+  return { client_id: candidate.client_id, reference_id: candidate.reference_id }
+}
+
 function parsePendingFlow(raw: string): PendingAuthFlow | null {
   let parsed: unknown
   try {
@@ -156,7 +175,16 @@ function parsePendingFlow(raw: string): PendingAuthFlow | null {
     return null
   }
 
-  return { kind, state, codeVerifier, codeChallenge, serverState, verificationMethod, identifier }
+  return {
+    kind,
+    state,
+    codeVerifier,
+    codeChallenge,
+    serverState,
+    verificationMethod,
+    identifier,
+    clientHandle: toClientHandle(candidate.clientHandle),
+  }
 }
 
 function parseClientHandle(raw: string): ClientHandle | null {
@@ -316,6 +344,8 @@ export function createNativeTransport(): AuthTransport {
   }
 
   void hydrate()
+    .then(setupDeepLinks)
+    .catch(() => {})
 
   async function setClientHandle(handle: ClientHandle) {
     clientHandle = handle
@@ -336,6 +366,31 @@ export function createNativeTransport(): AuthTransport {
     await setClientHandle(handle)
   }
 
+  /**
+   * Catches the auth return deep link both when the app is already running and
+   * when a magic link cold-starts it (`getInitialURL`). The handle is only
+   * adopted when the link's `state` matches the pending flow, so an unrelated or
+   * forged deep link cannot inject a session. Best-effort: if `expo-linking` is
+   * absent, system-browser returns from `redirect` still complete sign-in.
+   */
+  async function setupDeepLinks(): Promise<void> {
+    const linking = await loadLinking()
+    if (!linking) return
+    try {
+      const initialUrl = await linking.getInitialURL()
+      if (initialUrl) await completeAuthReturn(initialUrl)
+    } catch {
+      // No initial deep link to consume; live links are still handled below.
+    }
+    try {
+      linking.addEventListener('url', event => {
+        void completeAuthReturn(event.url)
+      })
+    } catch {
+      // Deep-link events are unavailable; same-session browser returns still work.
+    }
+  }
+
   return {
     getClientHandle(): ClientHandle | null {
       return clientHandle
@@ -346,6 +401,8 @@ export function createNativeTransport(): AuthTransport {
       void remove(CLIENT_HANDLE_KEY)
       notify()
     },
+
+    setClientHandle,
 
     attachCsrf(headers: Record<string, string>): Record<string, string> {
       return headers

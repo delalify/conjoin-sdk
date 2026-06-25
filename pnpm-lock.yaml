@@ -94,6 +94,9 @@ importers:
       expo-crypto:
         specifier: 56.0.4
         version: 56.0.4(expo@55.0.6)
+      expo-linking:
+        specifier: 56.0.14
+        version: 56.0.14(expo@55.0.6)(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)
       expo-secure-store:
         specifier: 55.0.13
         version: 55.0.13(expo@55.0.6)
@@ -3714,6 +3717,12 @@ packages:
       expo: '*'
       react-native: '*'
 
+  expo-constants@56.0.18:
+    resolution: {integrity: sha512-8AMtbDGl/WVPnWlmbpGmvcdnNCy9E4PFnwdVwj600vljkMDPSxcAcjw8GVXEPk3PpZ+ngTqsrkltWyj0UKYAxw==}
+    peerDependencies:
+      expo: '*'
+      react-native: '*'
+
   expo-crypto@56.0.4:
     resolution: {integrity: sha512-fRNEhoXRXgAWBpe3/hq5X+KXTit3OZqdiAGts1YvNEUHQb+H5591mpPac0Yw+sZg9pXcrjRnzo5AxvZaENpc7g==}
     peerDependencies:
@@ -3737,6 +3746,12 @@ packages:
     peerDependencies:
       expo: '*'
       react: '*'
+
+  expo-linking@56.0.14:
+    resolution: {integrity: sha512-IvVQHWC+Cj4fK5qD3iEVYqpU2a4rLW0IpAAlGJ4MH+H1fyZiHh3eN6qg2WmoclOEPfYATSuEa+dQT6wfgVpXlQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
 
   expo-modules-autolinking@55.0.9:
     resolution: {integrity: sha512-OXIrxSYKlT/1Av1AMyUWeSTW1GChGofWV14sB73o5eFbfuz6ocv18fnKx+Ji67ZC7a0RztDctcZTuEQK84S4iw==}
@@ -9512,6 +9527,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  expo-constants@56.0.18(expo@55.0.6)(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6)):
+    dependencies:
+      '@expo/env': 2.3.0
+      expo: 55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3)
+      react-native: 0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6)
+    transitivePeerDependencies:
+      - supports-color
+
   expo-crypto@56.0.4(expo@55.0.6):
     dependencies:
       expo: 55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3)
@@ -9532,6 +9555,16 @@ snapshots:
     dependencies:
       expo: 55.0.6(@babel/core@7.29.7)(@expo/dom-webview@55.0.3)(react-dom@19.2.6(react@19.2.6))(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6)(typescript@5.9.3)
       react: 19.2.6
+
+  expo-linking@56.0.14(expo@55.0.6)(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))(react@19.2.6):
+    dependencies:
+      expo-constants: 56.0.18(expo@55.0.6)(react-native@0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6))
+      invariant: 2.2.4
+      react: 19.2.6
+      react-native: 0.84.1(@babel/core@7.29.7)(@types/react@19.2.14)(react@19.2.6)
+    transitivePeerDependencies:
+      - expo
+      - supports-color
 
   expo-modules-autolinking@55.0.9(typescript@5.9.3):
     dependencies:
