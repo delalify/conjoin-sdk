@@ -169,6 +169,6 @@
     "generate": "openapi-typescript ../../spec/openapi.json -o src/generated/api-types.ts"
   },
   "dependencies": {
-    "jose": "6.2.3"
+    "jose": "6.2.12"
   }
 }
