@@ -8,11 +8,11 @@
   "homepage": "https://conjoin.delalify.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/delalify/conjoin-sdk.git",
+    "url": "git+https://github.com/conjoin-cloud/conjoin-sdk.git",
     "directory": "sdks/typescript-expo"
   },
   "bugs": {
-    "url": "https://github.com/delalify/conjoin-sdk/issues"
+    "url": "https://github.com/conjoin-cloud/conjoin-sdk/issues"
   },
   "keywords": [
     "sdk",
