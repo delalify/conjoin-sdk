@@ -51,7 +51,7 @@ Some SDKs need package-local setup before root tasks can run. Read the SDK guide
 
 ## Releases
 
-The [TypeScript publish workflow](.github/workflows/publish-typescript.yml) publishes the npm package, and the [Python publish workflow](.github/workflows/publish-python.yml) publishes the Python package. Nx versions packages independently and uses tags in the `{projectName}@v{version}` format, such as `sdk-typescript@v0.1.0`. The publish workflows run generation, linting, type checks, builds, and tests before publishing.
+The [TypeScript publish workflow](.github/workflows/publish-typescript.yml) stages the four npm packages with `npm stage publish`, and a maintainer then approves each staged package with 2FA on npmjs.com before it goes live. The [Python publish workflow](.github/workflows/publish-python.yml) publishes the Python package to PyPI. TypeScript releases carry tags such as `typescript-v0.1.0`, and Python releases carry tags such as `sdk-python@v0.1.0`. Both workflows run generation, linting, type checks, builds, and tests before they release anything.
 
 ## Contributing
 
