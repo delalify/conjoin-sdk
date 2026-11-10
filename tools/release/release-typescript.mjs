@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
   findLastTag,
@@ -10,6 +10,7 @@ import {
 } from './lib/git-history.mjs'
 import { assertCleanExcept } from './lib/git-tree.mjs'
 import { createRelease } from './lib/github-release.mjs'
+import { stagePackages } from './lib/npm-stage.mjs'
 import { repoUrl, resolveRepoSlug } from './lib/repo.mjs'
 import { run } from './lib/run.mjs'
 import { resolveVersion } from './lib/version.mjs'
@@ -139,6 +140,59 @@ function publishRelease({ version, dryRun, firstRelease }) {
   )
 }
 
+function writeStepSummary(lines) {
+  const summaryPath = process.env.GITHUB_STEP_SUMMARY
+
+  if (summaryPath) {
+    appendFileSync(summaryPath, `${lines.join('\n')}\n`)
+  }
+}
+
+function stageRelease({ version, dryRun }) {
+  const { toolchain, tag, staged, skipped, failures } = stagePackages({
+    packageDirs: PACKAGE_DIRS,
+    version,
+    dryRun,
+  })
+  const prefix = dryRun ? '[dry-run] ' : ''
+  const summary = [`## TypeScript SDK ${version} staged for approval`, '']
+
+  process.stdout.write(
+    `${prefix}Staging with npm ${toolchain.npmVersion} on Node ${toolchain.nodeVersion} under dist-tag ${tag}\n`,
+  )
+
+  for (const { name, stageId } of staged) {
+    const stageIdText = stageId ? ` with stage id \`${stageId}\`` : ''
+    process.stdout.write(`${prefix}Staged ${name}@${version}${stageId ? ` with stage id ${stageId}` : ''}\n`)
+    summary.push(`- \`${name}@${version}\` is staged${stageIdText} and waits for approval on npmjs.com.`)
+  }
+
+  for (const { name } of skipped) {
+    process.stdout.write(`${prefix}Skipped ${name}@${version} because npm already serves it\n`)
+    summary.push(`- \`${name}@${version}\` is already on npm.`)
+  }
+
+  if (!dryRun) {
+    writeStepSummary(summary)
+  }
+
+  if (failures.length > 0) {
+    for (const { message } of failures) {
+      process.stderr.write(`${message}\n\n`)
+    }
+
+    const names = failures.map(({ name }) => name).join(', ')
+    process.stderr.write(
+      `::error title=Staging failed::Staging failed for ${names}; read the step log for each cause\n`,
+    )
+    throw new Error(`Staging failed for ${failures.length} of ${PACKAGE_DIRS.length} packages: ${names}`)
+  }
+
+  process.stdout.write(
+    `${prefix}A maintainer approves each staged package with 2FA on npmjs.com before ${version} goes live\n`,
+  )
+}
+
 function main() {
   const options = parseArgs(process.argv.slice(2))
   const currentVersion = readManifestVersion(PRIMARY_MANIFEST)
@@ -155,7 +209,13 @@ function main() {
     return
   }
 
-  throw new Error(`Unknown command "${options.command ?? ''}"; expected "notes" or "release"`)
+  if (options.command === 'stage') {
+    const version = resolveVersion(currentVersion, currentVersion)
+    stageRelease({ version, dryRun: options.dryRun })
+    return
+  }
+
+  throw new Error(`Unknown command "${options.command ?? ''}"; expected "notes", "release", or "stage"`)
 }
 
 try {

@@ -49,6 +49,18 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org/
 
+      - name: Install the npm CLI that stages packages
+        env:
+          NPM_STAGED_PUBLISHING_CLI_VERSION: 11.19.1
+        run: |
+          npm install --global "npm@${NPM_STAGED_PUBLISHING_CLI_VERSION}"
+          installed="$(npm --version)"
+
+          if [[ "$installed" != "$NPM_STAGED_PUBLISHING_CLI_VERSION" ]]; then
+            echo "::error::Expected npm ${NPM_STAGED_PUBLISHING_CLI_VERSION} for staged publishing, found ${installed}"
+            exit 1
+          fi
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -114,16 +126,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
         run: node tools/release/release-typescript.mjs release
 
-      - name: Publish
+      - name: Stage packages for maintainer approval
         if: ${{ inputs['dry-run'] == false }}
         env:
           NPM_CONFIG_PROVENANCE: true
-          FIRST_RELEASE: ${{ inputs['first-release'] }}
-        run: |
-          args=(pnpm nx release publish --groups=typescript --verbose)
-
-          if [[ "$FIRST_RELEASE" == "true" ]]; then
-            args+=(--first-release)
-          fi
-
-          "${args[@]}"
+        run: node tools/release/release-typescript.mjs stage

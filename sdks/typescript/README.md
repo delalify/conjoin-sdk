@@ -402,7 +402,7 @@ try {
 ## Support
 
 - Read product documentation at <https://conjoin.delalify.com>.
-- Report SDK issues at <https://github.com/delalify/conjoin-sdk/issues>.
+- Report SDK issues at <https://github.com/conjoin-cloud/conjoin-sdk/issues>.
 
 ## License
 
