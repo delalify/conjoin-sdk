@@ -66,15 +66,15 @@
     "@radix-ui/react-visually-hidden": "1.2.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.6",
-    "@types/node": "25.9.1",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3",
-    "vitest": "4.1.6"
+    "@biomejs/biome": "2.6.5",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tsup": "9.0.0",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
   },
   "scripts": {
     "build": "tsup",
