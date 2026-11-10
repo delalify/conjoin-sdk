@@ -140,20 +140,20 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.6",
+    "@biomejs/biome": "2.6.5",
     "@types/express": "5.0.6",
-    "@types/node": "25.9.1",
-    "@types/react": "19.2.14",
-    "@vitest/coverage-v8": "4.1.6",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@vitest/coverage-v8": "5.1.0",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
-    "hono": "4.12.25",
-    "next": "16.2.6",
+    "hono": "4.13.16",
+    "next": "16.4.5",
     "openapi-typescript": "7.13.0",
-    "tsup": "8.5.1",
-    "tsx": "4.21.0",
-    "typescript": "5.9.3",
-    "vitest": "4.1.6"
+    "tsup": "9.0.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
   },
   "scripts": {
     "build": "tsup",
